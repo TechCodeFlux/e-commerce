@@ -38,6 +38,9 @@
     <input type="submit" value="Submit">
     
 </form>
+<br><br>
 <a href="{{ route('club.index') }}">
-    <button type="button">View Clubs</button></body>
+    <button type="button">View Clubs</button>
+
+</body>
 </html>

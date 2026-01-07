@@ -15,6 +15,7 @@
         <th>Address</th>
         <th>Contact</th>
         <th>Username</th>
+         <th>Edit/delete</th>
         {{-- <th>Password</th> --}}
     </tr>
 
@@ -25,12 +26,28 @@
             <td>{{ $club->address }}</td>
             <td>{{ $club->contact }}</td>
             <td>{{ $club->username }}</td>
+            <td><a href="{{ route('club.edit', $club->id) }}"><button type="submit">Edit</button></a> 
+                
+                | 
+                
+                <form action="{{ route('club.destroy', $club->id) }}"
+                      method="POST"
+                      style="display:inline;"
+                      onsubmit="return confirm('Are you sure you want to delete this club?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit">Delete</button>
+                </form>    
+            </td>
             {{-- <td>{{ $club->password }}</td> --}}
         </tr>
     @endforeach
 
 </table>
+<br>
 <a href="{{ route('club.create') }}">
-    <button type="button">add Clubs</button></body>
+    <button type="button">Add Clubs</button>
+
+  
 </body>
 </html>

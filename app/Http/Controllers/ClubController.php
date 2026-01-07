@@ -44,7 +44,7 @@ class ClubController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(club $club)
+    public function show(Club $club)
     {
         //
     }
@@ -52,24 +52,42 @@ class ClubController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(club $club)
+    public function edit(Club $club)
     {
-        //
+        return view('clubedit', compact('club'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, club $club)
+    public function update(Request $request, Club $club)
     {
-        //
+        $club->update([
+        'name' => $request->club_name,
+        'address' => $request->club_address,
+        'contact' => $request->club_contact,
+        'username' => $request->username,
+        ]);
+
+        if ($request->filled('password')) {
+            $club->update([
+                'password' => Hash::make($request->password),
+            ]);
+        }
+
+        return redirect()->route('club.index')
+            ->with('success', 'Club updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(club $club)
+    public function destroy(Club $club)
     {
-        //
+        $club->delete();
+
+        return redirect()
+            ->route('club.index')
+            ->with('success', 'Club deleted successfully.');
     }
 }
