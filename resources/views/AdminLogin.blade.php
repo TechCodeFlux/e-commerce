@@ -8,7 +8,8 @@
 </head>
 <body>
     <h3>ADMIN LOGIN</h3>
-    <form action="{{route('admin.index')}}" method="POST">
+    <form action="{{route('admin.login')}}" method="POST">
+        @csrf
         <label for="username">Username:</label>
         <input type="text" id="username" name="username">
         <br><br>
@@ -17,5 +18,8 @@
         <br><br>
         <input type="submit" value="Login">
     </form>
+    @if(session('error'))
+    <p style="color:red">{{ session('error') }}</p>
+@endif
 </body>
 </html>
