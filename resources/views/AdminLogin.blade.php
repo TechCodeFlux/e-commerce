@@ -8,7 +8,7 @@
 </head>
 <body>
     <h3>ADMIN LOGIN</h3>
-    <form action="{{route('admin.login')}}" method="POST">
+    <form action="{{route('admin.index')}}" method="POST">
         @csrf
         <label for="username">Username:</label>
         <input type="text" id="username" name="username">
