@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('state');
             $table->string('zip-code');
             $table->unsignedBigInteger('club_member_id');
+            $table->boolean('status')->default('0');
+            $table->softdeletes();
             $table->timestamps();
         });
     }
