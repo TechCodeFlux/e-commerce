@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Varient extends Model
 {
-    //
+    use SoftDeletes;
 }

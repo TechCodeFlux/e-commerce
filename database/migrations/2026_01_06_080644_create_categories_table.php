@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('parent_id');
             $table->boolean('status')->default('0');
+            $table->softdeletes();
             $table->timestamps();
         });
     }

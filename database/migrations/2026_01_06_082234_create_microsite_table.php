@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('club_micros', function (Blueprint $table) {
+        Schema::create('microsite', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->date('start_date');
@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('image');
             $table->unsignedBigInteger('club_id');
             $table->boolean('status')->default('0');
+            $table->softdeletes();
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('club_micros');
+        Schema::dropIfExists('microsite');
     }
 };

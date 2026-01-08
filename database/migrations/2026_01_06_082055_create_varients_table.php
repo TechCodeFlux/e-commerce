@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('size');
             $table->string('color');
             $table->integer('stock');
+            $table->boolean('status')->default('0');
+            $table->softdeletes();
             $table->timestamps();
         });
     }

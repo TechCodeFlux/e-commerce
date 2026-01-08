@@ -1,15 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DeveloperController;
+use App\Http\Controllers\DevelopmentController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClubController;
 
-use App\Models\Club;
+Route::get('/', function () {
+    return view('adminlogin');
+});
 
 
-route::get('/clublogin',[ClubController::class,'clublogin'])->name('clublogin');
+Route::resource('admin',DevelopmentController::class);
 
-route::post('/check',[ClubController::class,'check'])->name('check');
-Route::get('/list', function () {
-    return view('list');
-})->name('list');   
+Route::post('admin', [AdminController::class, 'login']);
+
+Route::resource('club', ClubController::class);
+Route::get('/clubs', [ClubController::class, 'index'])->name('club.index');
+Route::post('/club', [ClubController::class, 'store'])->name('club.store');
