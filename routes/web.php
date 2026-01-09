@@ -33,7 +33,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Auth::routes(['register' => false]);
     
 
->>>>>>> arjun-dev
+
 });
 
 

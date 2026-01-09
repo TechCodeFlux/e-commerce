@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class ClubMember extends Model
 {
-HEAD
+
     use SoftDeletes;
-=======
+
     protected $fillable = [
         'name',
         'contact',
@@ -32,7 +32,7 @@ HEAD
         return $this->belongsTo(Address::class);
     }
 
->>>>>>> arjun-dev
+
 }
 
 
