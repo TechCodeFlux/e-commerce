@@ -8,7 +8,7 @@
 </head>
 <body>
     <h3>ADMIN LOGIN</h3>
-    <form action="{{route('admin.index')}}" method="POST">
+    <form action="{{route('admin.login')}}" method="POST">
         @csrf
         <label for="username">Username:</label>
         <input type="text" id="username" name="username">
@@ -17,6 +17,9 @@
         <input type="password" id="password" name="password">
         <br><br>
         <input type="submit" value="Login">
+        @if(!{{ $credentials }})
+    <p style="color:red">{{ 'enter the email and password'}}</p>
+@endif
     </form>
     @if(session('error'))
     <p style="color:red">{{ session('error') }}</p>
