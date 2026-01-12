@@ -1,3 +1,6 @@
+    @extends('admin.components.app')
+
+@section('content')
     <!-- content -->
     <div class="content ">
         
@@ -637,5 +640,5 @@
 
     </div>
     <!-- ./ content -->
-
+@endsection
 
