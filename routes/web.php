@@ -6,7 +6,9 @@ use App\Models\ClubMember;
 use App\Http\Controllers\SampleController;
 
 Route::get('/', function () {
-     return view('admin.club');
+
+    return view('auth.login');
+    
 });
 
 // Route::get('/insert', function () {
