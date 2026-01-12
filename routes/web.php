@@ -10,7 +10,7 @@ use App\Http\Controllers\SampleController;
 
 Route::get('/', function () {
 
-    return view('adminlogin');
+    //return view('adminlogin');
 
      return view('admin.club');
 });
