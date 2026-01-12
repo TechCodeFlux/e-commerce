@@ -4,28 +4,19 @@ use App\Http\Controllers\Auth\AddProductsController;
 use App\Http\Controllers\IndexPageController;
 use Illuminate\Support\Facades\Route;
 
-<<<<<<< Updated upstream
-=======
 use App\Models\ClubMember;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SampleController;
 
->>>>>>> Stashed changes
 Route::get('/', function () {
-    return view('welcome');
+     return view('admin.club');
 });
 
-Route::get('/addproducts_index',[AddProductsController::class,'addproductsindex'])->name('addproducts_index');
+// Route::get('/insert', function () {
+//     return view("clubm");
+// })->name('insert');
 
-Route::post('/addproducts',[AddProductsController::class,'addproducts'])->name('addproducts');
-
-Route::get('/edit_product_index/{product}',[AddProductsController::class,'editproductindex'])->name('edit_product_index');
-
-Route::post('/editproduct/{product}',[AddProductsController::class,'editproduct'])->name('editproduct');
-
-Route::delete('/deleteproduct/{product}', [AddProductsController::class, 'deleteproduct'])->name('deleteproduct');
-
-Route::get('/index',[IndexPageController::class,'index'])->name('index');
+//Route::POST('/store',[SampleController::class,'store'])->name('asda');
+// Route::POST('/app',[SampleController::class,'store'])->name('app');
 
 
 
@@ -33,3 +24,9 @@ Route::get('/index',[IndexPageController::class,'index'])->name('index');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
+    Auth::routes(['register' => false]);
+    
+
+});
