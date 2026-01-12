@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,13 +8,13 @@
     <title>Login - Vetra | E-Commerce HTML Admin Dashboard Template</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="../../assets/images/favicon.png"/>
+    <link rel="shortcut icon" href="{{ url('assets/images/favicon.png') }}"/>
 
     <!-- Themify icons -->
-    <link rel="stylesheet" href="../../dist/icons/themify-icons/themify-icons.css" type="text/css">
+    <link rel="stylesheet" href="{{ url('assets/images/favicon.png') }}" type="text/css">
 
     <!-- Main style file -->
-    <link rel="stylesheet" href="../../dist/css/app.min.css" type="text/css">
+    <link rel="stylesheet" href="{{ url('dist/css/app.min.css') }}" type="text/css">
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -37,24 +38,25 @@
                         <div class="row">
                             <div class="col-md-10 offset-md-1">
                                 <div class="d-block d-lg-none text-center text-lg-start">
-                                    <img width="120" src="../../assets/images/logo.svg" alt="logo">
+                                    <img width="120" src="{{ url('assets/images/logo.svg') }}" alt="logo">
                                 </div>
                                 <div class="my-5 text-center text-lg-start">
-                                    <h1 class="display-8">Sign In</h1>
+                                    <h1 class="display-8">User Sign In</h1>
                                     <p class="text-muted">Sign in to Vetra to continue</p>
                                 </div>
-                                <form class="mb-5">
+                                <form action="{{ route('admin.login') }}" method="POST" class="mb-5">
+                                     @csrf 
                                     <div class="mb-3">
-                                        <input type="email" class="form-control" placeholder="Enter email" autofocus
+                                        <input type="email" name="email" class="form-control" placeholder="Enter email" autofocus
                                                required>
                                     </div>
                                     <div class="mb-3">
-                                        <input type="password" class="form-control" placeholder="Enter password"
+                                        <input type="password" name="password" class="form-control" placeholder="Enter password"
                                                required>
                                     </div>
                                     <div class="text-center text-lg-start">
                                         <p class="small">Can't access your account? <a href="#">Reset your password now</a>.</p>
-                                        <button class="btn btn-primary">Sign In</button>
+                                        <button type="submit" class="btn btn-primary">Sign In</button>
                                     </div>
                                 </form>
                                 <div class="social-links justify-content-center">
@@ -73,7 +75,7 @@
                     </div>
                     <div class="col d-none d-lg-flex border-start align-items-center justify-content-between flex-column text-center">
                         <div class="logo">
-                            <img width="120" src="../../assets/images/logo.svg" alt="logo">
+                            <img width="120" src="{{ url('assets/images/logo.svg') }}" alt="logo">
                         </div>
                         <div>
                             <h3 class="fw-bold">Welcome to Vetra!</h3>
@@ -96,9 +98,11 @@
 
 
 <!-- Bundle scripts -->
-<script src="../../libs/bundle.js"></script>
+<script src="{{ url('libs/bundle.js') }}"></script>
 
 <!-- Main Javascript file -->
-<script src="../../dist/js/app.min.js"></script>
+<script src="{{ url('dist/js/app.min.js') }}"></script>
 </body>
 </html>
+
+                
