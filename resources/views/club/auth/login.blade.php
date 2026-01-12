@@ -41,10 +41,10 @@
                                     <img width="120" src="{{ url('assets/images/logo.svg') }}" alt="logo">
                                 </div>
                                 <div class="my-5 text-center text-lg-start">
-                                    <h1 class="display-8">User Sign In</h1>
+                                    <h1 class="display-8">Club Sign In</h1>
                                     <p class="text-muted">Sign in to Vetra to continue</p>
                                 </div>
-                                <form action="{{ route('admin.login') }}" method="POST" class="mb-5"> 
+                                <form action="{{ route('club.login') }}" method="POST" class="mb-5">
                                      @csrf 
                                     <div class="mb-3">
                                         <input type="email" name="email" class="form-control" placeholder="Enter email" autofocus

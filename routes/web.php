@@ -11,13 +11,19 @@ use App\Http\Controllers\Admin\DashboardController;
 // Auth::routes();
 
 
-Route::get('/', function () {return view('auth.login');});
+Route::get('/', function () {return view('admin.auth.login');});
 
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
-    Auth::routes(['register' => false]);    });
+    Auth::routes(['register' => false]);    
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 
+Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+    Auth::routes(['register' => false]);    
+
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 // Auth::routes();
 
 // Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
