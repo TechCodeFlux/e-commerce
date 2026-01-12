@@ -4,6 +4,13 @@ use App\Http\Controllers\Auth\AddProductsController;
 use App\Http\Controllers\IndexPageController;
 use Illuminate\Support\Facades\Route;
 
+<<<<<<< Updated upstream
+=======
+use App\Models\ClubMember;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SampleController;
+
+>>>>>>> Stashed changes
 Route::get('/', function () {
     return view('welcome');
 });
