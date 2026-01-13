@@ -20,7 +20,7 @@ class ClubController extends Controller
      */
     public function create()
     {
-        return view('club');
+        return view('admin.club');
     }
 
     /**
@@ -29,14 +29,19 @@ class ClubController extends Controller
     public function store(Request $request)
     {
         Club::create([
-            'name' => $request->club_name,
-            'address' => $request->club_address,
-            'contact' => $request->club_contact,
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-        ]);
-
-        return redirect()->back()->with('success', 'Club registered successfully!');
+        'name'       => $request->name,
+        'contact'    => $request->contact,
+        'address'    => $request->address,
+        'country_id' => $request->country_id,
+        'state_id'   => $request->state_id,
+        'city'       => $request->city,
+        'zip_code'   => $request->zip_code,
+        'status'     => 1,
+        'password'   => Hash::make($request->password),
+    ]);
+       return redirect()
+        ->route('admin.club.create')
+        ->with('success', 'Club added successfully!');
     }
 
     /**
@@ -60,11 +65,27 @@ class ClubController extends Controller
      */
     public function update(Request $request, Club $club)
     {
+        $request->validate([
+        'club_name' => 'required|string|max:255',
+        'club_address' => 'required|string',
+        'club_contact' => 'required|string',
+        'email' => 'required|email|unique:clubs,email,' . $club->id,
+        'country_id' => 'required|integer',
+        'state_id' => 'required|integer',
+        'city' => 'required|string',
+        'zip_code' => 'required|string',
+        'status' => 'required|in:active,inactive',
+    ]);
         $club->update([
         'name' => $request->club_name,
         'address' => $request->club_address,
         'contact' => $request->club_contact,
-        'username' => $request->username,
+        'email' => $request->email,
+        'country_id' => $request->country_id,
+        'state_id' => $request->state_id,
+        'city' => $request->city,
+        'zip_code' => $request->zip_code,
+        'status' => $request->status,
         ]);
 
         if ($request->filled('password')) {

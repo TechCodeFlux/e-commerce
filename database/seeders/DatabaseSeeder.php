@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Club;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -25,5 +26,18 @@ class DatabaseSeeder extends Seeder
                 'password' => 'password',
             ]
         );
+        Club::create([
+            'name' => 'Green Valley Golf Club',
+            'address' => '123 Golf Course Road',
+            'contact' => '9876543210',
+            'email' => 'club@xample.com',
+            'country_id' => 1,
+            'state_id' => 1,
+            'city' => 'Bangalore',
+            'zip_code' => '560001',
+            'status' => '0',
+            'password' => Hash::make('password123'),
+        ]);
+
     }
 }

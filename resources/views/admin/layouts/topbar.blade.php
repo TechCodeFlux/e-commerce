@@ -110,6 +110,12 @@
         <i class="bi bi-plus-circle"></i> Add Product
     </button>
             </li>
+            <li class="nav-item ms-3">
+    <a href="{{ route('admin.club.create') }}" class="btn btn-primary btn-icon">
+        <i class="bi bi-plus-circle"></i> Add Club
+    </a>
+</li>
+
         </ul>
     </div>
     <!-- Header mobile buttons -->

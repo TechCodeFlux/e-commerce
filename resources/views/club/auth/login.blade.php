@@ -27,7 +27,7 @@
 <div class="preloader">
     <div class="preloader-icon"></div>
 </div>
-<!-- end::preloader -->
+<!-- end::preloader --> 
 
 
     <div class="form-wrapper">
