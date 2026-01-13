@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My App</title>
+    <title>Vetra | E-Commerce</title>
 </head>
-<body>
+<body> 
 
 @include('admin.components.app')
 
-<div class="content @yield('contentClassName')">
-    @yield('content')
-</div>
+
 
 </body>
 </html>

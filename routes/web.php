@@ -17,6 +17,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Auth::routes(['register' => false]);    
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
 });
 
 Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
