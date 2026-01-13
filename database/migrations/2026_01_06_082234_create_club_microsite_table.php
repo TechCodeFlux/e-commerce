@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('club_micros', function (Blueprint $table) {
+        Schema::create('microsite', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->date('start_date');
