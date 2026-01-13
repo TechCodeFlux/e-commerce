@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<<<<<<< HEAD
     <title> Vetra | E-Commerce HTML Admin Dashboard Template  </title>
+=======
+    <title> Vetra | E-Commerce  </title>
+>>>>>>> 9d47c1514a82c65dce22a043bb628e5b23338a2d
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{url('assets/images/favicon.png')}}"/>
@@ -46,7 +50,11 @@
 </div>
 
 @include('admin.layouts.footer')
+<<<<<<< HEAD
    
+=======
+
+>>>>>>> 9d47c1514a82c65dce22a043bb628e5b23338a2d
 <!-- Bundle scripts -->
 <script src="{{url('libs/bundle.js')}}"></script>
 
