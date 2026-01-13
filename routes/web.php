@@ -19,6 +19,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
     Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');
+    Route::post('club', [DashboardController::class, 'club'])->name('club');
 });
 
 Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {

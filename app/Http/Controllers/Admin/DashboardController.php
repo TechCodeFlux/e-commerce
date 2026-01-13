@@ -34,4 +34,8 @@ class DashboardController extends Controller
 
         return redirect()->route('admin.profile')->with('success', 'Profile updated successfully.');
     }
+    public function club()
+    {
+        return view('admin.dashboard');
+    }
 }
