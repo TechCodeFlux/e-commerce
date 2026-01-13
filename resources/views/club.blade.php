@@ -2,33 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Club Adding Form</title>
+    <title>Club Details</title>
 </head>
 <body>
-    <h2>Club Registration</h2>
 
-    <form method="POST" action="{{ route('club.store') }}">
-        @csrf
-        
-        <label>Club Name:</label><br>
-        <input type="text" name="name" required><br><br>
+<h3>Club Entry</h3>
 
-        <label>Address:</label><br>
-        <textarea name="address" rows="3" required></textarea><br><br>
+@if(session('success'))
+    <p style="color:green">{{ session('success') }}</p>
+@endif
 
-        <label>Contact Number:</label><br>
-        <input type="tel" name="contact" required><br><br>
+<form action="{{ route('club.store') }}" method="POST">
+    @csrf
 
-        <label>Username:</label><br>
-        <input type="text" name="username" required><br><br>
+    <label>Club Name:</label>
+    <input type="text" name="club_name" required>
+    <br><br>
 
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
+    <label>Club Address:</label>
+    <textarea name="club_address" required></textarea>
+    <br><br>
 
-        <button type="submit">Submit</button>
+    <label>Club Contact:</label>
+    <input type="text" name="club_contact" required>
+    <br><br>
 
-    </form>
+    <label>Username:</label>
+    <input type="text" name="username" required>
+    <br><br>
+
+    <label>Password:</label>
+    <input type="password" name="password" required>
+    <br><br>
+
+    <input type="submit" value="Submit">
+    
+</form>
+<br><br>
+<a href="{{ route('club.index') }}">
+    <button type="button">View Clubs</button>
+
 </body>
 </html>

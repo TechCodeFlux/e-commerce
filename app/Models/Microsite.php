@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OrderedItem extends Model
+class Microsite extends Model
 {
-    //
+    use SoftDeletes;
 }
