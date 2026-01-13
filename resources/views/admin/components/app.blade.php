@@ -29,8 +29,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
-
+<body class="d-flex flex-column min-vh-100">
 <!-- preloader -->
 <div class="preloader">
     <img src="{{url('assets/images/logo.svg')}}" alt="logo">
@@ -65,3 +64,4 @@
 @yield('script')
 </body>
 </html>
+

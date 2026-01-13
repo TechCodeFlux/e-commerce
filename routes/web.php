@@ -7,6 +7,7 @@ use App\Http\Controllers\ClubController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Auth::routes();
 
@@ -20,6 +21,13 @@ Route::post('/admin/club/store', [ClubController::class, 'store'])
 
 
 // Route::get('/', function () {return view('club.auth.login');});
+
+Route::get('/admin/anadmin', [DashboardController::class, 'adnew'])
+    ->name('admin.anadmin.create');  // For showing the form
+
+Route::post('/admin/anadmin', [DashboardController::class, 'storeAdmin'])
+    ->name('admin.anadmin.store'); 
+
 
 
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {

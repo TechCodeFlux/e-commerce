@@ -115,6 +115,11 @@
         <i class="bi bi-plus-circle"></i> Add Club
     </a>
 </li>
+<li class="nav-item ms-3">
+    <a href="{{ route('admin.anadmin.create') }}" class="btn btn-primary btn-icon">
+        <i class="bi bi-plus-circle"></i> Add Admin
+    </a>
+</li>
 
         </ul>
     </div>

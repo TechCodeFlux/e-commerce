@@ -41,11 +41,16 @@
 @include('admin.layouts.sidebar')
 @include('admin.layouts.topbar')
 
-<div class="content @yield('contentClassName')">
-    @yield('content')
-</div>
+<main class="flex-fill">
+    <div class="content @yield('contentClassName')">
+        @yield('content')
+    </div>
+</main>
 
-@include('admin.layouts.footer')
+<footer class="mt-auto">
+    @include('admin.layouts.footer')
+</footer>
+
 
 <!-- Bundle scripts -->
 <script src="{{url('libs/bundle.js')}}"></script>

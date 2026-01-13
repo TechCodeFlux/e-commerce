@@ -1,5 +1,5 @@
  <!-- content-footer -->
-    <footer class="content-footer">
+    <footer class="content-footer mt-auto">
         <div>© 2021 Vetra - <a href="https://laborasyon.com" target="_blank">Laborasyon</a></div>
         <div>
             <nav class="nav gap-4">
