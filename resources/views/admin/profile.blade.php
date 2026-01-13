@@ -27,21 +27,23 @@
                         <div class="card mb-4">
                             <div class="card-body">
                                 <h6 class="card-title mb-4">Basic Information</h6>
+                                <form method="POST" action="{{ route('admin.profile_update') }}">
+                                @csrf
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
-                                            <input type="text" class="form-control" value="Adek Kembar">
+                                            <input type="text" class="form-control" name="name" value="{{ old('name', $user->name) }}">
                                         </div>
-                                        <div class="mb-3">
+                                        {{-- <div class="mb-3">
                                             <label class="form-label">Username</label>
                                             <input type="text" class="form-control" value="adek-kembar">
-                                        </div>
+                                        </div> --}}
                                         <div class="mb-3">
                                             <label class="form-label">Email</label>
-                                            <input type="text" class="form-control" value="wtaffe3@addthis.com">
+                                            <input type="text" class="form-control" name="email" value="{{ old('email', $user->email) }}">
                                         </div>
-                                        <div class="mb-3">
+                                        {{-- <div class="mb-3">
                                             <label class="form-label">Date of Birth</label>
                                             <div class="d-flex gap-3">
                                                 <select class="form-select">
@@ -135,8 +137,8 @@
                                                     <option>1980</option>
                                                 </select>
                                             </div>
-                                        </div>
-                                        <div class="mb-3">
+                                        </div> --}}
+                                        {{-- <div class="mb-3">
                                             <label class="form-label">Gender</label>
                                             <div>
                                                 <div class="form-check form-check-inline">
@@ -156,9 +158,9 @@
                                                     <label class="form-check-label" for="inlineRadio3">Other</label>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Role</label>
                                             <select class="form-select">
@@ -177,8 +179,10 @@
                                             </select>
                                         </div>
                                         
-                                    </div>
+                                    </div> --}}
                                 </div>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </form>
                             </div>
                         </div>
                     </div>
