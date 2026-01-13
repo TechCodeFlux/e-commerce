@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="view
+    rt" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login - Vetra | E-Commerce HTML Admin Dashboard Template</title>
 
@@ -37,13 +38,13 @@
                         <div class="row">
                             <div class="col-md-10 offset-md-1">
                                 <div class="d-block d-lg-none text-center text-lg-start">
-                                    <img width="120" src={{ url="assets/images/logo.svg" alt="logo"}}>
+                                    <img width="120" >
                                 </div>
                                 <div class="my-5 text-center text-lg-start">
                                     <h1 class="display-8">Sign In</h1>
                                     <p class="text-muted">Sign in to Vetra to continue</p>
                                 </div>
-                                <form  method="POST" action= {{route ('adminlogin')}} class= "mb-5">
+                                <form  method="GET" action="" class= "mb-5">
                                     @csrf
                                     <div class="mb-3">
                                         <input type="email"  class="form-control"  name="email" placeholder="Enter email" autofocus

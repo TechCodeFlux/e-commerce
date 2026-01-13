@@ -30,7 +30,7 @@ Auth::routes();
 Route::get('/admin.content' ,function()
 {return view('admin.content');});
 
-Route::post('/adminlogin', [LoginController::class, 'login'])->name('adminlogin');//admin login
+Route::get('/adminlogin', [LoginController::class, 'login'])->name('adminlogin');//admin login
 
 
 
@@ -39,7 +39,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
     Auth::routes(['register' => false]);
 
-//Route::g
+
     
 
 });
