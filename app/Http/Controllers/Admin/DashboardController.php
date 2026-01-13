@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Club;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+
 
 
 class DashboardController extends Controller
@@ -36,6 +40,37 @@ class DashboardController extends Controller
     }
     public function club()
     {
-        return view('admin.dashboard');
+        return view('admin.club');
+    }
+    public function store(Request $request)
+    {
+         $validated = $request->validate([
+        'club_name'    => 'required|string|max:255',
+        'club_address' => 'required|string',
+        'club_contact' => 'required|string|max:20',
+        'email'        => 'required|email|unique:clubs,email',
+        'country_id'   => 'required|integer',
+        'state_id'     => 'required|string|max:100',
+        'city'         => 'required|string|max:100',
+        'zip_code'     => 'required|integer|max:10',
+        'status'       => 'required',//'nullable',
+    ]);
+
+        $randomPassword = Str::random(10);
+
+        Club::create([
+            'name' => $request->club_name,
+            'address' => $request->club_address,
+            'contact' => $request->club_contact,
+            'email' => $request->email,
+            'country_id' => $request->country_id,
+            'state_id' => $request->state_id,
+            'city' => $request->city,
+            'zip_code' => $request->zip_code,
+            'status' => $request->has('status'),
+            'password'    => Hash::make($randomPassword),
+        ]);
+        
+        return redirect()->back()->with('success', 'Club registered successfully!');
     }
 }

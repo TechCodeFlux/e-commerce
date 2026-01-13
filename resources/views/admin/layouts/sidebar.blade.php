@@ -535,6 +535,22 @@
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
                     </span>
+                    <span>Club</span>
+                </a>
+                <ul>
+                    <li>
+                        <a  href="{{ route('admin.club') }}">Add Club</a>
+                    </li>
+                    <li>
+                        <a  href="">View Club</a>
+                    </li>
+                </ul>
+            </li>
+            {{-- <li>
+                <a href="#">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-receipt"></i>
+                    </span>
                     <span>Orders</span>
                 </a>
                 <ul>
@@ -545,8 +561,8 @@
                         <a  href="./order-detail.html">Detail</a>
                     </li>
                 </ul>
-            </li>
-            <li>
+            </li> --}}
+            {{-- <li>
                 <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-truck"></i>
@@ -1084,7 +1100,7 @@
                     <span>Disabled</span>
                 </a>
             </li>
-        </ul>
+        </ul> --}}
     </div>
 </div>
 <!-- ./  menu -->

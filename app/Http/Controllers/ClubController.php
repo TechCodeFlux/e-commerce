@@ -17,12 +17,12 @@ class ClubController extends Controller
         return view('clublist', compact('clubs'));
     }
 
-    /**
+    /** 
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('club');
+        return view('club'); 
     }
 
     /**
