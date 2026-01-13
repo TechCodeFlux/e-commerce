@@ -8,23 +8,30 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
 
-// Auth::routes();
 
 
-Route::get('/', function () {return view('auth.login');});
+
+Route::get('/', function () {return view('admin.auth.login');});
 
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
-    Auth::routes(['register' => false]);    });
+    Auth::routes(['register' => false]);   
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+ });
+
+
 // Auth::routes();
+Route::get('/', function () {return view('club.auth.login');});
+Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+    Auth::routes(['register' => false]);
 
-// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-//     Auth::routes(['register' => false]);});
+
+    Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');
+    
+ });
 
 
-// Route::get('/', function () {return view('adminlogin');});
 // Route::post('adminlogin', [LoginController::class, 'login'])->name('adminlogin');
 // Route::post('/club', [ClubController::class, 'store'])->name('store');
 // Route::resource('admin',DevelopmentController::class);
@@ -35,6 +42,6 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/admin.content', function () {
-    return view('admin.content');
-})->name('admin.content');
+// Route::get('/admin.content', function () {
+//     return view('admin.content');
+// })->name('admin.content');
