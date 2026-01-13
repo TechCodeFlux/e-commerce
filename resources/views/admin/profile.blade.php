@@ -30,8 +30,8 @@
                                 <form method="POST" action="{{ route('admin.profile_update') }}">
                                 @csrf
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
+                                    {{-- <div class="col-md-6"> --}}
+                                        <div class="col-md-6 mb-3">
                                             <label class="form-label">Name</label>
                                             <input type="text" class="form-control" name="name" value="{{ old('name', $user->name) }}">
                                         </div>
@@ -39,7 +39,7 @@
                                             <label class="form-label">Username</label>
                                             <input type="text" class="form-control" value="adek-kembar">
                                         </div> --}}
-                                        <div class="mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label class="form-label">Email</label>
                                             <input type="text" class="form-control" name="email" value="{{ old('email', $user->email) }}">
                                         </div>
@@ -159,7 +159,7 @@
                                                 </div>
                                             </div>
                                         </div> --}}
-                                    </div>
+                                    {{-- </div> --}}
                                     {{-- <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Role</label>

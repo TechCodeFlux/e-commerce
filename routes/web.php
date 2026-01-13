@@ -22,6 +22,12 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::post('club', [DashboardController::class, 'club'])->name('club');
     Route::get('club', [DashboardController::class, 'club'])->name('club');
     Route::post('club', [DashboardController::class, 'store'])->name('club.store'); 
+    Route::get('clubview', [DashboardController::class, 'clubindex'])->name('club.index');
+    Route::delete('club/{club}', [DashboardController::class, 'destroy'])->name('club.destroy');
+    Route::get('club/{club}/edit', [DashboardController::class, 'edit'])->name('club.edit');
+    Route::put('club/{club}', [DashboardController::class, 'update'])->name('club.update');
+
+
 });
 
 Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
