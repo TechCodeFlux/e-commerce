@@ -4,7 +4,6 @@ use App\Http\Controllers\ClubController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DevelopmentController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ClubController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
