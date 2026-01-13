@@ -106,11 +106,9 @@
                 </div>
             </li>
             <li class="nav-item ms-3">
-                <form action="{{route('club.add_products_index')}}" method="GET">
                     <button class="btn btn-primary btn-icon">
         <i class="bi bi-plus-circle"></i> Add Product
     </button>
-                </form>
             </li>
         </ul>
     </div>

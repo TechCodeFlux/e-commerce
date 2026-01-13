@@ -38,14 +38,14 @@
 </div>
 <!-- ./ preloader -->
 
-@include('club.layouts.sidebar')
-@include('club.layouts.topbar')
+@include('admin.layouts.sidebar')
+@include('admin.layouts.topbar')
 
 <div class="content @yield('contentClassName')">
     @yield('content')
 </div>
 
-@include('club.layouts.footer')
+@include('admin.layouts.footer')
 
 <!-- Bundle scripts -->
 <script src="{{url('libs/bundle.js')}}"></script>

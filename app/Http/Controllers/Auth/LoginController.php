@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Models\User;
+use Illuminate\Http\Request;
+
+
 
 class LoginController extends Controller
 {
@@ -25,16 +29,48 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = 'dashboard';
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    // public function __construct()
+    // {
+    //     $this->middleware('guest')->except('logout');
+    //     $this->middleware('auth')->only('logout');
+    // }
+    //  public function login(Request $request, User $user)
+    // {
+    //     $credentials = $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required',
+    //     ]);
+
+    //    if($user->email === $credentials['email'] && $user->password === $credentials['password'])
+    //     {
+    //         return redirect()->route('admin.index',['credentials'=>$credentials]);
+
+    //     }
+    //     return back()->with('error', 'Invalid credentials');
+    // }
+
+    public function showLoginForm()
     {
-        $this->middleware('guest')->except('logout');
-        $this->middleware('auth')->only('logout');
+    
+        return view('auth.login');
     }
+    protected function redirectTo()
+    {
+        return route('dashboard');
+    }
+ protected function guard()
+    {
+        return Auth::guard('web');
+    }
+public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
+     }
 }

@@ -523,7 +523,7 @@
             <li class="menu-divider">E-Commerce</li>
             <li>
                 <a  class="active"
-                    href="{{ route('/') }}">
+                    href="index.html">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>
@@ -555,8 +555,8 @@
                 </a>
                 <ul>
                     <li>
-                        <a  href="{{ route('club.show_products') }}">
-                            List</a>
+                        <a  href="./product-list.html">List
+                            View</a>
                     </li>
                     <li>
                         <a  href="./product-grid.html">Grid

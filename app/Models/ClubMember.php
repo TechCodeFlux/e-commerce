@@ -10,25 +10,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ClubMember extends Model
 {
-    protected $fillable = [
-        'name',
-        'contact',
-        'email',
-        'club_id',
-        'address_id',
-
-    ];
-
-      public function club()
-    {
-        return $this->belongsTo(Club::class);
-    }
-
-    public function address()
-    {
-        return $this->belongsTo(Address::class);
-    }
-
+    use SoftDeletes;
 }
-
-

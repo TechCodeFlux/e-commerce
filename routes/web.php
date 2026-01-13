@@ -4,44 +4,45 @@ use App\Http\Controllers\Auth\AddProductsController;
 use App\Http\Controllers\Club\Auth\ProductController;
 use App\Http\Controllers\IndexPageController;
 use Illuminate\Support\Facades\Route;
-use App\Models\ClubMember;
-use App\Http\Controllers\SampleController;
-use Illuminate\Container\Attributes\Auth;
-/*Route::get('/', function () {
-     return view('admin.club');
-});*/
+use App\Http\Controllers\DevelopmentController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClubController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\DashboardController;
 
-Route::get('/', function () { 
-     return view('club.dashboard');
-})->name('/');
+// Auth::routes();
 
 
-Route::get('/club/add_products_index',[ProductController::class,'add_products_index'])->name('club.add_products_index');
+Route::get('/', function () {return view('admin.auth.login');});
 
-Route::post('/club/add_products',[ProductController::class,'store'])->name('club.add_products');
+Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
+    Auth::routes(['register' => false]);    
 
-Route::get('/club/show_products',[ProductController::class,'show'])->name('club.show_products');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
+    Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');
+    Route::post('club', [DashboardController::class, 'club'])->name('club');
+});
 
-Route::post('/club/destroy_products/{id}',[ProductController::class,'destroy'])->name('club.destroy_products');
+Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+    Auth::routes(['register' => false]);    
 
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
+// Auth::routes();
 
-
-
-
-// Route::get('/insert', function () {
-//     return view("clubm");
-// })->name('insert');
-
-//Route::POST('/store',[SampleController::class,'store'])->name('asda');
-// Route::POST('/app',[SampleController::class,'store'])->name('app');
-//Auth::routes();
-// Auth::routes(['register' => false]);
-
-
+// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+//     Auth::routes(['register' => false]);});
 
 
-
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-//Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
-//});
+// Route::get('/', function () {return view('adminlogin');});
+// Route::post('adminlogin', [LoginController::class, 'login'])->name('adminlogin');
+// Route::post('/club', [ClubController::class, 'store'])->name('store');
+// Route::resource('admin',DevelopmentController::class);
+// Route::post('admin', [AdminController::class, 'login']);
+// Route::resource('club', ClubController::class);
+// Route::get('/clubs', [ClubController::class, 'index'])->name('index');
+// Route::post('/club', [ClubController::class, 'store'])->name('club.store');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

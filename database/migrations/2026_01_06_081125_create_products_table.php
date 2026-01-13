@@ -16,13 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->integer('stock');
             $table->string('description');
-             $table->string('image')->nullable();
-            $table->unsignedBigInteger('option_id')->default('0');
-            $table->unsignedBigInteger('club_micro_id')->default('0');
-            $table->unsignedBigInteger('category_id')->default('0');
-            $table->unsignedBigInteger('club_id')->default('0');
+            $table->unsignedBigInteger('option_id');
+            $table->unsignedBigInteger('microsite_id');
+            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('club_id');
             $table->boolean('status')->default('0');
-            $table->softDeletes();
+            $table->softdeletes();
             $table->timestamps();
         });
     }

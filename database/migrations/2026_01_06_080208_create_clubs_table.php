@@ -14,10 +14,16 @@ return new class extends Migration
         Schema::create('clubs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('email');
+            $table->string('contact'); 
             $table->string('address');
-            $table->string('contact');
-            $table->string('username');
+            $table->integer('country_id');
+            $table->string('state_id');
+            $table->string('city');
+            $table->string('zip_code');
             $table->string('password');
+            $table->boolean('status')->default('0');
+            $table->softdeletes();
             $table->timestamps();
         });
     }
