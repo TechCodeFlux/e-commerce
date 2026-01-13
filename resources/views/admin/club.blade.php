@@ -5,7 +5,7 @@
 
     <label>Name</label>
     <input type="text">
-
+{{-- <a href="{{route('admin.login')}}"></a> --}}
     <label>State</label>
     <input type="text">
     

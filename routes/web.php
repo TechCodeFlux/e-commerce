@@ -4,50 +4,36 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DevelopmentController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClubController;
-use App\Http\Controllers\Admin\Auth\LoginController;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\DashboardController;
+
+// Auth::routes();
 
 
-
-use App\Models\ClubMember;
-use App\Http\Controllers\SampleController;
-
-Route::get('/', function () {
-
-    return view('auth.login');
-
-     //return view('admin.club');
-});
-
-// Route::get('/insert', function () {
-//     return view("clubm");
-// })->name('insert');
-
-//Route::POST('/store',[SampleController::class,'store'])->name('asda');
-// Route::POST('/app',[SampleController::class,'store'])->name('app');
-
-
-
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', function () {return view('auth.login');});
 
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
-    Auth::routes(['register' => false]);
-    
+    Auth::routes(['register' => false]);    });
+
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+// Auth::routes();
+
+// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+//     Auth::routes(['register' => false]);});
 
 
-});
-
-
-//Route::resource('admin',DevelopmentController::class);
-
-Route::post('adminlogin', [LoginController::class, 'login'])->name('adminlogin');//adminlogin
-
-Route::resource('club', ClubController::class);
-// Route::get('/clubs', [ClubController::class, 'index'])->name('club.index');
+// Route::get('/', function () {return view('adminlogin');});
+// Route::post('adminlogin', [LoginController::class, 'login'])->name('adminlogin');
+// Route::post('/club', [ClubController::class, 'store'])->name('store');
+// Route::resource('admin',DevelopmentController::class);
+// Route::post('admin', [AdminController::class, 'login']);
+// Route::resource('club', ClubController::class);
+// Route::get('/clubs', [ClubController::class, 'index'])->name('index');
 // Route::post('/club', [ClubController::class, 'store'])->name('club.store');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/admin.content', function () {
     return view('admin.content');

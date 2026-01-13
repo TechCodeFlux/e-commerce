@@ -1,7 +1,4 @@
     <!-- content -->
-     @extends('admin.components.app')
-
-@section('content')
     <div class="content ">
         
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -369,28 +366,28 @@
                         <div class="list-group-item d-flex justify-content-between align-items-center px-0">
                             <div class="d-flex flex-grow-1 align-items-center">
                                 <img width="45" class="me-3"
-                                     src="{{asset('assets/flags/united-states-of-america.svg')}}" alt="...">
+                                     src="../../assets/flags/united-states-of-america.svg" alt="...">
                                 <span>United States</span>
                             </div>
                             <span>$1.671,10</span>
                         </div>
                         <div class="list-group-item d-flex justify-content-between align-items-center px-0">
                             <div class="d-flex flex-grow-1 align-items-center">
-                                <img width="45" class="me-3" src="{{asset('assets/flags/venezuela.svg')}}" alt="...">
+                                <img width="45" class="me-3" src="../../assets/flags/venezuela.svg" alt="...">
                                 <span>Venezuela</span>
                             </div>
                             <span>$1.064,75</span>
                         </div>
                         <div class="list-group-item d-flex justify-content-between align-items-center px-0">
                             <div class="d-flex flex-grow-1 align-items-center">
-                                <img width="45" class="me-3" src="{{asset('assets/flags/salvador.svg')}}" alt="...">
+                                <img width="45" class="me-3" src="../../assets/flags/salvador.svg" alt="...">
                                 <span>Salvador</span>
                             </div>
                             <span>$1.055,98</span>
                         </div>
                         <div class="list-group-item d-flex justify-content-between align-items-center px-0">
                             <div class="d-flex flex-grow-1 align-items-center">
-                                <img width="45" class="me-3" src="{{asset('assets/flags/russia.svg')}}" alt="...">
+                                <img width="45" class="me-3" src="../../assets/flags/russia.svg" alt="...">
                                 <span>Russia</span>
                             </div>
                             <span>$1.042,00</span>
@@ -508,7 +505,7 @@
                                 </td>
                                 <td>
                                     <a href="#">
-                                        <img src="{{asset('assets/images/products/10.jpg')}}" class="rounded" width="40"
+                                        <img src="../../assets/images/products/10.jpg" class="rounded" width="40"
                                              alt="...">
                                     </a>
                                 </td>
@@ -540,7 +537,7 @@
                                 </td>
                                 <td>
                                     <a href="#">
-                                        <img src="{{asset('assets/images/products/7.jpg')}}" class="rounded" width="40"
+                                        <img src="../../assets/images/products/7.jpg" class="rounded" width="40"
                                              alt="...">
                                     </a>
                                 </td>
@@ -572,7 +569,7 @@
                                 </td>
                                 <td>
                                     <a href="#">
-                                        <img src="{{asset('assets/images/products/8.jpg')}}" class="rounded" width="40"
+                                        <img src="../../assets/images/products/8.jpg" class="rounded" width="40"
                                              alt="...">
                                     </a>
                                 </td>
@@ -604,7 +601,7 @@
                                 </td>
                                 <td>
                                     <a href="#">
-                                        <img src="{{asset('assets/images/products/9.jpg')}}" class="rounded" width="40"
+                                        <img src="../../assets/images/products/9.jpg" class="rounded" width="40"
                                              alt="...">
                                     </a>
                                 </td>
@@ -640,5 +637,5 @@
 
     </div>
     <!-- ./ content -->
-@endsection
+
 
