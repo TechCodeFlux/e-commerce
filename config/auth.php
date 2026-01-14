@@ -37,14 +37,16 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
           'admin' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'club' => [
+            'driver' => 'session',
+            'provider' => 'clubs',
+    ],
+
+
     ],
 
     /*
@@ -73,11 +75,11 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'clubs' => [
+        'driver' => 'eloquent',
+        'model' =>env('AUTH_MODEL', App\Models\Club::class) ,
     ],
+],
 
     /*
     |--------------------------------------------------------------------------

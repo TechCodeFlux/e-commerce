@@ -6,7 +6,7 @@ use app\Models\Club;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
-class Club extends Model
+class Club extends Authenticatable 
 {
     use SoftDeletes;
 
