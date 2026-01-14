@@ -11,4 +11,6 @@ class ClubDashboardController extends Controller
     {
         return view('club.dashboard');
     }
+
+  
 }

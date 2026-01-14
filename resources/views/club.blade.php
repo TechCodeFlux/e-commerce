@@ -21,7 +21,7 @@
 
     <label>Club Address:</label>
     <textarea name="club_address" required></textarea>
-    <br><br>
+    <br><br> 
 
     <label>Club Contact:</label>
     <input type="text" name="club_contact" required>
