@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\Club\ClubDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DevelopmentController;
 use App\Http\Controllers\AdminController;
@@ -12,36 +12,40 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 // Auth::routes();
 
 
-Route::get('/', function () {return view('admin.auth.login');});
-Route::get('/admin/club/create', [ClubController::class, 'create'])
-    ->name('admin.club.create');
-Route::post('/admin/club/store', [ClubController::class, 'store'])
-    ->name('admin.club.store');
-
-
-
+Route::get('/', function () {return view('club.option');});
 // Route::get('/', function () {return view('club.auth.login');});
-
-Route::get('/admin/anadmin', [DashboardController::class, 'adnew'])
-    ->name('admin.anadmin.create');  // For showing the form
-
-Route::post('/admin/anadmin', [DashboardController::class, 'storeAdmin'])
-    ->name('admin.anadmin.store'); 
+// Route::get('club/create', [ClubDashboardController::class, 'create'])
+//     ->name('club.create');
+// Route::post('club/store', [ClubDashboardController::class, 'store'])
+//     ->name('admin.club.store');
 
 
 
-Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
-    Auth::routes(['register' => false]);    
+// // Route::get('/', function () {return view('club.auth.login');});
 
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
-    Route::get('club', [DashboardController::class, 'create'])->name('club');
+// Route::get('/admin/anadmin', [DashboardController::class, 'adnew'])
+//     ->name('admin.anadmin.create');  // For showing the form
 
-Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-    Auth::routes(['register' => false]);    
+// Route::post('/admin/anadmin', [DashboardController::class, 'storeAdmin'])
+//     ->name('admin.anadmin.store'); 
 
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
+// Route::prefix('club')->name('club.')->group(function () {
+// Route::resource('option', ClubDashboardController::class);
+// });
+
+
+// Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
+//     Auth::routes(['register' => false]);    
+
+//     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// });
+//     Route::get('club', [DashboardController::class, 'create'])->name('club');
+
+// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+//     Auth::routes(['register' => false]);    
+
+//     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// });
 // Auth::routes();
 
 // Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
