@@ -1,77 +1,194 @@
-@extends('admin.components.app')
+    @extends('admin.components.app')
 
-@section('content')
-<div class="container mt-4">
-
-    <h3 class="mb-4">Registered Clubs</h3>
-
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Contact</th>
-                    <th>Address</th>
-                    <th>Country Id</th>
-                    <th>State Id</th>
-                    <th>City</th>
-                    <th>Zip Code</th>
-                    {{-- <th>Status</th> --}}
-
-                    <th class="text-center">Actions</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @forelse ($clubs as $club)
-                    <tr>
-                        <td>{{ $club->id }}</td>
-                        <td>{{ $club->name }}</td>
-                        <td>{{ $club->email }}</td>
-                        <td>{{ $club->contact }}</td>
-                        <td>{{ $club->address }}</td>
-                        <td>{{ $club->country_id }}</td>
-                        <td>{{ $club->state_id }}</td>
-                        <td>{{ $club->city }}</td>
-                        <td>{{ $club->zip_code }}</td>
-                        {{-- <td>{{ $club->status }}</td> --}}
-
-                        <td class="text-center">
-                            {{-- Edit --}}
-                            <a href="{{ route('admin.club.edit', $club->id) }}"
-                            class="btn btn-sm btn-primary me-1">
-                                Edit
-                            </a>
-
-                            {{-- Delete --}}
-                            <form action="{{ route('admin.club.destroy', $club->id) }}"
-                                  method="POST"
-                                  class="d-inline"
-                                  onsubmit="return confirm('Are you sure you want to delete this club?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="text-center text-muted">
-                            No clubs found.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+    @section('content')
+    <div class="mb-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('club.dashboard') }}">
+                        <i class="bi bi-globe2 small me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Members</li>
+            </ol>
+        </nav>
     </div>
+    <div class="content">
+        <div class="">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-md-flex gap-4 align-items-center">
+                        <div class="d-none d-md-flex">All Members</div>
+                        <div class="d-md-flex gap-4 align-items-center">
+                            <form class="mb-3 mb-md-0">
+                                <div class="row g-3">
+                                    <div class="col-md-7">
+                                        <select class="form-select" id="sort">
+                                            <option>Sort by</option>
+                                            <option data-sort="asc" data-column="1" value="">Name A-z</option>
+                                            <option data-sort="desc" data-column="1" value=""> Name Z-a
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <select class="form-select" id="pageLength">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="40">40</option>
+                                        <option value="50">50</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div> 
+                        <div class="dropdown ms-auto">
+                            <a href="">
+                                <button class="btn btn-primary btn-icon">
+                                        <i class="bi bi-plus-circle"></i> Add Member
+                                </button>
+                            </a>
+                        </div>
+                        
+                    </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-custom table-lg mb-0" id="club">
+                    <thead>
+                      <tr>
+                         <th>Name</th>  
+                         <th>email</th>  
+                         <th>phone</th>
+                         <th>Status</th>
+                        <th>Action</th>
+                     </tr>
+                    </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete Club</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form>
+            <div class="modal-body">
+                    <!-- <input type="hidden" name="_method" value="DELETE"> -->
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" id="deleteId" name="deleteId">
+                        <p>Are you sure you want to delete this Member</p>
+                        <div class="modal-footer">
+                        
+                            <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-sm btn-danger btn_delete_club_member" data-loading-text="">Delete</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>   
+</div> 
 
-    <a href="{{ route('admin.club') }}" class="btn btn-success mt-3">
-        Add New Club
-    </a>
+<script src="{{ url('libs/dataTable/datatables.min.js') }}"></script>
+<script src="{{ url('libs/range-slider/js/ion.rangeSlider.min.js') }}"></script>
+<script>
+@if(Session::has('success_message'))
+$(document).ready( function () {
+    Swal.fire({
+        icon: 'success',
+        title: '{{ Session::get('success_message') }}',
+      
+        footer: ''
+    })
+})
+@endif
+$(document).ready(function() {
+    var $column = $('#sort').find(':selected').data('column');
+    var $sort = $('#sort').find(':selected').data('sort');
+    $clubTable= $('#club').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '{{ route('admin.clubs') }}',
+            data: function(d) {
+                
+            }
+        },
 
-</div>
+        columns: [
+           
+            {
+                data: 'name',
+                name: 'name'
+            },
+            {
+                data: 'email',
+                name: 'email'
+            },
+            {
+                data: 'phone',
+                name: 'phone'
+            },
+            {
+                data: 'status',
+                name: 'status'
+            },
+            @if(auth()->user()->hasPermissionTo('Edit club member')|| auth()->user()->hasPermissionTo('Delete club member'))
+            { 
+                data: 'action',
+                name: 'action'
+            }
+            @endif 
+        ],
+        columnDefs: [{
+            'defaultContent': '--',
+            "targets": "_all"
+        }],
+    });
+    
+    $(document).on("keyup", ".searchInput", function(e) {
+        $clubTable.search($(this).val()).draw();
+    });
+    $("#club_filter").css({
+        "display": "none"
+    });
+    $("#club_length").css({
+        "display": "none"
+    });
+    $('#sort').on('change', function() {
+        $column = $(this).find(':selected').data('column');
+        $sort = $(this).find(':selected').data('sort');
+        $clubTable.order([$column, $sort]).draw();
+    })
+    $('#pageLength').on('change',function(){
+        $clubTable.page.len($(this).val()).draw();
+    })
+    $('#pageLength').val($clubTable.page.len());
+})
+$('table').off('click').on('click','.delete-club-member',function(){
+    var href=$(this).data('href');
+    $('.btn_delete_club_member').click(function(){
+        $.ajax({
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
+            type: 'DELETE',
+            dataType : 'JSON',
+            url : href,
+            success:function(response){
+                $('#delete-modal').modal('hide');
+                $('#club').DataTable().ajax.reload();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Member deleted successfully',
+                    footer: ''
+                })
+            }  
+        })
+    })
+
+})
+</script>
+
 @endsection

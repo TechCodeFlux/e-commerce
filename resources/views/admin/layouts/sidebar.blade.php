@@ -539,7 +539,7 @@
                 </a>
                 <ul>
                     <li>
-                        <a  href="{{ route('admin.club') }}">Add Club</a>
+                        <a  href="{{ route('admin.clubs') }}">Add Club</a>
                     </li>
                     <li>
                         <a  href="{{ route('admin.club.index') }}">View Club</a>
