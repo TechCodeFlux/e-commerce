@@ -56,5 +56,4 @@ class LoginController extends Controller
     {
         Auth::guard('club')->logout();
     }
-
 }

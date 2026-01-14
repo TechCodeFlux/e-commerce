@@ -530,6 +530,22 @@
                     <span>Dashboard</span>
                 </a>
             </li>
+              <li>
+                <a href="#">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-receipt"></i>
+                    </span>
+                    <span>Clubs</span>
+                </a>
+                <ul>
+                    <li>
+                        <a  href="./orders.html">List</a>
+                    </li>
+                    <li>
+                        <a  href="./order-detail.html">Detail</a>
+                    </li>
+                </ul>
+            </li>
             <li>
                 <a href="#">
                     <span class="nav-link-icon">

@@ -7,8 +7,11 @@
 
 @include('admin.components.app')
 
-<div class="content @yield('contentClassName')">
-    @yield('content')
+<!-- content -->
+        <div class="content @yield('contentClassName')">
+            @yield('content')
+        </div>
+        <!-- ./ content -->
 </div>
 
 </body>

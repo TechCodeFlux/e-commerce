@@ -9,5 +9,5 @@ class Club extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'address', 'contact', 'username', 'password'];
+    protected $fillable = ['name','contact', 'address','country_id','state_id','contact','city','status','zip_code','password'];
 }
