@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Club;
+use App\Models\Admin;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
@@ -102,7 +103,7 @@ class DashboardController extends Controller
             'email'        => 'required|email',
         ]);
 
-        $club->update([
+        User::update([
             'name'       => $request->club_name,
             'address'    => $request->club_address,
             'contact'    => $request->club_contact,
@@ -118,4 +119,26 @@ class DashboardController extends Controller
             ->route('admin.club.index')
             ->with('success', 'Club updated successfully');
     }
+//aishwarya
+    public function addnew()
+    {
+        return view('admin.admin');
+    }
+
+    public function storeadmin(Request $request)
+    {
+        $validated = $request->validate([
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|email|unique:users,email',
+            'dob'     => 'required|date',
+            'gender'  => 'required|in:Male,Female,Other',
+            'address' => 'required|string',
+            'contact' => 'required|string|max:15',
+        ]);
+
+        return redirect()
+            ->route('admin.addadmin.create')
+            ->with('success', 'Admin added successfully!');
+    }
+
 }

@@ -27,6 +27,8 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('club/{club}/edit', [DashboardController::class, 'edit'])->name('club.edit');
     Route::put('club/{club}', [DashboardController::class, 'update'])->name('club.update');
 
+    Route::get('addadmin', [DashboardController::class, 'addnew'])->name('addadmin.create');
+    Route::post('addadmin', [DashboardController::class, 'storeadmin'])->name('addadmin.store');
 
 });
 
