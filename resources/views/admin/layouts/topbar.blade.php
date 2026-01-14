@@ -29,14 +29,14 @@
     <div class="header-bar ms-auto">
         <ul class="navbar-nav justify-content-end">
             <li class="nav-item">
-                <a href="#" class="nav-link nav-link-notify" data-count="2" data-sidebar-target="#notifications">
+                <!-- <a href="#" class="nav-link nav-link-notify" data-count="2" data-sidebar-target="#notifications">
                     <i class="bi bi-bell icon-lg"></i>
                 </a>
             </li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link nav-link-notify" data-count="3" data-bs-toggle="dropdown">
                     <i class="bi bi-cart2 icon-lg"></i>
-                </a>
+                </a> -->
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
                     <h6 class="m-0 px-4 py-3 border-bottom">Shopping Cart</h6>
                     <div class="dropdown-menu-body">
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="list-group list-group-flush">
+                        <!-- <div class="list-group list-group-flush">
                             <div class="list-group-item d-flex align-items-center">
                                 <a href="#" class="text-danger me-3" title="Remove">
                                     <i class="bi bi-trash"></i>
@@ -100,15 +100,15 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <h6 class="m-0 px-4 py-3 border-top small">Sub Total : <strong
                             class="text-primary">$1.442,78</strong></h6>
                 </div>
             </li>
-            <li class="nav-item ms-3">
+            <!-- <li class="nav-item ms-3">
                     <button class="btn btn-primary btn-icon">
         <i class="bi bi-plus-circle"></i> Add Product
-    </button>
+    </button> -->
             </li>
         </ul>
     </div>
