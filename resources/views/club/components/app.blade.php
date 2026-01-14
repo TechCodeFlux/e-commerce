@@ -46,7 +46,7 @@
 </div>
 
 @include('admin.layouts.footer')
-   
+
 <!-- Bundle scripts -->
 <script src="{{url('libs/bundle.js')}}"></script>
 

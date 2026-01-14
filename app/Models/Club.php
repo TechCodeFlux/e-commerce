@@ -10,7 +10,5 @@ class Club extends Authenticatable
 {
     use SoftDeletes;
 
-    protected $fillable = 
-            ['name','email','contact','address','country_id','state_id','city','zip_code','password'
-            ];
+    protected $fillable =  ['name','email','contact','address','country_id','state_id','city','status','zip_code','password'];
 }
