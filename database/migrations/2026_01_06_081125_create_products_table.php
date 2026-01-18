@@ -17,10 +17,11 @@ return new class extends Migration
             $table->integer('stock');
             $table->string('description');
             $table->unsignedBigInteger('option_id');
-            $table->unsignedBigInteger('club_micro_id');
+            $table->unsignedBigInteger('microsite_id');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('club_id');
             $table->boolean('status')->default('0');
+            $table->softdeletes();
             $table->timestamps();
         });
     }

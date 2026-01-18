@@ -1,3 +1,4 @@
+
 <?php
 
 return [
@@ -36,10 +37,16 @@ return [
     */
 
     'guards' => [
-        'web' => [
+          'admin' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'club' => [
+            'driver' => 'session',
+            'provider' => 'clubs',
+    ],
+
+
     ],
 
     /*
@@ -64,12 +71,15 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+           'admins' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
+        'clubs' => [
+        'driver' => 'eloquent',
+        'model' =>env('AUTH_MODEL', App\Models\Club::class) ,
     ],
+],
 
     /*
     |--------------------------------------------------------------------------

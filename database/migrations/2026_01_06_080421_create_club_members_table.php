@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('contact');
             $table->string('email');
-            $table->unsignedBigInteger('address_id');
+            $table->unsignedBigInteger('address_id'); 
             $table->unsignedBigInteger('club_id');
+            $table->boolean('status')->default('0');
+            $table->softdeletes();
             $table->timestamps();
         });
     }
