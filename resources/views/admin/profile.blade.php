@@ -34,6 +34,10 @@
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Name</label>
                                             <input type="text" class="form-control" name="name" value="{{ old('name', $user->name) }}">
+                                             @error('name')
+                                                <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                            @enderror
+
                                         </div>
                                         {{-- <div class="mb-3">
                                             <label class="form-label">Username</label>
@@ -42,6 +46,10 @@
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Email</label>
                                             <input type="text" class="form-control" name="email" value="{{ old('email', $user->email) }}">
+                                             @error('email')
+                                                 <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                             @enderror
+
                                         </div>
                                         {{-- <div class="mb-3">
                                             <label class="form-label">Date of Birth</label>

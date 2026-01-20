@@ -28,13 +28,13 @@ class DashboardController extends Controller
     {
         $user = Auth::guard('admin')->user();
 
-        $validate=$request->validate([
+        $validate=$request->validate ([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
         ]);
 
-        $user->name = $validate->name;
-        $user->email = $validate->email;
+        $user->name = $validate['name'];
+        $user->email = $validate['email'];
         $user->save();
 
         return redirect()->route('admin.profile')->with('success', 'Profile updated successfully.');
@@ -103,7 +103,7 @@ class DashboardController extends Controller
             'email'        => 'required|email',
         ]);
 
-        User::update([
+        Club::update([
             'name'       => $request->club_name,
             'address'    => $request->club_address,
             'contact'    => $request->club_contact,

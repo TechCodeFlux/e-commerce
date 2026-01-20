@@ -531,20 +531,20 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('admin.club.index') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
                     </span>
                     <span>Club</span>
                 </a>
-                <ul>
+                {{--  <ul>
                     <li>
                         <a  href="{{ route('admin.club') }}">Add Club</a>
                     </li>
                     <li>
                         <a  href="{{ route('admin.club.index') }}">View Club</a>
                     </li>
-                </ul>
+                </ul> --}}
             </li>
             <li>
                 <a href="#">

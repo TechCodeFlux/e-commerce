@@ -46,7 +46,7 @@
                         </div>
                     </div>
 
-                    <!-- DOB + Contact
+                    {{-- <!-- DOB + Contact-->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Date of Birth</label>
@@ -72,7 +72,7 @@
                         </div>
                     </div>
 
-                    <!-- Gender
+                     {{-- <!-- Gender -->
                     <div class="mb-3">
                         <label class="form-label d-block">Gender</label>
 
@@ -92,7 +92,7 @@
                         @enderror
                     </div>
 
-                    <!-- Address 
+                    <!-- Address -->
                     <div class="mb-3">
                         <label class="form-label">Address</label>
                         <textarea name="address"
@@ -103,9 +103,9 @@
                         @error('address')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                    </div> -->
+                    </div> --}}
 
-                </div>
+                </div> 
 
                 <div class="card-footer bg-white d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary px-4">
