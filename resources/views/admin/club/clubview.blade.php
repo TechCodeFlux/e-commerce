@@ -1,15 +1,15 @@
     @extends('admin.components.app')
-
+    {{-- @yield('page-title','Club') --}}
     @section('content')
     <div class="mb-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ route('club.dashboard') }}">
+                    <a href="{{ route('admin.dashboard') }}">
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Members</li>
+                <li class="breadcrumb-item active" aria-current="page">Clubs</li>
             </ol>
         </nav>
     </div>
@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-md-flex gap-4 align-items-center">
-                        <div class="d-none d-md-flex">All Members</div>
+                        <div class="d-none d-md-flex">All Clubs</div>
                         <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
@@ -43,9 +43,9 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="">
+                            <a href="{{ route('admin.club') }}">
                                 <button class="btn btn-primary btn-icon">
-                                        <i class="bi bi-plus-circle"></i> Add Member
+                                        <i class="bi bi-plus-circle"></i> Add Club
                                 </button>
                             </a>
                         </div>
@@ -59,8 +59,11 @@
                       <tr>
                          <th>Name</th>  
                          <th>email</th>  
-                         <th>phone</th>
-                         <th>Status</th>
+                         <th>contact</th>
+                         <th>Address</th>
+                         <th>country_id</th>
+                         <th>state_id</th>
+                         <th>city</th>
                         <th>Action</th>
                      </tr>
                     </thead>
@@ -80,7 +83,7 @@
                     <!-- <input type="hidden" name="_method" value="DELETE"> -->
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="hidden" id="deleteId" name="deleteId">
-                        <p>Are you sure you want to delete this Member</p>
+                        <p>Are you sure you want to delete this club</p>
                         <div class="modal-footer">
                         
                             <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
@@ -91,28 +94,20 @@
             </div>
         </div>   
 </div> 
-
+@section('script')
 <script src="{{ url('libs/dataTable/datatables.min.js') }}"></script>
 <script src="{{ url('libs/range-slider/js/ion.rangeSlider.min.js') }}"></script>
 <script>
-@if(Session::has('success_message'))
-$(document).ready( function () {
-    Swal.fire({
-        icon: 'success',
-        title: '{{ Session::get('success_message') }}',
-      
-        footer: ''
-    })
-})
-@endif
+
 $(document).ready(function() {
+    console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
     $clubTable= $('#club').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url: '{{ route('admin.clubs') }}',
+            url: '{{ route('admin.clubsindex') }}',
             data: function(d) {
                 
             }
@@ -129,19 +124,28 @@ $(document).ready(function() {
                 name: 'email'
             },
             {
-                data: 'phone',
-                name: 'phone'
+                data: 'contact',
+                name: 'contact'
             },
             {
-                data: 'status',
-                name: 'status'
+                data: 'address',
+                name: 'address'
+            },{
+                data: 'country_id',
+                name: 'country_id'
+            },{
+                data: 'state_id',
+                name: 'state_id'
+            },{
+                data: 'city',
+                name: 'city'
             },
-            @if(auth()->user()->hasPermissionTo('Edit club member')|| auth()->user()->hasPermissionTo('Delete club member'))
             { 
                 data: 'action',
-                name: 'action'
+                name: 'action',
+                orderable: false,
+                searchable: false
             }
-            @endif 
         ],
         columnDefs: [{
             'defaultContent': '--',
@@ -168,27 +172,29 @@ $(document).ready(function() {
     })
     $('#pageLength').val($clubTable.page.len());
 })
-$('table').off('click').on('click','.delete-club-member',function(){
-    var href=$(this).data('href');
-    $('.btn_delete_club_member').click(function(){
-        $.ajax({
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
-            type: 'DELETE',
-            dataType : 'JSON',
-            url : href,
-            success:function(response){
-                $('#delete-modal').modal('hide');
-                $('#club').DataTable().ajax.reload();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Member deleted successfully',
-                    footer: ''
-                })
-            }  
-        })
-    })
+//delete club member
+// $('table').off('click').on('click','.delete-club-member',function(){
+//     var href=$(this).data('href');
+//     $('.btn_delete_club_member').click(function(){
+//         $.ajax({
+//             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
+//             type: 'DELETE',
+//             dataType : 'JSON',
+//             url : href,
+//             success:function(response){
+//                 $('#delete-modal').modal('hide');
+//                 $('#club').DataTable().ajax.reload();
+//                 Swal.fire({
+//                     icon: 'success',
+//                     title: 'Member deleted successfully',
+//                     footer: ''
+//                 })
+//             }  
+//         })
+//     })
 
-})
+// })
 </script>
 
+@endsection
 @endsection

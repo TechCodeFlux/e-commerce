@@ -1,12 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DevelopmentController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ClubController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ClubController;
 
 // Auth::routes();
 
@@ -15,29 +13,34 @@ Route::get('/', function () {return view('admin.auth.login');});
 
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
     Auth::routes(['register' => false]);    
-
+    //dashboard controller
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
     Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');
-    Route::post('club', [DashboardController::class, 'club'])->name('club');
-    Route::get('club', [DashboardController::class, 'club'])->name('club');
-    Route::post('club', [DashboardController::class, 'store'])->name('club.store'); 
-    Route::get('club', [DashboardController::class, 'clubindex'])->name('club.index');
-     Route::get('clubs', [DashboardController::class, 'clubindex'])->name('admin.clubs');
-    Route::delete('club/{club}', [DashboardController::class, 'destroy'])->name('club.destroy');
-    Route::get('club/{club}/edit', [DashboardController::class, 'edit'])->name('club.edit');
-    Route::put('club/{club}', [DashboardController::class, 'update'])->name('club.update');
+    //admin club controller
+    Route::get('clubs', [ClubController::class, 'index'])->name('clubsindex'); //view clubs in table 
+    Route::get('clubsform', [ClubController::class, 'create'])->name('club'); //To add club data form
+    Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table
+    Route::post('clubsupdate', [ClubController::class, 'update'])->name('update'); //add club data update
 
-    Route::get('addadmin', [DashboardController::class, 'addnew'])->name('addadmin.create');
-    Route::post('addadmin', [DashboardController::class, 'storeadmin'])->name('addadmin.store');
+
+    // Route::post('club', [DashboardController::class, 'club'])->name('club');
+    // Route::get('club', [DashboardController::class, 'club'])->name('club');
+    // Route::post('club', [DashboardController::class, 'store'])->name('club.store'); 
+    // Route::get('club', [DashboardController::class, 'clubindex'])->name('club.index');
+    
+    // Route::delete('club/{club}', [DashboardController::class, 'destroy'])->name('club.destroy');
+    // Route::get('club/{club}/edit', [DashboardController::class, 'edit'])->name('club.edit');
+    // Route::get('addadmin', [DashboardController::class, 'addnew'])->name('addadmin.create');
+    // Route::post('addadmin', [DashboardController::class, 'storeadmin'])->name('addadmin.store');
 
 });
 
-Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-    Auth::routes(['register' => false]);    
+// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+//     Auth::routes(['register' => false]);    
 
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
+//     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// });
 // Auth::routes();
 
 // Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
