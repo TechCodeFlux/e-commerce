@@ -194,9 +194,24 @@
                             </div>
                         </div>
                     </div>
-                   
+
+                    {{-- error display --}}
+
+                    <div class="mb-4">
+                    @if ($errors->any())
+                     <div class="alert alert-danger">
+                     <ul>
+                     @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                     @endforeach
+                     </ul>
+                     </div>
+                     @endif
+                    </div>
+                   {{-- error display end --}}
+
                   
-                </div>
+                
                 {{-- <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
                     <div class="card">
                         <div class="card-body">

@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str; 
+use Illuminate\Support\Facades\Hash;
 use App\Models\Club;
 use App\Models\Admin;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
-
 
 
 class DashboardController extends Controller
@@ -39,9 +38,10 @@ class DashboardController extends Controller
 
         return redirect()->route('admin.profile')->with('success', 'Profile updated successfully.');
     }
+    
     public function club()
     {
-        return view('admin.club');
+        return view('admin.addclub');
     }
     public function store(Request $request)
     {
@@ -74,71 +74,67 @@ class DashboardController extends Controller
         
         return redirect()->back()->with('success', 'Club registered successfully!');
     }
-    public function clubindex()
-    {
-        $clubs = Club::all();
-        return view('admin.clubview', compact('clubs'));
-    }
-    public function destroy(Club $club)
-    {
-        $club->delete();
+   
+    // public function destroy(Club $club)
+    // {
+    //     $club->delete();
 
-        return redirect()
-            ->route('admin.club.index')
-            ->with('success', 'Club deleted successfully.');
-    }
+    //     return redirect()
+    //         ->route('admin.club.index')
+    //         ->with('success', 'Club deleted successfully.');
+    // }
 
-    public function edit(Club $club)
-    {
-        return view('admin.clubedit', compact('club'));
-    }
+    // public function edit(Club $club)
+    // {
+    //     return view('admin.clubedit', compact('club'));
+    // }
 
 
-    public function update(Request $request, Club $club)
-    {
-        $request->validate([
-            'club_name'    => 'required|string|max:255',
-            'club_address' => 'required|string',
-            'club_contact' => 'required|string|max:20',
-            'email'        => 'required|email',
-        ]);
+    // public function update(Request $request, Club $club)
+    // {
+    //     $request->validate([
+    //         'club_name'    => 'required|string|max:255',
+    //         'club_address' => 'required|string',
+    //         'club_contact' => 'required|string|max:20',
+    //         'email'        => 'required|email',
+    //     ]);
 
-        Club::update([
-            'name'       => $request->club_name,
-            'address'    => $request->club_address,
-            'contact'    => $request->club_contact,
-            'email'      => $request->email,
-            'country_id' => $request->country_id,
-            'state_id'   => $request->state_id,
-            'city'       => $request->city,
-            'zip_code'   => $request->zip_code,
-            'status'     => $request->has('status'),
-        ]);
+    //     User::update([
+    //         'name'       => $request->club_name,
+    //         'address'    => $request->club_address,
+    //         'contact'    => $request->club_contact,
+    //         'email'      => $request->email,
+    //         'country_id' => $request->country_id,
+    //         'state_id'   => $request->state_id,
+    //         'city'       => $request->city,
+    //         'zip_code'   => $request->zip_code,
+    //         'status'     => $request->has('status'),
+    //     ]);
 
-        return redirect()
-            ->route('admin.club.index')
-            ->with('success', 'Club updated successfully');
-    }
+    //     return redirect()
+    //         ->route('admin.club.index')
+    //         ->with('success', 'Club updated successfully');
+    // }
 //aishwarya
-    public function addnew()
-    {
-        return view('admin.admin');
-    }
+    // public function addnew()
+    // {
+    //     return view('admin.admin');
+    // }
 
-    public function storeadmin(Request $request)
-    {
-        $validated = $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'required|email|unique:users,email',
-            'dob'     => 'required|date',
-            'gender'  => 'required|in:Male,Female,Other',
-            'address' => 'required|string',
-            'contact' => 'required|string|max:15',
-        ]);
+    // public function storeadmin(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'name'    => 'required|string|max:255',
+    //         'email'   => 'required|email|unique:users,email',
+    //         'dob'     => 'required|date',
+    //         'gender'  => 'required|in:Male,Female,Other',
+    //         'address' => 'required|string',
+    //         'contact' => 'required|string|max:15',
+    //     ]);
 
-        return redirect()
-            ->route('admin.addadmin.create')
-            ->with('success', 'Admin added successfully!');
-    }
+    //     return redirect()
+    //         ->route('admin.addadmin.create')
+    //         ->with('success', 'Admin added successfully!');
+    // }
 
 }

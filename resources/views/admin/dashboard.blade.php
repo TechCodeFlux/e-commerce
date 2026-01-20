@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Vetra | E-Commerce</title>
-</head>
-<body> 
 
-@include('admin.components.app')
-
+@extends('admin.components.app')
+@section('content')
 
 <div class="content ">
         
@@ -647,6 +641,4 @@
     </div>
     <!-- ./ content -->
 
-    
-</body>
-</html>
+@endsection
