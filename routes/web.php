@@ -2,11 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Auth\LoginController;
+// use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Club\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ClubController;
+use App\Http\Controllers\Club\ClubDashboardController;
 
-// Auth::routes();
+ Auth::routes();
 
 
 Route::get('/', function () {return view('admin.auth.login');});
@@ -37,32 +39,44 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
 
 });
 
-// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-//     Auth::routes(['register' => false]);    
+// club route
 
-//     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+// Route::get('/club', function () {return view('club.auth.login');}); // club login redirection
+
+// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+//     Auth::routes(['register' => false]);  
+
+//      Route::post('/login', [LoginController::class, 'login'])
+//         ->name('login.submit');
+        
+//      Route::middleware('auth:club')->group(function () {
+//         Route::get('/dashboard', [ClubDashboardController::class, 'index'])
+//             ->name('dashboard');
+//     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
 // });
-// Auth::routes();
-
-// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-//     Auth::routes(['register' => false]);});
+// });
 
 
-// Route::get('/', function () {return view('adminlogin');});
-// Route::post('adminlogin', [LoginController::class, 'login'])->name('adminlogin');
-// Route::post('/club', [ClubController::class, 'store'])->name('store');
-// Route::resource('admin',DevelopmentController::class);
-// Route::post('admin', [AdminController::class, 'login']);
-// Route::resource('club', ClubController::class);
-// Route::get('/clubs', [ClubController::class, 'index'])->name('index');
-// Route::post('/club', [ClubController::class, 'store'])->name('club.store'); 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::prefix('club')
+    ->name('club.')
+    ->middleware('web') // ✅ important for session/auth
+    ->group(function () {
 
-Route::get('/club', function () {return view('club.auth.login');}); // club login redirection
+        // Login form
+        Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 
-Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-    Auth::routes(['register' => false]);  
+        // Login POST
+        Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 
-        // Route::get('login', [LoginController::class, 'showLoginForm'])->name('dashboard');
+        // Routes that require authentication for 'club' guard
+        Route::middleware('auth:club')->group(function () {
+
+            // Dashboard
+            Route::get('/dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');
+
+            // Logout
+            Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+        });
 });

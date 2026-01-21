@@ -4,14 +4,17 @@ namespace App\Http\Controllers\Club;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\option;
+use App\Models\Option;
+
 
 class ClubDashboardController extends Controller
 {
     public function index()
     {
-        return view('admin.club.dashboard');
+        return view('club.dashboard');
     }
+
+    
     public function store(Request $request)
     {
         $request->validate([
