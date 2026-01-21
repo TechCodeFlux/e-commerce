@@ -1,10 +1,31 @@
 @extends('admin.components.app')
 
 @section('content')
+{{-- title breadcrumb --}}
+<div class="mb-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('admin.dashboard') }}">
+                        <i class="bi bi-globe2 small me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.clubsindex') }}">
+                    <i class="bi bi-people-fill small me-2"></i>Clubs</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <i class="bi bi-building me-1"></i>Add Clubs</li>
+            </ol>
+        </nav>
+    </div>
+
+    {{-- content form --}}
 <div class="container mt-4">
 
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
+            
+            <?php
+            echo $clubuser->id."dfvdxff"; 
+            ?>
 
             <h6 class="card-title mb-4 text-center">
                 {{ $clubuser->id ? 'Edit' : 'Add' }} Club User
@@ -50,9 +71,9 @@
 
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Phone</label>
-                                <input type="text" name="phone" class="form-control" placeholder="Contact"
-                                    value="{{ old('phone', $clubuser->phone ?? '') }}">
-                                @error('phone')
+                                <input type="text" name="contact" class="form-control" placeholder="Contact"
+                                    value="{{ old('contact', $clubuser->contact ?? '') }}">
+                                @error('contact')
                                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -68,7 +89,7 @@
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Country</label>
                                 <input type="text" name="country" class="form-control" placeholder="Country"
-                                    value="{{ old('country', $clubuser->country ?? '') }}">
+                                    value="{{ old('country', $clubuser->country_id ?? '') }}">
                                 @error('country')
                                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                                 @enderror
@@ -77,7 +98,7 @@
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">State</label>
                                 <input type="text" name="state" class="form-control" placeholder="State"
-                                    value="{{ old('state', $clubuser->state ?? '') }}">
+                                    value="{{ old('state', $clubuser->state_id ?? '') }}">
                                 @error('state')
                                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                                 @enderror
@@ -137,7 +158,7 @@
     </div>
 
 </div>
-
+@section('script')
 <script>
     const statusSwitch = document.getElementById('statusSwitch');
     const statusLabel = document.getElementById('statusLabel');
@@ -146,4 +167,5 @@
         statusLabel.innerText = this.checked ? 'Active' : 'Inactive';
     });
 </script>
+@endsection
 @endsection

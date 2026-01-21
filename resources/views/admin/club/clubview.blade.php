@@ -64,6 +64,7 @@
                          <th>country_id</th>
                          <th>state_id</th>
                          <th>city</th>
+                         <th>zip_code</th>
                         <th>Action</th>
                      </tr>
                     </thead>
@@ -130,15 +131,22 @@ $(document).ready(function() {
             {
                 data: 'address',
                 name: 'address'
-            },{
+            },
+            {
                 data: 'country_id',
                 name: 'country_id'
-            },{
+            },
+            {
                 data: 'state_id',
                 name: 'state_id'
-            },{
+            },
+            {
                 data: 'city',
                 name: 'city'
+            },
+             {
+                data: 'zip_code',
+                name: 'zipcode'
             },
             { 
                 data: 'action',

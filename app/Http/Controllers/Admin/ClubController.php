@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 // use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Validation\Rule;
+
 
 //datatables
 use App\Models\Club;
@@ -28,14 +30,13 @@ class ClubController extends Controller
     ->eloquent($club)
             ->addColumn('action', function (Club $club) use ($request) {
                 $actions= '<div class="d-flex gap-1"><div class="dropdown">';
+                //view button
                 $actions .= '<a href="' . route('admin.clubsindex', $club->id) . '" class="btn btn-sm btn-clean btn-icon" title="Show"><i class="fas fa-eye" style="color: #ffc107;"></i></a>';
-                // ' . route('admin.clubs.edit', $club->id) . '
-                 $actions .= '<a href="' . route('admin.club', $club->id) . '" class="btn btn-sm btn-outline-secondary me-2" title="Edit">
+                //edit button
+                $actions .= '<a href="' . route('admin.editclub', $club->id) . '" class="btn btn-sm btn-outline-secondary me-2" title="Edit">
                     <i class="fas fa-pencil-alt"></i>
                  </a>';
-
-                
-
+                //delete button
                 $actions .= '<button type="button" class="btn btn-sm btn-outline-danger delete-club" onclick="deleteClub(' . $club->id . ')" title="Delete">
                                 <i class="fas fa-trash-alt"></i>
                             </button>';
@@ -56,6 +57,7 @@ class ClubController extends Controller
     public function create()
     {
         $clubuser = new Club(); // empty model
+        // dd($clubuser);
         return view('admin.club.form', compact('clubuser'));
     }
     /**
@@ -64,12 +66,12 @@ class ClubController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-        'club_name'    => 'required|string|max:255',
-        'club_address' => 'required|string',
-        'club_contact' => 'required|string|max:20',
+        'name'    => 'required|string|max:255',
+        'address' => 'required|string',
+        'contact' => 'required|string|max:20',
         'email'        => 'required|email|unique:clubs,email',
-        'country_id'   => 'required|integer',
-        'state_id'     => 'required|string|max:100',
+        'country'   => 'required|integer',
+        'state'     => 'required|string|max:100',
         'city'         => 'required|string|max:100',
         'zip_code'     => 'required|string|max:10',
         'status'       => 'required',//'nullable',
@@ -78,18 +80,21 @@ class ClubController extends Controller
         $randomPassword = Str::random(8);
 
         Club::create([
-            'name' => $request->club_name,
-            'address' => $request->club_address,
-            'contact' => $request->club_contact,
+            'name' => $request->name,
+            'address' => $request->address,
+            'contact' => $request->contact,
             'email' => $request->email,
-            'country_id' => $request->country_id,
-            'state_id' => $request->state_id,
+            'country_id' => $request->country,
+            'state_id' => $request->state,
             'city' => $request->city,
             'zip_code' => $request->zip_code,
             'status' => $request->has('status'),
             'password'    => Hash::make($randomPassword),
         ]);
-        return redirect()->back()->with('success', 'Club registered successfully!');
+        return redirect()
+        // ->back()
+        ->route('admin.clubsindex')
+        ->with('success', 'Club registered successfully!');
     }
 
     /**
@@ -103,38 +108,48 @@ class ClubController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Club $club)
+    public function edit($id)
     {
-        $clubuser = Auth::guard('admin')->user();
+        $clubuser = Club::findOrFail($id);
         return view('admin.club.form', compact('clubuser'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Club $club)
     {
-        $request->validate([
-            'club_name'    => 'required|string|max:255',
-            'club_address' => 'required|string',
-            'club_contact' => 'required|string|max:20',
-            'email'        => 'required|email',
-        ]);
+       $request->validate([
+    'name' => 'required|string|max:255',
+    'address' => 'required|string',
+    'contact' => 'required|string|max:20',
+    'email' => [
+        'required',
+        'email',
+        Rule::unique('clubs')->ignore($club->id), // ignore current club id
+    ],
+    'country' => 'required|integer',
+    'state' => 'required|string|max:100',
+    'city' => 'required|string|max:100',
+    'zip_code' => 'required|string|max:10',
+    'status' => 'nullable',
+]);
 
-        Club::update([
-            'name'       => $request->club_name,
-            'address'    => $request->club_address,
-            'contact'    => $request->club_contact,
-            'email'      => $request->email,
-            'country_id' => $request->country_id,
-            'state_id'   => $request->state_id,
-            'city'       => $request->city,
-            'zip_code'   => $request->zip_code,
-            'status'     => $request->has('status'),
-        ]);
+        $club->update([
+        'name'       => $request->name,
+        'address'    => $request->address,
+        'contact'    => $request->contact,
+        'email'      => $request->email,
+        'country_id' => $request->country,
+        'state_id'   => $request->state,
+        'city'       => $request->city,
+        'zip_code'   => $request->zip_code,
+        'status'     => $request->has('status'),
+    ]);
 
         return redirect()
-            ->route('admin.club.index')
+            ->route('admin.clubsindex')
             ->with('success', 'Club updated successfully');
     }
 

@@ -19,41 +19,11 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');
     //admin club controller
     Route::get('clubs', [ClubController::class, 'index'])->name('clubsindex'); //view clubs in table 
-    Route::get('clubsform', [ClubController::class, 'create'])->name('club'); //To add club data form 
-    Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table
-    Route::post('clubsupdate', [ClubController::class, 'update'])->name('update'); //add club data update
-
-
-    // Route::post('club', [DashboardController::class, 'club'])->name('club');
-    // Route::get('club', [DashboardController::class, 'club'])->name('club');
-    // Route::post('club', [DashboardController::class, 'store'])->name('club.store'); 
-    // Route::get('club', [DashboardController::class, 'clubindex'])->name('club.index');
-    
-    // Route::delete('club/{club}', [DashboardController::class, 'destroy'])->name('club.destroy');
-    // Route::get('club/{club}/edit', [DashboardController::class, 'edit'])->name('club.edit');
-    // Route::get('addadmin', [DashboardController::class, 'addnew'])->name('addadmin.create');
-    // Route::post('addadmin', [DashboardController::class, 'storeadmin'])->name('addadmin.store');
+    Route::get('clubsform', [ClubController::class, 'create'])->name('club'); //To add club data form(submit form)
+    Route::get('clubsform/{club}', [ClubController::class, 'edit'])->name('editclub'); //To add club data form for edit(update form) 
+    Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table (submit form)
+    Route::put('clubsupdate/{club}', [ClubController::class, 'update'])->name('update'); //add club data (update form)
 
 });
 
-// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-//     Auth::routes(['register' => false]);    
 
-//     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-// });
-// Auth::routes();
-
-// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-//     Auth::routes(['register' => false]);});
-
-
-// Route::get('/', function () {return view('adminlogin');});
-// Route::post('adminlogin', [LoginController::class, 'login'])->name('adminlogin');
-// Route::post('/club', [ClubController::class, 'store'])->name('store');
-// Route::resource('admin',DevelopmentController::class);
-// Route::post('admin', [AdminController::class, 'login']);
-// Route::resource('club', ClubController::class);
-// Route::get('/clubs', [ClubController::class, 'index'])->name('index');
-// Route::post('/club', [ClubController::class, 'store'])->name('club.store'); 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
