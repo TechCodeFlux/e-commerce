@@ -65,5 +65,7 @@ class ClubDashboardController extends Controller
             ->route('club.option.index')
             ->with('success', 'Option deleted successfully');
     }
+
+  
 }
 

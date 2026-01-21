@@ -20,6 +20,21 @@ Route::get('/', function () {return view('club.option');});
 //     ->name('admin.club.store');
 
 
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
+    Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');
+    Route::post('club', [DashboardController::class, 'club'])->name('club');
+    Route::get('club', [DashboardController::class, 'club'])->name('club');
+    Route::post('club', [DashboardController::class, 'store'])->name('club.store'); 
+    Route::get('clubview', [DashboardController::class, 'clubindex'])->name('club.index');
+    Route::delete('club/{club}', [DashboardController::class, 'destroy'])->name('club.destroy');
+    Route::get('club/{club}/edit', [DashboardController::class, 'edit'])->name('club.edit');
+    Route::put('club/{club}', [DashboardController::class, 'update'])->name('club.update');
+
+    Route::get('addadmin', [DashboardController::class, 'addnew'])->name('addadmin.create');
+    Route::post('addadmin', [DashboardController::class, 'storeadmin'])->name('addadmin.store');
+
+});
 
 // // Route::get('/', function () {return view('club.auth.login');});
 
@@ -59,6 +74,6 @@ Route::get('/', function () {return view('club.option');});
 // Route::post('admin', [AdminController::class, 'login']);
 // Route::resource('club', ClubController::class);
 // Route::get('/clubs', [ClubController::class, 'index'])->name('index');
-// Route::post('/club', [ClubController::class, 'store'])->name('club.store');
+// Route::post('/club', [ClubController::class, 'store'])->name('club.store'); 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
