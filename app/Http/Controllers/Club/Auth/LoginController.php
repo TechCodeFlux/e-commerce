@@ -33,6 +33,7 @@ class LoginController extends Controller
      *
      * @return void
      */
+    protected $redirectTo = 'club/dashboard';
     // public function __construct()
     // {
     //     $this->middleware('guest')->except('logout');
@@ -57,7 +58,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-     return redirect()->route('club.dashboard');
+     return redirect()->route('club.login');
     }
 
 }
