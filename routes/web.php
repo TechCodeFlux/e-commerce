@@ -10,8 +10,17 @@ use App\Http\Controllers\Admin\DashboardController;
 
 // Auth::routes();
 
+Route::get('/', [DashboardController::class, 'index'])->name('home');
 
-Route::get('/', function () {return view('admin.auth.login');});
+Route::get('/dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');
+
+//Route::get('/', function () {return view('club.auth.login');});
+
+//Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+Route::get('/', function () {return view('dashboard');});
+
+
 
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
     Auth::routes(['register' => false]);    

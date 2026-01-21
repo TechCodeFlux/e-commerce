@@ -5,7 +5,7 @@
 </head>
 <body>
 
-@include('admin.components.app')
+@include('club.components.app')
 
 
 </div>

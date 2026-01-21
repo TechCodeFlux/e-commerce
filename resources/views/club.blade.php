@@ -9,6 +9,7 @@
 <h3>Club Entry</h3>
 
 @if(session('success'))
+
     <p style="color:green">{{ session('success') }}</p>
 @endif
 
@@ -41,6 +42,5 @@
 <br><br>
 <a href="{{ route('club.index') }}">
     <button type="button">View Clubs</button>
-
 </body>
 </html>

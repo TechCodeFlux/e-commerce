@@ -107,7 +107,7 @@
             </li>
             <li class="nav-item ms-3">
                     <button class="btn btn-primary btn-icon">
-        <i class="bi bi-plus-circle"></i> Add Product
+        <i class="bi bi-plus-circle"></i> Add Club Member 
     </button>
             </li>
         </ul>
