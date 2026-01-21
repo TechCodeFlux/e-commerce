@@ -23,6 +23,8 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('clubsform/{club}', [ClubController::class, 'edit'])->name('editclub'); //To add club data form for edit(update form) 
     Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table (submit form)
     Route::put('clubsupdate/{club}', [ClubController::class, 'update'])->name('update'); //add club data (update form)
+    Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
+
 
 });
 

@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Validation\Rule;
 
-
 //datatables
 use App\Models\Club;
-
+use App\Models\Country;
+use App\Models\State;
 
 class ClubController extends Controller
 {
@@ -57,8 +57,8 @@ class ClubController extends Controller
     public function create()
     {
         $clubuser = new Club(); // empty model
-        // dd($clubuser);
-        return view('admin.club.form', compact('clubuser'));
+        $countries = Country::orderBy('name')->get();
+        return view('admin.club.form', compact('clubuser','countries'));
     }
     /**
      * Store a newly created resource in storage.
@@ -111,7 +111,9 @@ class ClubController extends Controller
     public function edit($id)
     {
         $clubuser = Club::findOrFail($id);
-        return view('admin.club.form', compact('clubuser'));
+        $countries = Country::orderBy('name')->get();
+        $states = State::where('country_id', $club->country_id)->get();
+        return view('admin.club.form', compact('clubuser','countries','states'));
     }
 
 
@@ -159,5 +161,12 @@ class ClubController extends Controller
     public function destroy(Club $club)
     {
         //
+    }
+    // Get states based on country ID
+    public function getStates($countryId)
+    {
+        return State::where('country_id', $countryId)
+            ->orderBy('name')
+            ->get();
     }
 }

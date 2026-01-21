@@ -25,5 +25,11 @@ class DatabaseSeeder extends Seeder
                 'password' => 'password',
             ]
         );
+
+        // countrySeeder
+        $this->call([
+            CountrySeeder::class,
+        ]);
+
     }
 }
