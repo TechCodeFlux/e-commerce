@@ -41,6 +41,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
 
 // club route
 
+
 Route::prefix('club')
     ->name('club.')
     ->middleware('web') 
