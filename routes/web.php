@@ -41,27 +41,9 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
 
 // club route
 
-
-// Route::get('/club', function () {return view('club.auth.login');}); // club login redirection
-
-// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-//     Auth::routes(['register' => false]);  
-
-//      Route::post('/login', [LoginController::class, 'login'])
-//         ->name('login.submit');
-        
-//      Route::middleware('auth:club')->group(function () {
-//         Route::get('/dashboard', [ClubDashboardController::class, 'index'])
-//             ->name('dashboard');
-//     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
-// });
-// });
-
-
 Route::prefix('club')
     ->name('club.')
-    ->middleware('web') // ✅ important for session/auth
+    ->middleware('web') 
     ->group(function () {
 
         // Login form
