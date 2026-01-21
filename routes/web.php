@@ -19,7 +19,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');
     //admin club controller
     Route::get('clubs', [ClubController::class, 'index'])->name('clubsindex'); //view clubs in table 
-    Route::get('clubsform', [ClubController::class, 'create'])->name('club'); //To add club data form
+    Route::get('clubsform', [ClubController::class, 'create'])->name('club'); //To add club data form 
     Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table
     Route::post('clubsupdate', [ClubController::class, 'update'])->name('update'); //add club data update
 

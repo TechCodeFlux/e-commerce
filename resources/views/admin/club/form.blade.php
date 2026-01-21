@@ -22,8 +22,7 @@
                     <form 
                         action="{{ $clubuser->id ? route('admin.update', $clubuser->id) : route('admin.addclub') }}" 
                         method="POST" 
-                        enctype="multipart/form-data"
-                    >
+                        enctype="multipart/form-data"  autocomplete="off">
                         @csrf
                         @if($clubuser->id)
                             @method('PUT')
@@ -126,7 +125,7 @@
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary px-5">
                                 {{ $clubuser->id ? 'Update' : 'Submit' }}
-                            </button>
+                            </button> 
                         </div>
 
                     </form>

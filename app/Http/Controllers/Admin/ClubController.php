@@ -30,7 +30,7 @@ class ClubController extends Controller
                 $actions= '<div class="d-flex gap-1"><div class="dropdown">';
                 $actions .= '<a href="' . route('admin.clubsindex', $club->id) . '" class="btn btn-sm btn-clean btn-icon" title="Show"><i class="fas fa-eye" style="color: #ffc107;"></i></a>';
                 // ' . route('admin.clubs.edit', $club->id) . '
-                 $actions .= '<a href="" class="btn btn-sm btn-outline-secondary me-2" title="Edit">
+                 $actions .= '<a href="' . route('admin.club', $club->id) . '" class="btn btn-sm btn-outline-secondary me-2" title="Edit">
                     <i class="fas fa-pencil-alt"></i>
                  </a>';
 
@@ -55,7 +55,7 @@ class ClubController extends Controller
      */
     public function create()
     {
-        $clubuser = Auth::guard('admin')->user();
+        $clubuser = new Club(); // empty model
         return view('admin.club.form', compact('clubuser'));
     }
     /**
@@ -105,7 +105,8 @@ class ClubController extends Controller
      */
     public function edit(Club $club)
     {
-        //
+        $clubuser = Auth::guard('admin')->user();
+        return view('admin.club.form', compact('clubuser'));
     }
 
     /**
