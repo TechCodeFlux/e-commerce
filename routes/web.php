@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\ClubController;
 use App\Http\Controllers\Club\ClubDashboardController;
 use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
-use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
+// use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
 
 //arjun
 Route::get('/', function () {return view('club.auth.login');})->name('club.login');
@@ -46,7 +46,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
 
 //aishwarya
 Route::get('/clubmember', function () {return view('clubmember.auth.login');})->name('clubmember.login');
-Route::post('/clubmember', [ClubMemberLoginController::class, 'login'])->name('clubmember.login.submit');
+// Route::post('/clubmember', [ClubMemberLoginController::class, 'login'])->name('clubmember.login.submit');
 
 
 Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controllers\ClubMember')->group(function () {
