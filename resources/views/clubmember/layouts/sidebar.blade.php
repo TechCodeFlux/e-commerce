@@ -527,7 +527,7 @@
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>
-                    <span>Club Dashboard</span>
+                    <span>Dashboard</span>
                 </a>
             </li>
             <li>

@@ -9,7 +9,7 @@ use App\Http\Controllers\Club\ClubDashboardController;
 use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 
-
+//arjun
 Route::get('/', function () {return view('club.auth.login');})->name('club.login');
 Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
 Route::post('/logout', [ClubLoginController::class, 'logout'])->name('club.logout');
@@ -20,7 +20,7 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
     Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
 
 });
-
+//pauljo
 // Admin login
 Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
 Route::post('/admin', [AdminLoginController::class, 'login'])->name('admin.login.submit');
@@ -41,4 +41,16 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
 });
 
+
+
+//aishwarya
+Route::get('/clubmember', function () {return view('club.auth.login');})->name('clubmember.login');
+
+
+Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controllers\ClubMember')->group(function () {
+    Auth::routes(['register' => false]); 
+    //dashboard controller
+    Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
+
+});
 
