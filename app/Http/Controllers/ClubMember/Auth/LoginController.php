@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
-{
+{ 
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -38,26 +38,21 @@ class LoginController extends Controller
     //     $this->middleware('guest')->except('logout');
     //     $this->middleware('auth')->only('logout');
     // }
+    public function showLoginForm()
+    {
+
+        return view('clubmember.auth.login');
+    }
+    protected function redirectTo() 
+    {
+        return route('clubmember.dashboard');
+    }
     protected function guard()
     {
         return Auth::guard('clubmember');
     }
-    public function showLoginForm()
-    {
-        return view('clubmember.auth.login');
-    }
-    protected function redirectTo()
-    {
-        return route('clubmember.dashboard');
-    }
-
     public function logout(Request $request)
     {
         Auth::guard('clubmember')->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('clubmember.login');
     }
 }

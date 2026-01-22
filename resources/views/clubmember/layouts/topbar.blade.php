@@ -105,17 +105,12 @@
                             class="text-primary">$1.442,78</strong></h6>
                 </div>
             </li>
-            {{-- <li class="nav-item ms-3">
+            <li class="nav-item ms-3">
                     <button class="btn btn-primary btn-icon">
         <i class="bi bi-plus-circle"></i> Add Product
     </button>
             </li>
-            <li class="nav-item ms-3">
-                    <button class="btn btn-primary btn-icon">
-        <i class="bi bi-plus-circle"></i> Add Product option
-    </button>
-            </li>
-        </ul> --}}
+        </ul>
     </div>
     <!-- Header mobile buttons -->
     <div class="header-mobile-buttons">

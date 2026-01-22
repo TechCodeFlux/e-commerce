@@ -23,6 +23,9 @@
 
     <!-- Main style file -->
     <link rel="stylesheet" href="{{ url('dist/css/app.min.css')}}" type="text/css">
+    {{-- Icon Pack --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>

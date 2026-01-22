@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login - Vetra | E-Commerce HTML Club Member Dashboard Template</title>
+    <title>Login - Vetra | E-Commerce HTML Admin Dashboard Template</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ url('assets/images/favicon.png') }}"/>
@@ -27,7 +27,7 @@
 <div class="preloader">
     <div class="preloader-icon"></div>
 </div>
-<!-- end::preloader --> 
+<!-- end::preloader -->
 
 
     <div class="form-wrapper">
@@ -44,22 +44,22 @@
                                     <h1 class="display-8">Club Member Sign In</h1>
                                     <p class="text-muted">Sign in to Vetra to continue</p>
                                 </div>
-                                <form action="{{ route('club.login.submit') }}" method="POST" class="mb-5">
+                                <form action="{{ route('clubmember.login') }}" method="POST" class="mb-5">
                                      @csrf 
                                     <div class="mb-3">
                                         <input type="email" name="email" class="form-control" placeholder="Enter email" autofocus
                                                required>
                                     </div>
-                                    <div class="mb-3">
+                                    {{-- <div class="mb-3">
                                         <input type="password" name="password" class="form-control" placeholder="Enter password"
                                                required>
-                                    </div>
+                                    </div> --}}
                                     <div class="text-center text-lg-start">
-                                        <p class="small">Can't access your account? <a href="#">Reset your password now</a>.</p>
+                                        {{-- <p class="small">Can't access your account? <a href="#">Reset your password now</a>.</p> --}}
                                         <button type="submit" class="btn btn-primary">Sign In</button>
                                     </div>
                                 </form>
-                                <div class="social-links justify-content-center">
+                                {{-- <div class="social-links justify-content-center">
                                     <a href="#">
                                         <i class="ti-google bg-google"></i> Sign in with Google
                                     </a>
@@ -69,11 +69,11 @@
                                 </div>
                                 <p class="text-center d-block d-lg-none mt-5 mt-lg-0">
                                     Don't have an account? <a href="#">Sign up</a>.
-                                </p>
+                                </p> --}}
                             </div>
                         </div>
                     </div>
-                    <div class="col d-none d-lg-flex border-start align-items-center justify-content-between flex-column text-center">
+                    {{-- <div class="col d-none d-lg-flex border-start align-items-center justify-content-between flex-column text-center">
                         <div class="logo">
                             <img width="120" src="{{ url('assets/images/logo.svg') }}" alt="logo">
                         </div>
@@ -90,7 +90,7 @@
                                 <a href="#">Terms & Conditions</a>
                             </li>
                         </ul>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -103,7 +103,6 @@
 <!-- Main Javascript file -->
 <script src="{{ url('dist/js/app.min.js') }}"></script>
 </body>
-
 </html>
 
                 

@@ -11,7 +11,7 @@ class ClubDashboardController extends Controller
 {
     public function index()
     {
-        return view('club.dashboard');
+        return view('club.dashboard'); 
     }
 
     

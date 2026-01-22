@@ -23,21 +23,14 @@ return [
             'driver' => 'session',
             'provider' => 'admins', // ❗ FIXED
         ],
-
         'club' => [
             'driver' => 'session',
             'provider' => 'clubs',
         ],
-
         'clubmember' => [
             'driver' => 'session',
-            'provider' => 'clubmembers',
+            'provider' => 'club_members',
         ],
-
-        'providers' => [
-        'clubmembers' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\ClubMember::class,
     ],
 ],
     ],
@@ -65,6 +58,18 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Club::class,
         ],
+        'clubs' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Club::class, 
+        ],
+        'club_members' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\ClubMember::class,
+        ],
+        // 'users' => [
+        //     'driver' => 'database',
+        //     'table' => 'users',
+        // ],
     ],
 
 

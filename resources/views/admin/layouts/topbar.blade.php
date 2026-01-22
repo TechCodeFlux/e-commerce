@@ -28,7 +28,7 @@
     </form>
     <div class="header-bar ms-auto">
         <ul class="navbar-nav justify-content-end">
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="#" class="nav-link nav-link-notify" data-count="2" data-sidebar-target="#notifications">
                     <i class="bi bi-bell icon-lg"></i>
                 </a>
@@ -104,8 +104,8 @@
                     <h6 class="m-0 px-4 py-3 border-top small">Sub Total : <strong
                             class="text-primary">$1.442,78</strong></h6>
                 </div>
-            </li>
-            <li class="nav-item ms-3">
+            </li> --}}
+            {{-- <li class="nav-item ms-3">
                     <button class="btn btn-primary btn-icon">
         <i class="bi bi-plus-circle"></i> Add Product
     </button>
@@ -121,6 +121,7 @@
     </a>
 </li>
 
+            </li> --}}
         </ul>
     </div>
     <!-- Header mobile buttons -->

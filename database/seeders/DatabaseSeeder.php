@@ -27,23 +27,11 @@ class DatabaseSeeder extends Seeder
                 'password' => 'password',
             ]
         );
-        Club::create([
-            'name' => 'Green Valley Golf Club',
-            'address' => '123 Golf Course Road',
-            'contact' => '9876543210',
-            'email' => 'club@xample.com',
-            'country_id' => 1,
-            'state_id' => 1,
-            'city' => 'Bangalore',
-            'zip_code' => '560001',
-            'status' => '0',
-            'password' => Hash::make('password123'),
+
+        // countrySeeder
+        $this->call([
+            CountrySeeder::class,
         ]);
-        Clubmember::updateOrCreate(
-            ['email' => 'abc@example.com'], // condition
-            [   'name' => 'clubmember User',
-                'password' => 'password1',
-            ]
-        );
+
     }
 }
