@@ -32,8 +32,7 @@ return [
             'provider' => 'club_members',
         ],
     ],
-],
-    ],
+
 
 
     /*
@@ -57,10 +56,6 @@ return [
         'clubs' => [
             'driver' => 'eloquent',
             'model' => App\Models\Club::class,
-        ],
-        'clubs' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\Club::class, 
         ],
         'club_members' => [
             'driver' => 'eloquent',

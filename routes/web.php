@@ -6,7 +6,6 @@ use App\Http\Controllers\Club\Auth\LoginController;
 use App\Http\Controllers\Club\ClubDashboardController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ClubController;
-use App\Http\Controllers\Club\ClubDashboardController;
 use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;

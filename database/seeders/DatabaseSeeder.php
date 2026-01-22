@@ -28,10 +28,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // countrySeeder
-        $this->call([
-            CountrySeeder::class,
-        ]);
+        
 
     }
 }
