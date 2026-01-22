@@ -18,9 +18,9 @@ Route::get('/', function () {return view('admin.auth.login');});
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
     Auth::routes(['register' => false]);    
     //dashboard controller //
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
-    Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
+Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');
     //admin club controller
     // Route::get('clubs', [ClubController::class, 'index'])->name('clubsindex'); //view clubs in table 
     // Route::get('clubsform', [ClubController::class, 'create'])->name('club'); //To add club data form 
