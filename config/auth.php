@@ -44,6 +44,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'club' => [
+            'driver' => 'session',
+            'provider' => 'clubs',
+        ],
     ],
 
     /*
@@ -72,6 +76,10 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
+        'clubs' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Club::class, // direct reference
+    ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

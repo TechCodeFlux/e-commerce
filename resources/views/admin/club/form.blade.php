@@ -15,7 +15,7 @@
                     <i class="bi bi-people-fill small me-2"></i> Clubs
                 </a>
             </li>
-            <li class="breadcrumb-item active">Add Clubs</li>
+            <li class="breadcrumb-item active"><i class="bi bi-building small me-2"></i>Add Clubs</li>
         </ol>
     </nav>
 </div>
@@ -24,9 +24,9 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            <h6 class="text-center mb-4">
+            <h4 class="text-center mb-4">
                 {{ $clubuser->id ? 'Edit' : 'Add' }} Club User
-            </h6>
+            </h4>
 
             <form
                 action="{{ $clubuser->id ? route('admin.update', $clubuser->id) : route('admin.addclub') }}"
@@ -123,17 +123,25 @@ document.addEventListener('DOMContentLoaded', function () {
     function loadStates(countryId) {
         stateSelect.innerHTML = '<option value="">Loading...</option>';
 
-        fetch(`/get-states/${countryId}`)
-            .then(res => res.json())
-            .then(states => {
-                stateSelect.innerHTML = '<option value="">Select State</option>';
-                states.forEach(state => {
-                    stateSelect.innerHTML +=
-                        `<option value="${state.id}" ${state.id == selectedState ? 'selected' : ''}>
-                            ${state.name}
-                        </option>`;
-                });
-            });
+       fetch(`/admin/get-states/${countryId}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network error');
+        }
+        return response.json();
+    })
+    .then(states => {
+        stateSelect.innerHTML = '<option value="">Select State</option>';
+        states.forEach(state => {
+            stateSelect.innerHTML +=
+                `<option value="${state.id}">${state.name}</option>`;
+        });
+    })
+    .catch(error => {
+        console.error(error);
+        stateSelect.innerHTML = '<option value="">Failed to load states</option>';
+    });
+
     }
 
     countrySelect.addEventListener('change', function () {

@@ -64,38 +64,43 @@ class ClubController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-        'name'    => 'required|string|max:255',
-        'address' => 'required|string',
-        'contact' => 'required|string|max:20',
-        'email'        => 'required|email|unique:clubs,email',
-        'country'   => 'required|integer',
-        'state'     => 'required|string|max:100',
-        'city'         => 'required|string|max:100',
-        'zip_code'     => 'required|string|max:10',
-        'status'       => 'required',//'nullable',
+{
+    $validated = $request->validate([
+        'name'      => 'required|string|max:255',
+        'address'   => 'required|string',
+        'contact'   => 'required|string|max:20',
+        'email'     => 'required|email|unique:clubs,email',
+
+        'country'   => 'required|integer|exists:countries,id',
+        'state'     => 'required|integer|exists:states,id',
+
+        'city'      => 'required|string|max:100',
+        'zip_code'  => 'required|string|max:10',
+        'status'    => 'nullable|boolean',
     ]);
 
-        $randomPassword = Str::random(8);
+    $randomPassword = Str::random(8);
 
-        Club::create([
-            'name' => $request->name,
-            'address' => $request->address,
-            'contact' => $request->contact,
-            'email' => $request->email,
-            'country_id' => $request->country,
-            'state_id' => $request->state,
-            'city' => $request->city,
-            'zip_code' => $request->zip_code,
-            'status' => $request->has('status'),
-            'password'    => Hash::make($randomPassword),
-        ]);
-        return redirect()
-        // ->back()
+    Club::create([
+        'name'       => $request->name,
+        'address'    => $request->address,
+        'contact'    => $request->contact,
+        'email'      => $request->email,
+
+        'country_id' => $request->country,
+        'state_id'   => $request->state,
+
+        'city'       => $request->city,
+        'zip_code'   => $request->zip_code,
+        'status'     => $request->has('status'),
+        'password'   => Hash::make($randomPassword),
+    ]);
+
+    return redirect()
         ->route('admin.clubsindex')
         ->with('success', 'Club registered successfully!');
-    }
+}
+
 
     /**
      * Display the specified resource.
@@ -112,7 +117,7 @@ class ClubController extends Controller
     {
         $clubuser = Club::findOrFail($id);
         $countries = Country::orderBy('name')->get();
-        $states = State::where('country_id', $club->country_id)->get();
+        $states = State::where('country_id', $clubuser->country_id)->get();
         return view('admin.club.form', compact('clubuser','countries','states'));
     }
 
@@ -131,11 +136,11 @@ class ClubController extends Controller
         'email',
         Rule::unique('clubs')->ignore($club->id), // ignore current club id
     ],
-    'country' => 'required|integer',
-    'state' => 'required|string|max:100',
+    'country'   => 'required|integer|exists:countries,id',
+        'state'     => 'required|integer|exists:states,id',
     'city' => 'required|string|max:100',
     'zip_code' => 'required|string|max:10',
-    'status' => 'nullable',
+    'status' => 'nullable|boolean',
 ]);
 
         $club->update([
@@ -165,8 +170,10 @@ class ClubController extends Controller
     // Get states based on country ID
     public function getStates($countryId)
     {
-        return State::where('country_id', $countryId)
+        return response()->json(
+        State::where('country_id', $countryId)
             ->orderBy('name')
-            ->get();
+            ->get(['id', 'name'])
+        );;
     }
 }
