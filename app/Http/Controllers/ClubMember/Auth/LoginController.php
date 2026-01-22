@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\ClubMember\Auth;
+namespace App\Http\Controllers\Clubmember\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     /*
@@ -25,16 +26,38 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = 'clubmember/dashboard';
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    // public function __construct()
+    // {
+    //     $this->middleware('guest')->except('logout');
+    //     $this->middleware('auth')->only('logout');
+    // }
+    protected function guard()
     {
-        $this->middleware('guest')->except('logout');
-        $this->middleware('auth')->only('logout');
+        return Auth::guard('clubmember');
+    }
+    public function showLoginForm()
+    {
+        return view('clubmember.auth.login');
+    }
+    protected function redirectTo()
+    {
+        return route('clubmember.dashboard');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('clubmember')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('clubmember.login');
     }
 }

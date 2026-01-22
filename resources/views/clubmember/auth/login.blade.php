@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login - Vetra | E-Commerce HTML Admin Dashboard Template</title>
+    <title>Login - Vetra | E-Commerce HTML Club Member Dashboard Template</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ url('assets/images/favicon.png') }}"/>
@@ -41,10 +41,10 @@
                                     <img width="120" src="{{ url('assets/images/logo.svg') }}" alt="logo">
                                 </div>
                                 <div class="my-5 text-center text-lg-start">
-                                    <h1 class="display-8">Club Sign In</h1>
+                                    <h1 class="display-8">Club Member Sign In</h1>
                                     <p class="text-muted">Sign in to Vetra to continue</p>
                                 </div>
-                                <form action="{{ route('clubmember.login.submit') }}" method="POST" class="mb-5">
+                                <form action="{{ route('club.login.submit') }}" method="POST" class="mb-5">
                                      @csrf 
                                     <div class="mb-3">
                                         <input type="email" name="email" class="form-control" placeholder="Enter email" autofocus

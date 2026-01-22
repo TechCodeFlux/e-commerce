@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Club;
+use App\Models\Clubmember;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -38,6 +39,11 @@ class DatabaseSeeder extends Seeder
             'status' => '0',
             'password' => Hash::make('password123'),
         ]);
-
+        Clubmember::updateOrCreate(
+            ['email' => 'abc@example.com'], // condition
+            [   'name' => 'clubmember User',
+                'password' => 'password1',
+            ]
+        );
     }
 }

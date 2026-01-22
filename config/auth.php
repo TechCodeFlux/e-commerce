@@ -28,6 +28,18 @@ return [
             'driver' => 'session',
             'provider' => 'clubs',
         ],
+
+        'clubmember' => [
+            'driver' => 'session',
+            'provider' => 'clubmembers',
+        ],
+
+        'providers' => [
+        'clubmembers' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\ClubMember::class,
+    ],
+],
     ],
 
 
