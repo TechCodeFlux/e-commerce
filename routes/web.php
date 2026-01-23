@@ -10,9 +10,9 @@ use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
 
-//arjun
-Route::get('/', function () {return view('club.auth.login');})->name('club.login');
-Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
+//arjun // club //
+Route::get('/', function () {return view('club.adduser');})->name('club.login');
+//Route::post('/', action: [ClubLoginController::class, 'login'])->name('club.login.submit');
 Route::post('/logout', [ClubLoginController::class, 'logout'])->name('club.logout');
 
 Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {

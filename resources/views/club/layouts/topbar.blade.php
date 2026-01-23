@@ -115,6 +115,11 @@
         <i class="bi bi-plus-circle"></i> Add Product option
     </button>
             </li>
+            <li class="nav-item ms-3">
+                    <button class="btn btn-primary btn-icon">
+        <i class="bi bi-plus-circle"></i> Add another user
+    </button>
+            </li>
         </ul>
     </div>
     <!-- Header mobile buttons -->
