@@ -31,7 +31,26 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
 
 });
 //pauljo
-                                                                                                                                                                                                                                                                                                               
+// Admin login
+Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
+Route::post('/admin', [AdminLoginController::class, 'login'])->name('admin.login.submit');
+Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+
+Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
+    Auth::routes(['register' => false]);    
+    //dashboard controller
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');//dashboard
+    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');//profile view
+    Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');//profile update
+    //admin club controller
+    Route::get('clubs', [ClubController::class, 'index'])->name('clubsindex'); //view clubs in table 
+    Route::get('clubsform', [ClubController::class, 'create'])->name('club'); //To add club data form(submit form)
+    Route::get('clubsform/{club}', [ClubController::class, 'edit'])->name('editclub'); //To add club data form for edit(update form) 
+    Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table (submit form)
+    Route::put('clubsupdate/{club}', [ClubController::class, 'update'])->name('update'); //add club data (update form)
+    Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
+});
+
 
 
 //aishwarya
