@@ -2,67 +2,103 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Auth\LoginController;
+
+// Admin Controllers
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ClubController;
 
-// Auth::routes();
-
-Route::get('/', [DashboardController::class, 'index'])->name('home');
-
-Route::get('/dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');
-
-//Route::get('/', function () {return view('club.auth.login');});
-
-//Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-Route::get('/', function () {return view('dashboard');});
+// Club Controllers
+use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
+use App\Http\Controllers\Club\ClubDashboardController;
+use App\Http\Controllers\Club\MicrositeController;
+use App\Http\Controllers\Club\CategoryController;
+use App\Http\Controllers\Club\ProductController;
+use App\Http\Controllers\Club\ClubMemberController;
 
 
+/*
+|--------------------------------------------------------------------------
+| Default
+|--------------------------------------------------------------------------
+*/
+// Route::get('/', function () {
+//     return view('admin.auth.index');
+// });
 
-Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
-    Auth::routes(['register' => false]);    
-    //dashboard controller
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN ROUTES
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->name('admin.')->group(function () {
+
+    Auth::routes(['register' => false]);
+
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
     Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');
-    //admin club controller
-    Route::get('clubs', [ClubController::class, 'index'])->name('clubsindex'); //view clubs in table 
-    Route::get('clubsform', [ClubController::class, 'create'])->name('club'); //To add club data form 
-    Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table
-    Route::post('clubsupdate', [ClubController::class, 'update'])->name('update'); //add club data update
 
-
-    // Route::post('club', [DashboardController::class, 'club'])->name('club');
-    // Route::get('club', [DashboardController::class, 'club'])->name('club');
-    // Route::post('club', [DashboardController::class, 'store'])->name('club.store'); 
-    // Route::get('club', [DashboardController::class, 'clubindex'])->name('club.index');
-    
-    // Route::delete('club/{club}', [DashboardController::class, 'destroy'])->name('club.destroy');
-    // Route::get('club/{club}/edit', [DashboardController::class, 'edit'])->name('club.edit');
-    // Route::get('addadmin', [DashboardController::class, 'addnew'])->name('addadmin.create');
-    // Route::post('addadmin', [DashboardController::class, 'storeadmin'])->name('addadmin.store');
-
+    // Club Management (Admin)
+    Route::get('clubs', [ClubController::class, 'index'])->name('clubsindex');
+    Route::get('clubsform', [ClubController::class, 'create'])->name('club');
+    Route::get('clubsform/{club}', [ClubController::class, 'edit'])->name('editclub');
+    Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub');
+    Route::put('clubsupdate/{club}', [ClubController::class, 'update'])->name('update');
+    Route::get('get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');
 });
 
-// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-//     Auth::routes(['register' => false]);    
+/*
+|--------------------------------------------------------------------------
+| CLUB ROUTES (SEPARATE LOGIN)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('club')->name('club.')->group(function () {
 
-//     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-// });
-// Auth::routes();
+    // Club Auth
+    Route::get('login', [ClubLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [ClubLoginController::class, 'login'])->name('login.submit');
+    Route::post('logout', [ClubLoginController::class, 'logout'])->name('logout');
 
-// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-//     Auth::routes(['register' => false]);});
+    // Protected Club Area
+    // Route::middleware('auth:club')->group(function () {
 
+    //     Route::get('dashboard', [ClubDashboardController::class, 'index'])
+    //         ->name('dashboard');
 
-// Route::get('/', function () {return view('adminlogin');});
-// Route::post('adminlogin', [LoginController::class, 'login'])->name('adminlogin');
-// Route::post('/club', [ClubController::class, 'store'])->name('store');
-// Route::resource('admin',DevelopmentController::class);
-// Route::post('admin', [AdminController::class, 'login']);
-// Route::resource('club', ClubController::class);
-// Route::get('/clubs', [ClubController::class, 'index'])->name('index');
-// Route::post('/club', [ClubController::class, 'store'])->name('club.store'); 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+        // Microsite
+        // Route::get('microsite', [MicrositeController::class, 'index'])->name('microsite.index');
+        // Route::get('microsite/create', [MicrositeController::class, 'create'])->name('microsite.create');
+        // Route::post('microsite/store', [MicrositeController::class, 'store'])->name('microsite.store');
+        // Route::get('microsite/edit/{id}', [MicrositeController::class, 'edit'])->name('microsite.edit');
+        // Route::post('microsite/update/{id}', [MicrositeController::class, 'update'])->name('microsite.update');
+
+        // // Category
+        // Route::resource('categories', CategoryController::class);
+
+        // // Product
+        // Route::resource('products', ProductController::class);
+
+        
+    });
+
+    Route::prefix('club')->name('club.')->group(function () {
+
+    // Direct dashboard access
+    Route::get('dashboard', [ClubDashboardController::class, 'index'])
+        ->name('dashboard');
+
+Route::prefix('club')
+    ->name('club.')
+    ->middleware('auth:club')
+    ->group(function () {
+
+        // Club Member CRUD
+        Route::resource('members', ClubMemberController::class);
+    });
+    Route::get('clubs', [ClubController::class, 'index'])->name('clubindex'); //view clubs in table
+
+});

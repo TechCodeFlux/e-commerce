@@ -3,57 +3,32 @@
 namespace App\Http\Controllers\Club\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = 'club/dashboard';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    // public function __construct()
-    // {
-    //     $this->middleware('guest')->except('logout');
-    //     $this->middleware('auth')->only('logout');
-    // }
     public function showLoginForm()
     {
-
         return view('club.auth.login');
     }
-    protected function redirectTo() 
+
+    public function login(Request $request)
     {
-        return route('club.dashboard');
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard('club')->attempt($credentials)) {
+            return redirect()->route('club.dashboard');
+        }
+
+        return back()->withErrors(['email' => 'Invalid login details']);
     }
-    protected function guard()
-    {
-        return Auth::guard('club');
-    }
-    public function logout(Request $request)
+
+    public function logout()
     {
         Auth::guard('club')->logout();
+        return redirect()->route('club.login');
     }
 }
+
+

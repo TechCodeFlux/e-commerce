@@ -4,7 +4,7 @@ namespace App\Models;
 use App\Models\ClubMember;      
 
 use Illuminate\Database\Eloquent\Model;
-// use App\Http\Controllers\ClubController;
+use App\Http\Controllers\ClubController;
 
 
 
