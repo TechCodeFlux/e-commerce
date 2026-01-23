@@ -72,19 +72,20 @@ class ClubController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
+    {
     $validated = $request->validate([
-        'name'      => 'required|string|max:255',
-        'address'   => 'required|string',
-        'contact'   => 'required|string|max:20',
-        'email'     => 'required|email|unique:clubs,email',
-
-        'country'   => 'required|integer|exists:countries,id',
-        'state'     => 'required|integer|exists:states,id',
-
-        'city'      => 'required|string|max:100',
-        'zip_code'  => 'required|string|max:10',
-        'status'    => 'nullable|boolean',
+            'name' => ['required', 'string', 'regex:/^[A-Za-z ]+$/'],
+            'email' => ['required', 'email', 'max:255'],
+            'contact' => ['required', 'digits_between:7,15'],
+            'address' => ['required', 'string'],
+            'country' => ['required', 'exists:countries,id'],
+            'state' => ['required', 'exists:states,id'],
+            'city' => ['required', 'string'],
+            'zip_code' => ['required', 'regex:/^\d{5}(-\d{4})?$/']
+        ], [
+            'name.regex' => 'Name may contain only letters and spaces.',
+            'contact.digits_between' => 'Contact must contain numbers only (7-15 digits).',
+            'zip_code.regex' => 'ZIP code must be in US format (12345 or 12345-6789).'
     ]);
 
     $randomPassword = Str::random(8);
@@ -178,9 +179,7 @@ class ClubController extends Controller
     return redirect()
         ->route('admin.clubsindex')
         ->with('success', 'Club deleted successfully');
-    //  $club->delete(); 
-    // return redirect()->back()->with('success', 'Club deleted successfully');
-}
+    }
 
     // Get states based on country ID
     public function getStates($countryId)
