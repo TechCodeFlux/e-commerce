@@ -1,15 +1,16 @@
     @extends('club.components.app')
     {{-- @yield('page-title','Club') --}}
     @section('content')
+    
     <div class="mb-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}">
+                    <a href="{{ route('club.dashboard') }}">
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Club Members</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-building  small me-2"></i>Club Members</li>
             </ol>
         </nav>
     </div>
@@ -43,7 +44,7 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="{{ route('club.clubmember') }}">
+                            <a href="{{ route('club.addclubmember') }}">
                                 <button class="btn btn-primary btn-icon">
                                         <i class="bi bi-plus-circle"></i> Add Club Member
                                 </button>

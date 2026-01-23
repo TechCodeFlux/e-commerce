@@ -27,7 +27,11 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
     Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
     //club controller
     Route::get('clubmembers', [ClubMemberController::class, 'index'])->name('clubmembersindex'); //view club members in table
-    Route::get('clubmembersform', [ClubMemberController::class, 'create'])->name('clubmember'); //To add club member data form(submit form) 
+    Route::get('clubmembersform', [ClubMemberController::class, 'create'])->name('addclubmember'); //To add club member data form(submit form)
+    Route::post('clubmembersadd', [ClubMemberController::class, 'store'])->name('storeclubmember'); //add club member data to table (submit form)
+    // Route::put('clubmembersupdate/{club}', [ClubMemberController::class, 'update'])->name('update'); //add club member data (update form)
+
+    Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
 
 });
 //pauljo
