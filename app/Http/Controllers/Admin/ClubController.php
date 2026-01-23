@@ -36,20 +36,28 @@ class ClubController extends Controller
                 $actions .= '<a href="' . route('admin.editclub', $club->id) . '" class="btn btn-sm btn-outline-secondary me-2" title="Edit">
                     <i class="fas fa-pencil-alt"></i>
                  </a>';
-                //delete button
-                $actions .= '<button type="button" class="btn btn-sm btn-outline-danger delete-club" onclick="deleteClub(' . $club->id . ')" title="Delete">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>';
-                
-              
-
-                $actions .= '</div>';
-                return  $actions;
-            })->rawColumns(['action'])->make(true);
+                // // delete button
+         $actions .= '
+        <form action="'.route('admin.deleteclub', $club->id).'" method="POST" 
+              style="display:inline-block" 
+              onsubmit="return confirm(\'Are you sure you want to delete this club?\')">
+            '.csrf_field().'
+            '.method_field('DELETE').'
+            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </form>
+        ';
+        $actions .= '</div>';
+        return $actions;
+    })
+    ->rawColumns(['action'])
+    ->make(true);
         }
 
         return view('admin.club.clubview');
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -165,8 +173,15 @@ class ClubController extends Controller
      */
     public function destroy(Club $club)
     {
-        //
-    }
+    $club->delete();
+
+    return redirect()
+        ->route('admin.clubsindex')
+        ->with('success', 'Club deleted successfully');
+    //  $club->delete(); 
+    // return redirect()->back()->with('success', 'Club deleted successfully');
+}
+
     // Get states based on country ID
     public function getStates($countryId)
     {

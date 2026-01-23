@@ -21,6 +21,7 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
     Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
 
 });
+
 //pauljo
 // Admin login
 Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
@@ -40,6 +41,11 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table (submit form)
     Route::put('clubsupdate/{club}', [ClubController::class, 'update'])->name('update'); //add club data (update form)
     Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
+    
+    Route::delete('/clubs/{club}', [ClubController::class, 'destroy'])
+        ->name('deleteclub');
+    
+    
 });
 
 
