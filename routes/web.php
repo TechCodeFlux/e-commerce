@@ -3,41 +3,40 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\Auth\LoginController;
+
+//for login
+use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
+use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
+
+//dashboard
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ClubController;
 use App\Http\Controllers\ClubMember\ClubmemberDasboardController;
 
-// Auth::routes();
+// admin (done by pauljo)
 
-//  Route::get('/', function () {return view('admin.auth.login');});
+Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
+Route::post('/admin', [AdminLoginController::class, 'login'])->name('admin.login.submit');
+Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
-// Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
-//     Auth::routes(['register' => false]);    
-//     //dashboard controller
-//     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-//     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
-//     Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');
-//     //admin club controller
-//     Route::get('clubs', [ClubController::class, 'index'])->name('clubsindex'); //view clubs in table 
-//     Route::get('clubsform', [ClubController::class, 'create'])->name('club'); //To add club data form
-//     Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table
-//     Route::post('clubsupdate', [ClubController::class, 'update'])->name('update'); //add club data update
+Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
+    Auth::routes(['register' => false]);    
+    //dashboard controller
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');//dashboard
+    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');//profile view
+    Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');//profile update
+    //admin club controller
+    Route::get('clubs', [ClubController::class, 'index'])->name('clubsindex'); //view clubs in table 
+    Route::get('clubsform', [ClubController::class, 'create'])->name('club'); //To add club data form(submit form)
+    Route::get('clubsform/{club}', [ClubController::class, 'edit'])->name('editclub'); //To add club data form for edit(update form) 
+    Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table (submit form)
+    Route::put('clubsupdate/{club}', [ClubController::class, 'update'])->name('update'); //add club data (update form)
+    Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
+});
 
-
-    // Route::post('club', [DashboardController::class, 'club'])->name('club');
-    // Route::get('club', [DashboardController::class, 'club'])->name('club');
-    // Route::post('club', [DashboardController::class, 'store'])->name('club.store'); 
-    // Route::get('club', [DashboardController::class, 'clubindex'])->name('club.index');
-    
-    // Route::delete('club/{club}', [DashboardController::class, 'destroy'])->name('club.destroy');
-    // Route::get('club/{club}/edit', [DashboardController::class, 'edit'])->name('club.edit');
-    // Route::get('addadmin', [DashboardController::class, 'addnew'])->name('addadmin.create');
-    // Route::post('addadmin', [DashboardController::class, 'storeadmin'])->name('addadmin.store');
-
-// });
-
-Route::get('/', function () {return view('clubmember.dashboard');});
+Route::get('/clubmember', function () {return view('clubmember.dashboard');});
 
 Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controllers\ClubMember')->group(function () {
     Auth::routes(['register' => false]); 
