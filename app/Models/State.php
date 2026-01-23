@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Models;
-use App\Models\ClubMember;      
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ClubMember extends Model
+class State extends Model
 {
-    //
+    use SoftDeletes;
+   protected $fillable = [
+        'name',
+        'country_id',
+    ];
 }

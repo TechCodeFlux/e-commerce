@@ -1,4 +1,4 @@
-    @extends('admin.components.app')
+    @extends('club.components.app')
     {{-- @yield('page-title','Club') --}}
     @section('content')
     <div class="mb-4">
@@ -9,7 +9,7 @@
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Clubs</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Club Members</li>
             </ol>
         </nav>
     </div>
@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-md-flex gap-4 align-items-center">
-                        <div class="d-none d-md-flex">All Clubs</div>
+                        <div class="d-none d-md-flex">All Club Members</div>
                         <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
@@ -43,9 +43,9 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="{{ route('admin.club') }}">
+                            <a href="{{ route('club.clubmember') }}">
                                 <button class="btn btn-primary btn-icon">
-                                        <i class="bi bi-plus-circle"></i> Add Club
+                                        <i class="bi bi-plus-circle"></i> Add Club Member
                                 </button>
                             </a>
                         </div>

@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Club extends Authenticatable
 {
-    use SoftDeletes;
+    use Notifiable, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -15,10 +16,10 @@ class Club extends Authenticatable
         'address',
         'country_id',
         'state_id',
-        'city',
         'contact',
-        'zip_code',
+        'city',
         'status',
+        'zip_code',
         'password',
     ];
 

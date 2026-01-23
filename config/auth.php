@@ -44,10 +44,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-          'club' => [
+        'club' => [
             'driver' => 'session',
             'provider' => 'clubs',
-    ],
+        ],
+        'clubmember' => [
+            'driver' => 'session',
+            'provider' => 'club_members',
+        ],
     ],
 
     /*
@@ -76,11 +80,14 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-            'clubs' => [
+        'clubs' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Club::class, 
+        ],
+        'club_members' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
-    ],
-],
+            'model' => App\Models\ClubMember::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

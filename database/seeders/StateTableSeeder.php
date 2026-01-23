@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 
 class StateTableSeeder extends Seeder
-{
+{ 
     /**
      * Run the database seeds.
      */
