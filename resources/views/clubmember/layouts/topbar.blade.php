@@ -40,8 +40,10 @@
 
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
                     {{-- @include('clubmember.product.cart') --}}
-                    <h6 class="m-0 px-4 py-3 border-bottom">My Cart</h6>
-                    <div class="dropdown-menu-body">
+                    <h6 class="m-0 px-4 py-3 border-bottom">My Cart</h6>  
+                    
+                    <div class="dropdown-menu-body"></h6>
+                   
                         
                     @forelse($cartItems as $item)
                         <div class="list-group list-group-flush">
