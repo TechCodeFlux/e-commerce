@@ -25,7 +25,7 @@
 <div class="container mt-4">
     <div class="card shadow-sm">
         <div class="card-body">
-
+<h6 class="card-title mb-4 text-center">ADD ANOTHER USER</h6>
             <h4 class="text-center mb-4">
                 {{-- {{ $clubuser->id ? 'Edit' : 'Add' }} User --}}
             </h4>
