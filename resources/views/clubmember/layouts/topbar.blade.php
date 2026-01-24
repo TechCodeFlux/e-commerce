@@ -107,7 +107,21 @@
             </li>
             <li class="nav-item ms-3">
                     <button class="btn btn-primary btn-icon">
-        <i class="bi bi-plus-circle"></i> Add Product
+        <i class="bi bi-plus-circle"></i> Edit Profile
+    </button>
+            </li>
+            <li class="nav-item ms-3">
+                  <form action="{{ route('clubmember.orders.index') }}" method="GET" class="d-inline">
+    <button type="submit" class="btn btn-primary btn-icon">
+        <i class="bi bi-plus-circle"></i> Order History
+    </button>
+</form>
+
+            </li>
+            
+            <li class="nav-item ms-3">
+                    <button class="btn btn-primary btn-icon">
+        <i class="bi bi-plus-circle"></i> Logout
     </button>
             </li>
         </ul>

@@ -7,13 +7,7 @@ return [
         'passwords' => 'users',
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Guards
-    |--------------------------------------------------------------------------
-    */
     'guards' => [
-
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -21,7 +15,7 @@ return [
 
         'admin' => [
             'driver' => 'session',
-            'provider' => 'admins', // ❗ FIXED
+            'provider' => 'admins',
         ],
         'club' => [
             'driver' => 'session',
@@ -29,51 +23,28 @@ return [
         ],
         'clubmember' => [
             'driver' => 'session',
-            'provider' => 'club_members',
+            'provider' => 'clubmembers', // make sure this matches exactly
         ],
     ],
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | User Providers
-    |--------------------------------------------------------------------------
-    */
-
     'providers' => [
-
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class, // or Admin model if you have one
+            'model' => App\Models\User::class, // or Admin model
         ],
-
         'clubs' => [
             'driver' => 'eloquent',
             'model' => App\Models\Club::class,
         ],
-        'club_members' => [
+        'clubmembers' => [
             'driver' => 'eloquent',
             'model' => App\Models\ClubMember::class,
         ],
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Password Resets
-    
-    |--------------------------------------------------------------------------
-    */
 
     'passwords' => [
         'users' => [

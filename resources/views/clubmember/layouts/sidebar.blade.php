@@ -499,11 +499,11 @@
                          class="rounded-circle" alt="image">
                 </div>
                 <div>
-                    <div class="fw-bold">Timotheus Bendan</div>
-                    <small class="text-muted">Sales Manager</small>
+                    <div class="fw-bold">Aishwarya</div>
+                    <small class="text-muted">Club Member</small>
                 </div>
             </a>
-            <div class="dropdown-menu dropdown-menu-end">
+            {{-- <div class="dropdown-menu dropdown-menu-end">
                 <a href="#" class="dropdown-item d-flex align-items-center">
                     <i class="bi bi-person dropdown-item-icon"></i> Profile
                 </a>
@@ -517,25 +517,25 @@
                    target="_blank">
                     <i class="bi bi-box-arrow-right dropdown-item-icon"></i> Logout
                 </a>
-            </div>
+            </div> --}}
         </div>
         <ul>
-            <li class="menu-divider">E-Commerce</li>
+            <li class="menu-divider"></li>
             <li>
-                <a  class="active"
+                {{-- <a  class="active"
                     href="index.html">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>
                     <span>Dashboard</span>
-                </a>
+                </a> --}}
             </li>
-            <li>
-                <a href="#">
+            {{-- <li> --}}
+                {{-- <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
-                    </span>
-                    <span>Orders</span>
+                    </span> --}}
+                    {{-- <span>Orders</span>
                 </a>
                 <ul>
                     <li>
@@ -546,8 +546,8 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a href="#">
+            <li> --}}
+                {{-- <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-truck"></i>
                     </span>
@@ -573,20 +573,20 @@
                         <a  href="./checkout.html">Checkout</a>
                     </li>
                 </ul>
-            </li>
-            <li>
-                <a href="#">
+            </li> --}}
+            {{-- <li> --}}
+                {{-- <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-wallet2"></i>
                     </span>
                     <span>Buyer</span>
                 </a>
-                <ul>
+                <ul> --}}
                     <li>
                         <a  href="./buyer-dashboard.html">Dashboard</a>
                     </li>
                     <li>
-                        <a  href="./buyer-orders.html">Orders</a>
+                        {{-- <a  href="./buyer-orders.html">Orders</a>
                     </li>
                     <li>
                         <a  href="./buyer-addresses.html">Addresses</a>
@@ -604,7 +604,7 @@
                     <span>Customers</span>
                 </a>
             </li>
-            <li>
+            <li> --}}
                 <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
@@ -622,7 +622,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="menu-divider">Apps</li>
+            {{-- <li class="menu-divider">Apps</li>
             <li>
                 <a  href="./chats.html">
                     <span class="nav-link-icon">
@@ -632,8 +632,8 @@
                     <span class="badge bg-success rounded-circle ms-auto">2</span>
                 </a>
             </li>
-            <li>
-                <a href="./email.html">
+            <li> --}}
+                {{-- <a href="./email.html">
                     <span class="nav-link-icon">
                         <i class="bi bi-envelope"></i>
                     </span>
@@ -656,9 +656,9 @@
                         </a>
                     </li>
                 </ul>
-            </li>
-            <li>
-                <a href="./todo-list.html">
+            </li> --}}
+            {{-- <li> --}}
+                {{-- <a href="./todo-list.html">
                     <span class="nav-link-icon">
                         <i class="bi bi-check-circle"></i>
                     </span>
@@ -676,8 +676,8 @@
                         </a>
                     </li>
                 </ul>
-            </li>
-            <li class="menu-divider">Pages</li>
+            </li> --}}
+            {{-- <li class="menu-divider">Pages</li>
             <li>
                 <a href="#">
                     <span class="nav-link-icon">
@@ -705,9 +705,9 @@
                     <li><a  href="./user-list.html">List View</a></li>
                     <li><a  href="./user-grid.html">Grid View</a></li>
                 </ul>
-            </li>
-            <li>
-                <a href="#">
+            </li> --}}
+            {{-- <li> --}}
+                {{-- <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-lock"></i>
                     </span>
@@ -731,8 +731,8 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a href="#">
+            <li> --}}
+                {{-- <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-exclamation-octagon"></i>
                     </span>
@@ -750,8 +750,8 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a  href="./settings.html">
+            <li> --}}
+                {{-- <a  href="./settings.html">
                     <span class="nav-link-icon">
                         <i class="bi bi-gear"></i>
                     </span>
@@ -775,8 +775,8 @@
                     <span>Search Page</span>
                 </a>
             </li>
-            <li>
-                <a  href="./faq.html">
+            <li> --}}
+                {{-- <a  href="./faq.html">
                     <span class="nav-link-icon">
                         <i class="bi bi-question-circle"></i>
                     </span>
@@ -859,8 +859,8 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a href="#" target="_blank">
+            <li> --}}
+                {{-- <a href="#" target="_blank">
                     <span class="nav-link-icon">
                         <i class="bi bi-file-earmark-text"></i>
                     </span>
@@ -953,8 +953,8 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a href="#">
+            <li> --}}
+                {{-- <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-heart"></i>
                     </span>
@@ -992,8 +992,8 @@
                         </a>
                     </li>
                 </ul>
-            </li>
-            <li>
+            </li> --}}
+            {{-- <li>
                 <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
@@ -1014,9 +1014,9 @@
                         <a  href="./morsis.html">Morsis</a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
             <li>
-                <a href="#">
+                {{-- <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-paperclip"></i>
                     </span>
@@ -1052,8 +1052,8 @@
                         <a  href="./code-highlighter.html">Code Highlighter</a>
                     </li>
                 </ul>
-            </li>
-            <li class="menu-divider">Other</li>
+            </li> --}}
+            {{-- <li class="menu-divider">Other</li>
             <li>
                 <a href="#">
                     <span class="nav-link-icon">
@@ -1072,19 +1072,19 @@
                             <li>
                                 <a href="#">Menu Item 2.2</a>
                             </li>
-                        </ul>
-                    </li>
+                        </ul> --}}
+                    {{-- </li>
                 </ul>
             </li>
             <li>
-                <a href="#" class="disabled">
+                {{-- <a href="#" class="disabled">
                     <span class="nav-link-icon">
                         <i class="bi bi-hand-index-thumb"></i>
                     </span>
                     <span>Disabled</span>
-                </a>
-            </li>
-        </ul>
+                {{-- </a> --}}
+            {{-- </li>
+        </ul> --}}
     </div>
 </div>
 <!-- ./  menu -->

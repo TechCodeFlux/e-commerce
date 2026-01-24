@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Club;
+use App\Models\ClubMember;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
 class ClubController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * Example: all club members (optional)
      */
     public function index()
     {
-        //
+        $members = ClubMember::all();
+        return view('clubmember.index', compact('members'));
     }
 
     /** 
@@ -20,7 +25,7 @@ class ClubController extends Controller
      */
     public function create()
     {
-        return view('club'); 
+       //
     }
 
     /**
@@ -28,85 +33,55 @@ class ClubController extends Controller
      */
     public function store(Request $request)
     {
-        Club::create([
-        'name'       => $request->name,
-        'contact'    => $request->contact,
-        'address'    => $request->address,
-        'country_id' => $request->country_id,
-        'state_id'   => $request->state_id,
-        'city'       => $request->city,
-        'zip_code'   => $request->zip_code,
-        'status'     => 1,
-        'password'   => Hash::make($request->password),
-    ]);
-       return redirect()
-        ->route('admin.club.create')
-        ->with('success', 'Club added successfully!');
+       //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Club $club)
+    public function show(ClubMember $clubMember)
     {
-        //
+        return view('clubmember.show', compact('clubMember'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Club $club)
+    public function edit(ClubMember $clubMember)
     {
-        return view('clubedit', compact('club'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Club $club)
+    public function update(Request $request, ClubMember $clubMember)
     {
-        $request->validate([
-        'club_name' => 'required|string|max:255',
-        'club_address' => 'required|string',
-        'club_contact' => 'required|string',
-        'email' => 'required|email|unique:clubs,email,' . $club->id,
-        'country_id' => 'required|integer',
-        'state_id' => 'required|integer',
-        'city' => 'required|string',
-        'zip_code' => 'required|string',
-        'status' => 'required|in:active,inactive',
-    ]);
-        $club->update([
-        'name' => $request->club_name,
-        'address' => $request->club_address,
-        'contact' => $request->club_contact,
-        'email' => $request->email,
-        'country_id' => $request->country_id,
-        'state_id' => $request->state_id,
-        'city' => $request->city,
-        'zip_code' => $request->zip_code,
-        'status' => $request->status,
-        ]);
-
-        if ($request->filled('password')) {
-            $club->update([
-                'password' => Hash::make($request->password),
-            ]);
-        }
-
-        return redirect()->route('club.index')
-            ->with('success', 'Club updated successfully.');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Club $club)
+    public function destroy(ClubMember $clubMember)
     {
-        $club->delete();
-
-        return redirect()
-            ->route('club.index')
-            ->with('success', 'Club deleted successfully.');
+       //
     }
+
+    /**
+     * Display the logged-in member's order history.
+     */
+
+// public function orderHistory()
+// {
+//     // Fetch orders for the logged-in user
+//     $orders = Order::with('items', 'status')
+//                    ->where('user_id', Auth::id()) // adjust if your column is different
+//                    ->orderBy('created_at', 'desc')
+//                    ->get();
+
+//     // Return the view
+//     return view('clubmember.orderhistory', compact('orders'));
+// }
+
 }

@@ -22,12 +22,19 @@ class DatabaseSeeder extends Seeder
 
         
         User::updateOrCreate(
-            ['email' => 'admin@example.com'], // condition
+            ['email' => 'admin@example.com'], // Admin
             [   'name' => 'Admin User',
                 'password' => 'password',
             ]
         );
+        
+        Clubmember::updateOrCreate(
+            ['email' => 'clubmember@example.com'], // clubmember
+            [   'name' => 'Clubmember'
+            ]
+        );
 
+       
         
 
     }

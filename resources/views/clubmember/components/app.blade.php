@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title> Vetra | E-Commerce Club Dashboard </title>
+    <title> Vetra | E-Commerce Club member Dashboard </title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{url('assets/images/favicon.png')}}"/>
@@ -38,14 +38,14 @@
 </div>
 <!-- ./ preloader -->
 
-@include('club.layouts.sidebar')
-@include('club.layouts.topbar')
+@include('clubmember.layouts.sidebar')
+@include('clubmember.layouts.topbar')
 
 <div class="content @yield('contentClassName')">
     @yield('content')
 </div>
 
-@include('club.layouts.footer')
+@include('clubmember.layouts.footer')
 
 <!-- Bundle scripts -->
 <script src="{{url('libs/bundle.js')}}"></script>

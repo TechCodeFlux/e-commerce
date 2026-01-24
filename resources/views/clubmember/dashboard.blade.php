@@ -1,5 +1,5 @@
 
-@extends('club.components.app')
+@extends('clubmember.components.app')
 @section('content')
 
 <div class="content ">
