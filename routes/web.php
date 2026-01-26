@@ -60,12 +60,17 @@ Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controller
     Auth::routes(['register' => false]); 
 //dashboard controller
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');//dashboard
-
 Route::get('/clubmember/dashboard', [DashboardController::class, 'index'])
     ->name('clubmember.dashboard');
-
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::get('/order-history', [OrderController::class, 'orderHistory'])
+     ->name('order.history');
 
 
 });
+
+
+
+
+
 

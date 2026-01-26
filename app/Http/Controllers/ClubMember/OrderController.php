@@ -13,17 +13,43 @@ class OrderController extends Controller
     /**
      * Display a listing of the club member's orders.
      */
-    public function index()
-    {
-        // Get the logged-in club member
-        $clubMember = Auth::guard('clubmember')->user();
+    // public function index()
+    // {
+    //     // Get the logged-in club member
+    //     $clubMember = Auth::guard('clubmember')->user();
 
-        // Fetch their orders (example, assuming Order has club_member_id)
-        $orders = Order::where('club_member_id', $clubMember->id)
-                       ->orderBy('created_at', 'desc')
-                       ->get();
+    //     // Fetch their orders (example, assuming Order has club_member_id)
+    //     $orders = Order::where('club_member_id', $clubMember->id)
+    //                    ->orderBy('created_at', 'desc')
+    //                    ->get();
 
-        // Return a Blade view (we’ll create this next)
-        return view('clubmember.orders.index', compact('orders'));
-    }
+    //     // Return a Blade view (we’ll create this next)
+    //     return view('clubmember.orders.index', compact('orders'));
+    // }
+ 
+   public function index()
+{
+    $orders = [
+        [
+            'order_id' => 'ORD-1001',
+            'order_date' => '20 Jan 2026',
+            'status' => 'Delivered',
+            'items' => [
+                ['product_id' => 101, 'quantity' => 2],
+                ['product_id' => 102, 'quantity' => 1],
+            ],
+        ],
+        [
+            'order_id' => 'ORD-1002',
+            'order_date' => '22 Jan 2026',
+            'status' => 'Pending',
+            'items' => [
+                ['product_id' => 103, 'quantity' => 3],
+            ],
+        ],
+    ];
+
+    return view('clubmember.orderhistory', compact('orders'));
+}
+
 }
