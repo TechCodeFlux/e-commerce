@@ -48,6 +48,10 @@ Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controller
     Route::get('viewcart', [ClubmemberDasboardController::class, 'viewcart'])->name('viewcart');
 
     Route::get('delete/{id}',[ClubmemberDasboardController::class,'delete'])->name('delete');
+
+    // booking the product
+
+    Route::get('booking/{id}',[ClubmemberDasboardController::class,'booking'])->name('booking');
     
 });
 

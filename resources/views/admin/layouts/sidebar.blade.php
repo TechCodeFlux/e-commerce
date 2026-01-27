@@ -522,8 +522,8 @@
         <ul>
             <li class="menu-divider">E-Commerce</li>
             <li>
-                <a  class="active"
-                    href="{{route('admin.dashboard')}}">
+                {{-- <a  class="active" --}}
+                   <a href="{{route('admin.dashboard')}}">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>

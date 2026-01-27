@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\ClubMember;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Controller;
+use App\Models\ClubMember;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Cart;
+use App\models\Address;
 
 
 class ClubmemberDasboardController extends Controller
@@ -42,7 +44,7 @@ class ClubmemberDasboardController extends Controller
                             </a>';
 
                 // Buy now button 
-                $actions .= '<a href="#" class="btn btn-sm me-2" title="Buy Now">
+                $actions .= '<a href="'.route('clubmember.booking',$product->id). '" class="btn btn-sm me-2" title="Buy Now">
                                 <i class="fas fa-credit-card fa-l -center"></i>
                             </a>';
 
@@ -63,7 +65,7 @@ class ClubmemberDasboardController extends Controller
    
 
 
-
+// add to cart and process
 
 
     
@@ -115,4 +117,39 @@ class ClubmemberDasboardController extends Controller
         $cart->delete(); 
         return redirect()->back()->with('success', 'cart as deleted successfully');
     }
+
+
+
+
+    //booking product
+
+   public function booking($id)
+   {
+    $product = Product::findOrFail($id);
+
+   $cart = Cart::where('product_id', $product->id)
+            ->where('clubmember_id','1')
+            ->first();
+
+    if ($cart === null) {
+        $quantity = 1;
+    } else {
+        $quantity = $cart->quantity;
+    }
+
+    $clubmember = ClubMember::findOrFail(1);
+
+    $address= Address::findOrFail(1);
+
+    // dd($clubmember);
+    return view('clubmember.product.booking', [
+        'product'  => $product,
+        'quantity' => $quantity,
+        'clubmember' => $clubmember,
+        'address' => $address,
+
+    ]);
+   }
+
+
 }

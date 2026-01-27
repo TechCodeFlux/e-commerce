@@ -15,6 +15,7 @@
 
     <!-- Bootstrap icons -->
     <link rel="stylesheet" href="{{url('dist/icons/bootstrap-icons-1.4.0/bootstrap-icons.min.css')}}" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <!-- Bootstrap Docs -->
     <link rel="stylesheet" href="{{url('dist/css/bootstrap-docs.css')}}" type="text/css">
 
@@ -64,6 +65,8 @@
 
 <!-- Main Javascript file -->
 <script src="{{url('dist/js/app.min.js')}}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
 @yield('script')
 </body>
