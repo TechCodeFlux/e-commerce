@@ -37,11 +37,10 @@
                 @if($clubuser->id) @method('PUT') @endif --}}
 
                 <div class="row">
-                    <div class="col-md-4 mb-3 text-center">
-                    <img src="{{ asset('storage/' . $product->image) }}"
-                        width="100" height="100"
-                        class="rounded">
-                    </div>
+
+                    <div class="col-md-4 mb-3"></div>
+
+                    
 
                     {{-- Name --}}
                     <div class="col-md-8 mb-3">
@@ -49,7 +48,12 @@
                         <input type="text" name="name" class="form-control" readonly
                                  value="{{ old('name', $product->name ?? '') }}"> 
                     </div>
-                    <div class="col-md-4 mb-3"></div>
+                    
+                    <div class="col-md-4 mb-3 text-center">
+                    <img src="{{ asset('storage/' . $product->image) }}"
+                        width="100" height="100"
+                        class="rounded">
+                    </div>
 
                     
                     <div class="col-md-8 mb-3">
