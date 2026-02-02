@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Varient extends Model
 {
     use SoftDeletes;
+           protected $fillable =  ['size','color', 'stock','status'];
+
 }

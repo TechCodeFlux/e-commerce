@@ -1,58 +1,113 @@
 <?php
 
 use App\Http\Controllers\Auth\AddProductsController;
+use App\Http\Controllers\Club\Auth\CategoryController;
+use App\Http\Controllers\Club\Auth\ExController;
+use App\Http\Controllers\Club\Auth\OptionController;
 use App\Http\Controllers\Club\Auth\ProductController;
+use App\Http\Controllers\Club\Auth\VarientController;
 use App\Http\Controllers\IndexPageController;
+use App\Models\Varient;
+use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DevelopmentController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ClubController;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Admin\DashboardController;
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
+
+
 Route::get('/', function () {
-    return view('welcome');
-});
-=======
-
-
-
-Route::get('/', function () {return view('auth.login');});
-
-Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
-    Auth::routes(['register' => false]);    });
-
-    Route::get('admin.dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-
-
-
-
-=======
-// Auth::routes();
-
-
-Route::get('/', function () {return view('admin.auth.login');});
-
-Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
-    Auth::routes(['register' => false]);    
-
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
-    Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');
-    Route::post('club', [DashboardController::class, 'club'])->name('club');
+    return view('club.dashboard');
 });
 
 Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-    Auth::routes(['register' => false]);    
+Auth::routes(['register' => false]);
 
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('product_management/form_products_index', [ProductController::class, 'form_products_index'])->name('product_management.form_products_index');
+
+Route::post('product_management/add_products', [ProductController::class, 'store'])->name('product_management.add_products');
+
+Route::get('product_management/show_products', [ProductController::class, 'show'])->name('product_management.show_products');
+
+Route::get('product_management/show_single/{id}', [ProductController::class, 'single_show'])->name('product_management.show_single');
+
+Route::delete('product_management/destroy_products/{id}', [ProductController::class, 'destroy'])->name('product_management.destroy_products');
+
+Route::get('product_management/form_products_index/{id}', [ProductController::class, 'edit_product_index'])->name('product_management.edit_products_index');
+
+Route::put('product_management/edit_product/{id}', [ProductController::class, 'update'])->name('product_management.edit_product');
+
+Route::post('product_management/change-status', [ProductController::class, 'changeStatus'])->name('product_management.change-status');
+
+
+
+//Category-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Route::get('category_management/add_category_index', [CategoryController::class, 'add_category_index'])->name('category_management.add_category_index');
+
+Route::post('category_management/add_category', [CategoryController::class, 'store'])->name('category_management.add_category');
+
+Route::get('category_management/show_category', [CategoryController::class, 'show'])->name('category_management.show_category');
+
+Route::get('category_management/show_single/{id}', [CategoryController::class, 'single_show'])->name('category_management.show_single');
+
+Route::delete('category_management/destroy_category/{id}', [CategoryController::class, 'destroy'])->name('category_management.destroy_category');
+
+Route::get('category_management/add_category_index/{id}', [CategoryController::class, 'edit_category_index'])->name('category_management.edit_category_index');
+
+Route::put('category_management/edit_category/{id}', [CategoryController::class, 'update'])->name('category_management.edit_category');
+
+Route::post('category_management/change-status', [CategoryController::class, 'changeStatus'])->name('category_management.change-status');
+
+
+
+
+//OPTIONS-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Route::get('option_management/form_option_index', [OptionController::class, 'form_option_index'])->name('option_management.form_option_index');
+
+Route::post('option_management/add_option', [OptionController::class, 'store'])->name('option_management.add_option');
+
+
+Route::get('option_management/show_option', [OptionController::class, 'show'])->name('option_management.show_option');
+
+
+Route::get('option_management/form_option_index/{id}', [OptionController::class, 'edit_option_index'])->name('option_management.edit_option_index');
+
+Route::put('option_management/edit_option/{id}', [OptionController::class, 'update'])->name('option_management.edit_option');
+
+
+Route::delete('option_management/destroy_option/{id}', [OptionController::class, 'destroy'])->name('option_management.destroy_option');
+
+Route::get('option_management/show_single/{id}', [OptionController::class, 'single_show'])->name('option_management.show_single');
+
+Route::post('option_management/change-status', [OptionController::class, 'changeStatus'])->name('option_management.change-status');
+
+
+ 
+  //VARIENTS-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Route::get('varient_management/form_varient_index', [VarientController::class, 'form_varient_index'])->name('varient_management.form_varient_index');
+
+Route::post('varient_management/add_varient', [VarientController::class, 'store'])->name('varient_management.add_varient');
+
+
+Route::get('varient_management/form_varient_index/{id}', [VarientController::class, 'edit_varient_index'])->name('varient_management.edit_varient_index');
+
+Route::put('varient_management/edit_varient/{id}', [VarientController::class, 'update'])->name('varient_management.edit_varient');
+
+
+Route::delete('varient_management/destroy_varient/{id}', [VarientController::class, 'destroy'])->name('varient_management.destroy_varient');
+
+
+Route::get('varient_management/show_varient', [VarientController::class, 'show'])->name('varient_management.show_varient');
+
+Route::get('varient_management/show_single/{id}', [VarientController::class, 'single_show'])->name('varient_management.show_single');
+
+
+Route::post('varient_management/change-status', [VarientController::class, 'changeStatus'])->name('varient_management.change-status');
+
 });
->>>>>>> 9d47c1514a82c65dce22a043bb628e5b23338a2d
-// Auth::routes();
 
+
+// Auth::routes();
 // Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
 //     Auth::routes(['register' => false]);});
 
@@ -67,11 +122,9 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
 // Route::post('/club', [ClubController::class, 'store'])->name('club.store');
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-<<<<<<< HEAD
+
 
 // Route::get('/admin.content', function () {
 //     return view('admin.content');
 // })->name('admin.content');
->>>>>>> Stashed changes
-=======
->>>>>>> 9d47c1514a82c65dce22a043bb628e5b23338a2d
+

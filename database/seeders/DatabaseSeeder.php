@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         
-        User::updateOrCreate(
+        User::updateOrCreate(                    //admin seeder of insert value to db without direct enter through wa
             ['email' => 'admin@example.com'], // condition
             [   'name' => 'Admin User',
                 'password' => 'password',

@@ -1594,7 +1594,7 @@
                 </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
-                <a href="{{ route('admin.profile') }}" class="dropdown-item d-flex align-items-center">
+                <a href="" class="dropdown-item d-flex align-items-center">
                     <i class="bi bi-person dropdown-item-icon"></i> Profile
                 </a>
                 <a href="#" class="dropdown-item d-flex align-items-center">
@@ -1613,7 +1613,7 @@
             <li class="menu-divider">E-Commerce</li>
             <li>
                 <a  class="active"
-                    href="{{route('admin.dashboard')}}">
+                    href="">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>

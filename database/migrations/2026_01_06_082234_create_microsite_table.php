@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('microsite', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('parent_id')->default('0');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->text('description');
+            $table->string('image');
+            $table->unsignedBigInteger('club_id');
             $table->boolean('status')->default('0');
             $table->softdeletes();
             $table->timestamps();
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('microsite');
     }
 };

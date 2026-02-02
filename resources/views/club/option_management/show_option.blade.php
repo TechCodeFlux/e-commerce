@@ -9,7 +9,7 @@
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Products</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Option</li>
             </ol>
         </nav>
     </div>
@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-md-flex gap-4 align-items-center">
-                        <div class="d-none d-md-flex">All Products</div>
+                        <div class="d-none d-md-flex">All Options</div>
                         <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
@@ -43,9 +43,9 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="{{ route('club.form_products_index') }}">
+                            <a href="{{ route('club.option_management.form_option_index') }}">
                                 <button class="btn btn-primary btn-icon">
-                                        <i class="bi bi-plus-circle"></i> Add Product
+                                        <i class="bi bi-plus-circle"></i> Add Option
                                 </button>
                             </a>
                         </div>
@@ -54,13 +54,10 @@
                     </div>
                 </div>
                 <div class="" >
-                    <table class="table table-custom table-lg mb-0"  id="club" >
+                    <table id="club" class="table table-custom table-lg mb-0" >
                     <thead>
                       <tr>
-                        <th class="tooltip-inner link-dark">Image</th>  
-                         <th >Name</th>  
-                         <th>Stock</th>
-                         <th>Description</th>
+                         <th >Option Name</th>  
                           <th>Status</th>
                         <th  class=" ps-5" >Action</th>
                      </tr>
@@ -73,21 +70,21 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Delete Product</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">Delete Option</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form>
-            {{-- <div class="modal-body">
+            <div class="modal-body">
                     <!-- <input type="hidden" name="_method" value="DELETE"> -->
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="hidden" id="deleteId" name="deleteId">
-                        <p>Are you sure you want to delete this Product</p>
+                        <p>Are you sure you want to delete this option</p>
                         <div class="modal-footer">
                         
                             <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
                             <button type="button" class="btn btn-sm btn-danger btn_delete_club_member" data-loading-text="">Delete</button>
                         </div>
-                    </div> --}}
+                    </div>
                 </form>
             </div>
         </div>   
@@ -109,38 +106,24 @@
                 </div>
 
                 <!-- Modal Body: The Product List -->
-               <div class="modal-body p-0">
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-                <tr>
-                    <th scope="col" class="ps-4 py-3">Image</th>
-                    <th scope="col" class="py-3"> Name</th>
-                    <th scope="col" class="py-3 ">Stock </th>
-                    <th scope="col" class="py-3"> Description</th>
+                <div class="modal-body p-0">
+                    <div class="list-group list-group-flush">
+                        
+                        <!-- Product Item 1 -->
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center p-3">
+                          <div class="flex-grow-1">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1 fw-bold" id="modalOptionName"   ></h6>
+                                  
+                                </div>
+                              
+                            </div>
+                        </a>
+
                     
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Product Item Row -->
-                <tr>
-                    <td class="ps-4 py-3">
-                        <img id="modalProductImage" class="rounded shadow-sm object-fit-cover" width="120" height="120" alt="Product">
-                    </td>
-                    <td class="py-3">
-                        <h4 class="mb-1 fw-bold" id="modalProductName"></h4>
-                    </td>
-                    <td> 
-                        <p class="mb-0 text-muted fs-6" id="modalProductDescription"></p>
-                    </td>
-                    <td class="text-end pe-4 py-3">
-                        <h5 class=" fw-bold mb-0" id="modalProductStock"></h5>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+                    </div>
+                </div>
+
                 <!-- Modal Footer -->
                
                 
@@ -153,21 +136,18 @@
 <script>
 
 //view single row
-$(document).on('click', '.view-product', function () {
+$(document).on('click', '.view-option', function () {
 
-    let productId = $(this).data('id');
+    let optionId = $(this).data('id');
 
     $.ajax({
-        url: "{{ route('club.show_single', ':id') }}".replace(':id', productId),
+        url: "{{ route('club.option_management.show_single', ':id') }}".replace(':id', optionId),
         type: "GET",
         success: function (res) {
-            $('#modalProductName').text(res.name);
-            $('#modalProductStock').text( res.stock);
-            $('#modalProductDescription').text(res.description);
-            $('#modalProductImage').attr('src', res.image);
+            $('#modalOptionName').text(res.name);
         },
         error: function () {
-            alert('Failed to load product');
+            alert('Failed to load Option');
         }
     });
 });
@@ -179,16 +159,16 @@ $(document).on('click', '.view-product', function () {
 
 $(document).on('change', '.toggle-status', function () {
 
-    let productId = $(this).data('id');
+    let optionId = $(this).data('id');
     let status = $(this).is(':checked') ? 1 : 0;
-    let label = $('#status-label-' + productId);
+    let label = $('#status-label-' + optionId);
 
     $.ajax({
-        url: "{{ route('club.change-status') }}",
+        url: "{{ route('club.option_management.change-status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
-            id: productId,
+            id: optionId,
             status: status
         },
         success: function (res) {
@@ -216,21 +196,18 @@ $(document).ready(function() {
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
-    $productTable= $('#club').DataTable({
+    $optionTable= $('#club').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-           url: "{{ route('club.show_products') }}",
+           url: "{{ route('club.option_management.show_option') }}",
             data: function(d) {
                 
             }
         },
 
         columns: [
-            { data: 'image', name: 'image' },
             { data: 'name', name: 'name', orderable: false,searchable: false },
-            { data: 'stock', name: 'stock' },
-            { data: 'description', name: 'description' },
             { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ],
@@ -242,7 +219,7 @@ $(document).ready(function() {
     });
     
     $(document).on("keyup", ".searchInput", function(e) {
-        $productTable.search($(this).val()).draw();
+        $optionTable.search($(this).val()).draw();
     });
     $("#club_filter").css({
         "display": "none"
@@ -250,47 +227,15 @@ $(document).ready(function() {
     $("#club_length").css({
         "display": "none"
     });
-    // $('#sort').on('change', function() {
-    //     $column = $(this).find(':selected').data('column');
-    //     $sort = $(this).find(':selected').data('sort');
-    //     $productTable.order([$column, $sort]).draw();
-    // })
-
-    
-    //sorting
-
-
-    document.getElementById('sort').addEventListener('change', function () {
-    const selectedOption = this.options[this.selectedIndex];
-    const sortType = selectedOption.dataset.sort;
-    const columnIndex = selectedOption.dataset.column;
-
-    if (!sortType) return;
-
-    const table = document.getElementById('club');
-    const tbody = table.tBodies[0];
-    const rows = Array.from(tbody.rows);
-
-    rows.sort((a, b) => {
-        let textA = a.cells[columnIndex].innerText.toLowerCase();
-        let textB = b.cells[columnIndex].innerText.toLowerCase();
-
-        if (sortType === 'asc') {
-            return textA.localeCompare(textB);
-        } else {
-            return textB.localeCompare(textA);
-        }
-    });
-
-    // Re-append sorted rows
-    rows.forEach(row => tbody.appendChild(row));
-});
-
-
-    $('#pageLength').on('change',function(){
-        $productTable.page.len($(this).val()).draw();
+    $('#sort').on('change', function() {
+        $column = $(this).find(':selected').data('column');
+        $sort = $(this).find(':selected').data('sort');
+        $optionTable.order([$column, $sort]).draw();
     })
-    $('#pageLength').val($productTable.page.len());
+    $('#pageLength').on('change',function(){
+        $optionTable.page.len($(this).val()).draw();
+    })
+    $('#pageLength').val($optionTable.page.len());
 })
 
 
@@ -298,14 +243,14 @@ $(document).ready(function() {
 
 
 
-function deleteProduct(id) {
+function deleteOption(id) {
 
-    if (!confirm("Are you sure you want to delete this product?")) {
+    if (!confirm("Are you sure you want to delete this option?")) {
         return;
     }
 
     $.ajax({
-       url: "{{ url('club/destroy_products') }}/" + id,
+       url: "{{ url('club/option_management/destroy_option') }}/" + id,
         type: "DELETE",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -322,28 +267,6 @@ function deleteProduct(id) {
     });
 }
 
-
-
-// image view scale
-
-document.addEventListener('mouseover', function (e) {
-    if (e.target.classList.contains('product-image')) {
-        e.target.dataset.originalWidth = e.target.offsetWidth;
-        e.target.dataset.originalHeight = e.target.offsetHeight;
-
-        e.target.style.position = 'relative';
-        e.target.style.zIndex = '999';
-        e.target.style.transform = 'scale(2)';
-        e.target.style.transition = 'transform 0.2s ease';
-    }
-});
-
-document.addEventListener('mouseout', function (e) {
-    if (e.target.classList.contains('product-image')) {
-        e.target.style.transform = 'scale(1)';
-        e.target.style.zIndex = '1';
-    }
-});
 
 
 
