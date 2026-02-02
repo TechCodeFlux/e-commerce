@@ -1,11 +1,10 @@
 <?php
 
-use App\Http\Controllers\Auth\AddProductsController;
-use App\Http\Controllers\Club\Auth\CategoryController;
-use App\Http\Controllers\Club\Auth\ExController;
-use App\Http\Controllers\Club\Auth\OptionController;
-use App\Http\Controllers\Club\Auth\ProductController;
-use App\Http\Controllers\Club\Auth\VarientController;
+use App\Http\Controllers\Admin\Auth\CategoryController;
+use App\Http\Controllers\Admin\Auth\ExController;
+use App\Http\Controllers\Admin\Auth\OptionController;
+use App\Http\Controllers\Admin\Auth\ProductController;
+use App\Http\Controllers\Admin\Auth\VarientController;
 use App\Http\Controllers\IndexPageController;
 use App\Models\Varient;
 use Illuminate\Support\Facades\Auth; 
@@ -14,10 +13,10 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('club.dashboard');
+    return view('admin.dashboard');
 });
 
-Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
 Auth::routes(['register' => false]);
 
 Route::get('product_management/form_products_index', [ProductController::class, 'form_products_index'])->name('product_management.form_products_index');

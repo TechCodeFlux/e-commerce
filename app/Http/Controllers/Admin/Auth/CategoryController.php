@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Club\Auth;
+namespace App\Http\Controllers\Admin\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Controller;
 use App\Models\Category;

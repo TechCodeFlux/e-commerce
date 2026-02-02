@@ -1,4 +1,4 @@
-@extends('club.components.app')
+@extends('admin.components.app')
 
 @section('content')
 
@@ -11,7 +11,7 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('club.show_products') }}">
+                    <a href="{{ route('admin.product_management.show_products') }}">
                         <i class="bi bi-building small me-2"></i> Products 
                     </a>
                 </li>
@@ -39,7 +39,7 @@
                 <div class="col-lg-12">
 
                     <form 
-                        action="{{ $product->id? route('club.edit_product', $product->id): route('club.add_products') }}"  enctype="multipart/form-data"
+                        action="{{ $product->id? route('admin.product_management.edit_product', $product->id): route('admin.product_management.add_products') }}"  enctype="multipart/form-data"
                         method="POST" 
                         autocomplete="off">
                         @csrf
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // If productId exists (Edit Page), run AJAX.
     $.ajax({
-        url: "{{ route('club.change-status') }}",
+        url: "{{ route('admin.product_management.change-status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",

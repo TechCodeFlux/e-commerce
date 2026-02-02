@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Club\Auth;
+namespace App\Http\Controllers\Admin\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Controller;
 use Illuminate\Container\Attributes\Storage;
@@ -19,7 +19,7 @@ class ProductController extends Controller
         $product = new Product();
         $categories = Category::orderBy('name')->get();
         $options = Option::orderBy('name')->get();
-       return  view('club.form_products_index', compact('product','categories','options'));
+       return  view('admin.product_management.form_products_index', compact('product','categories','options'));
     }
 
     public function store(Request $request){
@@ -48,7 +48,7 @@ class ProductController extends Controller
         'option_id' =>$request->option,
 
           ]);
-        return redirect('club/show_products');
+        return redirect('admin/product_management/show_products');
     }
 
 
@@ -57,14 +57,14 @@ class ProductController extends Controller
      public function edit_product_index($id){
         
 
-        $club = Auth::guard('club')->user();
+        $admin = Auth::guard('admin')->user();
 
          $product = Product::where('id', $id)->firstOrFail();
 
          $categories = Category::orderBy('name')->get();
          
          $options = Option::orderBy('name')->get();
-          return view('club.form_products_index',compact('product','categories','options'));
+          return view('admin.product_management.form_products_index',compact('product','categories','options'));
     }
 
 
@@ -89,7 +89,7 @@ class ProductController extends Controller
          'image'       => $imagePath,
          'category_id' => $request->category,
 ]);
-          return redirect('club/show_products'); 
+          return redirect('admin/product_management/show_products'); 
 
 
     }
@@ -157,7 +157,7 @@ class ProductController extends Controller
 
                 //edit button
                 $actions .= '<a
-                                href="' . route('club.edit_products_index', $product->id) . '"
+                                href="' . route('admin.product_management.edit_products_index', $product->id) . '"
                                 class="btn btn-sm 
                                 title="Edit">
                                                               <i class="bi bi-pencil-square btn btn-outline-success btn btn-sm"></i>
@@ -167,7 +167,7 @@ class ProductController extends Controller
                 //delete button
                 $actions .= '<button 
                                  type="button"
-                                 class="btn btn-sm  delete-club"
+                                 class="btn btn-sm  delete-admin"
                                  onclick="deleteProduct(' . $product->id . ')"
                                  title="Delete">
                                                               <i class="bi-trash-fill btn btn-outline-danger btn btn-sm "></i>
@@ -180,7 +180,7 @@ class ProductController extends Controller
             })->rawColumns(['image', 'status','action'])->make(true);
         }
 
-        return view('club.show_products');
+        return view('admin.product_management.show_products');
     }
 
 

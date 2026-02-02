@@ -1,4 +1,4 @@
-@extends('club.components.app')
+@extends('admin.components.app')
 
 @section('content')
     <div class="mb-4">
@@ -43,7 +43,7 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="{{ route('club.form_products_index') }}">
+                            <a href="{{ route('admin.product_management.form_products_index') }}">
                                 <button class="btn btn-primary btn-icon">
                                         <i class="bi bi-plus-circle"></i> Add Product
                                 </button>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="" >
-                    <table class="table table-custom table-lg mb-0"  id="club" >
+                    <table class="table table-custom table-lg mb-0"  id="admin" >
                     <thead>
                       <tr>
                         <th class="tooltip-inner link-dark">Image</th>  
@@ -158,7 +158,7 @@ $(document).on('click', '.view-product', function () {
     let productId = $(this).data('id');
 
     $.ajax({
-        url: "{{ route('club.show_single', ':id') }}".replace(':id', productId),
+        url: "{{ route('admin.product_management.show_single', ':id') }}".replace(':id', productId),
         type: "GET",
         success: function (res) {
             $('#modalProductName').text(res.name);
@@ -184,7 +184,7 @@ $(document).on('change', '.toggle-status', function () {
     let label = $('#status-label-' + productId);
 
     $.ajax({
-        url: "{{ route('club.change-status') }}",
+        url: "{{ route('admin.product_management.change-status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
@@ -216,11 +216,11 @@ $(document).ready(function() {
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
-    $productTable= $('#club').DataTable({
+    $productTable= $('#admin').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-           url: "{{ route('club.show_products') }}",
+           url: "{{ route('admin.product_management.show_products') }}",
             data: function(d) {
                 
             }
@@ -244,10 +244,10 @@ $(document).ready(function() {
     $(document).on("keyup", ".searchInput", function(e) {
         $productTable.search($(this).val()).draw();
     });
-    $("#club_filter").css({
+    $("#admin_filter").css({
         "display": "none"
     });
-    $("#club_length").css({
+    $("#admin_length").css({
         "display": "none"
     });
     // $('#sort').on('change', function() {
@@ -267,7 +267,7 @@ $(document).ready(function() {
 
     if (!sortType) return;
 
-    const table = document.getElementById('club');
+    const table = document.getElementById('admin');
     const tbody = table.tBodies[0];
     const rows = Array.from(tbody.rows);
 
@@ -305,7 +305,7 @@ function deleteProduct(id) {
     }
 
     $.ajax({
-       url: "{{ url('club/destroy_products') }}/" + id,
+       url: "{{ url('admin/product_management/destroy_products') }}/" + id,
         type: "DELETE",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -314,7 +314,7 @@ function deleteProduct(id) {
             alert(response.message);
 
             // Reload DataTable
-            $('#club').DataTable().ajax.reload(null, false);
+            $('#admin').DataTable().ajax.reload(null, false);
         },
         error: function (xhr) {
             alert("Something went wrong. Try again.");

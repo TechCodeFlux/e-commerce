@@ -1,18 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Club\Auth;
+namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Varient;
+use App\Models\Option;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+use Psy\Util\Str;
 
-class VarientController extends Controller
+class OptionController extends Controller
 {
-      public function form_varient_index()
+     public function form_option_index()
     {
-        $varient = new Varient(); // empty model
+        $option = new Option(); // empty model
        
-        return view('club.varient_management.form_varient_index', compact('varient'));
+        return view('club.option_management.form_option_index', compact('option'));
     }
     /**
      * Store a newly created resource in storage.
@@ -20,24 +23,20 @@ class VarientController extends Controller
     public function store(Request $request)
 {
     $validated = $request->validate([
-        'size'      => 'required|string|max:25',
-        'color'      => 'required|string|max:25',
-        'stock'      => 'required|integer|min:0|max:50',
+        'name'      => 'required|string|max:255',
         'status'    => 'nullable|boolean',
     ]);
 
     
 
-    Varient::create([
-        'size'       => $request->size,
-        'color'       => $request->color,
-        'stock'       => $request->stock,
+    Option::create([
+        'name'       => $request->name,
         'status'     => $request->has('status'),
     ]);
 
     return redirect()
-        ->route('club.varient_management.form_varient_index')
-        ->with('success', 'New varient row created successfully!');
+        ->route('club.option_management.form_option_index')
+        ->with('success', 'Option created successfully!');
 }
 
 
@@ -49,22 +48,23 @@ class VarientController extends Controller
     public function show(Request $request)
     {
          if($request->ajax()){
-            $varient=Varient::query();
+            $option=Option::query();
             // return DataTables::eloquent($club)
             return datatables()
-    ->eloquent($varient)
+    ->eloquent($option)
       
 
             
             
 //toggle button
-             ->addColumn('status', function (Varient $varient) {
+
+             ->addColumn('status', function (Option $option) {
 
                 return '
                  <span
-                         id="status-label-'.$varient->id.'" 
-                          class=" '.( $varient->status ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' ).' ">
-                            '.($varient->status ? 'Active' : 'Inactive' ).'
+                         id="status-label-'.$option->id.'" 
+                          class=" '.( $option->status ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' ).' ">
+                            '.($option->status ? 'Active' : 'Inactive' ).'
                  </span>
                        
                         <div class="form-check form-switch">
@@ -72,22 +72,24 @@ class VarientController extends Controller
                                           class="form-check-input toggle-status"
                                           type="checkbox"
                                           name="status"
-                                          data-id="'.$varient->id.'"  '.($varient->status ? 'checked' : '').'>
+                                          data-id="'.$option->id.'"  '.($option->status ? 'checked' : '').'>
                          </div>';
             })
 
 
 
-//toggle button
-            ->addColumn('action', function (Varient $varient) use ($request) {
+//End - toggle button
+
+
+            ->addColumn('action', function (Option $option) use ($request) {
                 $actions= '<div class="d-flex gap-1"><div class="dropdown">';
 
 
                 //view button
                 $actions .= '<button 
                                      type="button"
-                                     class="btn btn-sm view-varient"
-                                     data-id="'.$varient->id.'"
+                                     class="btn btn-sm view-option"
+                                     data-id="'.$option->id.'"
                                      data-bs-toggle="modal"
                                      data-bs-target="#productListModal">
                                                              <i class="bi bi-eye-fill btn btn-outline-warning btn-sm"></i>
@@ -96,7 +98,7 @@ class VarientController extends Controller
 
                 //edit button
                 $actions .= '<a
-                                href="' . route('club.varient_management.edit_varient_index', $varient->id) . '"
+                                href="' . route('club.option_management.edit_option_index', $option->id) . '"
                                 class="btn btn-sm 
                                 title="Edit">
                                                               <i class="bi bi-pencil-square btn btn-outline-success btn btn-sm"></i>
@@ -107,7 +109,7 @@ class VarientController extends Controller
                 $actions .= '<button 
                                  type="button"
                                  class="btn btn-sm  delete-club"
-                                 onclick="deleteVarient(' . $varient->id . ')"
+                                 onclick="deleteOption(' . $option->id . ')"
                                  title="Delete">
                                                               <i class="bi-trash-fill btn btn-outline-danger btn btn-sm "></i>
                             </button>';
@@ -119,15 +121,15 @@ class VarientController extends Controller
             })->rawColumns([ 'status','action'])->make(true);
         }
 
-        return view('club.varient_management.show_varient');
+        return view('club.option_management.show_option');
     }
 
 
-public function edit_varient_index($id)
+public function edit_option_index($id)
     {
-        $varient = Varient::findOrFail($id);
+        $option = Option::findOrFail($id);
        
-        return view('club.varient_management.form_varient_index', compact('varient'));
+        return view('club.option_management.form_option_index', compact('option'));
     }
 
 
@@ -135,20 +137,15 @@ public function edit_varient_index($id)
       public function update(Request $request, $id)
     {
         $request->validate([
-          'size'      => 'required|string|max:25',
-          'color'      => 'required|string|max:25',
-          'stock'      => 'required|integer|min:0|max:50',
-          'status'    => 'nullable|boolean',
+            'name'    => 'required|string|max:255',
         ]);
 
-        Varient::where('id', $id)->update([
-             'size' => $request->size,
-             'color' => $request->color,
-             'stock' => $request->stock,
+        Option::where('id', $id)->update([
+             'name' => $request->name,
         ]);
         return redirect()
-            ->route('club.varient_management.show_varient')
-            ->with('success', 'Varient updated successfully');
+            ->route('club.option_management.show_option')
+            ->with('success', 'Option updated successfully');
     }
 
 
@@ -157,13 +154,11 @@ public function edit_varient_index($id)
 
     public function single_show($id)
 {
-    $varient = Varient::findOrFail($id);
+    $option = Option::findOrFail($id);
 
     return response()->json([
-        'id' => $varient->id,
-        'size' => $varient->size,
-        'color'=> $varient->color,
-        'stock'=>$varient->stock,
+        'id' => $option->id,
+        'name' => $option->name,
     ]);
 }
 
@@ -173,10 +168,10 @@ public function edit_varient_index($id)
 
      public function changeStatus(Request $request)
     {
-        $varient = Varient::find($request->id);
-        if ($varient) {
-            $varient->status = $request->status;
-            $varient->save();
+        $option = Option::find($request->id);
+        if ($option) {
+            $option->status = $request->status;
+            $option->save();
 
             return response()->json(['success' => 'Status changed successfully.']);
         }
@@ -187,11 +182,11 @@ public function edit_varient_index($id)
     
     public function destroy($id)
 {
-    $varient = Varient::findOrFail($id);
-    $varient->delete();
+    $option = Option::findOrFail($id);
+    $option->delete();
 
     return response()->json([
-        'message' => 'Varient deleted successfully'
+        'message' => 'Option deleted successfully'
     ]);
 }
 

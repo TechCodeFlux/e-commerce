@@ -531,7 +531,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('club.show_products') }}">
+                <a href="{{ route('club.product_management.show_products') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
                     </span>
