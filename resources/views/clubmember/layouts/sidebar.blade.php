@@ -582,10 +582,10 @@
                     <span>Buyer</span>
                 </a>
                 <ul> --}}
-                    <li>
-                        <a  href="./buyer-dashboard.html">Dashboard</a>
+                    {{-- <li> --}}
+                        {{-- <a  href="./buyer-dashboard.html">Dashboard</a>
                     </li>
-                    <li>
+                    <li> --}}
                         {{-- <a  href="./buyer-orders.html">Orders</a>
                     </li>
                     <li>
@@ -605,11 +605,11 @@
                 </a>
             </li>
             <li> --}}
-                <a href="#">
+                {{-- <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
                     </span>
-                    <span>Invoices</span>
+                    <span></span>
                 </a>
                 <ul>
                     <li>
@@ -621,7 +621,7 @@
                            >Detail</a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
             {{-- <li class="menu-divider">Apps</li>
             <li>
                 <a  href="./chats.html">
@@ -1015,7 +1015,7 @@
                     </li>
                 </ul>
             </li> --}}
-            <li>
+            {{-- <li> --}}
                 {{-- <a href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-paperclip"></i>

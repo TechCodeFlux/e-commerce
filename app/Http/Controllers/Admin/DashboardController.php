@@ -34,7 +34,7 @@ class DashboardController extends Controller
 
         $user->name = $validate['name'];
         $user->email = $validate['email'];
-        $user->save();
+        // $user->save();
 
         return redirect()->route('admin.profile')->with('success', 'Profile updated successfully.');
     }

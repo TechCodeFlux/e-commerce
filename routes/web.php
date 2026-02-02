@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
 use App\Http\Controllers\ClubMember\DashboardController;
 use App\Http\Controllers\ClubMember\OrderController;
+use App\Http\Controllers\ClubMember\ProfileController;
 
 
 
@@ -19,7 +20,7 @@ use App\Http\Controllers\ClubMember\OrderController;
 
 //arjun // club //
 // Route::get('/', function () {return view('club.adduser');})->name('club.login');
-Route::post('/', action: [ClubLoginController::class, 'login'])->name('club.login.submit');
+// Route::post('/', action: [ClubLoginController::class, 'login'])->name('club.login.submit');
 Route::post('/logout', [ClubLoginController::class, 'logout'])->name('club.logout');
 
 Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
@@ -31,15 +32,35 @@ Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashbo
 
 //pauljo
 // Admin login
-Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
+Route::get('/', function () {return view('admin.auth.login');})->name('admin.login');
 Route::post('/admin', [AdminLoginController::class, 'login'])->name('admin.login.submit');
 Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
     Auth::routes(['register' => false]);    
 //dashboard controller
-Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');//dashboard
-Route::get('profile', [DashboardController::class, 'profile'])->name('profile');//profile view
-Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');//profile update
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'); //dashboard
+Route::get('profile', [DashboardController::class, 'profile'])->name('profile');  //profile view
+Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');  //profile update
+
+// Route::get('/', function () {  return view('admin.auth.login');})->name('admin.login');
+
+// Route::get('/admin', [AdminLoginController::class, 'login'])
+//     ->name('admin.login.submit');
+
+// Route::post('/admin/logout', [AdminLoginController::class, 'logout'])
+//     ->name('admin.logout');
+
+// Route::prefix('admin')->name('admin.')->group(function () {
+
+//     Route::get('dashboard', [DashboardController::class, 'index'])
+//         ->name('dashboard');
+
+//     Route::get('profile', [DashboardController::class, 'profile'])
+//         ->name('profile');
+
+//     Route::post('profile/update', [DashboardController::class, 'profile_update'])
+//         ->name('profile.update');
+// });
 //admin club controller
 Route::get('clubs', [ClubController::class, 'index'])->name('clubsindex'); //view clubs in table 
 Route::get('clubsform', [ClubController::class, 'create'])->name('club'); //To add club data form(submit form)
@@ -65,6 +86,9 @@ Route::get('/clubmember/dashboard', [DashboardController::class, 'index'])
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 Route::get('/order-history', [OrderController::class, 'orderHistory'])
      ->name('order.history');
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('clubmember.profile.edit');
+Route::put('/profile/update', [ProfileController::class, 'update'])->name('clubmember.profile.update');
+Route::get('/clubmember/get-states/{country}', [ProfileController::class, 'getStates']);
 
 
 });
