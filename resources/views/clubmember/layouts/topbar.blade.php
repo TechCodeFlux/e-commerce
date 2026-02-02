@@ -67,11 +67,17 @@
                                     Quantity: {{ $item->quantity }}    
                                     </div>
                                 </div>
+
                                 <!-- Remove -->
                                 <a href={{ route('clubmember.delete' ,$item->id) }}
-                                class="text-danger me-3" title="Remove">
-                                    <i class="bi bi-trash"></i>
+                                class="text-danger me-2 " title="Remove">
+                                    <i class=" bi bi-trash m-1  -center"></i>
                                 </a> 
+                                
+                                <!-- order-->
+                                 <a href={{ route('clubmember.booking' ,$item->id) }}
+                                class="btn btn-sm me-2" title="Buy Now">
+                                    <i class="fas fa-credit-card fa-l -center"></i>
 
                             </div>
                         </div>

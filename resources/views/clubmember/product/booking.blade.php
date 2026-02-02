@@ -30,12 +30,12 @@
                 {{-- {{ $clubuser->id ? 'Edit' : 'Add' }} Club User --}}
             </h4>
 
-            <form action='#' method="POST">
+            <form action="{{route('clubmember.placeorder')}}" method="POST">
                 {{-- action="{{ $clubuser->id ? route('admin.update', $clubuser->id) : route('admin.addclub') }}"
                 method="POST">
                 @csrf
                 @if($clubuser->id) @method('PUT') @endif --}}
-
+                @csrf   
                 <div class="row">
 
                     <div class="col-md-4 mb-3"></div>
@@ -45,21 +45,33 @@
                     {{-- Name --}}
                     <div class="col-md-8 mb-3">
                         <label> Product Name</label>
-                        <input type="text" name="name" class="form-control" readonly
-                                 value="{{ old('name', $product->name ?? '') }}"> 
+                        <!-- Display name (read-only or disabled if needed) -->
+                        <input type="text"
+                            class="form-control"
+                            value="{{ $product->name }}"
+                            readonly>
+
+                        <!-- Actual value submitted -->
+                        <input type="hidden"
+                            name="product_id"
+                            value="{{ $product->id }}">
                     </div>
+
+                   
                     
                     <div class="col-md-4 mb-3 text-center">
                     <img src="{{ asset('storage/' . $product->image) }}"
                         width="100" height="100"
                         class="rounded">
                     </div>
+                    
 
                     
                     <div class="col-md-8 mb-3">
                         <label>description</label>
                         <textarea name="description" class="form-control" readonly>{{ old('description', $product->description ?? '') }}</textarea>
                     </div>
+
 
                     <div class="col-md-4 mb-3"></div>
                     
@@ -74,9 +86,18 @@
                     </div>
 
                      <div class="col-md-4 mb-3">
-                        <label> Name</label>
-                        <input type="text" name="name" class="form-control" 
-                                 value="{{ old('name', $clubmember->name ?? '') }}"> 
+                        <label>Name</label>
+
+                        <!-- Display name (read-only or disabled if needed) -->
+                        <input type="text"
+                            class="form-control"
+                            value="{{ $clubmember->name }}"
+                            readonly>
+
+                        <!-- Actual value submitted -->
+                        <input type="hidden"
+                            name="clubmember_id"
+                            value="{{ $clubmember->id }}">
                     </div>
 
                     <div class="col-md-4 mb-3">
@@ -85,17 +106,54 @@
                                  value="{{ old('phone', $clubmember->contact ?? '') }}"> 
                     </div>
 
+                    @error('phone')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
                     <div class="col-md-4 mb-3">
                         <label> Email</label>
                         <input type="email" name="email" class="form-control" 
                                  value="{{ old('email', $clubmember->email ?? '') }}"> 
                     </div>
 
-                    {{-- Address --}}
+                    @error('email')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
                     <div class="col-md-8 mb-3">
                         <label>Address</label>
-                        {{-- <textarea name="address" class="form-control"></textarea> --}}
-                        <textarea name="address" class="form-control">{{ old('address', $address->address1 ?? '') }}</textarea>
+                        <select name="address" id="address" class="form-select">
+                             <option value="">select you address</option>
+                            @foreach($address as $address)
+                                <option value="{{ $address->address1 }}">
+                                    {{ $address->address1 }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                     
+                    {{-- Address --}}
+                    <div class="col-md-8 mb-3">
+                        <label>Address to add as new</label>
+                         
+                         <textarea name="address" class="form-control">{{ old('address') }}</textarea> 
+                    </div>
+
+                    @error('address')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                    <div class="col-md-4 mb-3">
+                        {{-- <label> club_id</label> --}}
+                        <input type="hidden"
+                            name="club_id"
+                            value="{{ $clubmember->club_id }}">
                     </div>
 
                     {{-- Country 

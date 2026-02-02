@@ -523,7 +523,7 @@
             <li class="menu-divider">E-Commerce</li>
             <li>
                 <a  class="active"
-                    href="index.html">
+                    href="{{ url('/club/dashboard') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>
@@ -531,13 +531,13 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('club.vieworder') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
                     </span>
                     <span>Orders</span>
                 </a>
-                <ul>
+                {{-- <ul>
                     <li>
                         <a  href="./orders.html">List</a>
                     </li>
@@ -859,8 +859,8 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a href="#" target="_blank">
+            <li> --}}
+                {{-- <a href="#" target="_blank">
                     <span class="nav-link-icon">
                         <i class="bi bi-file-earmark-text"></i>
                     </span>
@@ -1076,14 +1076,14 @@
                     </li>
                 </ul>
             </li>
-            <li>
+            <li> 
                 <a href="#" class="disabled">
                     <span class="nav-link-icon">
                         <i class="bi bi-hand-index-thumb"></i>
                     </span>
                     <span>Disabled</span>
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </div>
 </div>

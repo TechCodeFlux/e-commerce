@@ -539,6 +539,15 @@
                 </a>
             </li> 
 
+            <li>
+                <a href="{{ route('clubmember.vieworder') }}">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-receipt"></i>
+                    </span>
+                    <span>View orders</span>
+                </a>
+            </li> 
+
             {{-- admin --}}
             {{-- <li>
                 <a href="#">

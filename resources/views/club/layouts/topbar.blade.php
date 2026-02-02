@@ -26,7 +26,7 @@
             </a>
         </div>
     </form>
-    <div class="header-bar ms-auto">
+    {{-- <div class="header-bar ms-auto">
         <ul class="navbar-nav justify-content-end">
             <li class="nav-item">
                 <a href="#" class="nav-link nav-link-notify" data-count="2" data-sidebar-target="#notifications">
@@ -111,7 +111,7 @@
     </button>
             </li>
         </ul>
-    </div>
+    </div> --}}
     <!-- Header mobile buttons -->
     <div class="header-mobile-buttons">
         <a href="#" class="search-bar-btn">

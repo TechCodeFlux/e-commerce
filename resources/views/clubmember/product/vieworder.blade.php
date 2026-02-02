@@ -9,7 +9,7 @@
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Products</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>orders</li>
             </ol>
         </nav>
     </div>
@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-md-flex gap-4 align-items-center">
-                        <div class="d-none d-md-flex">All Products</div>
+                        <div class="d-none d-md-flex">All orders</div>
                         <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
@@ -53,15 +53,22 @@
                     </div>
                     </div>
                 </div>
-                <div class="">
-                    <table class="table table-custom table-lg mb-0 " id="product">
+                <div class=" ">
+                    <table class="table table-custom table-lg mb-0 " id="order">
                     <thead>
                         <tr >
-                            <th>Name</th>
+                            <th>order Name</th>
                             <th>Image</th>
                             <th>Description</th>
-                            <th>Available</th>
-                            <th class="text-center pe-md-5">Action</th>
+                            <th>quantity</th>
+                            <th>stock</th>
+                            <th>user name</th>
+                            <th>address</th>
+                            <th>email</th>
+                            <th>phone</th>
+                            <th>order_date</th>
+                            <th>status</th>
+                            {{-- <th class="text-center pe-md-5">Action</th> --}}
                         </tr>
                     </thead>
                 </table>
@@ -100,76 +107,68 @@ $(document).ready(function() {
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
-    $ProductTable= $('#product').DataTable({
+    $orderTable= $('#order').DataTable({
         processing: true,
         serverSide: true,
+        scrollX: true,        // ✅ enables left-right scroll
+        autoWidth: false, 
+        dom: 'rtip',          // 👈 hides default Search & Show entries
+        
         ajax: {
-            url: "{{ route('clubmember.viewproduct') }}",
+            url: "{{ route('clubmember.vieworder') }}",
             data: function(d) {
                     
             }
         },
 
         columns: [
-           
-            {
-                data: 'name',
-                name: 'name',
-                className: 'text-center'
-            },
-            {
-                data: 'image',
-                name: 'image',
-                className: 'text-center',
-                orderable: false,
-                searchable: false
-            },
-            {
-                data: 'description',
-                name: 'description',
-                className: 'text-center'
-            },
-            {
-                data: 'stock',
-                name: 'stock',
-                className: 'text-center',
-                render: function (data) {
+                { data: 'name', className: 'text-center' },
+                { data: 'image', orderable:false, searchable:false },
+                { data: 'description', className: 'text-center' },
+                { data: 'quantity', className: 'text-center' },
+                 { data: 'stock',
+                    render: function (data) {
                         return Number(data) > 0
-                        ? '<span class="badge bg-success">Available</span>'
-                        : '<span class="badge bg-danger">Unavailable</span>';
+                            ? '<span class="badge bg-success">Available</span>'
+                            : '<span class="badge bg-danger">Unavailable</span>';
+                            
                     }
-            },
-            { 
-                data: 'action',
-                name: 'action',
-                orderable: false,
-                searchable: false,
-            }
-        ],
-        columnDefs: [{
-            'defaultContent': '--',
-            "targets": "_all"
-        }],
+                },
+                {data:'name', classname:'text-center' },
+                { data :'address',classname:'text-center'},
+                { data :'email',classname:'text-center'},
+                { data :'phone',classname: 'text-center'},
+                { data :'created_at',classname:'text-center'},
+                {  data: 'order_status_id',
+                    render: function (data) {
+                        return Number(data)==2
+                            ? '<span class="badge bg-success">order confirmed</span>'
+                            : '<span class="badge bg-danger">not confirm</span>';
+                    }
+                },
+               
+            ]
+
     });
     
     $(document).on("keyup", ".searchInput", function(e) {
-        $ProductTable.search($(this).val()).draw();
+        $orderTable.search($(this).val()).draw();
     });
-    $("#product_filter").css({
+    $("#order_filter").css({
         "display": "none"
     });
-    $("#product_length").css({
+    $("#order_length").css({
         "display": "none"
     });
     $('#sort').on('change', function() {
         $column = $(this).find(':selected').data('column');
         $sort = $(this).find(':selected').data('sort');
-        $ProductTable.order([$column, $sort]).draw();
+        $orderTable.order([$column, $sort]).draw();
     })
     $('#pageLength').on('change',function(){
-        $ProductTable.page.len($(this).val()).draw();
+        $orderTable.page.len($(this).val()).draw();
     })
-    $('#pageLength').val($ProductTable.page.len());
+    $('#pageLength').val($orderTable.page.len());
 })
 //delete club member
 // $('table').off('click').on('click','.delete-club-member',function(){

@@ -1,11 +1,11 @@
-@extends('clubmember.components.app')
+@extends('club.components.app')
     {{-- @yield('page-title','Club') --}}
     @section('content')
     <div class="mb-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ url('/clubmember') }}">
+                    <a href="{{ url('/club/dashboard') }}">
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-md-flex gap-4 align-items-center">
-                        <div class="d-none d-md-flex">All Products</div>
+                        <div class="d-none d-md-flex">All orders</div>
                         <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
@@ -53,17 +53,26 @@
                     </div>
                     </div>
                 </div>
-                <div class="">
-                    <table class="table table-custom table-lg mb-0 " id="product">
+                <div class="table-responsive">
+                    <table class="table table-custom table-lg mb-0" id="order">
                     <thead>
                         <tr >
-                            <th>Name</th>
+                            <th>product Name</th>
                             <th>Image</th>
                             <th>Description</th>
-                            <th>Available</th>
-                            <th class="text-center pe-md-5">Action</th>
+                            <th>quantity</th>
+                            <th>stock</th>
+                            <th>user name</th>
+                            <th>address</th>
+                            <th>email</th>
+                            <th>phone</th>
+                            <th>order_date</th>
+                            <th>status</th>
+                            <th>Action</th>
+                            {{-- <th class="text-center pe-md-5">Action</th> --}}
                         </tr>
                     </thead>
+                    <tbody></tbody>
                 </table>
                 </div>
             </div>
@@ -100,57 +109,83 @@ $(document).ready(function() {
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
-    $ProductTable= $('#product').DataTable({
+    $ProductTable= $('#order').DataTable({
         processing: true,
         serverSide: true,
+        scrollX: true,        // ✅ enables left-right scroll
+        autoWidth: false, 
         ajax: {
-            url: "{{ route('clubmember.viewproduct') }}",
+            url: "{{ route('club.vieworder') }}",
             data: function(d) {
                     
             }
         },
 
         columns: [
-           
-            {
-                data: 'name',
-                name: 'name',
-                className: 'text-center'
-            },
-            {
-                data: 'image',
-                name: 'image',
-                className: 'text-center',
-                orderable: false,
-                searchable: false
-            },
-            {
-                data: 'description',
-                name: 'description',
-                className: 'text-center'
-            },
-            {
-                data: 'stock',
-                name: 'stock',
-                className: 'text-center',
-                render: function (data) {
+                { data: 'name', className: 'text-center' },
+                { data: 'image', orderable:false, searchable:false },
+                { data: 'description', className: 'text-center' },
+                { data: 'quantity', className: 'text-center' },
+                 { data: 'stock',
+                    render: function (data) {
                         return Number(data) > 0
-                        ? '<span class="badge bg-success">Available</span>'
-                        : '<span class="badge bg-danger">Unavailable</span>';
+                            ? '<span class="badge bg-success">Available</span>'
+                            : '<span class="badge bg-danger">Unavailable</span>';
+                            
                     }
-            },
-            { 
-                data: 'action',
-                name: 'action',
-                orderable: false,
-                searchable: false,
-            }
-        ],
-        columnDefs: [{
-            'defaultContent': '--',
-            "targets": "_all"
-        }],
+                },
+                {data:'name', classname:'text-center' },
+                { data :'address',classname:'text-center'},
+                { data :'email',classname:'text-center'},
+                { data :'phone',classname: 'text-center'},
+                { data :'created_at',classname:'text-center'},
+                {  data: 'order_status_id',
+                    render: function (data) {
+                        return Number(data)==2
+                            ? '<span class="badge bg-success">order confirmed</span>'
+                            : '<span class="badge bg-danger">not confirm</span>';
+                    }
+                },
+                 { data: 'status', name: 'status', orderable: false, searchable: false },
+               
+            ]
+
     });
+
+    //toggle button
+    $(document).on('change', '.toggle-status', function () {
+
+    let orderId = $(this).data('id');
+    let status = $(this).is(':checked') ?  2 : 1 ;
+    let label = $('#status-label-' + orderId);
+
+    $.ajax({
+        url: "{{ route('club.change-status') }}",
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            id: orderId,
+            order_status_id : status,
+        },
+        success: function (res) {
+           alert('Status Changed!');
+           if (status === 2) {
+                    label.text('Active')
+                         .removeClass('bg-secondary-subtle text-secondary')
+                         .addClass('bg-success-subtle text-success');
+                } else {
+                    label.text('Inactive')
+                         .removeClass('bg-success-subtle text-success')
+                         .addClass('bg-secondary-subtle text-secondary');
+                }
+        },
+        error: function () {
+            alert('Status update failed');
+        }
+    });
+    //end toggle button
+
+});
     
     $(document).on("keyup", ".searchInput", function(e) {
         $ProductTable.search($(this).val()).draw();

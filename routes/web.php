@@ -13,7 +13,9 @@ use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 //dashboard
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ClubController;
-use App\Http\Controllers\ClubMember\ClubmemberDasboardController;
+use App\Http\Controllers\Clubmember\ClubmemberDashboardController;
+use App\Http\Controllers\Club\ClubDashboardController;
+
 
 // admin (done by pauljo)
 
@@ -36,30 +38,53 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
 });
 
+
+
+
+// clubmember
+
+
 Route::get('/clubmember', function () {return view('clubmember.dashboard');});
 
 Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controllers\ClubMember')->group(function () {
     Auth::routes(['register' => false]); 
 
-    Route::get('viewproduct', [ClubmemberDasboardController::class, 'viewproduct'])->name('viewproduct');
+    Route::get('viewproduct', [ClubmemberDashboardController::class, 'viewproduct'])->name('viewproduct');
 
-    Route::get('addcart/{id}', [ClubmemberDasboardController::class, 'addcart'])->name('addcart');
+    Route::get('addcart/{id}', [ClubmemberDashboardController::class, 'addcart'])->name('addcart');
 
-    Route::get('viewcart', [ClubmemberDasboardController::class, 'viewcart'])->name('viewcart');
+    Route::get('viewcart', [ClubmemberDashboardController::class, 'viewcart'])->name('viewcart');
 
-    Route::get('delete/{id}',[ClubmemberDasboardController::class,'delete'])->name('delete');
+    Route::get('delete/{id}',[ClubmemberDashboardController::class,'delete'])->name('delete');
 
     // booking the product
 
-    Route::get('booking/{id}',[ClubmemberDasboardController::class,'booking'])->name('booking');
+    Route::get('booking/{id}',[ClubmemberDashboardController::class,'booking'])->name('booking');
+
+    Route::post('placeorder',[ClubmemberDashboardController::class,'placeorder'])->name('placeorder');
+
+    Route::get('vieworder',[ClubmemberDashboardController::class,'vieworder'])->name('vieworder');
     
 });
 
-// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-//     Auth::routes(['register' => false]);    
 
-//     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-// });
+
+// club
+
+Route::get('/club', function () {return view('club.auth.login');})->name('club.login');
+Route::post('/club', [ClubLoginController::class, 'login'])->name('club.login.submit');
+Route::post('/club/logout', [ClubLoginController::class, 'logout'])->name('club.logout');
+
+Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+    Auth::routes(['register' => false]);   
+
+     Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');
+
+     Route::get('vieworder',[ClubDashboardController::class,'vieworder'])->name('vieworder');
+
+     Route::post('change-status', [ClubDashboardController::class, 'changeStatus'])->name('change-status');
+     
+ });
 // Auth::routes();
 
 // Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
