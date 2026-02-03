@@ -52,47 +52,38 @@
                 </div>
             </div>
         </div>
-
-        <div class="table-responsive">
-            <table class="table table-custom table-lg mb-0" id="club_members">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Contact</th>
-                        <th>Address</th>
-                        <th>Country ID</th>
-                        <th>State ID</th>
-                        <th>City</th>
-                        <th>Zip Code</th>
+    </div>
+            <div class="table-responsive">
+                    <table class="table table-custom table-lg mb-0" id="club_members">
+                    <thead>
+                      <tr>
+                         <th>Name</th>  
+                         <th>Contact</th>
+                         <th>Email</th>
+                         <th>Address</th>
+                         <th>Country</th>
+                         <th>State</th>
+                         <th>City</th>
+                         <th>Zip Code</th>  
                         <th>Action</th>
-                    </tr>
-                </thead>
-            </table>
+                     </tr>
+                    </thead>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-
-<!-- Delete Modal -->
-<div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Delete Club Member</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="staticBackdropLabel">Delete Club Member</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <input type="hidden" id="deleteId" name="deleteId">
-                <p>Are you sure you want to delete this club member?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-sm btn-danger btn_delete_club_member">Delete</button>
-            </div>
+         </div>
         </div>
     </div>
-</div>
-@endsection
+
+
 
 @section('script')
 <script src="{{ url('libs/dataTable/datatables.min.js') }}"></script>
@@ -107,8 +98,8 @@ $(document).ready(function() {
         ajax: '{{ route("club.clubmembersindex") }}',
         columns: [
             { data: 'name', name: 'name' },
-            { data: 'email', name: 'email' },
             { data: 'contact', name: 'contact' },
+            { data: 'email', name: 'email' },
             { data: 'address.address1', name: 'address.address1' },
             { data: 'address.country_id', name: 'address.country_id' },
             { data: 'address.state_id', name: 'address.state_id' },
@@ -138,3 +129,5 @@ $(document).ready(function() {
 });
 </script>
 @endsection
+@endsection
+
