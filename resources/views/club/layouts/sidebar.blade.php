@@ -500,7 +500,7 @@
                 </div>
                 <div>
                     <div class="fw-bold">Timotheus Bendan</div>
-                    <small class="text-muted">Sales Manager</small>
+                    <small class="text-muted">Club Admin</small>
                 </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
@@ -534,7 +534,7 @@
             
             
             <li>
-                <a  href="{{route('club.clubmembersindex')}}">
+                <a  href="{{route('club.clubmembers.index')}}">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>

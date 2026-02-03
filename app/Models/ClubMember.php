@@ -1,12 +1,23 @@
 <?php
 
-namespace App\Models;
-use App\Models\ClubMember;      
+namespace App\Models;   
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class ClubMember extends Model
+class ClubMember extends Authenticatable
 {
-    //
+    use Notifiable, SoftDeletes;
+        protected $fillable = [
+        'name',
+        'email',
+        'address',
+        'status',
+
+    ];
+
 }
+
+
