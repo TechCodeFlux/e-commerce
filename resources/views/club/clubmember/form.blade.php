@@ -1,6 +1,25 @@
 @extends('club.components.app')
 
 @section('content')
+
+ <div class="mb-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('club.dashboard') }}">
+                        <i class="bi bi-globe2 small me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('club.clubmembersindex') }}">
+                        <i class="bi bi-building small me-2"></i> Club Members
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Add Club Members</li>
+            </ol>
+        </nav>
+    </div>
+
 <div class="container mt-4">
 
     <div class="card mb-4 shadow-sm">
@@ -20,9 +39,7 @@
                 <div class="col-lg-12">
 
                     <form 
-                        {{-- action="{{ $clubmember->id 
-                            ? route('club.members.update', $clubmember->id) 
-                            : route('club.members.store') }}"  --}}
+                        action="{{ $clubmember->id ? route('club.update', $clubmember->id) : route('club.storeclubmember') }}" 
                         method="POST" 
                         autocomplete="off">
                         @csrf
@@ -51,34 +68,52 @@
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Phone</label>
-                                <input type="text" name="phone" class="form-control" placeholder="Contact"
-                                    value="{{ old('phone', $clubmember->phone ?? '') }}">
-                                @error('phone')
+                                <label class="form-label">Contact</label>
+                                <input type="text" name="contact" class="form-control" placeholder="Contact"
+                                    value="{{ old('contact', $clubmember->contact ?? '') }}">
+                                @error('contact')
                                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                                 @enderror
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                <label class="form-label">Address</label>
-                                <textarea name="address" class="form-control" rows="3"
-                                    placeholder="Address">{{ old('address', $clubmember->address ?? '') }}</textarea>
-                                @error('address')
+                                <label class="form-label">Address 1</label>
+                                <textarea name="address1" class="form-control" rows="2"
+                                    placeholder="Address Line 1">{{ old('address1', $clubmember->address1 ?? '') }}</textarea>
+                                @error('address1')
                                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                                 @enderror
                             </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Address 2</label>
+                                <textarea name="address2" class="form-control" rows="2"
+                                    placeholder="Address Line 2">{{ old('address2', $clubmember->address2 ?? '') }}</textarea>
+                                @error('address2')
+                                    <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            
 
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Country</label>
-                                <input type="text" name="country" class="form-control" placeholder="Country"
-                                    value="{{ old('country', $clubmember->country ?? '') }}">
-                            </div>
+                        <label>Country</label>
+                        <select name="country" id="country" class="form-select">
+                            <option value="">Select Country</option>
+                            @foreach($countries as $country)
+                                <option value="{{ $country->id }}"
+                                    {{ old('country', $clubmember->country_id ?? '') == $country->id ? 'selected' : '' }}>
+                                    {{ $country->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
 
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">State</label>
-                                <input type="text" name="state" class="form-control" placeholder="State"
-                                    value="{{ old('state', $clubmember->state ?? '') }}">
-                            </div>
+                        <label>State</label>
+                        <select name="state" id="state" class="form-select">
+                            <option value="">Select State</option>
+                        </select>
+                    </div>
 
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">City</label>
@@ -130,6 +165,7 @@
 
 </div>
 
+@section('script')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const statusSwitch = document.getElementById('statusSwitch');
@@ -141,5 +177,51 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const countrySelect = document.getElementById('country');
+    const stateSelect   = document.getElementById('state');
+    const selectedState = "{{ old('state', $clubmember->state_id ?? '') }}";
+
+    function loadStates(countryId) {
+        stateSelect.innerHTML = '<option value="">Loading...</option>';
+
+       fetch(`/admin/get-states/${countryId}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network error');
+        }
+        return response.json();
+    })
+    .then(states => {
+        stateSelect.innerHTML = '<option value="">Select State</option>';
+        states.forEach(state => {
+            stateSelect.innerHTML +=
+                `<option value="${state.id}">${state.name}</option>`;
+        });
+    })
+    .catch(error => {
+        console.error(error);
+        stateSelect.innerHTML = '<option value="">Failed to load states</option>';
+    });
+
+    }
+
+    countrySelect.addEventListener('change', function () {
+        if (this.value) {
+            loadStates(this.value);
+        } else {
+            stateSelect.innerHTML = '<option value="">Select State</option>';
+        }
+    });
+
+    // AUTO LOAD STATES ON EDIT
+    if (countrySelect.value) {
+        loadStates(countrySelect.value);
+    }
+});
 </script>
+@endsection
 @endsection

@@ -9,15 +9,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class ClubMember extends Authenticatable
 {
-    use Notifiable, SoftDeletes;
-        protected $fillable = [
+    use SoftDeletes;
+    protected $fillable = [
         'name',
+        'club_id',
+        'address_id',
+        'contact',
         'email',
-        'address',
         'status',
-
-    ];
-
+   ];
 }
 
 

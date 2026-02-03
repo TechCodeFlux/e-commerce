@@ -523,7 +523,7 @@
             <li class="menu-divider">E-Commerce</li>
             <li>
                 <a  class="active"
-                    href="index.html">
+                    href="{{route('club.dashboard')}}">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>

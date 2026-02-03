@@ -20,7 +20,7 @@
     </nav>
 </div>
 
-<div class="container mt-4">
+<div class="container mt-4"> 
     <div class="card shadow-sm">
         <div class="card-body">
 
@@ -99,6 +99,27 @@
                             value="{{ old('zip_code', $clubuser->zip_code ?? '') }}">
                     </div>
 
+                    {{-- Status --}}
+                     <div class="col-md-4 mb-4">
+                                <label class="form-label d-block">Status</label>
+
+                                <input type="hidden" name="status" value="0">
+
+                                <div class="form-check form-switch">
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="status"
+                                        id="statusSwitch"
+                                        value="1"
+                                        {{ old('status', $clubmember->status ?? 1) ? 'checked' : '' }}
+                                    >
+                                    <label class="form-check-label" for="statusSwitch" id="statusLabel">
+                                        {{ old('status', $clubmember->status ?? 1) ? 'Active' : 'Inactive' }}
+                                    </label>
+                                </div>
+                            </div>
+
                 </div>
 
                 <div class="text-center mt-3">
@@ -114,6 +135,18 @@
 
 @section('script')
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const statusSwitch = document.getElementById('statusSwitch');
+    const statusLabel = document.getElementById('statusLabel');
+
+    if (statusSwitch) {
+        statusSwitch.addEventListener('change', function () {
+            statusLabel.innerText = this.checked ? 'Active' : 'Inactive';
+        });
+    }
+});
+
+
 document.addEventListener('DOMContentLoaded', function () {
 
     const countrySelect = document.getElementById('country');
