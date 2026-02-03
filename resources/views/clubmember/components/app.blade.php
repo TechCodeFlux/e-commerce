@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title> Vetra | E-Commerce  </title>
+    <title> Grabit | E-Commerce  </title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{url('assets/images/favicon.png')}}"/>
@@ -36,7 +36,7 @@
 
 <!-- preloader -->
 <div class="preloader">
-    <img src="{{url('assets/images/logo.svg')}}" alt="logo">
+    <img src="{{url('assets/images/newlogo1.png')}}" alt="logo">
     <div class="preloader-icon"></div>
 </div>
 <!-- ./ preloader -->
