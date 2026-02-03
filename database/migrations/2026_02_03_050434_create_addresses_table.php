@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('address1');
             $table->string('address2')->nullable();
-            $table->string('address3')->nullable();
+            $table->unsignedBigInteger('country_id');
+            $table->unsignedBigInteger('state_id');
             $table->string('city');
-            $table->string('state');
-            $table->string('zip-code');
+            $table->string('zip_code');
             $table->unsignedBigInteger('club_member_id');
             $table->boolean('status')->default('0');
             $table->softdeletes();

@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ClubMember extends Model
 {
     use SoftDeletes;
+    protected $fillable = [
+        'name',
+        'club_id',
+        'address_id',
+        'contact',
+        'email',
+        'status',
+   ];
 }

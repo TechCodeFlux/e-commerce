@@ -68,7 +68,7 @@
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Phone</label>
+                                <label class="form-label">Contact</label>
                                 <input type="text" name="contact" class="form-control" placeholder="Contact"
                                     value="{{ old('contact', $clubmember->contact ?? '') }}">
                                 @error('contact')
