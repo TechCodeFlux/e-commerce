@@ -44,7 +44,8 @@
                                     <h1 class="display-8">Admin Sign In</h1>
                                     <p class="text-muted">Sign in to Vetra to continue</p>
                                 </div>
-                                <form action="{{ route('admin.login') }}" method="POST" class="mb-5">
+                                <form action="{{ route('admin.login.submit') }}" method="POST">
+
                                      @csrf 
                                     <div class="mb-3">
                                         <input type="email" name="email" class="form-control" placeholder="Enter email" autofocus
