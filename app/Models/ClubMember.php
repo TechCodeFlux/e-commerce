@@ -16,4 +16,10 @@ class ClubMember extends Model
         'email',
         'status',
    ];
+
+   public function address() {
+    return $this->belongsTo(Address::class, 'address_id');
 }
+
+}
+
