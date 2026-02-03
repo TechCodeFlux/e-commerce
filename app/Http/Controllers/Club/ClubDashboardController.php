@@ -6,17 +6,28 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
-
+use Illuminate\Support\Facades\Auth;
 
 class ClubDashboardController extends Controller
 {
     public function index()
     {
-        return view('club.dashboard');
+        if (Auth::guard('club')->check()) {
+            $user = Auth::guard('club')->user();
+            return view('club.dashboard')->with('user',$user);
+        }
+         else
+            {
+                 return view('club.auth.login');
+            }
+
+        // dd($user);
+        
     }
     public function vieworder(Request $request)
     {
-    $clubid = 1;
+    $clubid = Auth::guard('club')->id();
+    //dd($clubid);
     $memberId = 1;
 
     if ($request->ajax()) {

@@ -26,9 +26,19 @@
             </a>
         </div>
     </form>
-    {{-- <div class="header-bar ms-auto">
+    <div class="header-bar ms-auto">
         <ul class="navbar-nav justify-content-end">
-            <li class="nav-item">
+            {{-- <a href="javascript:;" onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+                    class="dropdown-item d-flex align-items-center text-danger">
+                    <i class="bi bi-box-arrow-right dropdown-item-icon"></i> Logout
+                </a>
+                <form id="logout-form" action="{{ route('club.logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form> --}}
+    {{--<div class="header-bar ms-auto">
+        <ul class="navbar-nav justify-content-end">
+            
+             <li class="nav-item">
                 <a href="#" class="nav-link nav-link-notify" data-count="2" data-sidebar-target="#notifications">
                     <i class="bi bi-bell icon-lg"></i>
                 </a>
@@ -110,8 +120,8 @@
         <i class="bi bi-plus-circle"></i> Add Product
     </button>
             </li>
-        </ul>
-    </div> --}}
+        </ul>--}}
+    </div> 
     <!-- Header mobile buttons -->
     <div class="header-mobile-buttons">
         <a href="#" class="search-bar-btn">

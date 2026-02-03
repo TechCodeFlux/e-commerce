@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login - Vetra | Club Login</title>
+    <title>Login - Grabit | Club Login</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ url('assets/images/favicon.png') }}"/>
@@ -42,34 +42,54 @@
                                 </div>
                                 <div class="my-5 text-center text-lg-start">
                                     <h1 class="display-8">Club Sign In</h1>
-                                    <p class="text-muted">Sign in to Vetra to continue</p>
+                                    <p class="text-muted">Sign in to Grabit to continue</p>
                                 </div>
+                                
+                               
+
                                 <form action="{{ route('club.login') }}" method="POST" class="mb-5">
                                      @csrf 
                                     <div class="mb-3">
-                                        <input type="email" name="email" class="form-control" placeholder="Enter email" autofocus
-                                               required>
+                                        <input type="email" name="email"  value="{{ old('email') }}" class="form-control" placeholder="Enter email" autofocus
+                                               >
+                                    @error('email')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+
                                     </div>
                                     <div class="mb-3">
-                                        <input type="password" name="password" class="form-control" placeholder="Enter password"
-                                               required>
+                                        <input type="password" name="password" value="{{ old('password') }}" class="form-control" placeholder="Enter password"
+                                               >
+                                    @error('password')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                    
                                     </div>
                                     <div class="text-center text-lg-start">
                                         <p class="small">Can't access your account? <a href="#">Reset your password now</a>.</p>
                                         <button type="submit" class="btn btn-primary">Sign In</button>
                                     </div>
+
+                                   
                                 </form>
-                                <div class="social-links justify-content-center">
+
+                                 @if ($errors->any())
+                                    <div class="alert alert-danger text-center">
+                                    {{ $errors->first() }}
+                                    </div>
+                                @endif
+
+                                {{-- <div class="social-links justify-content-center">
                                     <a href="#">
                                         <i class="ti-google bg-google"></i> Sign in with Google
                                     </a>
                                     <a href="#">
                                         <i class="ti-facebook bg-facebook"></i> Sign in with Facebook
                                     </a>
-                                </div>
+                                </div> 
                                 <p class="text-center d-block d-lg-none mt-5 mt-lg-0">
                                     Don't have an account? <a href="#">Sign up</a>.
-                                </p>
+                                </p> --}}
                             </div>
                         </div>
                     </div>
@@ -78,18 +98,18 @@
                             <img width="120" src="{{ url('assets/images/logo.svg') }}" alt="logo">
                         </div>
                         <div>
-                            <h3 class="fw-bold">Welcome to Vetra!</h3>
-                            <p class="lead my-5">If you don't have an account, would you like to register right now?</p>
-                            <a href="#" class="btn btn-primary">Sign Up</a>
+                            <h3 class="fw-bold">Welcome to Grabit!</h3>
+                            <p class="lead my-5">it's user friendly e-commerce plate form</p>
+                            {{-- <a href="#" class="btn btn-primary">Sign Up</a> --}}
                         </div>
-                        <ul class="list-inline">
+                        {{-- <ul class="list-inline">
                             <li class="list-inline-item">
                                 <a href="#">Privacy Policy</a>
                             </li>
                             <li class="list-inline-item">
                                 <a href="#">Terms & Conditions</a>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </div>
                 </div>
             </div>

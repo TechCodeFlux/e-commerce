@@ -493,16 +493,37 @@
     </div>
     <div class="menu-body">
         <div class="dropdown">
-            <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown">
+              <a href="javascript:;" onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+                    class="dropdown-item d-flex align-items-center text-danger">
+                    {{-- <i class="bi bi-box-arrow-right dropdown-item-icon"> --}}
+                {{-- <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown"> --}}
                 <div class="avatar me-3">
                     <img src="{{url('assets/images/user/man_avatar3.jpg')}}"
                          class="rounded-circle" alt="image">
                 </div>
-                <div>
-                    <div class="fw-bold">Timotheus Bendan</div>
-                    <small class="text-muted">Sales Manager</small>
-                </div>
-            </a>
+                         <div> {{-- user varfication   --}}
+                    <div class="fw-bold">
+                        @if(auth('admin')->check())
+                             {{ auth('admin')->user()->name }}
+                             </div>                             
+                                <small class="text-muted">{{ auth('admin')->user()->email }}</small>                                
+                            </div>
+                        @elseif(auth()->check())
+                             {{ auth()->user()->name }}
+                              </div>
+                                <small class="text-muted">{{ auth()->user()->email }}</small>                                 
+                            </div>
+                        @else
+                            Guest
+                        @endif
+                {{-- </a> --}}
+                <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form> 
+            
+                   
+            
+           
             <div class="dropdown-menu dropdown-menu-end">
                 <a href="{{ route('admin.profile') }}" class="dropdown-item d-flex align-items-center">
                     <i class="bi bi-person dropdown-item-icon"></i> Profile

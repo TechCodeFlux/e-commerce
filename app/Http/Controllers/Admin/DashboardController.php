@@ -15,7 +15,17 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard');
+        if (Auth::guard('admin')->check()) {
+            $user = Auth::guard('admin')->user();
+             return view('admin.dashboard')->with('user',$user);
+        }
+        else
+            {
+                 return view('admin.auth.login');
+            }
+
+        // dd($user);
+        // return view('admin.dashboard')->with('user',$user);
     }
     public function profile()
     {

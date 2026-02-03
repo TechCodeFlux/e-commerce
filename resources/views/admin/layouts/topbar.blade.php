@@ -15,6 +15,7 @@
     <!-- ./ Logo -->
     <div class="page-title">Overview</div>
     <form class="search-form">
+         @csrf
         <div class="input-group">
             <button class="btn btn-outline-light" type="button" id="button-addon1">
                 <i class="bi bi-search"></i>
@@ -28,6 +29,13 @@
     </form>
     <div class="header-bar ms-auto">
         <ul class="navbar-nav justify-content-end">
+            {{-- <a href="javascript:;" onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+                    class="dropdown-item d-flex align-items-center text-danger">
+                    <i class="bi bi-box-arrow-right dropdown-item-icon"></i> Logout
+                </a>
+                <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form> --}}
             {{-- <li class="nav-item">
                 <a href="#" class="nav-link nav-link-notify" data-count="2" data-sidebar-target="#notifications">
                     <i class="bi bi-bell icon-lg"></i>

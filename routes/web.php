@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 
 //for login
-use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
-use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
+// use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
+// use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 
 //dashboard
 use App\Http\Controllers\Admin\DashboardController;
@@ -19,14 +19,13 @@ use App\Http\Controllers\Club\ClubDashboardController;
 
 // admin (done by pauljo)
 
-Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
-Route::post('/admin', [AdminLoginController::class, 'login'])->name('admin.login.submit');
-Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+// Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
+// Route::post('/admin', [AdminLoginController::class, 'login'])->name('admin.login.submit');
 
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
     Auth::routes(['register' => false]);    
     //dashboard controller
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');//dashboard
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');//dashboard
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');//profile view
     Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');//profile update
     //admin club controller
@@ -70,10 +69,9 @@ Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controller
 
 
 // club
-
-Route::get('/club', function () {return view('club.auth.login');})->name('club.login');
-Route::post('/club', [ClubLoginController::class, 'login'])->name('club.login.submit');
-Route::post('/club/logout', [ClubLoginController::class, 'logout'])->name('club.logout');
+// Route::get('/club', function () {return view('club.auth.login');})->name('club.login');
+// Route::post('/club', [ClubLoginController::class, 'login'])->name('club.login.submit');
+// Route::post('/club/logout', [ClubLoginController::class, 'logout'])->name('club.logout');
 
 Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
     Auth::routes(['register' => false]);   

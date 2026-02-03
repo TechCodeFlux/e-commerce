@@ -22,9 +22,9 @@ class DatabaseSeeder extends Seeder
 
         
         User::updateOrCreate(
-            ['email' => 'admin@example.com'], // condition
+            ['email' => 'admin@grabit.com'], // condition
             [   'name' => 'Admin User',
-                'password' => 'password',
+                'password' => '12345678',
             ]
         );
 

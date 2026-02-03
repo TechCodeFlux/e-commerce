@@ -48,10 +48,33 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::guard('club')->logout();
+         $request->session()->forget('guard_club');
+         $request->session()->regenerateToken();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($response = $this->loggedOut($request)) {
+           // return $response;
+            return redirect()->route('club.login');  
+            
+            }
 
-        return redirect()->route('club.login');
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect()->route('club.dashboard');
+        
+
+    }
+  
+    protected function authenticated(Request $request)
+    {
+        // $users = User::find($user['id']);
+        // dd($users);
+        // if ($user->status == 0 || $users->status == 0) {
+        //     $this->guard()->logout();
+        //     return view('admin.auth.login');
+        // }
+    
+        return redirect()->intended($this->redirectTo());
     }
 }
+
+    
