@@ -1,4 +1,4 @@
-@extends('club.components.app')
+@extends('admin.components.app')
 
 @section('content')
     <div class="mb-4">
@@ -43,7 +43,7 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="{{ route('club.category_management.add_category_index') }}">
+                            <a href="{{ route('admin.category_management.add_category_index') }}">
                                 <button class="btn btn-primary btn-icon">
                                         <i class="bi bi-plus-circle"></i> Add Category
                                 </button>
@@ -141,7 +141,7 @@ $(document).on('click', '.view-category', function () {
     let categoryId = $(this).data('id');
 
     $.ajax({
-        url: "{{ route('club.category_management.show_single', ':id') }}".replace(':id', categoryId),
+        url: "{{ route('admin.category_management.show_single', ':id') }}".replace(':id', categoryId),
         type: "GET",
         success: function (res) {
             $('#modalCategoryName').text(res.name);
@@ -164,7 +164,7 @@ $(document).on('change', '.toggle-status', function () {
     let label = $('#status-label-' + categoryId);
 
     $.ajax({
-        url: "{{ route('club.category_management.change-status') }}",
+        url: "{{ route('admin.category_management.change-status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
@@ -200,7 +200,7 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         ajax: {
-           url: "{{ route('club.category_management.show_category') }}",
+           url: "{{ route('admin.category_management.show_category') }}",
             data: function(d) {
                 
             }

@@ -1,4 +1,4 @@
-@extends('club.components.app')
+@extends('admin.components.app')
 
 @section('content')
 
@@ -11,7 +11,7 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('club.varient_management.show_varient') }}">
+                    <a href="{{ route('admin.varient_management.show_varient') }}">
                         <i class="bi bi-building small me-2"></i> Varient 
                     </a>
                 </li>
@@ -39,7 +39,7 @@
                 <div class="col-lg-12">
 
                     <form 
-                        action="{{$varient->id? route('club.varient_management.edit_varient',$varient->id): route('club.varient_management.add_varient') }}"
+                        action="{{$varient->id? route('admin.varient_management.edit_varient',$varient->id): route('admin.varient_management.add_varient') }}"
                         method="POST" 
                         autocomplete="off">
                         @csrf
@@ -136,7 +136,7 @@ $(document).on('change', '.toggle-status', function () {
     let status = $(this).is(':checked') ? 1 : 0;
 
      $.ajax({
-        url: "{{ route('club.varient_management.change-status') }}",
+        url: "{{ route('admin.varient_management.change-status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
@@ -151,7 +151,7 @@ $(document).on('change', '.toggle-status', function () {
 
 //     const countrySelect = document.getElementById('country');
 //     const stateSelect   = document.getElementById('state');
-//     const selectedState = "{{ old('state', $clubmember->state_id ?? '') }}";
+;
 
 //     function loadStates(countryId) {
 //         stateSelect.innerHTML = '<varient value="">Loading...</varient>';

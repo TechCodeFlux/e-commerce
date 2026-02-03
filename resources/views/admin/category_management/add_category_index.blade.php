@@ -1,4 +1,4 @@
-@extends('club.components.app')
+@extends('admin.components.app')
 
 @section('content')
 
@@ -11,7 +11,7 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('club.category_management.show_category') }}">
+                    <a href="{{ route('admin.category_management.show_category') }}">
                         <i class="bi bi-building small me-2"></i> Category
                     </a>
                 </li>
@@ -39,7 +39,7 @@
                 <div class="col-lg-12">
 
                     <form 
-                        action="{{ $category->id? route('club.category_management.edit_category', $category->id): route('club.category_management.add_category') }}"
+                        action="{{ $category->id? route('admin.category_management.edit_category', $category->id): route('admin.category_management.add_category') }}"
                         method="POST" 
                         autocomplete="off">
                         @csrf
@@ -118,7 +118,7 @@ $(document).on('change', '.toggle-status', function () {
     let status = $(this).is(':checked') ? 1 : 0;
 
      $.ajax({
-        url: "{{ route('club.category_management.change-status') }}",
+        url: "{{ route('admin.category_management.change-status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",

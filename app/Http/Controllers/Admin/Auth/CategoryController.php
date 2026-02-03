@@ -15,7 +15,7 @@ class CategoryController extends Controller
 {
     public function add_category_index(){
         $category = new Category();
-       return  view('club.category_management.add_category_index', compact('category'));
+       return  view('admin.category_management.add_category_index', compact('category'));
     }
 
     public function store(Request $request){
@@ -28,7 +28,7 @@ class CategoryController extends Controller
           Category::create([
              'name' => $request->name,
           ]);
-        return redirect('club/category_management/show_category');
+        return redirect('admin/category_management/show_category');
     }
 
 
@@ -85,7 +85,7 @@ class CategoryController extends Controller
 
                 //edit button
                 $actions .= '<a
-                                href="' . route('club.category_management.edit_category_index', $category->id) . '"
+                                href="' . route('admin.category_management.edit_category_index', $category->id) . '"
                                 class="btn btn-sm 
                                 title="Edit">
                                                               <i class="bi bi-pencil-square btn btn-outline-success btn btn-sm"></i>
@@ -108,7 +108,7 @@ class CategoryController extends Controller
             })->rawColumns([ 'status','action'])->make(true);
         }
 
-        return view('club.category_management.show_category');
+        return view('admin.category_management.show_category');
     }
 
 
@@ -161,7 +161,7 @@ class CategoryController extends Controller
 
          $category = Category::where('id', $id)
         ->firstOrFail();
-          return view('club.category_management.add_category_index',compact('category'));
+          return view('admin.category_management.add_category_index',compact('category'));
     }
 
 
@@ -176,7 +176,7 @@ class CategoryController extends Controller
         Category::where('id', $id)->update([
              'name' => $request->name,
 ]);
-          return redirect('club/category_management/show_category'); 
+          return redirect('admin/category_management/show_category'); 
 
 
     }

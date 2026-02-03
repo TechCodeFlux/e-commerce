@@ -41,15 +41,18 @@
                     <form 
                         action="{{ $product->id? route('admin.product_management.edit_product', $product->id): route('admin.product_management.add_products') }}"  enctype="multipart/form-data"
                         method="POST" 
+                        id="productForm"
                         autocomplete="off">
                         @csrf
                         @if($product->id)
                             @method('PUT')
                         @endif
-                       
-                        <div class="row">
-                            {{-- product-Name & Stock --}}
-                                    <div class="col-md-4 mb-3">
+                        
+                        {{-- Row 1: Name, Category, Description --}}
+                        <div class="row justify-content-center">
+                            {{-- product-Name --}}
+                            <!-- Increased width to col-md-6 -->
+                                    <div class="col-md-6 mb-3">
                                         <label class="form-label">Name</label>
                                         <input type="text" name="name" class="form-control" placeholder="Name" 
                                         value="{{ old('name', $product->name ?? '') }}">
@@ -58,102 +61,92 @@
                                         @enderror
                                     </div> 
                                     
-                                    
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label">Stock</label>
-                                        <input type="number" name="stock" class="form-control" placeholder="Stock" 
-                                            value="{{ old('stock', $product->stock ?? '') }}">
-                                        @error('stock')
-                                            <small class="text-danger d-block mt-1">{{ $message }}</small>
-                                        @enderror
-                                    </div> 
-                            {{-- product-Name & Stock --}} 
-
-
                             {{-- category --}}
-                                        <div class="col-md-4 mb-3">
+                            <!-- Increased width to col-md-6 -->
+                                    <div class="col-md-6 mb-3">
                                         <label class="form-label">Categories</label>
-                                    <select name="category" id="category" class="form-select">
-                                        
-                                        <option value="">Select Category</option>
-                                    
-                                        @foreach($categories as $category)
-                                            <option value="{{ $category->id }}"
-                                                {{ old('category', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
-                                                {{ $category->name }}
-                                                
-                                            </option>
+                                        <select name="category" id="category" class="form-select">
                                             
-                                        @endforeach
+                                            <option value="">Select Category</option>
                                         
-                                    </select>
-                                    @error('category')
-                                            <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                            @foreach($categories as $category)
+                                                <option value="{{ $category->id }}"
+                                                    {{ old('category', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                                                    {{ $category->name }}
+                                                    
+                                                </option>
+                                                
+                                            @endforeach
+                                            
+                                        </select>
+                                        @error('category')
+                                                <small class="text-danger d-block mt-1">{{ $message }}</small>
                                         @enderror
                                     </div>
                             {{-- category --}}
 
-                            {{-- ---Option --- --}}
-                                        <div class="col-md-4 mb-3">
+                            {{-- ---Option (Commented out) --- --}}
+                                    {{-- <div class="col-md-6 mb-3">
                                         <label class="form-label">Options</label>
-                                    <select name="option" id="option" class="form-select">
-                                        
-                                        <option value="">Select Option</option>
-                                    
-                                        @foreach( $options as $option)
-                                            <option value="{{ $option->id }}"
-                                                {{ old('option', $product->option_id ?? '') == $option->id ? 'selected' : '' }}>
-                                                {{ $option->name }}
-                                                
-                                            </option>
-                                            
-                                        @endforeach
-                                        
-                                    </select>
-                                    @error('option')
-                                            <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                        <select name="option" id="option" class="form-select">
+                                            <option value="">Select Option</option>
+                                            @foreach( $options as $option)
+                                                <option value="{{ $option->id }}"
+                                                    {{ old('option', $product->option_id ?? '') == $option->id ? 'selected' : '' }}>
+                                                    {{ $option->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('option')
+                                                <small class="text-danger d-block mt-1">{{ $message }}</small>
                                         @enderror
-                                    </div>
+                                    </div> --}}
                             {{-- ---Option--- --}}
 
                             {{-- ---Description--- --}}
-                                    <div class="col-md-8 mb-3">
+                            <!-- Increased width to col-md-12 (Full Width) -->
+                                    <div class="col-md-12 mb-3">
                                             <label class="form-label">Description</label>
                                             <textarea name="description" class="form-control" >{{ old('description', $product->description ?? '') }}</textarea>
                                             @error('description')
                                             <small class="text-danger d-block mt-1">{{ $message }}</small>
-                                        @enderror
+                                            @enderror
                                     </div> 
                             {{-- ---Description--- --}}
 
                         </div>
-                            {{---image---}}
 
-                            <div class="col-md-4 mb-3">
+                        {{-- Row 2: Image & Status --}}
+                         <div class="row ">
+                            {{---image---}}
+                            <!-- Increased width to col-md-6 -->
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Image</label>
-                            {{-- Pre-View image --}}
-                                        <div class="mt-3">
+                                {{-- Pre-View image --}}
+                                        <div class="mt-3 ">
                                             <img id="imagePreview" 
                                                 src="{{ isset($product) && $product->image ? asset('storage/' . $product->image) : '#' }}"
                                                 alt="Image Preview" 
-                                                class="col-7 ">
+                                                class="col-7 d-none img-fluid w-25">
                                         </div>
-                            {{-- end-pre -View image --}}
+                                {{-- end-pre -View image --}}
                                 <input type="file"
                                  name="image" 
-                                 class="form-control"
+                                 class="form-control swal2-radio"
                                  id="imageInput" 
                                  accept="image/*"
                                  onchange="previewImage(event)">
-                                       
+                                        
                                 @error('image')
                                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                                 @enderror
                             </div>
-
-                    {{-- ----status---- --}}
-
-                             <div class="col-md-4 mb-4">
+                           
+                       
+                        
+                            {{-- ----status---- --}}
+                         <!-- Increased width to col-md-6 -->
+                            <div class="col-md-6 mb-3 mt-5 w-25 m-auto mt-lg-3">
                                 <label class="form-label d-block">Status</label>
 
                                 <input type="hidden" name="status" value="0">
@@ -173,20 +166,15 @@
                                     </label>
                                 </div>
                             </div>
-                              
-                                </div>
-
-                           
-
-                        </div>
-
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary px-5">
-                                {{ $product->id ? 'Update' : 'Submit' }}
+ </div>
+                        <div class="text-center mt-3">
+                            <button type="submit" id="btnSubmitProduct" class="btn btn-primary px-5">
+                                {{ $product->id ? 'Update' : 'Next' }}
                             </button> 
                         </div>
 
                     </form>
+                    
 
                 </div>
             </div>
@@ -241,18 +229,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
-
-
-
-
-
-
-
-
 function previewImage(event) {
         var input = event.target;
         var imagePreview = document.getElementById('imagePreview');
+         const file = event.target.files[0];
+
+        if (file) {
+        imagePreview.src = URL.createObjectURL(file);
+        imagePreview.classList.remove('d-none'); // show image
+        }
 
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -272,49 +257,6 @@ function previewImage(event) {
             imagePreview.style.display = 'none';
         }
     }
-// document.addEventListener('DOMContentLoaded', function () {
-
-//     const countrySelect = document.getElementById('country');
-//     const stateSelect   = document.getElementById('state');
-//     const selectedState = "{{ old('state', $clubmember->state_id ?? '') }}";
-
-//     function loadStates(countryId) {
-//         stateSelect.innerHTML = '<product value="">Loading...</product>';
-
-//        fetch(`/admin/get-states/${countryId}`)
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error('Network error');
-//         }
-//         return response.json();
-//     })
-//     .then(states => {
-//         stateSelect.innerHTML = '<product value="">Select State</product>';
-//         states.forEach(state => {
-//             stateSelect.innerHTML +=
-//                 `<product value="${state.id}">${state.name}</product>`;
-//         });
-//     })
-//     .catch(error => {
-//         console.error(error);
-//         stateSelect.innerHTML = '<product value="">Failed to load states</product>';
-//     });
-
-//     }
-
-//     countrySelect.addEventListener('change', function () {
-//         if (this.value) {
-//             loadStates(this.value);
-//         } else {
-//             stateSelect.innerHTML = '<product value="">Select State</product>';
-//         }
-//     });
-
-//     // AUTO LOAD STATES ON EDIT
-//     if (countrySelect.value) {
-//         loadStates(countrySelect.value);
-//     }
-// });
 </script>
 @endsection
 @endsection

@@ -18,18 +18,15 @@ class ProductController extends Controller
     public function form_products_index(){
         $product = new Product();
         $categories = Category::orderBy('name')->get();
-        $options = Option::orderBy('name')->get();
-       return  view('admin.product_management.form_products_index', compact('product','categories','options'));
+       return  view('admin.product_management.form_products_index', compact('product','categories'));
     }
 
     public function store(Request $request){
           $validated = $request->validate([
         'name'    => 'required|string|max:255',
-        'stock' => 'required|string',   
         'description' => 'required|string|max:20',
          'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
         'category'   => 'required|integer|exists:categories,id',
-        'option'   => 'required|integer|exists:options,id',
         'status'    => 'nullable|boolean',
     ]);
 
@@ -39,16 +36,14 @@ class ProductController extends Controller
 
           Product::create([
              'name' => $request->name,
-        'stock' => $request->stock,
-        'description' => $request->description,
-         'image'       => $imagePath,
+            'description' => $request->description,
+            'image'       => $imagePath,
         'status'     => $request->status,
-        
         'category_id' => $request->category,
-        'option_id' =>$request->option,
+       
 
           ]);
-        return redirect('admin/product_management/show_products');
+        return redirect('admin/varient_management/form_varient_index');
     }
 
 

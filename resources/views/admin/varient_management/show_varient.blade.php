@@ -1,4 +1,4 @@
-@extends('club.components.app')
+@extends('admin.components.app')
 
 @section('content')
     <div class="mb-4">
@@ -43,7 +43,7 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="{{ route('club.varient_management.form_varient_index') }}">
+                            <a href="{{ route('admin.varient_management.form_varient_index') }}">
                                 <button class="btn btn-primary btn-icon">
                                         <i class="bi bi-plus-circle"></i> Add Varient
                                 </button>
@@ -143,7 +143,7 @@ $(document).on('click', '.view-varient', function () {
     let varientId = $(this).data('id');
 
     $.ajax({
-        url: "{{ route('club.varient_management.show_single', ':id') }}".replace(':id', varientId),
+        url: "{{ route('admin.varient_management.show_single', ':id') }}".replace(':id', varientId),
         type: "GET",       
         success: function (res) {
             $('#modalVarientSize').text(res.size);
@@ -168,7 +168,7 @@ $(document).on('change', '.toggle-status', function () {
     let label = $('#status-label-' + varientId);
 
     $.ajax({
-        url: "{{ route('club.varient_management.change-status') }}",
+        url: "{{ route('admin.varient_management.change-status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
@@ -204,7 +204,7 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         ajax: {
-           url: "{{ route('club.varient_management.show_varient') }}",
+           url: "{{ route('admin.varient_management.show_varient') }}",
             data: function(d) {
                 
             }
@@ -256,7 +256,7 @@ function deleteVarient(id) {
     }
 
     $.ajax({
-       url: "{{ url('club/varient_management/destroy_varient') }}/" + id,
+       url: "{{ url('admin/varient_management/destroy_varient') }}/" + id,
         type: "DELETE",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

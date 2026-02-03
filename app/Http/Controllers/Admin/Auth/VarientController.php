@@ -12,7 +12,7 @@ class VarientController extends Controller
     {
         $varient = new Varient(); // empty model
        
-        return view('club.varient_management.form_varient_index', compact('varient'));
+        return view('admin.varient_management.form_varient_index', compact('varient'));
     }
     /**
      * Store a newly created resource in storage.
@@ -36,7 +36,7 @@ class VarientController extends Controller
     ]);
 
     return redirect()
-        ->route('club.varient_management.form_varient_index')
+        ->route('admin.varient_management.form_varient_index')
         ->with('success', 'New varient row created successfully!');
 }
 
@@ -96,7 +96,7 @@ class VarientController extends Controller
 
                 //edit button
                 $actions .= '<a
-                                href="' . route('club.varient_management.edit_varient_index', $varient->id) . '"
+                                href="' . route('admin.varient_management.edit_varient_index', $varient->id) . '"
                                 class="btn btn-sm 
                                 title="Edit">
                                                               <i class="bi bi-pencil-square btn btn-outline-success btn btn-sm"></i>
@@ -106,7 +106,7 @@ class VarientController extends Controller
                 //delete button
                 $actions .= '<button 
                                  type="button"
-                                 class="btn btn-sm  delete-club"
+                                 class="btn btn-sm  delete-admin"
                                  onclick="deleteVarient(' . $varient->id . ')"
                                  title="Delete">
                                                               <i class="bi-trash-fill btn btn-outline-danger btn btn-sm "></i>
@@ -119,7 +119,7 @@ class VarientController extends Controller
             })->rawColumns([ 'status','action'])->make(true);
         }
 
-        return view('club.varient_management.show_varient');
+        return view('admin.varient_management.show_varient');
     }
 
 
@@ -127,7 +127,7 @@ public function edit_varient_index($id)
     {
         $varient = Varient::findOrFail($id);
        
-        return view('club.varient_management.form_varient_index', compact('varient'));
+        return view('admin.varient_management.form_varient_index', compact('varient'));
     }
 
 
@@ -147,7 +147,7 @@ public function edit_varient_index($id)
              'stock' => $request->stock,
         ]);
         return redirect()
-            ->route('club.varient_management.show_varient')
+            ->route('admin.varient_management.show_varient')
             ->with('success', 'Varient updated successfully');
     }
 
