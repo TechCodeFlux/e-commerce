@@ -36,9 +36,9 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
 });
 //pauljo
 // Admin login
-Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
-Route::post('/admin', [AdminLoginController::class, 'login'])->name('admin.login.submit');
-Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+// Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
+// Route::post('/admin', [AdminLoginController::class, 'login'])->name('admin.login.submit');
+// Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
     Auth::routes(['register' => false]);    
