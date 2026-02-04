@@ -76,7 +76,7 @@ Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controller
 Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
     Auth::routes(['register' => false]);   
 
-     Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');
+     Route::get('/', [ClubDashboardController::class, 'index'])->name('dashboard');
 
      Route::get('vieworder',[ClubDashboardController::class,'vieworder'])->name('vieworder');
 

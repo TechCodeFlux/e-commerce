@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login - GRabit | E-Commerce HTML Admin Dashboard Template</title>
+    <title>Login - Grabit | E-Commerce HTML Admin Dashboard Template</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ url('assets/images/favicon.png') }}"/>
@@ -38,7 +38,7 @@
                         <div class="row">
                             <div class="col-md-10 offset-md-1">
                                 <div class="d-block d-lg-none text-center text-lg-start">
-                                    <img width="120" src="{{ url('assets/images/newlogo1.png') }}" alt="logo">
+                                    <img class="img-fluid" style="max-width:300px;" src="{{ asset('assets/images/grabit/logo.png') }}" alt="logo">
                                 </div>
                                 <div class="my-5 text-center text-lg-start">
                                     <h1 class="display-8">Admin Sign In</h1>
@@ -96,7 +96,7 @@
                     </div>
                     <div class="col d-none d-lg-flex border-start align-items-center justify-content-between flex-column text-center">
                         <div class="logo">
-                            <img width="120" src="{{ url('assets/images/newlogo1.png') }}" alt="logo">
+                            <img class="img-fluid" style="max-width:300px;" src="{{ asset('assets/images/grabit/logo.png') }}" alt="logo">
                         </div>
                         <div>
                             <h3 class="fw-bold">Welcome to Grabit!</h3>

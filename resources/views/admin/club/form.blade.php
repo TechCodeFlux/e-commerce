@@ -1,5 +1,5 @@
 @extends('admin.components.app')
-
+@section('page-title','Add club')
 @section('content')
 
 <div class="mb-4">

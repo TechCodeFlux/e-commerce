@@ -485,8 +485,9 @@
 <!-- menu -->
 <div class="menu">
     <div class="menu-header">
-        <a href="index.html" class="menu-header-logo">
-            <img src="{{url('assets/images/logo.svg')}}" alt="logo">
+        <a href="{{route('admin.dashboard')}}" class="menu-header-logo" >
+            <img  src="{{ asset('assets/images/grabit/logo.png') }}" alt="logo">
+            <span><b style="front-size:25px">GRABIT</b></span>
         </a>
         <a href="index.html" class="btn btn-sm menu-close-btn">
             <i class="bi bi-x"></i>
@@ -537,8 +538,8 @@
         <ul>
             <li class="menu-divider">E-Commerce</li>
             <li>
-                <a  class="active"
-                    href="{{route('admin.dashboard')}}">
+                <a href="{{route('admin.dashboard')}}"
+                    class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>
@@ -549,8 +550,9 @@
             
             
             <li>
-                <a  href="{{ route('admin.clubsindex') }}">
-                    <span class="nav-link-icon">
+                <a  href="{{ route('admin.clubsindex') }}"
+                     class="{{ request()->routeIs('admin.clubsindex') ? 'active' : '' }}">
+                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
                     <span>Club</span>
