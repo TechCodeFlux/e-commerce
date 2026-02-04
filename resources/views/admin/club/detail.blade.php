@@ -14,11 +14,11 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="">
-                        <i ></i> Clubs
+                    <a href="{{ route('admin.clubsindex') }}">
+                        <i class="bi bi-people-fill small me-2"></i> Clubs
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">{{$club->name}}</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-building small me-2"></i>{{$club->name}}</li>
             </ol>
         </nav>
     </div>
@@ -37,7 +37,7 @@
                                 <h6 class="card-title">Over view</h6>
                                 <div class="row">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-6"> 
                                             <div class="card border-0">
                                                 <a href="">
 

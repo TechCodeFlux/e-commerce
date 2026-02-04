@@ -538,7 +538,7 @@
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
-                    <span>Club Members</span>
+                    <span>Club Members</span> 
                 </a>
             </li>
             
