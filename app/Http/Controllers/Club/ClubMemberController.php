@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str; 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\ClubMember;
 use App\Models\Country;
 use App\Models\State;
@@ -20,37 +21,39 @@ class ClubMemberController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        if ($request->ajax()) {
+{
+    if ($request->ajax()) {
+        $members = ClubMember::with('address')->select('club_members.*');
 
-            $members = ClubMember::query();
+        return DataTables::eloquent($members)
+            ->addColumn('action', function (ClubMember $member) {
+                $actions = '<div class="d-flex gap-1"><div class="dropdown">';
 
-            return DataTables::eloquent($members)
-                ->addColumn('action', function (ClubMember $member) {
+                // View button
+                $actions .= '<a href="' . route('club.clubmembersindex', $member->id) . '" class="btn btn-sm btn-clean btn-icon" title="Show">
+                                <i class="fas fa-eye" style="color: #ffc107;"></i>
+                             </a>';
 
-                    $actions = '<div class="d-flex gap-1">';
+                // Edit button
+                // $actions .= '<a href="' . route('club.editclubmember', $member->id) . '" class="btn btn-sm btn-outline-secondary me-2" title="Edit">
+                //                 <i class="fas fa-pencil-alt"></i>
+                //              </a>';
 
-                    $actions .= '<a href="' . route('club.clubmembers.edit', $member->id) . '"
-                        class="btn btn-sm btn-outline-secondary" title="Edit">
-                        <i class="fas fa-pencil-alt"></i>
-                    </a>';
+                // // Delete button
+                // $actions .= '<button type="button" class="btn btn-sm btn-outline-danger delete-club-member" onclick="deleteClubMember(' . $member->id . ')" title="Delete">
+                //                 <i class="fas fa-trash-alt"></i>
+                //              </button>';
 
-                    $actions .= '<button type="button"
-                        class="btn btn-sm btn-outline-danger"
-                        onclick="deleteMember(' . $member->id . ')">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>';
-
-                    $actions .= '</div>';
-
-                    return $actions;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
-        }
-
-        return view('club.clubmembers.clubmemberview');
+                $actions .= '</div></div>';
+                return $actions;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
+
+    return view('club.clubmember.clubmemberview');
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -67,7 +70,7 @@ class ClubMemberController extends Controller
      */
     public function store(Request $request)
 {
-    // 1️⃣ Validate input
+    //  Validate
     $validated = $request->validate([
         'name'      => 'required|string|max:255',
         'email'     => 'required|email|unique:club_members,email',
@@ -82,10 +85,10 @@ class ClubMemberController extends Controller
     ]);
 
     try {
-        // 2️⃣ Start transaction
+       
         DB::transaction(function () use ($validated, $request) {
 
-            // 2a️⃣ Create the address first
+            // Create the address
             $address = Address::create([
                 'address1'   => $validated['address1'],
                 'address2'   => $validated['address2'] ?? null,
@@ -95,10 +98,10 @@ class ClubMemberController extends Controller
                 'zip_code'   => $validated['zip_code'],
             ]);
 
-            // 2b️⃣ Create the club member with address_id
+            // Create the club member 
             $member = ClubMember::create([
                 'name'       => $validated['name'],
-                'club_id'    => 6, // hardcoded, or $validated['club_id'] if dynamic
+                'club_id'    => 6, 
                 'contact'    => $validated['contact'],
                 'email'      => $validated['email'],
                 'status'     => $request->boolean('status'),
@@ -106,13 +109,13 @@ class ClubMemberController extends Controller
             ]);
         });
 
-        // 3️⃣ Redirect on success
+        //  Redirect on success
         return redirect()
             ->route('club.clubmembersindex')
             ->with('success', 'Club member registered successfully!');
 
     } catch (\Throwable $e) {
-        // 4️⃣ Show error if something fails
+        //  Show error if something fails
         return back()->withErrors(['error' => $e->getMessage()])->withInput();
     }
 }

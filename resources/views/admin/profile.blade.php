@@ -15,13 +15,13 @@
                                      src="../../assets/images/user/man_avatar3.jpg" alt="...">
                             </figure>
                             <div class="flex-fill">
-                                <h5 class="mb-3">Adek Kembar</h5>
-                                <button class="btn btn-primary me-2">Change Avatar</button>
+                                <h3 class="mb-6">{{$user->name}}</h3>
+                                {{-- <button class="btn btn-primary me-2">Change Avatar</button>
                                 <button class="btn btn-outline-danger btn-icon" data-bs-toggle="tooltip" title="Remove Avatar">
                                     <i class="bi bi-trash me-0"></i>
-                                </button>
-                                <p class="small text-muted mt-3">For best results, use an image at least
-                                    256px by 256px in either .jpg or .png format</p>
+                                </button> --}}
+                                {{-- <p class="small text-muted mt-3">For best results, use an image at least
+                                    256px by 256px in either .jpg or .png format</p> --}}
                             </div>
                         </div>
                         <div class="card mb-4">

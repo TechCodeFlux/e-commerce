@@ -34,15 +34,11 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
     Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
 
 });
-
-/*
-|--------------------------------------------------------------------------
-| ADMIN LOGIN
-|--------------------------------------------------------------------------
-*/
-Route::get('/admin', fn () => view('admin.auth.login'))->name('admin.login');
-Route::post('/admin', [AdminLoginController::class, 'login'])->name('admin.login.submit');
-Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+//pauljo
+// Admin login
+// Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
+// Route::post('/admin', [AdminLoginController::class, 'login'])->name('admin.login.submit');
+// Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
 /*
 |--------------------------------------------------------------------------
