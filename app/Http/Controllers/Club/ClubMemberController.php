@@ -118,7 +118,7 @@ class ClubMemberController extends Controller
         //  Show error if something fails
         return back()->withErrors(['error' => $e->getMessage()])->withInput();
     }
-}
+
 
 
 

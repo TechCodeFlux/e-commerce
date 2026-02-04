@@ -3,8 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Microsite extends Model
+class Country extends Model
 {
-    use SoftDeletes;
+   use SoftDeletes;
+   protected $fillable = [
+        'code',
+        'name',
+        'phonecode',
+    ];
 }

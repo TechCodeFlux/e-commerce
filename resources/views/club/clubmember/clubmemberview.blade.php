@@ -52,12 +52,6 @@
                         </div>
                     </form>
                 </div>
-
-                <div class="ms-auto">
-                    <a href="{{ route('club.clubmembers.create') }}" class="btn btn-primary btn-icon">
-                        <i class="bi bi-plus-circle"></i> Add Club Member
-                    </a>
-                </div>
             </div>
         </div>
 
@@ -107,35 +101,39 @@
 <script src="{{ url('libs/dataTable/datatables.min.js') }}"></script>
 
 <script>
-$(document).ready(function () {
+let table = $('#club').DataTable({
+    processing: true,
+    serverSide: true,
+    dom: 'rtip',
+    ajax: '{{ route('club.clubmembersindex') }}',
+    columns: [
+        { data: 'name', name: 'name' },
+        { data: 'email', name: 'email' },
+        { data: 'contact', name: 'contact' },
+        { data: 'address', name: 'address' },
+        { data: 'country_id', name: 'country_id' },
+        { data: 'state_id', name: 'state_id' },
+        { data: 'city', name: 'city' },
+        { data: 'zip_code', name: 'zip_code' },
+        { data: 'action', orderable: false, searchable: false }
+    ],
 
-    let table = $('#club').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: '{{ route('club.clubmembers.index') }}',
-        columns: [
-            { data: 'name', name: 'name' },
-            { data: 'email', name: 'email' },
-            { data: 'contact', name: 'contact' },
-            { data: 'address', name: 'address' },
-            { data: 'country_id', name: 'country_id' },
-            { data: 'state_id', name: 'state_id' },
-            { data: 'city', name: 'city' },
-            { data: 'zip_code', name: 'zip_code' },
-            { data: 'action', orderable: false, searchable: false }
-        ]
-    });
+    drawCallback: function () {
+        const wrapper = $('#club').closest('.dataTables_wrapper');
 
-    $('#sort').on('change', function () {
-        let column = $(this).find(':selected').data('column');
-        let order = $(this).find(':selected').data('sort');
-        table.order([column, order]).draw();
-    });
+        wrapper.find('.dataTables_info, .dataTables_paginate')
+            .css({
+                'float': 'none',
+                'text-align': 'center'
+            });
 
-    $('#pageLength').on('change', function () {
-        table.page.len($(this).val()).draw();
-    });
-
+        wrapper.find('.dataTables_paginate')
+            .css({
+                'display': 'flex',
+                'justify-content': 'center'
+            });
+    }
 });
+
 </script>
 @endsection

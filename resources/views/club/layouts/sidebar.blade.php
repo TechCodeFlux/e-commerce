@@ -499,7 +499,7 @@
                          class="rounded-circle" alt="image">
                 </div>
                 <div>
-                    <div class="fw-bold">Timotheus Bendan</div>
+                    <div class="fw-bold">CLUB ADMIN</div>
                     <small class="text-muted">Club Admin</small>
                 </div>
             </a>
@@ -522,8 +522,8 @@
         <ul>
             <li class="menu-divider">E-Commerce</li>
             <li>
-                <a  class="active"
-                    href="{{route('club.dashboard')}}">
+                <a href="{{route('club.dashboard')}}" 
+                    class="{{ request()->routeIs(patterns: 'club.dashboard') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>
@@ -534,7 +534,8 @@
             
             
             <li>
-                <a  href="{{route('club.clubmembers.index')}}">
+                <a  href="{{route('club.clubmembersindex')}}"
+                class="{{ request()->routeIs(patterns: 'club.clubmembersindex') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
