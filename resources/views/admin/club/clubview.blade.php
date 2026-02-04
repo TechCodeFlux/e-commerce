@@ -1,5 +1,5 @@
     @extends('admin.components.app')
-    {{-- @yield('page-title','Club') --}}
+    @section('page-title', 'Clubs')
     @section('content')
     <div class="mb-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
