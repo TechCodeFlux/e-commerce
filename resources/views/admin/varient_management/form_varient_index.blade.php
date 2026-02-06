@@ -25,7 +25,7 @@
             @endif
 
             <div class="row justify-content-center">
-                <div class="col-lg-12">
+                <div class="col-lg-12 ">
 
                     <form class="VarientForm" enctype="multipart/form-data">
                             @csrf
@@ -77,22 +77,26 @@
                             </div>
                         </div>
 
-                        <div class="text-center mt-3 w-25 ms-sm-auto">
-                            <button type="submit" class="btn btn-primary px-5">
+                        {{-- CHANGED: Combined Button Container using Bootstrap d-flex --}}
+                        <div class="d-flex justify-content-end gap-3 mt-4">
+                            
+                            {{-- Previous Button: Linked to external form via form attribute --}}
+                            <button type="submit" form="previous-form" class="btn btn-secondary px-5 p-md-2">
+                                Previous
+                            </button> 
+
+                            {{-- Submit Button --}}
+                            <button type="submit" class="btn btn-primary px-5 p-md-2">
                                 {{$varient->id ?? '' ? 'Update' : 'Submit' }}
                             </button> 
-                        </div>         
+                        </div>        
                     </form>
                     
                 </div>
                 
-                {{-- Previous Button - Now preserves form data --}}
-                <form method="get" action="{{ route('admin.product_management.form_products_index') }}" class="previous-form">
-                    <div class="text-center mt-3 w-25 ms-sm-auto">
-                        <button type="submit" class="btn btn-secondary px-5">
-                            Previous
-                        </button> 
-                    </div>
+                {{-- Previous Form: Hidden shell that handles the logic --}}
+                <form id="previous-form" method="get" action="{{ route('admin.product_management.form_products_index') }}" class="previous-form d-none">
+                    {{-- Button moved inside the main form group above for alignment --}}
                 </form>
             </div>
         </div>
@@ -118,10 +122,11 @@ $(document).ready(function() {
         }
     }
 
-    // ✅ SAVE FORM DATA ON ANY INPUT CHANGE (before Previous button)
-    $('.VarientForm input, .VarientForm select, .VarientForm textarea').on('input change', function() {
-        saveFormData();
-    });
+    // // ✅ SAVE FORM DATA ON ANY INPUT CHANGE (before Previous button)
+
+    // $('.VarientForm input, .VarientForm select, .VarientForm textarea').on('input change', function() {
+    //     saveFormData();
+    // });
 
     // ✅ SAVE FORM DATA BEFORE PREVIOUS BUTTON CLICK
     $('.previous-form').on('submit', function(e) {

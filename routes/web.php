@@ -10,11 +10,9 @@ use App\Models\Varient;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Route;
 
-
-
 Route::get('/', function () {
     return view('admin.dashboard');
-});
+})->name('admin.dashboard');
 
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
 Auth::routes(['register' => false]);

@@ -522,8 +522,8 @@
         <ul>
             <li class="menu-divider">E-Commerce</li>
             <li>
-                <a  class="active"
-                    href="{{ url('/') }}">
+                <a  class="{{ request()->routeIs('admin.dashboard')  ? 'active' : '' }}"
+                    href="{{ route('admin.dashboard') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>
@@ -531,7 +531,8 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.product_management.show_products') }}">
+                <a class="{{ request()->routeIs('admin.product_management.show_products','admin.product_management.form_products_index','admin.varient_management.form_varient_index')? 'active' : '' }}"
+                     href="{{ route('admin.product_management.show_products') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
                     </span>
@@ -539,7 +540,8 @@
                 </a>
             </li>
               <li>
-                <a href="{{ route('admin.category_management.show_category') }}">
+                <a class="{{ request()->routeIs('admin.category_management.show_category')? 'active' : '' }}"
+                href="{{ route('admin.category_management.show_category') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
                     </span>
