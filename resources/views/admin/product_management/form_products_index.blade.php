@@ -1,33 +1,28 @@
 @extends('admin.components.app')
-
+@section('page-title','Product Form')
 @section('content')
 
- <div class="mb-4">
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="/">
-                        <i class="bi bi-globe2 small me-2"></i> Dashboard
-                    </a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="{{ route('admin.product_management.show_products') }}">
-                        <i class="bi bi-building small me-2"></i> Products 
-                    </a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>{{ $product->id ? 'Edit product':'Add product' }}</li>
-            </ol>
-        </nav>
-    </div>
+ 
 
 <div class="container mt-4">
 
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
 
-            <h6 class="card-title mb-4 text-center">
-                {{ $product->id ? 'Edit' : 'Add' }} product Form
-            </h6>
+           <div class="mb-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb d-flex gap-3">
+               
+                <li class="breadcrumb-item">
+                    <a class="list-group-item-primary px-sm-4 border p-2 d-inline-block" href="{{ route('admin.product_management.form_products_index') }}">
+                        Product Details 
+                    </a>
+                </li>
+                <li class="list-group-item-dark px-sm-4 border p-2 d-inline-block" >Varient Details</li>
+            </ol>
+        </nav>
+    </div>
+            
 
             @if(session('success'))
                 <div class="alert alert-success text-center">
@@ -38,15 +33,12 @@
             <div class="row justify-content-center">
                 <div class="col-lg-12">
 
-                    <form 
-                        action="{{ $product->id? route('admin.product_management.edit_product', $product->id): route('admin.product_management.add_products') }}"  enctype="multipart/form-data"
-                        method="POST" 
-                        id="productForm"
-                        autocomplete="off">
+                    <form class="productForm"
+                     action="{{ route('admin.product_management.add_products') }}"
+                     method="POST"
+                    enctype="multipart/form-data"
+                    autocomplete="off">
                         @csrf
-                        @if($product->id)
-                            @method('PUT')
-                        @endif
                         
                         {{-- Row 1: Name, Category, Description --}}
                         <div class="row justify-content-center">
@@ -54,8 +46,7 @@
                             <!-- Increased width to col-md-6 -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Name</label>
-                                        <input type="text" name="name" class="form-control" placeholder="Name" 
-                                        value="{{ old('name', $product->name ?? '') }}">
+                                        <input type="text" name="name" class="form-control" placeholder="Name" >
                                         @error('name')
                                             <small class="text-danger d-block mt-1">{{ $message }}</small>
                                         @enderror
@@ -70,8 +61,7 @@
                                             <option value="">Select Category</option>
                                         
                                             @foreach($categories as $category)
-                                                <option value="{{ $category->id }}"
-                                                    {{ old('category', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                                                <option value="{{ $category->id }}">
                                                     {{ $category->name }}
                                                     
                                                 </option>
@@ -107,7 +97,7 @@
                             <!-- Increased width to col-md-12 (Full Width) -->
                                     <div class="col-md-12 mb-3">
                                             <label class="form-label">Description</label>
-                                            <textarea name="description" class="form-control" >{{ old('description', $product->description ?? '') }}</textarea>
+                                            <textarea name="description" class="form-control" ></textarea>
                                             @error('description')
                                             <small class="text-danger d-block mt-1">{{ $message }}</small>
                                             @enderror
@@ -151,6 +141,7 @@
 
                                 <input type="hidden" name="status" value="0">
 
+
                                 <div class="form-check form-switch">
                                     <input
                                         class="form-check-input toggle-status"
@@ -158,19 +149,18 @@
                                         type="checkbox"
                                         name="status"
                                         id="statusSwitch"
-                                        value="1"   
+                                        value="1"
                                         {{ old('status', $product->status ?? 1) ? 'checked' : '' }}
                                     >
                                     <label class="form-check-label" for="statusSwitch" id="statusLabel">
                                         {{ old('status', $product->status ?? 1) ? 'Active' : 'Inactive' }}
                                     </label>
                                 </div>
+
                             </div>
  </div>
-                        <div class="text-center mt-3">
-                            <button type="submit" id="btnSubmitProduct" class="btn btn-primary px-5">
-                                {{ $product->id ? 'Update' : 'Next' }}
-                            </button> 
+                        <div class="text-center mt-3 w-25 ms-sm-auto">
+                           <button type="submit" class="btn btn-primary px-5"> {{ $product->id ? 'Update' : 'Next' }}</button>
                         </div>
 
                     </form>
@@ -186,6 +176,280 @@
 
 @section('script')
 <script>
+$('.productForm').on('submit', function (e) {
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    $.ajax({
+        url: "{{ route('admin.product_management.add_products') }}",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+       success: function (response) {
+
+            // 🔹 Convert FormData → Object (for localStorage)
+            let formObject = {};
+            formData.forEach((value, key) => {
+                formObject[key] = value;
+            });
+
+            // 🔹 Save form data temporarily
+            localStorage.setItem('productForm', JSON.stringify(formObject));
+           
+
+            // 🔹 Redirect to Variant page
+            window.location.href =
+                "{{ route('admin.varient_management.form_varient_index') }}" 
+        },
+
+        error: function (xhr) {
+            if (xhr.status === 422) {
+                $('.text-danger').remove();
+
+                let errors = xhr.responseJSON.errors;
+                $.each(errors, function (field, messages) {
+                    $('[name="' + field + '"]')
+                        .after('<small class="text-danger d-block mt-1">' + messages[0] + '</small>');
+                });
+            }
+        }
+    });
+});
+
+
+
+
+$(document).ready(function () {
+
+    let savedData = localStorage.getItem('productForm');
+
+    if (savedData) {
+        let data = JSON.parse(savedData);
+
+        $.each(data, function (key, value) {
+            let field = $('[name="' + key + '"]');
+
+            if (!field.length) return;
+
+            if (field.attr('type') === 'checkbox') {
+                field.prop('checked', value == 1);
+            } else {
+                field.val(value);
+            }
+        });
+    }
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// $('.productForm').on('submit', function (e) {
+//     e.preventDefault();
+
+//     let formData = new FormData(this);
+
+//     $.ajax({
+//         url: "{{ route('admin.product_management.add_products') }}",
+//         type: "POST",
+//         data: formData,
+//         processData: false,
+//         contentType: false,
+
+//        success: function (response) {
+
+//             // 🔹 Convert FormData → Object (for localStorage)
+//             let formObject = {};
+//             formData.forEach((value, key) => {
+//                 formObject[key] = value;
+//             });
+
+//             // 🔹 Save form data temporarily
+//             localStorage.setItem('productForm', JSON.stringify(formObject));
+           
+
+//             // 🔹 Redirect to Variant page
+//             window.location.href =
+//                 "{{ route('admin.varient_management.form_varient_index') }}" 
+//         },
+
+//         error: function (xhr) {
+//             if (xhr.status === 422) {
+//                 $('.text-danger').remove();
+
+//                 let errors = xhr.responseJSON.errors;
+//                 $.each(errors, function (field, messages) {
+//                     $('[name="' + field + '"]')
+//                         .after('<small class="text-danger d-block mt-1">' + messages[0] + '</small>');
+//                 });
+//             }
+//         }
+//     });
+// });
+
+
+
+
+// $(document).ready(function () {
+
+//     let savedData = localStorage.getItem('productForm');
+
+//     if (savedData) {
+//         let data = JSON.parse(savedData);
+
+//         $.each(data, function (key, value) {
+//             let field = $('[name="' + key + '"]');
+
+//             if (!field.length) return;
+
+//             if (field.attr('type') === 'checkbox') {
+//                 field.prop('checked', value == 1);
+//             } else {
+//                 field.val(value);
+//             }
+//         });
+//     }
+
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//     error: function (xhr) {
+//         if (xhr.status === 422) {
+//             let errors = xhr.responseJSON.errors;
+
+//             $.each(errors, function (field, messages) {
+//                 let input = $('[name="' + field + '"]');
+
+//                 if (input.length) {
+//                     input.after(
+//                         '<small class="text-danger d-block mt-1">' +
+//                         messages[0] +
+//                         '</small>'
+//                     );
+//                 }
+//             });
+//         }
+//     },
+
+//     complete: function () {
+//         // ✅ ALWAYS runs (success or error)
+//         $('button[type=submit]')
+//             .prop('disabled', false)
+//             .text('Next');
+//     }
+// });
+//     });
+
+// });
+
+
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const statusSwitch = document.getElementById('statusSwitch');
     const statusLabel = document.getElementById('statusLabel');

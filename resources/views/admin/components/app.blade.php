@@ -45,6 +45,8 @@
     @yield('content')
 </div>
 
+
+
 @include('admin.layouts.footer')
    
 <!-- Bundle scripts -->

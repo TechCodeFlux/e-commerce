@@ -3,26 +3,30 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\Varient;
 use Illuminate\Http\Request;
 
 class VarientController extends Controller
 {
-      public function form_varient_index()
-    {
-        $varient = new Varient(); // empty model
-       
-        return view('admin.varient_management.form_varient_index', compact('varient'));
-    }
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function form_varient_index()
+{
+    $varient = new Varient();
+
+    return view(
+        'admin.varient_management.form_varient_index',
+        compact('varient')
+    );
+}
+
+    
     public function store(Request $request)
 {
     $validated = $request->validate([
         'size'      => 'required|string|max:25',
         'color'      => 'required|string|max:25',
         'stock'      => 'required|integer|min:0|max:50',
+    
         'status'    => 'nullable|boolean',
     ]);
 
@@ -32,12 +36,13 @@ class VarientController extends Controller
         'size'       => $request->size,
         'color'       => $request->color,
         'stock'       => $request->stock,
-        'status'     => $request->has('status'),
+        
+        'status'     => $request->status,
     ]);
 
-    return redirect()
-        ->route('admin.varient_management.form_varient_index')
-        ->with('success', 'New varient row created successfully!');
+    return response()->json([
+        'message' => 'Variant created successfully'
+    ]);
 }
 
 
