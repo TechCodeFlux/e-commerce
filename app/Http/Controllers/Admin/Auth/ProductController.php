@@ -36,14 +36,12 @@ public function store(Request $request)
     // store image temporarily
 $imagePath = $request->file('image')->store('products', 'public');
     // ✅ write to session
-    session([
-        'product' => [
-            'name'        => $request->name,
-            'description' => $request->description,
-            'image'       => $imagePath,
-            'status'      => $request->status ? 1 : 0,
-            'category_id' => $request->category,
-        ]
+    session()->put('product', [
+        'name'        => $request->name,
+        'description' => $request->description,
+        'image'       => $imagePath,
+        'status'      => $request->status ? 1 : 0,
+        'category_id' => $request->category,
     ]);
 
     return response()->json([

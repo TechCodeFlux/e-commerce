@@ -29,13 +29,18 @@ class VarientController extends Controller
         'status'    => 'nullable|boolean',
     ]);
 
-    
+   $productData = session('product');
+        
+    $product =  Product::create($productData);
+    session()->forget('product');
+
 
     Varient::create([
         'size'       => $request->size,
         'color'       => $request->color,
         'stock'       => $request->stock,
         'status'     => $request->status,
+        'product_id'      =>$product->id,
     ]);
 
     return response()->json([
