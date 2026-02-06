@@ -26,7 +26,6 @@ class VarientController extends Controller
         'size'      => 'required|string|max:25',
         'color'      => 'required|string|max:25',
         'stock'      => 'required|integer|min:0|max:50',
-    
         'status'    => 'nullable|boolean',
     ]);
 
@@ -36,7 +35,6 @@ class VarientController extends Controller
         'size'       => $request->size,
         'color'       => $request->color,
         'stock'       => $request->stock,
-        
         'status'     => $request->status,
     ]);
 
