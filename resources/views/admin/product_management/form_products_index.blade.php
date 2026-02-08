@@ -180,7 +180,7 @@ $('.productForm').on('submit', function (e) {
     e.preventDefault();
 
     let formData = new FormData(this);
-
+       formData.append('_token', '{{ csrf_token() }}');
     $.ajax({
         url: "{{ route('admin.product_management.add_products') }}",
         type: "POST",

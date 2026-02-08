@@ -147,6 +147,7 @@ $(document).ready(function() {
     $('.VarientForm').on('submit', function (e) {
         e.preventDefault();
         let formData = new FormData(this);
+        formData.append('_token', '{{ csrf_token() }}');
 
         $.ajax({
             url: "{{ route('admin.varient_management.add_varient') }}",
