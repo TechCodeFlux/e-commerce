@@ -15,6 +15,32 @@
                         <i class="bi-people me-2"></i> Club Members
                     </a>
                 </li>
+
+                
+               <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="bi bi-receipt me-2"></i> Orders
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="bi bi-globe me-2"></i> Microsites
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="bi bi-person me-2"></i> Profile
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </a>
+                </li>
+
                
             </ul>
         </div>

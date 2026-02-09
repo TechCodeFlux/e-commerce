@@ -558,6 +558,40 @@
                     <span>Club</span>
                 </a>
             </li>
+
+            <li>
+                <a  href="">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-box-seam me-2"></i>
+                    </span>
+                    <span>Products</span>
+                </a>
+            </li>
+            <li>
+                <a  href="">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-tags me-2"></i>
+                    </span>
+                    <span>Categoies</span>
+                </a>
+            </li>
+             <li>
+                <a  href="">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-sliders me-2"></i>
+                    </span>
+                    <span>Option</span>
+                </a>
+            </li>
+                <li>
+                <a  href="">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-diagram-3 me-2"></i>
+                    </span>
+                    <span>Varient</span>
+                </a>
+            </li>
+             
             
            
 

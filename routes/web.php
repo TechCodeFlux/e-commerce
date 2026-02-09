@@ -13,7 +13,8 @@ use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 //for add user
 use App\Http\Controllers\Club\ClubMemberController;
-
+//for add varient
+use App\Http\Controllers\Admin\VarientController;
 // use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
 
 //arjun
