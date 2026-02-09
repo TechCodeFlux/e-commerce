@@ -8,7 +8,7 @@
              <div class="mb-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb d-flex gap-3">
-                <li class="list-group-item-dark px-sm-4 border p-2 d-inline-block" >Product Details</li>
+                <li class="list-group-item-dark px-sm-4 border p-2 d-inline-block bg-teal" >Product Details</li>
                  <li class="breadcrumb-item">
                     <a class="list-group-item-primary px-sm-4 border p-2 d-inline-block" href="{{ route('admin.varient_management.form_varient_index') }}">
                         Varient Details 

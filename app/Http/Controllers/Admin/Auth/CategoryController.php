@@ -27,6 +27,7 @@ class CategoryController extends Controller
 
           Category::create([
              'name' => $request->name,
+            'status'=> $request->status ? 1 : 0,
           ]);
         return redirect('admin/category_management/show_category');
     }

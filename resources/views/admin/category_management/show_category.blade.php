@@ -242,31 +242,27 @@ $(document).ready(function() {
 
 
 
-
 function deleteCategory(id) {
 
-    if (!confirm("Are you sure you want to delete this category?")) {
-        return;
-    }
+    if (!confirm("Are you sure you want to delete this category?")) return;
 
     $.ajax({
-       url: "{{ url('club/category_management/destroy_category') }}/" + id,
-        type: "DELETE",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        url: "{{ url('admin/category_management/destroy_category') }}/" + id,
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            _method: "DELETE"
         },
         success: function (response) {
             alert(response.message);
-
-            // Reload DataTable
             $('#club').DataTable().ajax.reload(null, false);
         },
         error: function (xhr) {
-            alert("Something went wrong. Try again.");
+            console.log(xhr.responseText);
+            alert("Delete failed");
         }
     });
 }
-
 
 
 

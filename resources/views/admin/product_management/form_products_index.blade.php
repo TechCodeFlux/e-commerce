@@ -1,7 +1,18 @@
 @extends('admin.components.app')
 @section('page-title','Product Form')
 @section('content')
-
+<div class="mb-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ url('/') }}">
+                        <i class="bi bi-globe2 small me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Products</li>
+            </ol>
+        </nav>
+    </div>
  
 
 <div class="container mt-4">
