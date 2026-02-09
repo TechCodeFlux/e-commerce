@@ -13,8 +13,10 @@ use Illuminate\Validation\Rule;
 
 //datatables
 use App\Models\Club;
+use App\Models\ClubMember;
 use App\Models\Country;
 use App\Models\State;
+use App\Models\Address;
 
 class ClubController extends Controller
 {
@@ -31,7 +33,7 @@ class ClubController extends Controller
             ->addColumn('action', function (Club $club) use ($request) {
                 $actions= '<div class="d-flex gap-1"><div class="dropdown">';
                 //view button
-                $actions .= '<a href="' . route('admin.clubsindex', $club->id) . '" class="btn btn-sm btn-clean btn-icon" title="Show"><i class="fas fa-eye" style="color: #ffc107;"></i></a>';
+                $actions .= '<a href="' . route('admin.clubs.dashboard', $club->id) . '" class="btn btn-sm btn-clean btn-icon" title="Show"><i class="fas fa-eye" style="color: #ffc107;"></i></a>';
                 //edit button
                 $actions .= '<a href="' . route('admin.editclub', $club->id) . '" class="btn btn-sm btn-outline-secondary me-2" title="Edit">
                     <i class="fas fa-pencil-alt"></i>
@@ -50,6 +52,9 @@ class ClubController extends Controller
 
         return view('admin.club.clubview');
     }
+
+    
+
 
     /**
      * Show the form for creating a new resource.
@@ -127,7 +132,7 @@ class ClubController extends Controller
      */
     public function update(Request $request, Club $club)
     {
-       $request->validate([
+    $request->validate([
     'name' =>  'required|regex:/^[A-Za-z\s]+$/',
     'address' => 'required|string',
     'contact' => 'required|string|max:20',
@@ -141,7 +146,7 @@ class ClubController extends Controller
     'city' => 'required|string|max:100',
     'zip_code' => 'required|string|max:10',
     'status' => 'nullable|boolean',
-]);
+   ]);
 
         $club->update([
         'name'       => $request->name,
@@ -176,4 +181,96 @@ class ClubController extends Controller
             ->get(['id', 'name'])
         );;
     }
-}
+
+    public function dashboard(Club $club)
+    {
+        return view('admin.club.detail', compact('club'));
+    }
+
+   public function viewmembers(Request $request, Club $club)
+   {
+    if ($request->ajax()) {
+
+        $clubmember = ClubMember::where('club_id', $club->id);
+
+        return datatables()
+            ->eloquent($clubmember)
+            ->addColumn('name', fn ($row) => $row->name ?? '--')
+            ->addColumn('contact', fn ($row) => $row->contact ?? '--')
+            ->addColumn('email', fn ($row) => $row->email ?? '--')
+            ->addColumn('address', fn ($row) => optional($row->address)->address1 ?? '--')
+            ->addColumn('action', function (ClubMember $clubmember) {
+                return '
+                    <div class="d-flex gap-1">
+                        <a href="#" class="btn btn-sm btn-clean btn-icon" title="Show">
+                            <i class="fas fa-eye text-warning"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-secondary" title="Edit">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <button type="button"
+                            class="btn btn-sm btn-outline-danger"
+                            onclick="deleteClub(' . $clubmember->id . ')"
+                            title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                ';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    return view('admin.clubmember.viewmember', compact('club'));
+   }
+
+
+
+   public function addmember($id)
+    {
+        $club = Club::findOrFail($id);
+        $clubmember = new ClubMember();
+        return view('admin.clubmember.addmember', compact('club','clubmember'));
+    }
+
+   public function storemember(Request $request,$id)
+   {
+    $request->validate([
+    'name' =>  'required|regex:/^[A-Za-z\s]+$/',
+    'address' => 'required|string',
+    'contact' => 'required|string|max:20',
+    'email' => [
+        'required',
+        'email',
+        // Rule::unique('club_members')->ignore($clubmember->id), // ignore current club member id
+    ],
+   
+    'state'     => 'required|string|max:100',
+    'city' => 'required|string|max:100',
+    'status' => 'nullable|boolean',
+   ]);
+   $address = Address::create([
+    'address1' => $request->address,
+    'state' => $request->state,
+    'city' => $request->city,
+    'zip-code' => $request->zip_code,
+    'status' => 1,
+   ]);
+
+    $address->save();
+
+    $clubmember=ClubMember::create([
+     'name' => $request->name,
+     'address_id' => $address->id,
+     'contact' => $request->contact,
+     'email' => $request->email,
+     'club_id' => $id, 
+     'status' => 1,
+    ]);
+    
+    $clubmember->save();
+    return redirect()
+        ->route('admin.clubmember.viewmembers', $id)
+        ->with('success', 'Club member added successfully');
+   }
+}   /// insertation not working

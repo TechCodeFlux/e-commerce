@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Models\ClubMember;      
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 // use App\Http\Controllers\ClubController;
 
 

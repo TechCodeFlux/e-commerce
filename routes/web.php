@@ -35,6 +35,11 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table (submit form)
     Route::put('clubsupdate/{club}', [ClubController::class, 'update'])->name('update'); //add club data (update form)
     Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
+    //admin dashboard contain all control
+    Route::get('/clubs/{club}/dashboard', [ClubController::class, 'dashboard'])->name('clubs.dashboard');//dashboard for each club   
+    Route::get('club/members/{club}', [ClubController::class, 'viewmembers'])->name('clubmember.viewmembers');//display members
+    Route::get('club/addmember/{id}',[ClubController::class,'addmember'])->name('clubmember.addmember');//add club members
+    Route::post('club/storemember/{id}',[ClubController::class,'storemember'])->name('clubmember.storemember');//store club members
 });
 
 
