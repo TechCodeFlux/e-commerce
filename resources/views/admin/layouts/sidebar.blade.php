@@ -531,7 +531,7 @@
                 </a>
             </li>
             <li>
-                <a class="{{ request()->routeIs('admin.product_management.show_products','admin.product_management.form_products_index','admin.varient_management.form_varient_index')? 'active' : '' }}"
+                <a class="{{ request()->routeIs('admin.product_management.show_products','admin.product_management.form_products_index')? 'active' : '' }}"
                      href="{{ route('admin.product_management.show_products') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
@@ -540,7 +540,7 @@
                 </a>
             </li>
               <li>
-                <a class="{{ request()->routeIs('admin.category_management.show_category')? 'active' : '' }}"
+                <a class="{{ request()->routeIs('admin.category_management.show_category','admin.category_management.add_category_index')? 'active' : '' }}"
                 href="{{ route('admin.category_management.show_category') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
@@ -549,7 +549,8 @@
                 </a>
             </li>
              <li>
-                <a href="{{ route('admin.option_management.show_option') }}">
+                <a  class="{{ request()->routeIs('admin.option_management.show_option')? 'active' : '' }}"
+                href="{{ route('admin.option_management.show_option') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
                     </span>
@@ -557,7 +558,8 @@
                 </a>
             </li>
               <li>
-                <a href="{{ route('admin.varient_management.show_varient') }}">
+                <a class="{{ request()->routeIs('admin.varient_management.show_varient','admin.varient_management.form_varient_index')? 'active' : '' }}"
+                href="{{ route('admin.varient_management.show_varient') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
                     </span>

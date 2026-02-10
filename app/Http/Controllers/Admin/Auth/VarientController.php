@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Option;
 use App\Models\Product;
 use App\Models\Varient;
 use Illuminate\Http\Request;
@@ -12,10 +13,24 @@ class VarientController extends Controller
     public function form_varient_index()
 {
     $varient = new Varient();
+   
+
 
     return view(
         'admin.varient_management.form_varient_index',
         compact('varient')
+    );
+}
+
+
+    public function generate_varient()
+{
+    $varient = new Varient();
+     $options = Option::orderBy('color')->get(); 
+
+    return view(
+        'admin.varient_management.generate_varient',
+        compact('varient','options')
     );
 }
 
@@ -29,23 +44,18 @@ class VarientController extends Controller
         'status'    => 'nullable|boolean',
     ]);
 
-   $productData = session('product');
-        
-    $product =  Product::create($productData);
-    session()->forget('product');
-
+   
 
     Varient::create([
         'size'       => $request->size,
         'color'       => $request->color,
         'stock'       => $request->stock,
         'status'     => $request->status,
-        'product_id'      =>$product->id,
     ]);
 
-    return response()->json([
-        'message' => 'Variant created successfully'
-    ]);
+    return redirect()
+            ->route('admin.varient_management.form_varient_index')
+            ->with('success', 'Varient updated successfully');
 }
 
 

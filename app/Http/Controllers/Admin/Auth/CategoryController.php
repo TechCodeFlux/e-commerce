@@ -15,7 +15,8 @@ class CategoryController extends Controller
 {
     public function add_category_index(){
         $category = new Category();
-       return  view('admin.category_management.add_category_index', compact('category'));
+        $category_list = Category::orderBy('name')->get(); 
+       return  view('admin.category_management.add_category_index', compact('category','category_list'));
     }
 
     public function store(Request $request){
@@ -27,7 +28,8 @@ class CategoryController extends Controller
 
           Category::create([
              'name' => $request->name,
-            'status'=> $request->status ? 1 : 0,
+             'parent_id' => $request->category ? $request->category : 0 ,
+            'status'=> $request->status ? 1 : 0,    
           ]);
         return redirect('admin/category_management/show_category');
     }
@@ -162,7 +164,8 @@ class CategoryController extends Controller
 
          $category = Category::where('id', $id)
         ->firstOrFail();
-          return view('admin.category_management.add_category_index',compact('category'));
+         $category_list = Category::orderBy('name')->get(); 
+          return view('admin.category_management.add_category_index',compact('category','category_list'));
     }
 
 
@@ -176,6 +179,7 @@ class CategoryController extends Controller
 
         Category::where('id', $id)->update([
              'name' => $request->name,
+             'parent_id' => $request->category ? $request->category : 0 ,
 ]);
           return redirect('admin/category_management/show_category'); 
 

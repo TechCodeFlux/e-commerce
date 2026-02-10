@@ -213,7 +213,7 @@ $('.productForm').on('submit', function (e) {
 
             // 🔹 Redirect to Variant page
             window.location.href =
-                "{{ route('admin.varient_management.form_varient_index') }}" 
+                "{{ route('admin.varient_management.generate_varient') }}" 
         },
 
         error: function (xhr) {
@@ -344,7 +344,7 @@ $(document).ready(function () {
 
 //             // 🔹 Redirect to Variant page
 //             window.location.href =
-//                 "{{ route('admin.varient_management.form_varient_index') }}" 
+//                 "{{ route('admin.varient_management.generate_varient') }}" 
 //         },
 
 //         error: function (xhr) {

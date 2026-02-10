@@ -1,4 +1,4 @@
-@extends('club.components.app')
+@extends('admin.components.app')
 
 @section('content')
 
@@ -11,7 +11,7 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('club.option_management.show_option') }}">
+                    <a href="{{ route('admin.option_management.show_option') }}">
                         <i class="bi bi-building small me-2"></i> Options 
                     </a>
                 </li>
@@ -39,7 +39,7 @@
                 <div class="col-lg-12">
 
                     <form 
-                        action="{{ $option->id? route('club.option_management.edit_option', $option->id): route('club.option_management.add_option') }}"
+                        action="{{ $option->id? route('admin.option_management.edit_option', $option->id): route('admin.option_management.add_option') }}"
                         method="POST" 
                         autocomplete="off">
                         @csrf
@@ -50,13 +50,22 @@
                         <div class="row">
 
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Name</label>
-                                <input type="text" name="name" class="form-control" placeholder="Name" 
-                                    value="{{ old('name', $option->name ?? '') }}">
-                                @error('name')
+                                <label class="form-label">Color:</label>
+                                <input type="text" name="color" class="form-control" placeholder="Color" 
+                                    value="{{ old('color', $option->color ?? '') }}">
+                                @error('color')
                                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                                 @enderror
-                            </div>     
+                            </div>   
+                            
+                             <div class="col-md-4 mb-3">
+                                <label class="form-label">Size:</label>
+                                <input type="text" name="size" class="form-control" placeholder="Size" 
+                                    value="{{ old('size', $option->size ?? '') }}">
+                                @error('size')
+                                    <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                @enderror
+                            </div>   
 
                             <div class="col-md-4 mb-4">
                                 <label class="form-label d-block">Status</label>
@@ -118,7 +127,7 @@ $(document).on('change', '.toggle-status', function () {
     let status = $(this).is(':checked') ? 1 : 0;
 
      $.ajax({
-        url: "{{ route('club.option_management.change-status') }}",
+        url: "{{ route('admin.option_management.change-status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",

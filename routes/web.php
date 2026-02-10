@@ -83,6 +83,8 @@ Route::post('option_management/change-status', [OptionController::class, 'change
 
 Route::get('varient_management/form_varient_index', [VarientController::class, 'form_varient_index'])->name('varient_management.form_varient_index');
 
+Route::get('varient_management/generate_varient', [VarientController::class, 'generate_varient'])->name('varient_management.generate_varient');
+
 Route::post('varient_management/add_varient',[VarientController::class, 'store'])->name('varient_management.add_varient');
 
 

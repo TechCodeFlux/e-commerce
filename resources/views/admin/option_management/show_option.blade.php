@@ -1,4 +1,4 @@
-@extends('club.components.app')
+@extends('admin.components.app')
 
 @section('content')
     <div class="mb-4">
@@ -43,7 +43,7 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="{{ route('club.option_management.form_option_index') }}">
+                            <a href="{{ route('admin.option_management.form_option_index') }}">
                                 <button class="btn btn-primary btn-icon">
                                         <i class="bi bi-plus-circle"></i> Add Option
                                 </button>
@@ -57,7 +57,8 @@
                     <table id="club" class="table table-custom table-lg mb-0" >
                     <thead>
                       <tr>
-                         <th >Option Name</th>  
+                         <th >Color</th>  
+                          <th >Size</th>  
                           <th>Status</th>
                         <th  class=" ps-5" >Action</th>
                      </tr>
@@ -141,7 +142,7 @@ $(document).on('click', '.view-option', function () {
     let optionId = $(this).data('id');
 
     $.ajax({
-        url: "{{ route('club.option_management.show_single', ':id') }}".replace(':id', optionId),
+        url: "{{ route('admin.option_management.show_single', ':id') }}".replace(':id', optionId),
         type: "GET",
         success: function (res) {
             $('#modalOptionName').text(res.name);
@@ -164,7 +165,7 @@ $(document).on('change', '.toggle-status', function () {
     let label = $('#status-label-' + optionId);
 
     $.ajax({
-        url: "{{ route('club.option_management.change-status') }}",
+        url: "{{ route('admin.option_management.change-status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
@@ -200,14 +201,15 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         ajax: {
-           url: "{{ route('club.option_management.show_option') }}",
+           url: "{{ route('admin.option_management.show_option') }}",
             data: function(d) {
                 
             }
         },
 
         columns: [
-            { data: 'name', name: 'name', orderable: false,searchable: false },
+            { data: 'color', name: 'color', orderable: false,searchable: false },
+            { data: 'size', name: 'size', orderable: false,searchable: false },
             { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ],

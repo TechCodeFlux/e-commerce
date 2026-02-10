@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Category extends Model
 {
     use SoftDeletes;
-     protected $fillable =  ['name','status'];
+     protected $fillable =  ['name','status','parent_id'];
 }

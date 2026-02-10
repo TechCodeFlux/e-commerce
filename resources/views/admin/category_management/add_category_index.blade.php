@@ -56,7 +56,31 @@
                                 @error('name')
                                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                                 @enderror
-                            </div>     
+                            </div>  
+                            
+                             <div class="col-md-6 mb-3">
+                                        <label class="form-label">Categories</label>
+                                        <select name="category" id="category" class="form-select">
+                                          <option value="">Select Category</option>
+
+                                        @foreach($category_list as $cat)
+
+                                          
+                                            @if(isset($category->id) && $category->id == $cat->id)
+                                                @continue
+                                            @endif
+
+                                            <option value="{{ $cat->id }}"
+                                                {{ old('category', $category->parent_id ?? '') == $cat->id ? 'selected' : '' }}>
+                                                {{ $cat->name }}
+                                            </option>
+
+                                            @endforeach
+                                        </select>
+                                        @error('category')
+                                                <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                        @enderror
+                                    </div>
 
                             <div class="col-md-4 mb-4">
                                 <label class="form-label d-block">Status</label>

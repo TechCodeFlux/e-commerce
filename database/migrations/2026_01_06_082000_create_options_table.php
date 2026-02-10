@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('options', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('color');
+            $table->string('size');
             $table->boolean('status')->default('0');
             $table->softdeletes();
             $table->timestamps();

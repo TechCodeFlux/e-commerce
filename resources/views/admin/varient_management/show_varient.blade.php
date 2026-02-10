@@ -258,8 +258,9 @@ function deleteVarient(id) {
     $.ajax({
        url: "{{ url('admin/varient_management/destroy_varient') }}/" + id,
         type: "DELETE",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+       data: {
+            _token: "{{ csrf_token() }}",
+            _method: "DELETE"
         },
         success: function (response) {
             alert(response.message);
