@@ -63,9 +63,10 @@ class ClubMemberController extends Controller
         $club = Club::findOrFail($id);
         $clubmember = new ClubMember();
         $countries = Country::orderBy('name')->get();
+        $address= new Address();
         // $state=State::all();
         $message=" ";
-        return view('admin.clubmember.addmember', compact('club','clubmember','message','countries'));
+        return view('admin.clubmember.addmember', compact('club','clubmember','message','countries','address'));
     }
 
     public function storemember(Request $request, $id)
