@@ -13,8 +13,8 @@ use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 //for add user
 use App\Http\Controllers\Club\ClubMemberController;
-//for add varient
-use App\Http\Controllers\Admin\VarientController;
+//category controller
+use App\Http\Controllers\Admin\CategoryController;
 // use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
 
 //arjun
@@ -55,6 +55,17 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
     //Club dashboard
     Route::get('/clubs/{club}/dashboard', [ClubController::class, 'dashboard'])->name('clubs.dashboard');//dashboard for each club
+
+    //Category-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    Route::get('category_management/add_category_index', [CategoryController::class, 'add_category_index'])->name('category_management.add_category_index');
+    Route::post('category_management/add_category', [CategoryController::class, 'store'])->name('category_management.add_category');
+    Route::get('category_management/show_category', [CategoryController::class, 'show'])->name('category_management.show_category');
+    Route::get('category_management/show_single/{id}', [CategoryController::class, 'single_show'])->name('category_management.show_single');
+    Route::delete('category_management/destroy_category/{id}', [CategoryController::class, 'destroy'])->name('category_management.destroy_category');
+    Route::get('category_management/add_category_index/{id}', [CategoryController::class, 'edit_category_index'])->name('category_management.edit_category_index');
+    Route::put('category_management/edit_category/{id}', [CategoryController::class, 'update'])->name('category_management.edit_category');
+    Route::post('category_management/change-status', [CategoryController::class, 'changeStatus'])->name('category_management.change-status');
 
 });
 

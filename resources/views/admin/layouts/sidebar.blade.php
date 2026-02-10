@@ -568,7 +568,8 @@
                 </a>
             </li>
             <li>
-                <a  href="">
+                <a class="{{ request()->routeIs('admin.category_management.show_category')? 'active' : '' }}"  
+                    href="{{ route('admin.category_management.show_category') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-tags me-2"></i>
                     </span>

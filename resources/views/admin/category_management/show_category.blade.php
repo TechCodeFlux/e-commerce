@@ -1,5 +1,5 @@
 @extends('admin.components.app')
-
+@section('page-title', 'Categories')
 @section('content')
     <div class="mb-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -9,7 +9,7 @@
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Varient</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-tags me-2"></i>Categories</li>
             </ol>
         </nav>
     </div>
@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-md-flex gap-4 align-items-center">
-                        <div class="d-none d-md-flex">All Varients</div>
+                        <div class="d-none d-md-flex">All Categories</div>
                         <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
@@ -43,9 +43,9 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="{{ route('admin.varient_management.form_varient_index') }}">
+                            <a href="{{ route('admin.category_management.add_category_index') }}">
                                 <button class="btn btn-primary btn-icon">
-                                        <i class="bi bi-plus-circle"></i> Add Varient
+                                        <i class="bi bi-plus-circle"></i> Add Category
                                 </button>
                             </a>
                         </div>
@@ -57,9 +57,7 @@
                     <table id="club" class="table table-custom table-lg mb-0" >
                     <thead>
                       <tr>
-                         <th >Size</th>  
-                         <th >Color</th> 
-                         <th >Stock</th> 
+                         <th >Category Name</th>  
                           <th>Status</th>
                         <th  class=" ps-5" >Action</th>
                      </tr>
@@ -72,7 +70,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Delete Option</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">Delete category</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form>
@@ -80,7 +78,7 @@
                     <!-- <input type="hidden" name="_method" value="DELETE"> -->
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="hidden" id="deleteId" name="deleteId">
-                        <p>Are you sure you want to delete this varient</p>
+                        <p>Are you sure you want to delete this category</p>
                         <div class="modal-footer">
                         
                             <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
@@ -103,7 +101,7 @@
                 
                 <!-- Modal Header with Close Button -->
                 <div class="modal-header bg-light">
-                    <h5 class="modal-title" id="productListModalLabel">Available varient</h5>
+                    <h5 class="modal-title" id="productListModalLabel">Available Products</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -113,15 +111,15 @@
                         
                         <!-- Product Item 1 -->
                         <a href="#" class="list-group-item list-group-item-action d-flex align-items-center p-3">
-                                                      <div class="flex-grow-1">
+                          <div class="flex-grow-1">
                                 <div class="d-flex w-100 justify-content-between">
-                                       <h6 class="mb-1 fw-bold" id="modalVarientSize"   ></h6>    
-                                    <h6 class="mb-1 fw-bold" id="modalVarientColor"   ></h6>
-                                    <small class="text-primary fw-bold mb-0" id="modalVarientStock"></small>
+                                    <h6 class="mb-1 fw-bold" id="modalCategoryName"   ></h6>
+                                  
                                 </div>
-                                {{-- <p class="mb-0 text-muted fs-6" id="modalVarientStock"></p> --}}
+                              
                             </div>
                         </a>
+
                     
                     </div>
                 </div>
@@ -138,20 +136,18 @@
 <script>
 
 //view single row
-$(document).on('click', '.view-varient', function () {
+$(document).on('click', '.view-category', function () {
 
-    let varientId = $(this).data('id');
+    let categoryId = $(this).data('id');
 
     $.ajax({
-        url: "{{ route('admin.varient_management.show_single', ':id') }}".replace(':id', varientId),
-        type: "GET",       
+        url: "{{ route('admin.category_management.show_single', ':id') }}".replace(':id', categoryId),
+        type: "GET",
         success: function (res) {
-            $('#modalVarientSize').text(res.size);
-            $('#modalVarientColor').text(res.color);
-            $('#modalVarientStock').text(res.stock);
+            $('#modalCategoryName').text(res.name);
         },
         error: function () {
-            alert('Failed to load Option');
+            alert('Failed to load category');
         }
     });
 });
@@ -163,16 +159,16 @@ $(document).on('click', '.view-varient', function () {
 
 $(document).on('change', '.toggle-status', function () {
 
-    let varientId = $(this).data('id');
+    let categoryId = $(this).data('id');
     let status = $(this).is(':checked') ? 1 : 0;
-    let label = $('#status-label-' + varientId);
+    let label = $('#status-label-' + categoryId);
 
     $.ajax({
-        url: "{{ route('admin.varient_management.change-status') }}",
+        url: "{{ route('admin.category_management.change-status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
-            id: varientId,
+            id: categoryId,
             status: status
         },
         success: function (res) {
@@ -200,20 +196,18 @@ $(document).ready(function() {
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
-    $optionTable= $('#club').DataTable({
+    $categoryTable= $('#club').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-           url: "{{ route('admin.varient_management.show_varient') }}",
+           url: "{{ route('admin.category_management.show_category') }}",
             data: function(d) {
                 
             }
         },
 
         columns: [
-            { data: 'size', size: 'size' },
-            { data: 'color', size: 'color' },
-            { data: 'stock', size: 'stock' },
+            { data: 'name', name: 'name', orderable: false,searchable: false },
             { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ],
@@ -225,7 +219,7 @@ $(document).ready(function() {
     });
     
     $(document).on("keyup", ".searchInput", function(e) {
-        $optionTable.search($(this).val()).draw();
+        $categoryTable.search($(this).val()).draw();
     });
     $("#club_filter").css({
         "display": "none"
@@ -236,43 +230,39 @@ $(document).ready(function() {
     $('#sort').on('change', function() {
         $column = $(this).find(':selected').data('column');
         $sort = $(this).find(':selected').data('sort');
-        $optionTable.order([$column, $sort]).draw();
+        $categoryTable.order([$column, $sort]).draw();
     })
     $('#pageLength').on('change',function(){
-        $optionTable.page.len($(this).val()).draw();
+        $categoryTable.page.len($(this).val()).draw();
     })
-    $('#pageLength').val($optionTable.page.len());
+    $('#pageLength').val($categoryTable.page.len());
 })
 
 
 
 
 
+function deleteCategory(id) {
 
-function deleteVarient(id) {
-
-    if (!confirm("Are you sure you want to delete this option?")) {
-        return;
-    }
+    if (!confirm("Are you sure you want to delete this category?")) return;
 
     $.ajax({
-       url: "{{ url('admin/varient_management/destroy_varient') }}/" + id,
-        type: "DELETE",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        url: "{{ url('admin/category_management/destroy_category') }}/" + id,
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            _method: "DELETE"
         },
         success: function (response) {
             alert(response.message);
-
-            // Reload DataTable
             $('#club').DataTable().ajax.reload(null, false);
         },
         error: function (xhr) {
-            alert("Something went wrong. Try again.");
+            console.log(xhr.responseText);
+            alert("Delete failed");
         }
     });
 }
-
 
 
 

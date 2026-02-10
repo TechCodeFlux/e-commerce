@@ -12,10 +12,10 @@
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('admin.clubsindex') }}">
-                    <i class="bi bi-people-fill small me-2"></i> Clubs
+                    <i class="bi bi-person-badge"></i> Clubs
                 </a>
             </li>
-            <li class="breadcrumb-item active"><i class="bi bi-building small me-2"></i>Add Clubs</li>
+            <li class="breadcrumb-item active"><i class="bi bi-person-plus-fill small me-2"></i>Add Clubs</li>
         </ol>
     </nav>
 </div>

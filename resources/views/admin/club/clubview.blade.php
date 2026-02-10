@@ -9,7 +9,7 @@
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Clubs</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-person-badge"></i>Clubs</li>
             </ol>
         </nav>
     </div>
