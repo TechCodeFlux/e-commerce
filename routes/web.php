@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\ClubController;
 use App\Http\Controllers\Clubmember\ClubmemberDashboardController;
 use App\Http\Controllers\Club\ClubDashboardController;
 
+use App\Http\Controllers\Admin\ClubMemberController;
+
 
 // admin (done by pauljo)
 
@@ -35,14 +37,19 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table (submit form)
     Route::put('clubsupdate/{club}', [ClubController::class, 'update'])->name('update'); //add club data (update form)
     Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
-    //admin dashboard contain all control
+
+
+    //admin dashboard contain clubmember details------------------------------------------------------------------------------------------------------
+
     Route::get('/clubs/{club}/dashboard', [ClubController::class, 'dashboard'])->name('clubs.dashboard');//dashboard for each club   
-    Route::get('club/members/{club}', [ClubController::class, 'viewmembers'])->name('clubmember.viewmembers');//display members
-    Route::get('club/addmember/{id}',[ClubController::class,'addmember'])->name('clubmember.addmember');//add club members
-    Route::post('club/storemember/{id}',[ClubController::class,'storemember'])->name('clubmember.storemember');//store club members
-    Route::get('club/editmember/{id}',[ClubController::class,'editmember'])->name('clubmember.editmember');
-    Route::post('club/updatemember/{id}',[ClubController::class,'updatemember'])->name('clubmember.updatemember');
-    Route::get('club/deletemember/{id}',[ClubController::class,'deletemember'])->name('clubmember.deletemember');
+    Route::get('club/members/{club}', [ClubMemberController::class, 'viewmembers'])->name('clubmember.viewmembers');//display members
+    Route::get('club/addmember/{id}',[ClubMemberController::class,'addmember'])->name('clubmember.addmember');//add club members
+    Route::post('club/storemember/{id}',[ClubMemberController::class,'storemember'])->name('clubmember.storemember');//store club members
+    Route::get('club/editmember/{id}',[ClubMemberController::class,'editmember'])->name('clubmember.editmember');
+    Route::post('club/updatemember/{id}',[ClubMemberController::class,'updatemember'])->name('clubmember.updatemember');
+    Route::get('club/deletemember/{id}',[ClubMemberController::class,'deletemember'])->name('clubmember.deletemember');
+
+    //
 });
 
 
