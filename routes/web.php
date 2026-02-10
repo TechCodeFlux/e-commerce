@@ -55,6 +55,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
 
     Route::get('/clubs/{club}/dashboard', [ClubController::class, 'dashboard'])->name('clubs.dashboard');//dashboard for each club
+    Route::delete('clubs/{club}', [ClubController::class, 'destroy'])->name('clubs.destroy');//delete club
 
 });
 

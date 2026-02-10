@@ -24,13 +24,7 @@
 
                 <div class="d-md-flex gap-4 align-items-center">
                     <form class="row g-3">
-                        <div class="col-md-7">
-                            <select class="form-select" id="sort">
-                                <option value="">Sort by</option>
-                                <option data-sort="asc" data-column="0">Name A-Z</option>
-                                <option data-sort="desc" data-column="0">Name Z-A</option>
-                            </select>
-                        </div>
+                       
                         <div class="col-md-5">
                             <select class="form-select" id="pageLength">
                                 <option value="10">10</option>

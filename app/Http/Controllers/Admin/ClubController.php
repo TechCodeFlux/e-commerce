@@ -24,7 +24,14 @@ class ClubController extends Controller
     public function index(Request $request)
     {
          if($request->ajax()){
-            $club=Club::query();
+          $club = Club::query()
+            ->leftJoin('countries', 'countries.id', '=', 'clubs.country_id')
+            ->leftJoin('states', 'states.id', '=', 'clubs.state_id')
+            ->select([
+                'clubs.*',
+                'countries.name as country_name',
+                'states.name as state_name'
+    ]);
             // return DataTables::eloquent($club)
             return datatables()
     ->eloquent($club)
@@ -37,11 +44,8 @@ class ClubController extends Controller
                     <i class="fas fa-pencil-alt"></i>
                  </a>';
                 //delete button
-                $actions .= '<button type="button" class="btn btn-sm btn-outline-danger delete-club" onclick="deleteClub(' . $club->id . ')" title="Delete">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>';
-                
-              
+                $actions .= '<button type="button" class="btn btn-sm btn-outline-danger delete-club" data-id="'.$club->id.'"data-bs-toggle="modal"
+                data-bs-target="#delete-modal" title="Delete"><i class="fas fa-trash-alt"></i></button>';
 
                 $actions .= '</div>';
                 return  $actions;
@@ -171,13 +175,14 @@ class ClubController extends Controller
      */
     public function destroy(Club $club)
     {
-        //
+         $club->delete();
+
+         return response()->json([
+        'success' => true,
+        'message' => 'Club deleted successfully'
+        ]);
     }
     // Get states based on country ID
-    
-
-
-
     public function getStates($countryId)
     {
         return response()->json(
