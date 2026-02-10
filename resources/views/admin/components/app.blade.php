@@ -36,7 +36,7 @@
 
 <!-- preloader -->
 <div class="preloader">
-    <img src="{{url('assets/images/logo.svg')}}" alt="logo">
+    <img src="{{url('assets/images/grabit/logo.png')}}" alt="logo">
     <div class="preloader-icon"></div>
 </div>
 <!-- ./ preloader -->

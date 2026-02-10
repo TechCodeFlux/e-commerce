@@ -70,4 +70,5 @@ Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controller
     //dashboard controller
     Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
 
-}); 
+});
+

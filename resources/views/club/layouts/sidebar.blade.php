@@ -499,8 +499,8 @@
                          class="rounded-circle" alt="image">
                 </div>
                 <div>
-                    <div class="fw-bold">CLUB ADMIN</div>
-                    <small class="text-muted">Club Admin</small>
+                    <div class="fw-bold">Timotheus Bendan</div>
+                    <small class="text-muted">Sales Manager</small>
                 </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
@@ -522,8 +522,8 @@
         <ul>
             <li class="menu-divider">E-Commerce</li>
             <li>
-                <a href="{{route('club.dashboard')}}" 
-                    class="{{ request()->routeIs(patterns: 'club.dashboard') ? 'active' : '' }}">
+                <a  class="active"
+                    href="{{route('club.dashboard')}}">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>
@@ -534,12 +534,11 @@
             
             
             <li>
-                <a  href="{{route('club.clubmembersindex')}}"
-                class="{{ request()->routeIs(patterns: 'club.clubmembersindex') ? 'active' : '' }}">
+                <a  href="{{route('club.clubmembersindex')}}">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
-                    <span>Club Members</span>
+                    <span>Club Members</span> 
                 </a>
             </li>
             

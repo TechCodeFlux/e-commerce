@@ -118,35 +118,31 @@ class ClubMemberController extends Controller
         //  Show error if something fails
         return back()->withErrors(['error' => $e->getMessage()])->withInput();
     }
+}
 
 
 
 
-
-        ClubMember::create([
-            'name'    => $request->name,
-            'address' => $request->address,
-            'email'   => $request->email,
-            'status'  => $request->has('status'),
-        ]);
-
-        return redirect()
-            ->route('club.clubmembers.index')
-            ->with('success', 'Club Member registered successfully!');
+    /**
+     * Display the specified resource.
+     */
+    public function show(ClubMember $clubMember)
+    {
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ClubMember $clubmember)
+    public function edit(ClubMember $clubMember)
     {
-        return view('club.clubmembers.clubmemberview', compact('clubmember'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ClubMember $clubmember)
+    public function update(Request $request, ClubMember $clubMember)
     {
         
     }
@@ -154,10 +150,8 @@ class ClubMemberController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ClubMember $clubmember)
+    public function destroy(ClubMember $clubMember)
     {
-        $clubmember->delete();
-
-        return response()->json(['success' => true]);
+        //
     }
 }

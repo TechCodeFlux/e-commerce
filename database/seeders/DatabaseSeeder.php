@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Club;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -22,8 +21,7 @@ class DatabaseSeeder extends Seeder
         
         User::updateOrCreate(
             ['email' => 'admin@example.com'], // condition
-            [ 
-                'name' => 'Admin User',
+            [   'name' => 'Admin User',
                 'password' => 'password',
             ]
         );
@@ -34,5 +32,4 @@ class DatabaseSeeder extends Seeder
         ]);
 
     }
-
 }

@@ -31,7 +31,7 @@ class ClubController extends Controller
             ->addColumn('action', function (Club $club) use ($request) {
                 $actions= '<div class="d-flex gap-1"><div class="dropdown">';
                 //view button
-                $actions .= '<a href="' . route('admin.clubsindex', $club->id) . '" class="btn btn-sm btn-clean btn-icon" title="Show"><i class="fas fa-eye" style="color: #ffc107;"></i></a>';
+                $actions .= '<a href="' . route('admin.clubs.dashboard', $club->id) . '" class="btn btn-sm btn-clean btn-icon" title="Show"><i class="fas fa-eye" style="color: #ffc107;"></i></a>';
                 //edit button
                 $actions .= '<a href="' . route('admin.editclub', $club->id) . '" class="btn btn-sm btn-outline-secondary me-2" title="Edit">
                     <i class="fas fa-pencil-alt"></i>
@@ -50,6 +50,12 @@ class ClubController extends Controller
 
         return view('admin.club.clubview');
     }
+    //dashboard for each club
+    public function dashboard(Club $club)
+    {
+        return view('admin.club.detail', compact('club'));
+    }
+
 
     /**
      * Show the form for creating a new resource.

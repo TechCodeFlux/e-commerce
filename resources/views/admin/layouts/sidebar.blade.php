@@ -485,10 +485,13 @@
 <!-- menu -->
 <div class="menu">
     <div class="menu-header">
-        <a href="index.html" class="menu-header-logo">
-            <img src="{{url('assets/images/logo.svg')}}" alt="logo">
+        <a href="{{route('admin.dashboard')}}" class="menu-header-logo">
+            <img src="{{url('assets/images/grabit/logo.png')}}" alt="logo">
+        <span style="font-size:25px; font-family:'Montserrat', sans-serif; font-weight:530; font-style:italic; letter-spacing:4px;">
+    GRABiT
+</span>
         </a>
-        <a href="index.html" class="btn btn-sm menu-close-btn">
+        <a href="{{route('admin.dashboard')}}" class="btn btn-sm menu-close-btn">
             <i class="bi bi-x"></i>
         </a>
     </div>
@@ -535,10 +538,9 @@
             </div>
         </div>
         <ul>
-            <li class="menu-divider">E-Commerce</li>
+            {{-- <li class="menu-divider">E-Commerce</li> --}}
             <li>
-                <a  class="active"
-                    href="{{route('admin.dashboard')}}">
+                <a href="{{route('admin.dashboard')}}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>
@@ -549,7 +551,7 @@
             
             
             <li>
-                <a  href="{{ route('admin.clubsindex') }}">
+                <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs('admin.clubsindex','admin.club') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>

@@ -1,7 +1,7 @@
 @extends('admin.components.app')
 
 @section('content')
-
+@section('page-title', 'Add Clubs')
 <div class="mb-4">
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
