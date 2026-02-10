@@ -11,7 +11,7 @@
                 </li>
                 
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="profile-tab" href="" role="tab" aria-controls="profile" aria-selected="true">
+                    <a class="nav-link" id="profile-tab" href="{{ route('admin.clubmember.viewmembers',$club->id) }}" role="tab" aria-controls="profile" aria-selected="true">
                         <i class="bi-people me-2"></i> Club Members
                     </a>
                 </li>

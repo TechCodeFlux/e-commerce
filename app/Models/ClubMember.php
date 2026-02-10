@@ -20,6 +20,8 @@ class ClubMember extends Model
    public function address() {
     return $this->belongsTo(Address::class, 'address_id');
 }
+public function club() {
+    return $this->belongsTo(Club::class, 'club_id');
 
 }
-
+}

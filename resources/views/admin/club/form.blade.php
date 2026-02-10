@@ -12,10 +12,10 @@
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('admin.clubsindex') }}">
-                    <i class="bi bi-person-badge"></i> Clubs
+                    <i class="bi bi-people-fill small me-2"></i> Clubs
                 </a>
             </li>
-            <li class="breadcrumb-item active"><i class="bi bi-person-plus-fill small me-2"></i>Add Clubs</li>
+            <li class="breadcrumb-item active"><i class="bi bi-building small me-2"></i>Add Clubs</li>
         </ol>
     </nav>
 </div>
@@ -82,7 +82,15 @@
                         <label>State</label>
                         <select name="state" id="state" class="form-select">
                             <option value="">Select State</option>
-                        </select>
+                            @isset($states)
+                                @foreach($states as $state)
+                        <option value="{{ $state->id }}"
+                            {{ old('state', $clubuser->state_id ?? '') == $state->id ? 'selected' : '' }}>
+                                {{ $state->name }}
+            </option>
+        @endforeach
+    @endisset
+</select>
                     </div>
 
                     {{-- City --}}
@@ -112,10 +120,12 @@
                                         name="status"
                                         id="statusSwitch"
                                         value="1"
-                                        {{ old('status', $clubmember->status ?? 1) ? 'checked' : '' }}
+                                        {{ old('status', $clubuser->status ?? 1) ? 'checked' : '' }}
+
                                     >
                                     <label class="form-check-label" for="statusSwitch" id="statusLabel">
-                                        {{ old('status', $clubmember->status ?? 1) ? 'Active' : 'Inactive' }}
+                                        {{ old('status', $clubuser->status ?? 1) ? 'Active' : 'Inactive' }}
+
                                     </label>
                                 </div>
                             </div>
@@ -172,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .catch(error => {
         console.error(error);
-        stateSelect.innerHTML = '<option value="">Failed to load states</option>';
+        stateSelect.innerHTML = '<option value="state">Failed to load states</option>';
     });
 
     }
@@ -185,10 +195,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // AUTO LOAD STATES ON EDIT
-    if (countrySelect.value) {
-        loadStates(countrySelect.value);
-    }
 });
 </script>
 @endsection

@@ -58,6 +58,7 @@
                     <thead>
                       <tr>
                          <th >Category Name</th>  
+                         <th >Parent Category</th> 
                           <th>Status</th>
                         <th  class=" ps-5" >Action</th>
                      </tr>
@@ -173,15 +174,15 @@ $(document).on('change', '.toggle-status', function () {
         },
         success: function (res) {
            alert('Status Changed!');
-           if (status === 1) {
-                    label.text('Active')
-                         .removeClass('bg-secondary-subtle text-secondary')
-                         .addClass('bg-success-subtle text-success');
-                } else {
-                    label.text('Inactive')
-                         .removeClass('bg-success-subtle text-success')
-                         .addClass('bg-secondary-subtle text-secondary');
-                }
+        //    if (status === 1) {
+        //         label.text('Active')
+        //             .removeClass('bg-danger-subtle text-danger')
+        //             .addClass('bg-success-subtle text-success');
+        //     } else {
+        //         label.text('Inactive')
+        //             .removeClass('bg-success-subtle text-success')
+        //             .addClass('bg-danger-subtle text-danger');
+        //     }
         },
         error: function () {
             alert('Status update failed');
@@ -208,6 +209,7 @@ $(document).ready(function() {
 
         columns: [
             { data: 'name', name: 'name', orderable: false,searchable: false },
+            { data: 'parent_id', name: 'parent_id', orderable: false,searchable: false },
             { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ],

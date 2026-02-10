@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
-
+use App\Http\Controllers\Admin\ClubMemberController;
 use App\Http\Controllers\Admin\ClubController;
 //for dashboard
 use App\Http\Controllers\Admin\DashboardController;
@@ -12,28 +12,28 @@ use App\Http\Controllers\Club\ClubDashboardController;
 use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 //for add user
-use App\Http\Controllers\Club\ClubMemberController;
+// use App\Http\Controllers\Club\ClubMemberController;
 //category controller
 use App\Http\Controllers\Admin\CategoryController;
 // use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
 
 //arjun
-Route::get('/', function () {return view('club.auth.login');})->name('club.login');
-Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
-Route::post('/logout', [ClubLoginController::class, 'logout'])->name('club.logout');
+// Route::get('/', function () {return view('club.auth.login');})->name('club.login');
+// Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
+// Route::post('/logout', [ClubLoginController::class, 'logout'])->name('club.logout');
 
-Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-    Auth::routes(['register' => false]); 
-    //dashboard controller
-    Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
-    //club controller
-    Route::get('clubmembers', [ClubMemberController::class, 'index'])->name('clubmembersindex'); //view club members in table
-    Route::get('clubmembersform', [ClubMemberController::class, 'create'])->name('addclubmember'); //To add club member data form(submit form)
-    Route::post('clubmembersadd', [ClubMemberController::class, 'store'])->name('storeclubmember'); //add club member data to table (submit form)
-    // Route::put('clubmembersupdate/{club}', [ClubMemberController::class, 'update'])->name('update'); //add club member data (update form)
-    Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
+// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+//     Auth::routes(['register' => false]); 
+//     //dashboard controller
+//     //Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
+//     //club controller
+//     // Route::get('clubmembers', [ClubMemberController::class, 'index'])->name('clubmembersindex'); //view club members in table
+//     // Route::get('clubmembersform', [ClubMemberController::class, 'create'])->name('addclubmember'); //To add club member data form(submit form)
+//     // Route::post('clubmembersadd', [ClubMemberController::class, 'store'])->name('storeclubmember'); //add club member data to table (submit form)
+//     // // Route::put('clubmembersupdate/{club}', [ClubMemberController::class, 'update'])->name('update'); //add club member data (update form)
+//     // Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
 
-});
+// });
 //pauljo
 // Admin login
 // Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
@@ -55,9 +55,10 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
     //Club dashboard
     Route::get('/clubs/{club}/dashboard', [ClubController::class, 'dashboard'])->name('clubs.dashboard');//dashboard for each club
+    Route::delete('clubs/{club}', [ClubController::class, 'destroy'])->name('clubs.destroy');//delete club
+
 
     //Category-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
     Route::get('category_management/add_category_index', [CategoryController::class, 'add_category_index'])->name('category_management.add_category_index');
     Route::post('category_management/add_category', [CategoryController::class, 'store'])->name('category_management.add_category');
     Route::get('category_management/show_category', [CategoryController::class, 'show'])->name('category_management.show_category');
@@ -66,7 +67,14 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('category_management/add_category_index/{id}', [CategoryController::class, 'edit_category_index'])->name('category_management.edit_category_index');
     Route::put('category_management/edit_category/{id}', [CategoryController::class, 'update'])->name('category_management.edit_category');
     Route::post('category_management/change-status', [CategoryController::class, 'changeStatus'])->name('category_management.change-status');
-
+     //admin dashboard contain clubmember details------------------------------------------------------------------------------------------------------
+    Route::get('/clubs/{club}/dashboard', [ClubController::class, 'dashboard'])->name('clubs.dashboard');//dashboard for each club   
+    Route::get('club/members/{club}', [ClubMemberController::class, 'index'])->name('clubmember.viewmembers');//display members
+    Route::get('club/addmember/{id}',[ClubMemberController::class,'addmember'])->name('clubmember.addmember');//add club members
+    Route::post('club/storemember/{id}',[ClubMemberController::class,'storemember'])->name('clubmember.storemember');//store club members
+    Route::get('club/editmember/{id}',[ClubMemberController::class,'editmember'])->name('clubmember.editmember');
+    Route::post('club/updatemember/{id}',[ClubMemberController::class,'updatemember'])->name('clubmember.updatemember');
+    Route::get('club/deletemember/{id}',[ClubMemberController::class,'deletemember'])->name('clubmember.deletemember');
 });
 
 
