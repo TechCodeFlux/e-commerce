@@ -40,6 +40,9 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('club/members/{club}', [ClubController::class, 'viewmembers'])->name('clubmember.viewmembers');//display members
     Route::get('club/addmember/{id}',[ClubController::class,'addmember'])->name('clubmember.addmember');//add club members
     Route::post('club/storemember/{id}',[ClubController::class,'storemember'])->name('clubmember.storemember');//store club members
+    Route::get('club/editmember/{id}',[ClubController::class,'editmember'])->name('clubmember.editmember');
+    Route::post('club/updatemember/{id}',[ClubController::class,'updatemember'])->name('clubmember.updatemember');
+    Route::get('club/deletemember/{id}',[ClubController::class,'deletemember'])->name('clubmember.deletemember');
 });
 
 

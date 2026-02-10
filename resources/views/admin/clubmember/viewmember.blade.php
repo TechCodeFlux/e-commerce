@@ -74,7 +74,7 @@
                                     </div>
                                     </div>
                                 </div>
-                                <div class="table-responsive">
+                                <div class="">
                                     <table class="table table-custom table-lg mb-0" id="clubmember">
                                     <thead>
                                     <tr>
@@ -82,7 +82,11 @@
                                         <th>contact</th> 
                                         <th>email</th>                         
                                         <th>Address</th>
-                                        <th>club_id</th>
+                                        <th>zip code</th>
+                                        <th>country</th>
+                                        <th>state</th>
+                                        <th>city</th>
+                                        <th>club name</th>
                                         <th>Action</th>
                                     
                                     </tr>
@@ -129,6 +133,9 @@
                         processing: true,
                         serverSide: true,
                         dom:'rtip',
+                        scrollY: '400px', 
+                        scrollX: true,  // 👈 height of table
+                        scrollCollapse: true,
                         ajax: {
                             url: "{{ route('admin.clubmember.viewmembers',compact('club')) }}",
                             data: function(d) {
@@ -136,8 +143,8 @@
                             }
                         },
 
-                        columns: [
-                        
+                         columns: [
+           
                             {
                                 data: 'name',
                                 name: 'name'
@@ -154,10 +161,23 @@
                                 data: 'address',
                                 name: 'address'
                             },{
-                                data: 'club_id',
-                                name: 'club_id'
+                                data: 'zip_code',
+                                name: 'zip_code'
+                            },{
+                                data: 'country',
+                                name: 'country'
                             },
-                           
+                            {
+                                data: 'state',
+                                name: 'state'
+                            },{
+                                data: 'city',
+                                name: 'city'
+                            },
+                            {
+                                data: 'club',
+                                name: 'club'
+                            },
                             { 
                                 data: 'action',
                                 name: 'action',

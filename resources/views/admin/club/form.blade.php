@@ -107,12 +107,27 @@
                     </div>
 
                     {{-- State --}}
-                    <div class="col-md-4 mb-3">
-                        <label>State</label>
-                        <select name="state" id="state" class="form-select">
-                            <option value="{{old('country')}}">Select State</option>
-                        </select>
-                    </div>
+                    <select name="state" id="state" class="form-select">
+
+                        <option value="">Select State</option>
+
+                        @isset($states)
+
+                        @foreach($states as $state)
+
+                                <option value="{{ $state->id }}"
+
+                                {{ old('state', $clubmember->state_id ?? '') == $state->id ? 'selected' : '' }}>
+
+                                {{ $state->name }}
+
+                            </option>
+
+                        @endforeach
+
+                     @endisset
+
+                    </select>
 
                     {{-- City --}}
                     <div class="col-md-4 mb-3">
@@ -163,27 +178,20 @@ document.addEventListener('DOMContentLoaded', function () {
     function loadStates(countryId) {
         stateSelect.innerHTML = '<option value="">Loading...</option>';
 
-       fetch(`/admin/get-states/${countryId}`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network error');
-        }
-        return response.json();
-    })
-    .then(states => {
-        stateSelect.innerHTML = '<option value="">Select State</option>';
-        states.forEach(state => {
-            stateSelect.innerHTML +=
-                `<option value="${state.id}">${state.name}</option>`;
-        });
-    })
-    .catch(error => {
-        console.error(error);
-        stateSelect.innerHTML = '<option value="">Failed to load states</option>';
-    });
+        fetch(`/admin/get-states/${countryId}`)
+            .then(res => res.json())
+            .then(states => {
+                stateSelect.innerHTML = '<option value="">Select State</option>';
 
+                states.forEach(state => {
+                    const selected = state.id == selectedState ? 'selected' : '';
+                    stateSelect.innerHTML +=
+                        `<option value="${state.id}" ${selected}>${state.name}</option>`;
+                });
+            });
     }
 
+    // Load states when country changes
     countrySelect.addEventListener('change', function () {
         if (this.value) {
             loadStates(this.value);
@@ -192,11 +200,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // AUTO LOAD STATES ON EDIT
+    // 🔥 AUTO LOAD STATES ON EDIT
     if (countrySelect.value) {
         loadStates(countrySelect.value);
     }
 });
 </script>
 @endsection
-@endsection
+ 

@@ -20,18 +20,22 @@ class ClubMember extends Model
         'email',
         'club_id',
         'address_id',
+        
 
     ];
 
-      public function club()
+  // being value to club member table
+
+     public function club()
     {
         return $this->belongsTo(Club::class);
     }
 
-    public function address()
+    public  function address()
     {
-        return $this->belongsTo(Address::class);
+         return $this->belongsTo(Address::class);
     }
+    
 
 
 }
