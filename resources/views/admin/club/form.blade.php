@@ -1,7 +1,7 @@
 @extends('admin.components.app')
 
 @section('content')
-
+@section('page-title', 'Add Clubs')
 <div class="mb-4">
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -20,7 +20,7 @@
     </nav>
 </div>
 
-<div class="container mt-4">
+<div class="container mt-4"> 
     <div class="card shadow-sm">
         <div class="card-body">
 
@@ -82,7 +82,15 @@
                         <label>State</label>
                         <select name="state" id="state" class="form-select">
                             <option value="">Select State</option>
-                        </select>
+                            @isset($states)
+                                @foreach($states as $state)
+                        <option value="{{ $state->id }}"
+                            {{ old('state', $clubuser->state_id ?? '') == $state->id ? 'selected' : '' }}>
+                                {{ $state->name }}
+            </option>
+        @endforeach
+    @endisset
+</select>
                     </div>
 
                     {{-- City --}}
@@ -99,6 +107,29 @@
                             value="{{ old('zip_code', $clubuser->zip_code ?? '') }}">
                     </div>
 
+                    {{-- Status --}}
+                     <div class="col-md-4 mb-4">
+                                <label class="form-label d-block">Status</label>
+
+                                <input type="hidden" name="status" value="0">
+
+                                <div class="form-check form-switch">
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="status"
+                                        id="statusSwitch"
+                                        value="1"
+                                        {{ old('status', $clubuser->status ?? 1) ? 'checked' : '' }}
+
+                                    >
+                                    <label class="form-check-label" for="statusSwitch" id="statusLabel">
+                                        {{ old('status', $clubuser->status ?? 1) ? 'Active' : 'Inactive' }}
+
+                                    </label>
+                                </div>
+                            </div>
+
                 </div>
 
                 <div class="text-center mt-3">
@@ -114,6 +145,18 @@
 
 @section('script')
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const statusSwitch = document.getElementById('statusSwitch');
+    const statusLabel = document.getElementById('statusLabel');
+
+    if (statusSwitch) {
+        statusSwitch.addEventListener('change', function () {
+            statusLabel.innerText = this.checked ? 'Active' : 'Inactive';
+        });
+    }
+});
+
+
 document.addEventListener('DOMContentLoaded', function () {
 
     const countrySelect = document.getElementById('country');
@@ -139,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .catch(error => {
         console.error(error);
-        stateSelect.innerHTML = '<option value="">Failed to load states</option>';
+        stateSelect.innerHTML = '<option value="state">Failed to load states</option>';
     });
 
     }
@@ -152,10 +195,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // AUTO LOAD STATES ON EDIT
-    if (countrySelect.value) {
-        loadStates(countrySelect.value);
-    }
 });
 </script>
 @endsection

@@ -1,154 +1,195 @@
+
 <?php
 
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Str; 
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+// use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Validation\Rule;
 
+//datatables
 use App\Models\Club;
 use App\Models\Country;
 use App\Models\State;
 
 class ClubController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            return DataTables::eloquent(Club::query())
-                ->addColumn('action', function (Club $club) {
-                    return '
-                        <a href="' . route('admin.editclub', $club->id) . '" class="btn btn-sm btn-outline-secondary">
-                            <i class="fas fa-pencil-alt"></i>
-                        </a>
+         if($request->ajax()){
+            $club = Club::query()
+            ->leftJoin('countries', 'countries.id', '=', 'clubs.country_id')
+            ->leftJoin('states', 'states.id', '=', 'clubs.state_id')
+            ->select([
+                'clubs.*',
+                'countries.name as country_name',
+                'states.name as state_name'
+            ]);
+            // return DataTables::eloquent($club)
+            return datatables()
+    ->eloquent($club)
+            ->addColumn('action', function (Club $club) use ($request) {
+                $actions= '<div class="d-flex gap-1"><div class="dropdown">';
+                //view button
+                $actions .= '<a href="' . route('admin.clubs.dashboard', $club->id) . '" class="btn btn-sm btn-clean btn-icon" title="Show"><i class="fas fa-eye" style="color: #ffc107;"></i></a>';
+                //edit button
+                $actions .= '<a href="' . route('admin.editclub', $club->id) . '" class="btn btn-sm btn-outline-secondary me-2" title="Edit">
+                    <i class="fas fa-pencil-alt"></i>
+                 </a>';
+                //delete button
+                $actions .= '<button type="button" class="btn btn-sm btn-outline-danger delete-club" data-id="'.$club->id.'"data-bs-toggle="modal"
+                data-bs-target="#delete-modal" title="Delete"><i class="fas fa-trash-alt"></i></button>';
 
-                        <form action="' . route('admin.deleteclub', $club->id) . '" method="POST" style="display:inline-block">
-                            ' . csrf_field() . method_field('DELETE') . '
-                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm(\'Delete this club?\')">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </form>
-                    ';
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+                $actions .= '</div>';
+                return  $actions;
+            })->rawColumns(['action'])->make(true);
         }
 
         return view('admin.club.clubview');
     }
+    //dashboard for each club
+    public function dashboard(Club $club) 
+    {
+        return view('admin.club.detail', compact('club'));
+    }
+
 
     /**
-     * SHOW CREATE FORM
+     * Show the form for creating a new resource.
      */
     public function create()
     {
-        $clubuser = new Club(); // 🔥 REQUIRED for form blade
+        $clubuser = new Club(); // empty model
         $countries = Country::orderBy('name')->get();
-
-        return view('admin.club.form', compact('clubuser', 'countries'));
+        return view('admin.club.form', compact('clubuser','countries'));
     }
-
     /**
-     * STORE CLUB
+     * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name'    => ['required', 'string', 'regex:/^[A-Za-z ]+$/'],
-            'email'   => ['required', 'email', 'max:255'],
-            'contact' => ['required', 'regex:/^[2-9][0-9]{2}[2-9][0-9]{6}$/'], // US phone
-            'address' => ['required', 'string', 'max:255'],
-            'country' => ['required', 'exists:countries,id'],
-            'state'   => ['required', 'exists:states,id'],
-            'city'    => ['required', 'string', 'max:100'],
-            'zip_code'=> ['required', 'regex:/^\d{5}(-\d{4})?$/'], // US ZIP
-            //  dd('STORE METHOD HIT', $request->all())
-        ]);
+{
+    $validated = $request->validate([
+        'name'      => 'required|string|max:255',
+        'address'   => 'required|string',
+        'contact'   => 'required|string|max:20',
+        'email'     => 'required|email|unique:clubs,email',
 
-        Club::create([
-            'name'       => $validated['name'],
-            'email'      => $validated['email'],
-            'contact'    => $validated['contact'],
-            'address'    => $validated['address'],
-            'country_id' => $validated['country'],
-            'state_id'   => $validated['state'],
-            'city'       => $validated['city'],
-            'zip_code'   => $validated['zip_code'],
-            'status'     => $request->has('status') ? 1 : 0,
-            'password'   => Hash::make(Str::random(8)),
-        ]);
+        'country'   => 'required|integer|exists:countries,id',
+        'state'     => 'required|integer|exists:states,id',
 
-        return redirect()->route('admin.clubsindex')
-            ->with('success', 'Club registered successfully!');
-    }
+        'city'      => 'required|string|max:100',
+        'zip_code'  => 'required|string|max:10',
+        'status'    => 'nullable|boolean',
+    ]);
+
+    $randomPassword = Str::random(8);
+
+    Club::create([
+        'name'       => $request->name,
+        'address'    => $request->address,
+        'contact'    => $request->contact,
+        'email'      => $request->email,
+
+        'country_id' => $request->country,
+        'state_id'   => $request->state,
+
+        'city'       => $request->city,
+        'zip_code'   => $request->zip_code,
+        'status'     => $request->has('status'),
+        'password'   => Hash::make($randomPassword),
+    ]);
+
+    return redirect()
+        ->route('admin.clubsindex')
+        ->with('success', 'Club registered successfully!');
+}
+
 
     /**
-     * SHOW EDIT FORM
+     * Display the specified resource.
      */
-    public function edit(Club $club)
+    public function show(Club $club)
     {
-        $clubuser = $club; // 🔥 make variable match form blade
-        $countries = Country::orderBy('name')->get();
-        $states = State::where('country_id', $club->country_id)->get();
-
-        return view('admin.club.form', compact('clubuser', 'countries', 'states'));
+        //
     }
 
     /**
-     * UPDATE CLUB
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $clubuser = Club::findOrFail($id);
+        $countries = Country::orderBy('name')->get();
+        $states = State::where('country_id', $clubuser->country_id)->get();
+        return view('admin.club.form', compact('clubuser','countries','states'));
+    }
+
+
+    /**
+     * Update the specified resource in storage.
      */
     public function update(Request $request, Club $club)
     {
-        $validated = $request->validate([
-            'name'    => ['required', 'string', 'max:255'],
-            'email'   => ['required', 'email', Rule::unique('clubs')->ignore($club->id)],
-            'contact' => ['required', 'regex:/^[2-9][0-9]{2}[2-9][0-9]{6}$/'],
-            'address' => ['required', 'string'],
-            'country' => ['required', 'exists:countries,id'],
-            'state'   => ['required', 'exists:states,id'],
-            'city'    => ['required', 'string', 'max:100'],
-            'zip_code'=> ['required', 'regex:/^\d{5}(-\d{4})?$/'],
-        ]);
+       $request->validate([
+    'name' => 'required|string|max:255',
+    'address' => 'required|string',
+    'contact' => 'required|string|max:20',
+    'email' => [
+        'required',
+        'email',
+        Rule::unique('clubs')->ignore($club->id), // ignore current club id
+    ],
+    'country'   => 'required|integer|exists:countries,id',
+        'state'     => 'required|integer|exists:states,id',
+    'city' => 'required|string|max:100',
+    'zip_code' => 'required|string|max:10',
+    'status' => 'nullable|boolean',
+]);
 
         $club->update([
-            'name'       => $validated['name'],
-            'email'      => $validated['email'],
-            'contact'    => $validated['contact'],
-            'address'    => $validated['address'],
-            'country_id' => $validated['country'],
-            'state_id'   => $validated['state'],
-            'city'       => $validated['city'],
-            'zip_code'   => $validated['zip_code'],
-            'status'     => $request->has('status') ? 1 : 0,
-        ]);
+        'name'       => $request->name,
+        'address'    => $request->address,
+        'contact'    => $request->contact,
+        'email'      => $request->email,
+        'country_id' => $request->country,
+        'state_id'   => $request->state,
+        'city'       => $request->city,
+        'zip_code'   => $request->zip_code,
+        'status'     => $request->has('status'),
+    ]);
 
-        return redirect()->route('admin.clubsindex')
+        return redirect()
+            ->route('admin.clubsindex')
             ->with('success', 'Club updated successfully');
     }
 
     /**
-     * DELETE CLUB
+     * Remove the specified resource from storage.
      */
     public function destroy(Club $club)
     {
-        $club->delete();
+         $club->delete();
 
-        return redirect()->route('admin.clubsindex')
-            ->with('success', 'Club deleted successfully');
+         return response()->json([
+        'success' => true,
+        'message' => 'Club deleted successfully'
+        ]);
     }
-
-    /**
-     * AJAX — STATES BY COUNTRY
-     */
+    // Get states based on country ID
     public function getStates($countryId)
     {
         return response()->json(
-            State::where('country_id', $countryId)
-                ->orderBy('name')
-                ->get(['id', 'name'])
-        );
+        State::where('country_id', $countryId)
+            ->orderBy('name')
+            ->get(['id', 'name'])
+        );;
     }
 }

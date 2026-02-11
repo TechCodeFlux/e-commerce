@@ -13,7 +13,7 @@
         <img width="100" src="{{url('assets/images/logo.svg')}}" alt="logo">
     </a>
     <!-- ./ Logo -->
-    <div class="page-title">Overview</div>
+    <div class="page-title"> @yield('page-title', 'Overview')</div>
     <form class="search-form">
         <div class="input-group">
             <button class="btn btn-outline-light" type="button" id="button-addon1">
