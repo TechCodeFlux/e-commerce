@@ -33,7 +33,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link">
+                    <a class="nav-link"  class="nav-link" id="profile-tab" href="{{ route('admin.clubsindex') }}" role="tab" aria-controls="profile" aria-selected="true">
                         <i class="bi bi-box-arrow-right me-2"></i> Logout
                     </a>
                 </li>
