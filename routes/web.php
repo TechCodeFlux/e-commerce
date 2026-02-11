@@ -37,7 +37,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table (submit form)
     Route::put('clubsupdate/{club}', [ClubController::class, 'update'])->name('update'); //add club data (update form)
     Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
-
+    Route::delete('clubs/{club}', [ClubController::class, 'destroy'])->name('clubs.destroy');//delete club
 
     //admin dashboard contain clubmember details------------------------------------------------------------------------------------------------------
 
@@ -51,6 +51,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
 
     Route::get('club/profile/{id}',[ClubController::class,'profile'])->name('club.profile');
     Route::post('club/editprofile/{id}',[ClubController::class,'editprofile'])->name('club.editprofile');
+    
     //
 });
 

@@ -39,9 +39,8 @@ class ClubController extends Controller
                     <i class="fas fa-pencil-alt"></i>
                  </a>';
                 //delete button
-                $actions .= '<button type="button" class="btn btn-sm btn-outline-danger delete-club" onclick="deleteClub(' . $club->id . ')" title="Delete">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>';
+                $actions .= '<button type="button" class="btn btn-sm btn-outline-danger delete-club" data-id="'.$club->id.'"data-bs-toggle="modal"
+                            data-bs-target="#delete-modal" title="Delete"><i class="fas fa-trash-alt"></i></button>';
                 
               
 
@@ -133,19 +132,18 @@ class ClubController extends Controller
     public function update(Request $request, Club $club)
     {
     $request->validate([
-    'name' =>  'required|regex:/^[A-Za-z\s]+$/',
+    'name'    => 'required|regex:/^[A-Za-z\s\.\-]+$/',
     'address' => 'required|string',
-    'contact' => 'required|string|max:20',
-    'email' => [
-        'required',
-        'email',
-        Rule::unique('clubs')->ignore($club->id), // ignore current club id
-    ],
+    'contact' => 'required|regex:/^\+?[1-9]\d{6,14}$/',
+    'email'   => [
+                    'required',
+                    'email',        
+                ],
     'country'   => 'required|integer|exists:countries,id',
-        'state'     => 'required|integer|exists:states,id',
-    'city' => 'required|string|max:100',
-    'zip_code' => 'required|string|max:10',
-    'status' => 'nullable|boolean',
+    'state'     => 'required|integer|exists:states,id',
+    'city'      => 'required|string|max:100',
+    'zip_code'  => 'required|regex:/^[A-Za-z0-9\-\s]{3,10}$/',
+    'status'    => 'nullable|boolean',
    ]);
 
         $club->update([
@@ -170,7 +168,12 @@ class ClubController extends Controller
      */
     public function destroy(Club $club)
     {
-        //
+         $club->delete();
+
+         return response()->json([
+        'success' => true,
+        'message' => 'Club deleted successfully'
+        ]);
     }
     // Get states based on country ID
     public function getStates($countryId)
@@ -202,32 +205,31 @@ class ClubController extends Controller
         $countries = Country::orderBy('name')->get();
         $states = State::orderBy('name')->get();
         $request->validate([
-        'name' =>  'required|regex:/^[A-Za-z\s]+$/',
-        'address' => 'required|string',
-        'contact' => 'required|string|max:20',
-        'email' => [
-            'required',
-            'email',
-            //Rule::unique('clubs')->ignore($club->id), // ignore current club id
-        ],
-        'country'   => 'required|integer|exists:countries,id',
-        'state'     => 'required|integer|exists:states,id',
-        'city' => 'required|string|max:100',
-        'zip_code' => 'required|string|max:10',
-        'status' => 'nullable|boolean',
+            'name'    => 'required|regex:/^[A-Za-z\s\.\-]+$/',
+            'address' => 'required|string',
+            'contact' => 'required|regex:/^\+?[1-9]\d{6,14}$/',
+            'email'   => [
+                            'required',
+                            'email',        
+                        ],
+            'country'   => 'required|integer|exists:countries,id',
+            'state'     => 'required|integer|exists:states,id',
+            'city'      => 'required|string|max:100',
+            'zip_code'  => 'required|regex:/^[A-Za-z0-9\-\s]{3,10}$/',
+            'status'    => 'nullable|boolean',
         ]);
 
-        $club->update([
-        'name'       => $request->name,
-        'address'    => $request->address,
-        'contact'    => $request->contact,
-        'email'      => $request->email,
-        'country_id' => $request->country,
-        'state_id'   => $request->state,
-        'city'       => $request->city,
-        'zip_code'   => $request->zip_code,
-        'status'     => $request->has('status'),
-        ]);
+                $club->update([
+                'name'       => $request->name,
+                'address'    => $request->address,
+                'contact'    => $request->contact,
+                'email'      => $request->email,
+                'country_id' => $request->country,
+                'state_id'   => $request->state,
+                'city'       => $request->city,
+                'zip_code'   => $request->zip_code,
+                'status'     => $request->has('status'),
+            ]);
 
         
         return view('admin.club.profile',compact('club','countries','states'));

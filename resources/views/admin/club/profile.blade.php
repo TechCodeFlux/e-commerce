@@ -59,9 +59,10 @@
                                             <h6 class="card-title mb-4">Basic Information</h6>
                                             <form method="POST" action="{{ route('admin.club.editprofile',$club->id) }}">
                                             @csrf
+                                             {{-- @method('PUT') --}}
                                             <div class="row">
                                                 {{-- <div class="col-md-6"> --}}
-                                                    <div class="col-md-6 mb-3">
+                                                    <div class="col-md-4 mb-3">
                                                         <label class="form-label">Name</label>
                                                         <input type="text" class="form-control" name="name" value="{{ old('name', $club->name) }}">
                                                         @error('name')
@@ -73,7 +74,7 @@
                                                         <label class="form-label">Username</label>
                                                         <input type="text" class="form-control" value="adek-kembar">
                                                     </div> --}}
-                                                    <div class="col-md-6 mb-3">
+                                                    <div class="col-md-4 mb-3">
                                                         <label class="form-label">Email</label>
                                                         <input type="text" class="form-control" name="email" value="{{ old('email', $club->email) }}">
                                                         @error('email')
@@ -82,15 +83,15 @@
 
                                                     </div>
 
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Contact</label>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">Telephone no</label>
                                                         <input type="text" class="form-control" name="contact" value="{{ old('contact', $club->contact) }}">
                                                         @error('contact')
                                                             <small class="text-danger d-block mt-1">{{ $message }}</small>
                                                         @enderror
 
                                                     </div>
-                                                    <div class="col-md-6 mb-3">
+                                                    <div class="col-md-12 mb-3">
                                                         <label class="form-label">Address</label>
                                                         <textarea name="address" class="form-control 
                                                         @error('address') is-invalid @enderror">{{ old('address', $club->address ?? '') }}
@@ -161,7 +162,7 @@
 
                                 {{-- error display --}}
 
-                                <div class="mb-4">
+                                {{-- <div class="mb-4">
                                 @if ($errors->any())
                                 <div class="alert alert-danger">
                                 <ul>
@@ -171,7 +172,7 @@
                                 </ul>
                                 </div>
                                 @endif
-                                </div>
+                                </div> --}}
                             {{-- error display end --}}
 
                             
