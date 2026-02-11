@@ -43,9 +43,10 @@ class ClubMemberController extends Controller
                         <a href="'. route('admin.clubmember.editmember',$clubmember->id).'" class="btn btn-sm btn-outline-secondary" title="Edit">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
-                        <a href="'. route('admin.clubmember.deletemember',$clubmember->id).'" class="btn btn-sm btn-outline-danger" title="Delete">
-                            <i class="fas fa-trash-alt"></i>
-                        </a>
+                        
+                        <button type="button" class="btn btn-sm btn-outline-danger delete-club" onclick="deletemember(' . $clubmember->id . ')" title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
                     </div>
                 ';
             })
@@ -62,11 +63,11 @@ class ClubMemberController extends Controller
     {
         $club = Club::findOrFail($id);
         $clubmember = new ClubMember();
-        $address = new Address();
         $countries = Country::orderBy('name')->get();
+        $address= new Address();
         // $state=State::all();
         $message=" ";
-        return view('admin.clubmember.addmember', compact('club','clubmember','address','message','countries'));
+        return view('admin.clubmember.addmember', compact('club','clubmember','message','countries','address'));
     }
 
     public function storemember(Request $request, $id)

@@ -74,7 +74,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::post('club/storemember/{id}',[ClubMemberController::class,'storemember'])->name('clubmember.storemember');//store club members
     Route::get('club/editmember/{id}',[ClubMemberController::class,'editmember'])->name('clubmember.editmember');
     Route::post('club/updatemember/{id}',[ClubMemberController::class,'updatemember'])->name('clubmember.updatemember');
-    Route::get('club/deletemember/{id}',[ClubMemberController::class,'deletemember'])->name('clubmember.deletemember');
+    Route::delete('club/deletemember/{id}',[ClubMemberController::class,'deletemember'])->name('clubmember.deletemember');
 });
 
 
