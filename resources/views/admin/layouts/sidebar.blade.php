@@ -550,7 +550,7 @@
             
             
             <li>
-                <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs('admin.clubsindex','admin.club','admin.clubs.dashboard','admin.clubmember.viewmembers') ? 'active' : '' }}">
+                <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs('admin.clubsindex','admin.club','admin.clubs.dashboard','admin.clubmember.viewmembers','admin.club.profile') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>

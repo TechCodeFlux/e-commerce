@@ -49,7 +49,7 @@
                        
                         <div class="row">
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Name</label>
                                 <input type="text" name="name" class="form-control" placeholder="Name" 
                                     value="{{ old('name', $category->name ?? '') }}">

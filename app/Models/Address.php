@@ -15,6 +15,15 @@ class Address extends Model
         'city',
         'state_id',
         'country_id',
-        'pincode',
+        'zip_code',
     ];
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
 }
