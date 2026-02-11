@@ -13,8 +13,10 @@ use Illuminate\Validation\Rule;
 
 //datatables
 use App\Models\Club;
+use App\Models\ClubMember;
 use App\Models\Country;
 use App\Models\State;
+use App\Models\Address;
 
 class ClubController extends Controller
 {
@@ -24,14 +26,7 @@ class ClubController extends Controller
     public function index(Request $request)
     {
          if($request->ajax()){
-            $club = Club::query()
-            ->leftJoin('countries', 'countries.id', '=', 'clubs.country_id')
-            ->leftJoin('states', 'states.id', '=', 'clubs.state_id')
-            ->select([
-                'clubs.*',
-                'countries.name as country_name',
-                'states.name as state_name'
-            ]);
+            $club=Club::query();
             // return DataTables::eloquent($club)
             return datatables()
     ->eloquent($club)
@@ -45,7 +40,9 @@ class ClubController extends Controller
                  </a>';
                 //delete button
                 $actions .= '<button type="button" class="btn btn-sm btn-outline-danger delete-club" data-id="'.$club->id.'"data-bs-toggle="modal"
-                data-bs-target="#delete-modal" title="Delete"><i class="fas fa-trash-alt"></i></button>';
+                            data-bs-target="#delete-modal" title="Delete"><i class="fas fa-trash-alt"></i></button>';
+                
+              
 
                 $actions .= '</div>';
                 return  $actions;
@@ -54,11 +51,8 @@ class ClubController extends Controller
 
         return view('admin.club.clubview');
     }
-    //dashboard for each club
-    public function dashboard(Club $club) 
-    {
-        return view('admin.club.detail', compact('club'));
-    }
+
+    
 
 
     /**
@@ -76,16 +70,17 @@ class ClubController extends Controller
     public function store(Request $request)
 {
     $validated = $request->validate([
-        'name'      => 'required|string|max:255',
+        'name'      =>'required|string|regex:/^[A-Za-z\s]+$/',
+    
         'address'   => 'required|string',
-        'contact'   => 'required|string|max:20',
+        'contact'   => 'required|string|max:20|digits_between:1,10',
         'email'     => 'required|email|unique:clubs,email',
 
         'country'   => 'required|integer|exists:countries,id',
         'state'     => 'required|integer|exists:states,id',
 
         'city'      => 'required|string|max:100',
-        'zip_code'  => 'required|string|max:10',
+        'zip_code'  => 'required|integer|digits:6',
         'status'    => 'nullable|boolean',
     ]);
 
@@ -110,7 +105,6 @@ class ClubController extends Controller
         ->route('admin.clubsindex')
         ->with('success', 'Club registered successfully!');
 }
-
 
     /**
      * Display the specified resource.
@@ -137,21 +131,20 @@ class ClubController extends Controller
      */
     public function update(Request $request, Club $club)
     {
-       $request->validate([
-    'name' => 'required|string|max:255',
+    $request->validate([
+    'name'    => 'required|regex:/^[A-Za-z\s\.\-]+$/',
     'address' => 'required|string',
-    'contact' => 'required|string|max:20',
-    'email' => [
-        'required',
-        'email',
-        Rule::unique('clubs')->ignore($club->id), // ignore current club id
-    ],
+    'contact' => 'required|regex:/^\+?[1-9]\d{6,14}$/',
+    'email'   => [
+                    'required',
+                    'email',        
+                ],
     'country'   => 'required|integer|exists:countries,id',
-        'state'     => 'required|integer|exists:states,id',
-    'city' => 'required|string|max:100',
-    'zip_code' => 'required|string|max:10',
-    'status' => 'nullable|boolean',
-]);
+    'state'     => 'required|integer|exists:states,id',
+    'city'      => 'required|string|max:100',
+    'zip_code'  => 'required|regex:/^[A-Za-z0-9\-\s]{3,10}$/',
+    'status'    => 'nullable|boolean',
+   ]);
 
         $club->update([
         'name'       => $request->name,
@@ -191,4 +184,56 @@ class ClubController extends Controller
             ->get(['id', 'name'])
         );;
     }
-}
+
+    public function dashboard(Club $club)
+    {
+        return view('admin.club.detail', compact('club'));
+    }
+
+    public function profile($id)
+    {
+        $club=Club::findorfail($id);
+        $countries = Country::orderBy('name')->get();
+        $states = State::orderBy('name')->get();
+        return view('admin.club.profile',compact('club','countries','states'));
+    }
+
+    public function editprofile(Request $request,$id)
+    {
+
+        $club=Club::findorfail($id);
+        $countries = Country::orderBy('name')->get();
+        $states = State::orderBy('name')->get();
+        $request->validate([
+            'name'    => 'required|regex:/^[A-Za-z\s\.\-]+$/',
+            'address' => 'required|string',
+            'contact' => 'required|regex:/^\+?[1-9]\d{6,14}$/',
+            'email'   => [
+                            'required',
+                            'email',        
+                        ],
+            'country'   => 'required|integer|exists:countries,id',
+            'state'     => 'required|integer|exists:states,id',
+            'city'      => 'required|string|max:100',
+            'zip_code'  => 'required|regex:/^[A-Za-z0-9\-\s]{3,10}$/',
+            'status'    => 'nullable|boolean',
+        ]);
+
+                $club->update([
+                'name'       => $request->name,
+                'address'    => $request->address,
+                'contact'    => $request->contact,
+                'email'      => $request->email,
+                'country_id' => $request->country,
+                'state_id'   => $request->state,
+                'city'       => $request->city,
+                'zip_code'   => $request->zip_code,
+                'status'     => $request->has('status'),
+            ]);
+
+        
+        return view('admin.club.profile',compact('club','countries','states'));
+    }
+    
+
+}       

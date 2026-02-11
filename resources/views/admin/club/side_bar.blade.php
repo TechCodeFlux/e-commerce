@@ -30,7 +30,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link">
+                    <a class="nav-link {{ request()->routeIs('admin.club.profile') ? 'active' : '' }}" id="profile-tab" href="{{ route('admin.club.profile',$club->id) }}" role="tab" aria-controls="profile" aria-selected="true">
+
                         <i class="bi bi-person me-2"></i> Profile
                     </a>
                 </li>

@@ -75,6 +75,8 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('club/editmember/{id}',[ClubMemberController::class,'editmember'])->name('clubmember.editmember');
     Route::post('club/updatemember/{id}',[ClubMemberController::class,'updatemember'])->name('clubmember.updatemember');
     Route::delete('club/deletemember/{id}',[ClubMemberController::class,'deletemember'])->name('clubmember.deletemember');
+    Route::get('club/profile/{id}',[ClubController::class,'profile'])->name('club.profile');
+    Route::post('club/editprofile/{id}',[ClubController::class,'editprofile'])->name('club.editprofile');
 });
 
 
