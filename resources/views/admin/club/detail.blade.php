@@ -2,7 +2,8 @@
 @section('page-title', $club->name)
 
 @section('head')
-@endsection
+
+@endsection 
 
 @section('content')
     <div class="mb-4">
@@ -39,6 +40,7 @@
                                     <div class="row">
                                         <div class="col-md-6"> 
                                             <div class="card border-0">
+                                            <div class="card border-0"> 
                                                 <a href="">
 
                                                     <div class="card-body text-center">

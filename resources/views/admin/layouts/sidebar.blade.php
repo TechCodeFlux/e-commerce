@@ -1,4 +1,3 @@
-
 <!-- sidebars -->
 
 <!-- notifications sidebar -->
@@ -485,11 +484,11 @@
 <!-- menu -->
 <div class="menu">
     <div class="menu-header">
-        <a href="{{route('admin.dashboard')}}" class="menu-header-logo">
-            <img src="{{url('assets/images/grabit/logo.png')}}" alt="logo">
-        <span style="font-size:25px; font-family:'Montserrat', sans-serif; font-weight:530; font-style:italic; letter-spacing:4px;">
-    GRABiT
-</span>
+        <a href="{{route('admin.dashboard')}}" class="menu-header-logo" style="display:flex; align-items:center; gap:0.1px;">
+            <img src="{{url('assets/images/grabit/logo1.png')}}" alt="logo" style="width:80px; height:auto;">
+        <span style="font-size:25px; font-family:'Calibri', sans; color:black; font-weight:530; font-style:italic; letter-spacing:2px;">
+        <b>GRABiT</b>
+        </span>
         </a>
         <a href="{{route('admin.dashboard')}}" class="btn btn-sm menu-close-btn">
             <i class="bi bi-x"></i>
@@ -540,7 +539,7 @@
         <ul>
             {{-- <li class="menu-divider">E-Commerce</li> --}}
             <li>
-                <a href="{{route('admin.dashboard')}}" class="{{ request()->routeIs(patterns: 'admin.dashboard') ? 'active' : '' }}">
+                <a href="{{route('admin.dashboard')}}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>
@@ -551,22 +550,50 @@
             
             
             <li>
-                <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs('admin.clubsindex','admin.club') ? 'active' : '' }}">
+                <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs('admin.clubsindex','admin.club','admin.clubs.dashboard','admin.clubmember.viewmembers') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
                     <span>Club</span>
                 </a>
             </li>
-            
+
             <li>
-                <a href="{{route('admin.dashboard')}}" class="{{ request()->routeIs(patterns: 'admin.dashboard') ? 'active' : '' }}">
+                <a  href="">
                     <span class="nav-link-icon">
-                        <i class="bi bi-person-badge"></i>
+                        <i class="bi bi-box-seam me-2"></i>
                     </span>
-                    <span>Orders</span>
+                    <span>Products</span>
                 </a>
             </li>
+            <li>
+                <a class="{{ request()->routeIs('admin.category_management.show_category')? 'active' : '' }}"  
+                    href="{{ route('admin.category_management.show_category') }}">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-tags me-2"></i>
+                    </span>
+                    <span>Categoies</span>
+                </a>
+            </li>
+             <li>
+                <a  href="">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-sliders me-2"></i>
+                    </span>
+                    <span>Option</span>
+                </a>
+            </li>
+                <li>
+                <a  href="">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-diagram-3 me-2"></i>
+                    </span>
+                    <span>Varient</span>
+                </a>
+            </li>
+             
+            
+           
 
             
             

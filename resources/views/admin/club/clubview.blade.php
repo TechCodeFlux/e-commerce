@@ -46,7 +46,7 @@
             </div>
         </form>
     </div>
-<br>
+
     <div class="ms-auto">
         <a href="{{ route('admin.club') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle me-1"></i> Add Club
@@ -126,10 +126,10 @@ $(document).ready(function () {
             {data: 'city'},
             {data: 'zip_code'},
             {data: 'action', orderable:false, searchable:false}
-        ],
-        searching: false,     // removes the Search box
+        ],searching: false,     // removes the Search box
         lengthChange: false,  // removes the "Show X entries" dropdown
         dom: 'rtip'           // only table, info, and pagination
+        
     });
 
 
@@ -145,6 +145,7 @@ $(document).ready(function () {
     $('#pageLength').change(function () {
         clubTable.page.len($(this).val()).draw();
     });
+
 
     // OPEN DELETE MODAL
     $(document).on('click', '.delete-club', function () {
@@ -178,7 +179,10 @@ $(document).ready(function () {
         });
 
     });
-$('.dataTables_paginate').addClass('d-flex justify-content-center');
+
+    $('.dataTables_paginate').addClass('d-flex justify-content-center');
+
+
 });
 
 </script>

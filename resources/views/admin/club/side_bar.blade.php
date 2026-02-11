@@ -7,11 +7,44 @@
                         <i class="bi-graph-up me-2"></i> Dashboard
                     </a>
                 </li>
+                    <a class="nav-link {{ request()->routeIs('admin.clubs.dashboard') ? 'active' : '' }}"
+                    href="{{ route('admin.clubs.dashboard', $club->id) }}">
+                        <i class="bi bi-graph-up me-2"></i> Dashboard
+                    </a>
+
+                </li>
+                
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="profile-tab" href="" role="tab" aria-controls="profile" aria-selected="true">
                         <i class="bi-people me-2"></i> Club Members
                     </a>
                 </li>
+
+                
+               <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="bi bi-receipt me-2"></i> Orders
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="bi bi-globe me-2"></i> Microsites
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="bi bi-person me-2"></i> Profile
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </a>
+                </li>
+
                
             </ul>
         </div>
