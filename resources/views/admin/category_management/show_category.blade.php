@@ -1,5 +1,5 @@
 @extends('admin.components.app')
-
+@section('page-title','Categories')
 @section('content')
     <div class="mb-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">

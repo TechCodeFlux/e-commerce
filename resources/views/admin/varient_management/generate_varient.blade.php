@@ -33,21 +33,23 @@
                         {{-- Added align-items-end to align button with inputs --}}
                       <div class="row align-items-end">
     <div class="col-md-5 mb-3">
-        <label class="form-label">Color (Hold Ctrl to select multiple)</label>
-        <select name="option_color[]" id="option_color" class="form-select" multiple>
+        <label class="form-label">Color</label>
+        <select id="option_color" class="form-select">
+            <option value="">Select Color</option>
             @foreach($options->unique('color') as $option)
                 <option value="{{ $option->color }}">{{ $option->color }}</option>
             @endforeach
-        </select>
+</select>
     </div>
 
     <div class="col-md-5 mb-3">
-        <label class="form-label">Size (Hold Ctrl to select multiple)</label>
-        <select name="option_size[]" id="option_size" class="form-select" multiple>
+        <label class="form-label">Size </label>
+        <select id="option_size" class="form-select">
+            <option value="">Select Size</option>
             @foreach($options->unique('size') as $option)
-                <option value="{{ $option->size }}">{{ $option->size }}</option>
-            @endforeach
-        </select>
+           <option value="{{ $option->size }}">{{ $option->size }}</option>
+    @endforeach
+</select>
     </div>
 
     <div class="col-md-2 mb-3">
@@ -61,11 +63,7 @@
 
                             {{-- Generate Button --}}
                             {{-- Removed 'card-body' class from here to fix alignment padding issues --}}
-                            <div class="col-md-2 mb-3">
-                                <button type="submit" id="btn-generate-matrix" class="btn btn-secondary w-100">
-                                    Generate
-                                </button>
-                            </div>
+                           
                         </div> 
                         <div id="variant-matrix-container" class="mt-4"></div>
 
@@ -92,57 +90,83 @@
 
 @section('script')
 <script>
+    const EXISTING_VARIANTS = @json($variants);
 
-    
-$(document).ready(function() {
-    $('#btn-generate-matrix').on('click', function() {
-        const colors = $('#option_color').val(); // Array of selected colors
-        const sizes = $('#option_size').val();   // Array of selected sizes
+$(document).ready(function () {
 
-        if (!colors.length || !sizes.length) {
-            alert('Please select at least one Color and one Size.');
+    $('#btn-generate-matrix').on('click', function () {
+
+        let colorValue = $('#option_color').val(); // "red,white"
+        let sizeValue  = $('#option_size').val();  // "S,M,L"
+
+        if (!colorValue || !sizeValue) {
+            alert('Please select Color and Size');
             return;
         }
 
-        let tableHtml = `
-            <table class="table table-bordered bg-white shadow-sm">
+        let colors = colorValue.split(',').map(c => c.trim());
+        let sizes  = sizeValue.split(',').map(s => s.trim());
+
+        let html = `
+            <table class="table table-bordered mt-3">
                 <thead class="table-light">
                     <tr>
                         <th>Color</th>
                         <th>Size</th>
-                        <th style="width: 200px;">Stock</th>
+                        <th>Stock</th>
                     </tr>
                 </thead>
-                <tbody>`;
+                <tbody>
+        `;
 
-        colors.forEach(function(color) {
-            sizes.forEach(function(size) {
-                tableHtml += `
+        let found = false;
+
+        EXISTING_VARIANTS.forEach(function (variant) {
+
+            if (
+                colors.includes(variant.color) &&
+                sizes.includes(variant.size)
+            ) {
+                found = true;
+
+                html += `
                     <tr>
                         <td>
-                            <input type="hidden" name="variants[${color}_${size}][color]" value="${color}">
-                            ${color}
+                            ${variant.color}
+                            <input type="hidden" name="variants[${variant.id}][color]" value="${variant.color}">
                         </td>
                         <td>
-                            <input type="hidden" name="variants[${color}_${size}][size]" value="${size}">
-                            ${size}
+                            ${variant.size}
+                            <input type="hidden" name="variants[${variant.id}][size]" value="${variant.size}">
                         </td>
                         <td>
-                            <input type="number" name="variants[${color}_${size}][stock]" 
-                                   class="form-control" placeholder="0" min="0" required>
+                            <input type="number"
+                                   class="form-control"
+                                   name="variants[${variant.id}][stock]"
+                                   value="${variant.stock}"
+                                   min="0">
                         </td>
-                    </tr>`;
-            });
+                    </tr>
+                `;
+            }
         });
 
-        tableHtml += `</tbody></table>`;
-        $('#variant-matrix-container').html(tableHtml);
+        if (!found) {
+            html += `
+                <tr>
+                    <td colspan="3" class="text-center text-muted">
+                        No variants found for selected options
+                    </td>
+                </tr>
+            `;
+        }
+
+        html += `</tbody></table>`;
+
+        $('#variant-matrix-container').html(html);
     });
+
 });
-
-
-
-
 
 
 

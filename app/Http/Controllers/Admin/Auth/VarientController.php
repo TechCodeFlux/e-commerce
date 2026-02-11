@@ -23,44 +23,17 @@ class VarientController extends Controller
 }
 
 
-    public function generate_varient()
+public function generate_varient()
 {
-    $varient = new Varient();
-     $options = Option::orderBy('color')->get(); 
+    $varient  = new Varient();
+    $options  = Option::orderBy('color')->get();
+    $variants = Varient::whereNull('deleted_at')->get();
 
     return view(
         'admin.varient_management.generate_varient',
-        compact('varient','options')
+        compact('varient', 'options', 'variants')
     );
 }
-
-
-public function add_varient(Request $request)
-{
-    // Validate that the variants array exists
-    $request->validate([
-        'variants' => 'required|array',
-        'variants.*.stock' => 'required|numeric|min:0'
-    ]);
-
-    foreach ($request->variants as $item) {
-        Varient::updateOrCreate(
-            [
-                'color' => $item['color'],
-                'size'  => $item['size'],
-                // Add product_id here if applicable
-            ],
-            [
-                'stock' => $item['stock']
-            ]
-        );
-    }
-
-    return response()->json(['message' => 'Variants generated and saved successfully!']);
-}
-
-    
-
 
 
     

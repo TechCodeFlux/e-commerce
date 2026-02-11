@@ -1,4 +1,5 @@
 @extends('admin.components.app')
+@section('page-title', $category->id ? 'Edit Category form' : 'Add Category Form')
 
 @section('content')
 
@@ -25,10 +26,6 @@
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
 
-            <h6 class="card-title mb-4 text-center">
-                {{ $category->id ? 'Edit' : 'Add' }} Category Form
-            </h6>
-
             @if(session('success'))
                 <div class="alert alert-success text-center">
                     {{ session('success') }}
@@ -49,7 +46,7 @@
                        
                         <div class="row">
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Name</label>
                                 <input type="text" name="name" class="form-control" placeholder="Name" 
                                     value="{{ old('name', $category->name ?? '') }}">
