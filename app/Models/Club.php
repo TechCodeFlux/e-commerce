@@ -11,4 +11,14 @@ class Club extends Authenticatable
     use SoftDeletes;
 
     protected $fillable =  ['name','email', 'address','country_id','state_id','contact','city','status','zip_code','password'];
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
 }

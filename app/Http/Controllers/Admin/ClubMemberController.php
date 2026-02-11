@@ -178,4 +178,6 @@ class ClubMemberController extends Controller
         $clubmember->delete(); 
         return redirect()->back()->with('success', 'club member as deleted successfully');
     }
+
+    
 }

@@ -12,6 +12,31 @@
                         <i class="bi-people me-2"></i> Club Members
                     </a>
                 </li>
+
+                               <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="bi bi-receipt me-2"></i> Orders
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" >
+                        <i class="bi bi-globe me-2"></i> Microsites
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" href="{{ route('admin.club.profile',$club->id) }}" role="tab" aria-controls="profile" aria-selected="true">
+
+                        <i class="bi bi-person me-2"></i> Profile
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </a>
+                </li>
                
             </ul>
         </div>

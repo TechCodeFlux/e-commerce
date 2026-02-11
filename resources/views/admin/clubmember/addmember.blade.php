@@ -182,7 +182,7 @@
             </div>
         </div>
 
-        @section('script')
+@section('script')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 

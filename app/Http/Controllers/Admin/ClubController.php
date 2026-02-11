@@ -187,7 +187,51 @@ class ClubController extends Controller
         return view('admin.club.detail', compact('club'));
     }
 
-  
+    public function profile($id)
+    {
+        $club=Club::findorfail($id);
+        $countries = Country::orderBy('name')->get();
+        $states = State::orderBy('name')->get();
+        return view('admin.club.profile',compact('club','countries','states'));
+    }
+
+    public function editprofile(Request $request,$id)
+    {
+
+        $club=Club::findorfail($id);
+        $countries = Country::orderBy('name')->get();
+        $states = State::orderBy('name')->get();
+        $request->validate([
+        'name' =>  'required|regex:/^[A-Za-z\s]+$/',
+        'address' => 'required|string',
+        'contact' => 'required|string|max:20',
+        'email' => [
+            'required',
+            'email',
+            Rule::unique('clubs')->ignore($club->id), // ignore current club id
+        ],
+        'country'   => 'required|integer|exists:countries,id',
+        'state'     => 'required|integer|exists:states,id',
+        'city' => 'required|string|max:100',
+        'zip_code' => 'required|string|max:10',
+        'status' => 'nullable|boolean',
+        ]);
+
+        $club->update([
+        'name'       => $request->name,
+        'address'    => $request->address,
+        'contact'    => $request->contact,
+        'email'      => $request->email,
+        'country_id' => $request->country,
+        'state_id'   => $request->state,
+        'city'       => $request->city,
+        'zip_code'   => $request->zip_code,
+        'status'     => $request->has('status'),
+        ]);
+
+        
+        return view('admin.club.profile',compact('club','countries','states'));
+    }
     
 
 }   
