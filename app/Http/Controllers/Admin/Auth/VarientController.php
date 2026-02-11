@@ -34,6 +34,35 @@ class VarientController extends Controller
     );
 }
 
+
+public function add_varient(Request $request)
+{
+    // Validate that the variants array exists
+    $request->validate([
+        'variants' => 'required|array',
+        'variants.*.stock' => 'required|numeric|min:0'
+    ]);
+
+    foreach ($request->variants as $item) {
+        Varient::updateOrCreate(
+            [
+                'color' => $item['color'],
+                'size'  => $item['size'],
+                // Add product_id here if applicable
+            ],
+            [
+                'stock' => $item['stock']
+            ]
+        );
+    }
+
+    return response()->json(['message' => 'Variants generated and saved successfully!']);
+}
+
+    
+
+
+
     
     public function store(Request $request)
 {

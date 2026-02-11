@@ -28,7 +28,7 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Size</label>
-                                <input type="text" name="size" class="form-control" value="{{ old('size', $varient->size ?? '') }}"  
+                                <input type="text" name="size" class="form-control" placeholder="Size"  value="{{ old('size', $varient->size ?? '') }}"  
                                     >
                                 @error('size')
                                     <small class="text-danger d-block mt-1">{{ $message }}</small>

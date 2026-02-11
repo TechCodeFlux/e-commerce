@@ -103,6 +103,7 @@ Route::get('varient_management/show_single/{id}', [VarientController::class, 'si
 
 Route::post('varient_management/change-status', [VarientController::class, 'changeStatus'])->name('varient_management.change-status');
 
+Route::post('varient_management/add_varient', [VarientController::class, 'add_varient'])->name('varient_management.add_varient');
 });
 
 

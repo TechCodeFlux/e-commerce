@@ -53,11 +53,7 @@ class CategoryController extends Controller
              ->addColumn('status', function (Category $category) {
 
                 return '
-                 <span
-                         id="status-label-'.$category->id.'" 
-                          class=" '.( $category->status ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' ).' ">
-                            '.($category->status ? 'Active' : 'Inactive' ).'
-                 </span>
+                
                        
                         <div class="form-check form-switch">
                                      <input 
@@ -76,32 +72,25 @@ class CategoryController extends Controller
 
 
                 //view button
-                $actions .= '<button 
-                                     type="button"
-                                     class="btn btn-sm view-category"
-                                     data-id="'.$category->id.'"
-                                     data-bs-toggle="modal"
-                                     data-bs-target="#productListModal">
-                                                             <i class="bi bi-eye-fill btn btn-outline-warning btn-sm"></i>
-                            </button>';
+               
 
 
                 //edit button
                 $actions .= '<a
                                 href="' . route('admin.category_management.edit_category_index', $category->id) . '"
-                                class="btn btn-sm 
+                                 class="bi-pencil-fill btn btn-sm btn-outline-secondary me-2"
                                 title="Edit">
-                                                              <i class="bi bi-pencil-square btn btn-outline-success btn btn-sm"></i>
+                                    <i class="fas fa-pencil-alt"></i> 
                             </a>';
 
 
                 //delete button
                 $actions .= '<button 
                                  type="button"
-                                 class="btn btn-sm  delete-club"
+                                 class="bi-trash-fill btn btn-sm btn-outline-danger delete-club-member"
                                  onclick="deleteCategory(' . $category->id . ')"
                                  title="Delete">
-                                                              <i class="bi-trash-fill btn btn-outline-danger btn btn-sm "></i>
+                                                              <i class="fas fa-trash-alt"></i>
                             </button>';
                 
               

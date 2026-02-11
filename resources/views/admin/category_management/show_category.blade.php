@@ -66,29 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Delete category</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form>
-            <div class="modal-body">
-                    <!-- <input type="hidden" name="_method" value="DELETE"> -->
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input type="hidden" id="deleteId" name="deleteId">
-                        <p>Are you sure you want to delete this category</p>
-                        <div class="modal-footer">
-                        
-                            <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-sm btn-danger btn_delete_club_member" data-loading-text="">Delete</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>   
-</div> 
+       
 
 
 
@@ -130,6 +108,42 @@
             </div>
         </div>
     </div>
+
+
+
+    {{-- modal --}}
+
+        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="deleteId">
+                <p>Are you sure you want to delete this category?</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+
+                <!-- ✅ class used in JS -->
+                <button type="button" class="btn btn-sm btn-danger btn_delete_club_member">
+                    Delete
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+    {{-- end modal --}}
 @section('script')
 <script src="{{ url('libs/dataTable/datatables.min.js') }}"></script>
 <script src="{{ url('libs/range-slider/js/ion.rangeSlider.min.js') }}"></script>
@@ -240,34 +254,58 @@ $(document).ready(function() {
 
 
 
-
-
 function deleteCategory(id) {
-
-    if (!confirm("Are you sure you want to delete this category?")) return;
-
-    $.ajax({
-        url: "{{ url('admin/category_management/destroy_category') }}/" + id,
-        type: "POST",
-        data: {
-            _token: "{{ csrf_token() }}",
-            _method: "DELETE"
-        },
-        success: function (response) {
-            alert(response.message);
-            $('#club').DataTable().ajax.reload(null, false);
-        },
-        error: function (xhr) {
-            console.log(xhr.responseText);
-            alert("Delete failed");
-        }
-    });
+    $('#deleteId').val(id);
+    const modal = new bootstrap.Modal(document.getElementById('delete-modal'));
+    modal.show();
 }
 
+$(document).ready(function () {
 
+    $(document).on('click', '.btn_delete_club_member', function () {
 
+        let id = $('#deleteId').val();
+        let $btn = $(this);
 
+        if (!id) {
+            Swal.fire('Error', 'Invalid category ID', 'error');
+            return;
+        }
 
+        $btn.prop('disabled', true).text('Deleting...');
+
+        $.ajax({
+            url: "{{ url('admin/category_management/destroy_category') }}/" + id,
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                _method: "DELETE"
+            },
+           success: function () {
+
+                const modalEl = document.getElementById('delete-modal');
+                const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                if (modalInstance) modalInstance.hide();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Deleted!',
+                    text: 'Category deleted successfully',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload(); 
+                });
+            },
+            error: function (xhr) {
+                Swal.fire('Error', 'Delete failed', 'error');
+                console.log(xhr.responseText);
+            },
+            complete: function () {
+                $btn.prop('disabled', false).text('Delete');
+            }
+        });
+    });
+});
 
 
 //delete club member
