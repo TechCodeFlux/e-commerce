@@ -46,7 +46,7 @@
             </div>
         </form>
     </div>
-
+<br>
     <div class="ms-auto">
         <a href="{{ route('admin.club') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle me-1"></i> Add Club

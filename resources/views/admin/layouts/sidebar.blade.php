@@ -540,7 +540,7 @@
         <ul>
             {{-- <li class="menu-divider">E-Commerce</li> --}}
             <li>
-                <a href="{{route('admin.dashboard')}}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                <a href="{{route('admin.dashboard')}}" class="{{ request()->routeIs(patterns: 'admin.dashboard') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>
@@ -559,7 +559,14 @@
                 </a>
             </li>
             
-           
+            <li>
+                <a href="{{route('admin.dashboard')}}" class="{{ request()->routeIs(patterns: 'admin.dashboard') ? 'active' : '' }}">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-person-badge"></i>
+                    </span>
+                    <span>Orders</span>
+                </a>
+            </li>
 
             
             
