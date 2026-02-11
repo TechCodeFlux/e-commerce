@@ -43,9 +43,10 @@ class ClubMemberController extends Controller
                         <a href="'. route('admin.clubmember.editmember',$clubmember->id).'" class="btn btn-sm btn-outline-secondary" title="Edit">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
-                        <a href="'. route('admin.clubmember.deletemember',$clubmember->id).'" class="btn btn-sm btn-outline-danger" title="Delete">
-                            <i class="fas fa-trash-alt"></i>
-                        </a>
+                        
+                        <button type="button" class="btn btn-sm btn-outline-danger delete-club" onclick="deletemember(' . $clubmember->id . ')" title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
                     </div>
                 ';
             })
