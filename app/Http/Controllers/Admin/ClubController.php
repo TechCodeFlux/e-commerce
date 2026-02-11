@@ -26,7 +26,14 @@ class ClubController extends Controller
     public function index(Request $request)
     {
          if($request->ajax()){
-            $club=Club::query();
+            $club = Club::query()
+            ->leftJoin('countries', 'countries.id', '=', 'clubs.country_id')
+            ->leftJoin('states', 'states.id', '=', 'clubs.state_id')
+            ->select([
+                'clubs.*',
+                'countries.name as country_name',
+                'states.name as state_name'
+    ]);
             // return DataTables::eloquent($club)
             return datatables()
     ->eloquent($club)
@@ -131,7 +138,7 @@ class ClubController extends Controller
      */
     public function update(Request $request, Club $club)
     {
-    $request->validate([
+        $request->validate([
     'name'    => 'required|regex:/^[A-Za-z\s\.\-]+$/',
     'address' => 'required|string',
     'contact' => 'required|regex:/^\+?[1-9]\d{6,14}$/',
@@ -144,7 +151,7 @@ class ClubController extends Controller
     'city'      => 'required|string|max:100',
     'zip_code'  => 'required|regex:/^[A-Za-z0-9\-\s]{3,10}$/',
     'status'    => 'nullable|boolean',
-   ]);
+]);
 
         $club->update([
         'name'       => $request->name,
