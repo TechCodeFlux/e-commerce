@@ -210,7 +210,10 @@
                         $clubTable.page.len($(this).val()).draw();
                     })
                     $('#pageLength').val($clubTable.page.len());
+
+                    $('.dataTables_paginate').addClass('d-flex justify-content-center');
                 })
+                
                 //delete club member
                 // $('table').off('click').on('click','.delete-club-member',function(){
                 //     var href=$(this).data('href');

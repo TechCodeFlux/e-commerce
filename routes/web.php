@@ -18,14 +18,14 @@ use App\Http\Controllers\Admin\CategoryController;
 // use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
 
 //arjun
-// Route::get('/', function () {return view('club.auth.login');})->name('club.login');
+Route::get('/', function () {return view('club.auth.login');})->name('club.login');
 // Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
 // Route::post('/logout', [ClubLoginController::class, 'logout'])->name('club.logout');
 
-// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-//     Auth::routes(['register' => false]); 
+Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+    Auth::routes(['register' => false]); 
 //     //dashboard controller
-//     //Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
+    //Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
 //     //club controller
 //     // Route::get('clubmembers', [ClubMemberController::class, 'index'])->name('clubmembersindex'); //view club members in table
 //     // Route::get('clubmembersform', [ClubMemberController::class, 'create'])->name('addclubmember'); //To add club member data form(submit form)
@@ -33,7 +33,7 @@ use App\Http\Controllers\Admin\CategoryController;
 //     // // Route::put('clubmembersupdate/{club}', [ClubMemberController::class, 'update'])->name('update'); //add club member data (update form)
 //     // Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
 
-// });
+});
 //pauljo
 // Admin login
 // Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
