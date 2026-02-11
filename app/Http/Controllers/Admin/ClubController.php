@@ -202,9 +202,9 @@ class ClubController extends Controller
     {
 
         $club=Club::findorfail($id);
-        $countries = Country::orderBy('name')->get();
-        $states = State::orderBy('name')->get();
-        $request->validate([
+        // $countries = Country::orderBy('name')->get();
+        // $states = State::orderBy('name')->get();
+         $request->validate([
             'name'    => 'required|regex:/^[A-Za-z\s\.\-]+$/',
             'address' => 'required|string',
             'contact' => 'required|regex:/^\+?[1-9]\d{6,14}$/',
@@ -232,7 +232,9 @@ class ClubController extends Controller
             ]);
 
         
-        return view('admin.club.profile',compact('club','countries','states'));
+        return redirect()
+        ->route('admin.club.profile', $club->id) // or profile route
+        ->with('success', 'Profile updated successfully!');
     }
     
 
