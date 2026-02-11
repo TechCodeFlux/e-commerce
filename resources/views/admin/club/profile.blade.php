@@ -179,7 +179,7 @@
                                                 </div>
                                             </div>
                                             @endif
-
+                                {{-- end for the success  --}}
 
                             
                             
@@ -235,7 +235,7 @@
                 </script>
                 @endsection
 
-
+            {{-- success modal javascript --}}
                 @if(session('success'))
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
@@ -253,7 +253,7 @@
                     });
                 </script>
                 @endif
-
+             {{--end of success modal in javascript  --}}
 
 
 
