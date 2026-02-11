@@ -208,7 +208,7 @@ class ClubController extends Controller
         'email' => [
             'required',
             'email',
-            Rule::unique('clubs')->ignore($club->id), // ignore current club id
+            //Rule::unique('clubs')->ignore($club->id), // ignore current club id
         ],
         'country'   => 'required|integer|exists:countries,id',
         'state'     => 'required|integer|exists:states,id',
