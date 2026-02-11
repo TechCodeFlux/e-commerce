@@ -10,8 +10,8 @@ use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
 use App\Http\Controllers\ClubMember\DashboardController;
-// use App\Http\Controllers\ClubMember\OrderController;
-// use App\Http\Controllers\ClubMember\ProfileController;
+use App\Http\Controllers\ClubMember\OrderController;
+use App\Http\Controllers\ClubMember\ProfileController;
 
 //arjun // club //
 Route::get('/club', function () {return view('club.adduser');})->name('club.login');
@@ -24,7 +24,6 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
 Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
 
 });
-
 //pauljo
 // Admin login
 Route::get('/', function () {
@@ -53,8 +52,22 @@ Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name(
 Route::delete('/clubs/{club}', [ClubController::class, 'destroy'])
  ->name('deleteclub');
 });
+//admin club controller
+// CLUB ROUTES
+Route::prefix('admin')->name('admin.')->group(function () {
 
+    Route::get('clubs', [ClubController::class, 'index'])->name('clubsindex');
 
+    Route::get('clubsform', [ClubController::class, 'create'])->name('club');
+    Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub');
+
+    Route::get('clubsform/{club}', [ClubController::class, 'edit'])->name('editclub');
+    Route::put('clubsupdate/{club}', [ClubController::class, 'update'])->name('update');
+
+    Route::delete('clubs/{club}', [ClubController::class, 'destroy'])->name('deleteclub');
+
+    Route::get('get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');
+});
 
 //aishwarya
 Route::get('/clubmember', function () {return view('clubmember.auth.login');})->name('clubmember.login');
@@ -62,15 +75,15 @@ Route::post('/clubmember', [ClubMemberLoginController::class, 'login'])->name('c
 Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controllers\ClubMember')->group(function () {
     Auth::routes(['register' => false]); 
 //dashboard controller
-// Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');//dashboard
-// Route::get('/clubmember/dashboard', [DashboardController::class, 'index'])
-//     ->name('clubmember.dashboard');
-// Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-// Route::get('/order-history', [OrderController::class, 'orderHistory'])
-//      ->name('order.history');
-// Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('clubmember.profile.edit');
-// Route::put('/profile/update', [ProfileController::class, 'update'])->name('clubmember.profile.update');
-// Route::get('/clubmember/get-states/{country}', [ProfileController::class, 'getStates']);
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'); //dashboard
+Route::get('/clubmember/dashboard', [DashboardController::class, 'index'])
+    ->name('clubmember.dashboard');
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::get('/order-history', [OrderController::class, 'orderHistory'])
+     ->name('order.history');
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('clubmember.profile.edit');
+Route::put('/profile/update', [ProfileController::class, 'update'])->name('clubmember.profile.update');
+Route::get('/clubmember/get-states/{country}', [ProfileController::class, 'getStates']);
 });
 
 
