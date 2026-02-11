@@ -44,7 +44,7 @@
                                     <h1 class="display-8">Club Sign In</h1>
                                     <p class="text-muted">Sign in to Vetra to continue</p>
                                 </div>
-                                <form action="{{ route('clubmember.login.submit') }}" method="POST" class="mb-5">
+                                <form action="{{ route('club.login') }}" method="POST" class="mb-5">
                                      @csrf 
                                     <div class="mb-3">
                                         <input type="email" name="email" class="form-control" placeholder="Enter email" autofocus
