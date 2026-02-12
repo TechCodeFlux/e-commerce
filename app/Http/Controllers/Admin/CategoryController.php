@@ -7,7 +7,7 @@ use App\Models\Category;
 use Illuminate\Container\Attributes\Storage;
 //use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str; 
 

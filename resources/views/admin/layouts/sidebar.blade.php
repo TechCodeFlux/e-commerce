@@ -547,24 +547,12 @@
                     <span> Dashboard</span>
                 </a>
             </li>
-            
-            
-            
             <li>
                 <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs('admin.clubsindex','admin.club','admin.clubs.dashboard','admin.clubmember.viewmembers','admin.club.profile') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
                     <span>Club</span>
-                </a>
-            </li>
-
-            <li>
-                <a  href="">
-                    <span class="nav-link-icon">
-                        <i class="bi bi-box-seam me-2"></i>
-                    </span>
-                    <span>Products</span>
                 </a>
             </li>
             <li>
@@ -576,6 +564,14 @@
                     <span>Categoies</span>
                 </a>
             </li>
+            <li>
+                <a  href="">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-box-seam me-2"></i>
+                    </span>
+                    <span>Products</span>
+                </a>
+            </li>
              <li>
                 <a  href="">
                     <span class="nav-link-icon">
@@ -583,8 +579,16 @@
                     </span>
                     <span>Option</span>
                 </a>
+                <ul>
+                    <li>
+                        <a  href="{{ route('admin.show_option') }}">Option</a>
+                    </li>
+                    <li>
+                        <a  href="{{ route('admin.show_option_value') }}">Option Value</a>
+                    </li>
+                </ul>
             </li>
-                <li>
+            <li>
                 <a  href="">
                     <span class="nav-link-icon">
                         <i class="bi bi-diagram-3 me-2"></i>

@@ -15,8 +15,10 @@ use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 // use App\Http\Controllers\Club\ClubMemberController;
 //category controller
 use App\Http\Controllers\Admin\CategoryController;
-// use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
-
+use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
+//for option
+use App\Http\Controllers\Admin\OptionController;
+use App\Http\Controllers\Admin\OptionValueController;
 //arjun
 Route::get('/', function () {return view('club.auth.login');})->name('club.login');
 // Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
@@ -56,8 +58,6 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     //Club dashboard
     Route::get('/clubs/{club}/dashboard', [ClubController::class, 'dashboard'])->name('clubs.dashboard');//dashboard for each club
     Route::delete('clubs/{club}', [ClubController::class, 'destroy'])->name('clubs.destroy');//delete club
-
-
     //Category-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     Route::get('category_management/add_category_index', [CategoryController::class, 'add_category_index'])->name('category_management.add_category_index');
     Route::post('category_management/add_category', [CategoryController::class, 'store'])->name('category_management.add_category');
@@ -77,6 +77,16 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::delete('club/deletemember/{id}',[ClubMemberController::class,'deletemember'])->name('clubmember.deletemember');
     Route::get('club/profile/{id}',[ClubController::class,'profile'])->name('club.profile');
     Route::post('club/editprofile/{id}',[ClubController::class,'editprofile'])->name('club.editprofile');
+    //option
+    Route::get('show_option', [OptionController::class, 'index'])->name('show_option');//view options
+    Route::get('add_option', [OptionController::class, 'create'])->name('add_option');//add options
+    Route::post('addoption', [OptionController::class, 'store'])->name('addoption'); //add option data to table (submit form)
+    Route::post('option_change_status', [OptionController::class, 'changeStatus'])->name('option_change_status');
+
+    //option value
+    Route::get('show_option_value', [OptionValueController::class, 'index'])->name('show_option_value');//view options
+    Route::get('add_option_value', [OptionValueController::class, 'create'])->name('add_option_value');//add options 
+    Route::post('addoptionvalue', [OptionValueController::class, 'store'])->name('addoptionvalue'); //add option value data to table (submit form)
 });
 
 
