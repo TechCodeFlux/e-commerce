@@ -14,4 +14,9 @@ class OptionValue extends Model
         'option_value_id',
         'status'
     ];
+    public function option()
+    {
+        return $this->belongsTo(Option::class);
+    }
+
 }

@@ -11,7 +11,7 @@
                 </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('admin.clubsindex') }}">
+                <a href="{{ route('admin.show_option') }}">
                     <i class="bi bi-sliders me-2"></i> Options
                 </a>
             </li>

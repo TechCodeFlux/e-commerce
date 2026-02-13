@@ -548,7 +548,7 @@
                 </a>
             </li>
             <li>
-                <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs('admin.clubsindex','admin.club','admin.clubs.dashboard','admin.clubmember.viewmembers','admin.club.profile') ? 'active' : '' }}">
+                <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs('admin.clubsindex','admin.club','admin.clubs.dashboard','admin.clubmember.viewmembers','admin.club.profile','admin.show_microsites') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
@@ -573,7 +573,7 @@
                 </a>
             </li>
              <li>
-                <a class="{{ request()->routeIs('admin.show_option','admin.add_option','admin.show_option_value','admin.add_option_value')? 'active' : '' }}"  href="">
+                <a class="{{ request()->routeIs()? 'active' : '' }}"  href="">
                     <span class="nav-link-icon">
                         <i class="bi bi-sliders me-2"></i>
                     </span>
@@ -581,10 +581,10 @@
                 </a>
                 <ul>
                     <li>
-                        <a  href="{{ route('admin.show_option') }}">Option</a>
+                        <a class="{{ request()->routeIs('admin.show_option','admin.add_option')? 'active' : '' }}" href="{{ route('admin.show_option') }}">Option</a>
                     </li>
                     <li>
-                        <a  href="{{ route('admin.show_option_value') }}">Option Value</a>
+                        <a class="{{ request()->routeIs('admin.show_option_value','admin.add_option_value')? 'active' : '' }}" href="{{ route('admin.show_option_value') }}">Option Value</a>
                     </li>
                 </ul>
             </li>

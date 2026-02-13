@@ -98,24 +98,26 @@ return view('admin.option_management.show_option');
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|regex:/^[A-Za-z\s]+$/',
-    ], [
-        'name.required' => 'Option name is required',
-        'name.regex' => 'Only letters and spaces allowed',
-    ]);
+   public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|regex:/^[A-Za-z\s]+$/', 
+            'status' => 'nullable|boolean'
+        ], [
+            'name.required' => 'Option name is required',
+            'name.regex' => 'Only letters and spaces allowed',
+        ]);
 
-    Option::create([
-        'name'   => $validated['name'],
-        'status' => $validated['status'] ?? 0,
-    ]);
+        Option::create([
+            'name'   => $validated['name'],
+            'status' => $validated['status'] ?? 0,
+        ]);
 
-    return redirect()
-        ->route('admin.show_option')
-        ->with('success', 'Options registered successfully!'); 
-}
+        return redirect()
+            ->route('admin.show_option')
+            ->with('success', 'Options registered successfully!');
+    }
+
 
 
     /**

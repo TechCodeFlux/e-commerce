@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController
 //for option
 use App\Http\Controllers\Admin\OptionController;
 use App\Http\Controllers\Admin\OptionValueController;
+use App\Http\Controllers\Admin\MicrositeController;
 //arjun
 Route::get('/', function () {return view('club.auth.login');})->name('club.login');
 // Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
@@ -87,6 +88,11 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('show_option_value', [OptionValueController::class, 'index'])->name('show_option_value');//view options
     Route::get('add_option_value', [OptionValueController::class, 'create'])->name('add_option_value');//add options 
     Route::post('addoptionvalue', [OptionValueController::class, 'store'])->name('addoptionvalue'); //add option value data to table (submit form)
+    Route::post('option_value_change_status', [OptionValueController::class, 'changeStatus'])->name('option_value_change_status');
+    //microsite
+    Route::get('show_microsites', [MicrositeController::class, 'index'])->name('show_microsites');//view microsites
+
+
 });
 
 

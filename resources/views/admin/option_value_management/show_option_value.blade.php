@@ -55,9 +55,10 @@
                     </div>
                 </div>
                 <div class="" >
-                    <table id="club" class="table table-custom table-lg mb-0" >
+                    <table id="optionvalue" class="table table-custom table-lg mb-0" >
                     <thead>
                       <tr>
+                         <th >Option Value</th>
                          <th >Option Name</th>  
                           <th>Status</th>
                         <th  class=" ps-5" >Action</th>
@@ -179,7 +180,7 @@ $(document).on('change', '.toggle-status', function () {
     let label = $('#status-label-' + categoryId);
 
     $.ajax({
-        url: "{{ route('admin.category_management.change-status') }}",
+        url: "{{ route('admin.option_value_change_status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
@@ -211,21 +212,24 @@ $(document).ready(function() {
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
-    $categoryTable= $('#options').DataTable({
+    $categoryTable= $('#optionvalue').DataTable({
         processing: true,
         serverSide: true,
+        dom: 'rtip',
         ajax: {
-           url: "{{ route('admin.show_option') }}",
+           url: "{{ route('admin.show_option_value') }}",
             data: function(d) {
                 
             }
         },
 
         columns: [
-            { data: 'name', name: 'name', orderable: false,searchable: false },
-            { data: 'status', name: 'status', orderable: false, searchable: false },
-            { data: 'action', name: 'action', orderable: false, searchable: false }
-        ],
+    { data: 'name', name: 'option_values.name' },
+    { data: 'option_name', name: 'options.name' },
+    { data: 'status', name: 'option_values.status', orderable:false, searchable:false },
+    { data: 'action', orderable:false, searchable:false }
+]
+,
 
         columnDefs: [{
             'defaultContent': '--',
