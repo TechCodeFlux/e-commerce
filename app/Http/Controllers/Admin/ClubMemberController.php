@@ -18,7 +18,7 @@ use App\Models\Country;
 use App\Models\State;
 use App\Models\Address;
 use index;
-
+ 
 class ClubMemberController extends Controller
 {
     public function index(Request $request, Club $club)
@@ -175,7 +175,7 @@ class ClubMemberController extends Controller
 
     public function deletemember($id)
     {
-        $clubmember = Clubmember::findOrFail($id);
+        $clubmember = ClubMember::findOrFail($id);
         $clubmember->delete(); 
         return redirect()->back()->with('success', 'club member as deleted successfully');
     }

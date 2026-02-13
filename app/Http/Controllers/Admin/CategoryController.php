@@ -56,11 +56,8 @@ class CategoryController extends Controller
                 
                        
                         <div class="form-check form-switch">
-                                     <input 
-                                          class="form-check-input toggle-status"
-                                          type="checkbox"
-                                          name="status"
-                                          data-id="'.$category->id.'"  '.($category->status ? 'checked' : '').'>
+                                    <input class="form-check-input toggle-status" type="checkbox" name="status" 
+                                    data-id="'.$category->id.'"  '.($category->status ? 'checked' : '').'>
                          </div>';
             })
 

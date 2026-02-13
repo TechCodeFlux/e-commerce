@@ -29,7 +29,7 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            <h4 class="text-center mb-4">
+            <h4 class="text-start mb-4">
                 {{ $option_value->id ? 'Edit' : 'Add' }} Option Values
             </h4>
 
@@ -44,19 +44,6 @@
 
                 {{-- ROW 1 --}}
                 <div class="row">
-
-                    {{-- Name --}}
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold">Name</label>
-                        <input type="text"
-                               name="name"
-                               class="form-control"
-                               value="{{ old('name', $option_value->name ?? '') }}">
-
-                        @error('name')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
 
                     {{-- Options --}}
                     <div class="col-md-6 mb-3">
@@ -80,8 +67,20 @@
                         @enderror
                     </div>
 
-                </div>
+                    {{-- Name --}}
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Name</label>
+                        <input type="text"
+                               name="name"
+                               class="form-control"
+                               value="{{ old('name', $option_value->name ?? '') }}">
 
+                        @error('name')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    
+                </div>
                 {{-- ROW 2 --}}
                 <div class="row">
 
@@ -110,7 +109,7 @@
                 </div>
 
                 {{-- Submit --}}
-                <div class="text-center mt-3">
+                <div class="d-flex justify-content-end mt-3">
                     <button class="btn btn-primary px-5">
                         {{ $option_value->id ? 'Update' : 'Submit' }}
                     </button>

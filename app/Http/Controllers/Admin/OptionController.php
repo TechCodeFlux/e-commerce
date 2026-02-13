@@ -114,7 +114,7 @@ return view('admin.option_management.show_option');
 
     return redirect()
         ->route('admin.show_option')
-        ->with('success', 'Options registered successfully!');
+        ->with('success', 'Options registered successfully!'); 
 }
 
 

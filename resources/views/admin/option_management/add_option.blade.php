@@ -24,7 +24,7 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            <h4 class="text-center mb-4">
+            <h4 class="text-start mb-4">
                 {{ $option->id ? 'Edit' : 'Add' }} Options
             </h4>
 
@@ -73,7 +73,7 @@
 
                 </div>
 
-                <div class="text-center mt-3">
+                <div class="d-flex justify-content-end mt-3">
                     <button class="btn btn-primary px-5">
                         {{ $option->id ? 'Update' : 'Submit' }}
                     </button>

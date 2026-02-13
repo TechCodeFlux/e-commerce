@@ -84,23 +84,24 @@
                                                     </div>
 
                                                     <div class="col-md-4 mb-3">
-                                                        <label class="form-label">Contact</label>
+                                                        <label class="form-label">Telephone no</label>
                                                         <input type="text" class="form-control" name="contact" value="{{ old('contact', $club->contact) }}">
                                                         @error('contact')
                                                             <small class="text-danger d-block mt-1">{{ $message }}</small>
                                                         @enderror
 
                                                     </div>
-                                                    <div class="col-md-12 mb-3">
+                                                   <div class="col-md-12 mb-3">
                                                         <label class="form-label">Address</label>
-                                                        <textarea name="address" class="form-control 
-                                                        @error('address') is-invalid @enderror">{{ old('address', $club->address ?? '') }}
-                                                        </textarea>
+
+                                                        <textarea name="address"
+                                                            class="form-control @error('address') is-invalid @enderror">{{ old('address', $club->address ?? '') }}</textarea>
+
                                                         @error('address')
                                                             <small class="text-danger d-block mt-1">{{ $message }}</small>
                                                         @enderror
+                                                    </div>
 
-                                                        </div>
 
                                                         <div class="col-md-4 mb-3">
                                                         <label>Country</label>
@@ -156,24 +157,34 @@
                                                             @enderror
                                                         </div>
                                                       <div>  
-                                                   <button   type="submit" class="btn btn-primary">Save Changes</button>
+                                                    <div class="d-flex justify-content-end">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            Save Changes
+                                                        </button>
+                                                    </div>
                                                       </div>
                                             </form>
 
-                                {{-- error display --}}
-
-                                {{-- <div class="mb-4">
-                                @if ($errors->any())
-                                <div class="alert alert-danger">
-                                <ul>
-                                @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                                @endforeach
-                                </ul>
-                                </div>
-                                @endif
-                                </div> --}}
-                            {{-- error display end --}}
+                                            {{-- Success Modal --}}
+                                            @if(session('success'))
+                                            <div class="modal fade" id="successModal" tabindex="-1">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-success text-white">
+                                                            <h5 class="modal-title">Success</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {{ session('success') }}
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
+                                {{-- end for the success  --}}
 
                             
                             
@@ -229,8 +240,25 @@
                 </script>
                 @endsection
 
-
-
+            {{-- success modal javascript --}}
+                @if(session('success'))
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                        // successModal.show();
+                    Swal.fire
+                    ({
+                        icon: 'success',
+                        title: 'Update!',
+                        text: 'Profile updated successfully',
+                        confirmButtonText: 'OK'
+                        }).then(() => {
+                            // location.reload();  //to reload the current page
+                        });
+                    });
+                </script>
+                @endif
+             {{--end of success modal in javascript  --}}
 
 
 

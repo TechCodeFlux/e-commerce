@@ -573,7 +573,7 @@
                 </a>
             </li>
              <li>
-                <a  href="">
+                <a class="{{ request()->routeIs('admin.show_option','admin.add_option','admin.show_option_value','admin.add_option_value')? 'active' : '' }}"  href="">
                     <span class="nav-link-icon">
                         <i class="bi bi-sliders me-2"></i>
                     </span>
