@@ -10,7 +10,7 @@
     </div>
     <!-- Logo -->
     <a href="index.html" class="logo">
-        <img width="100" src="{{url('assets/images/logo.svg')}}" alt="logo">
+        <img width="100" src="{{url('assets/images/grabit/logo.png')}}" alt="logo">
     </a>
     <!-- ./ Logo -->
     <div class="page-title">@yield('page-title','Overview')</div>

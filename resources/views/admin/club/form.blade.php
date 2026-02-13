@@ -82,9 +82,9 @@
                     {{-- Address --}}
                     <div class="col-md-12 mb-3">
                         <label>Address</label>
-                        <textarea name="address" class="form-control @error('address') is-invalid @enderror"
-                        value="{{ old('address', $clubuser->address ?? '') }}"></textarea>
-
+                        <textarea name="address" 
+                        class="form-control @error('address') is-invalid @enderror">{{ old('address', $clubuser->address ?? '') }}
+                        </textarea>
                         @error('address')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -95,7 +95,7 @@
                     {{-- Country --}}
                     <div class="col-md-4 mb-3">
                         <label>Country</label>
-                        <select name="country" id="country" class="form-select">
+                        <select name="country" id="country" class="form-select @error('country') is-invalid @enderror">
                             <option value="">Select Country</option>
                             @foreach($countries as $country)
                                 <option value="{{ $country->id }}"
@@ -107,27 +107,27 @@
                     </div>
 
                     {{-- State --}}
-                    <select name="state" id="state" class="form-select">
+                    <div class="col-md-4 mb-3">
+                        <label>State</label>
+                        <select name="state" id="state" class="form-select @error('state') is-invalid @enderror">
+                            <option value="">Select State</option>
+                            @isset($states)
+                                @foreach($states as $state)
+                                    <option value="{{ $state->id }}"
+                                        {{ old('state', $clubuser->state_id ?? '') == $state->id ? 'selected' : '' }}>
+                                        {{ $state->name }}
+                                    </option>
+                                @endforeach
+                            @endisset
+                        </select>
 
-                        <option value="">Select State</option>
+                        @error('state')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
 
-                        @isset($states)
-
-                        @foreach($states as $state)
-
-                                <option value="{{ $state->id }}"
-
-                                {{ old('state', $clubmember->state_id ?? '') == $state->id ? 'selected' : '' }}>
-
-                                {{ $state->name }}
-
-                            </option>
-
-                        @endforeach
-
-                     @endisset
-
-                    </select>
 
                     {{-- City --}}
                     <div class="col-md-4 mb-3">
@@ -206,5 +206,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+@endsection
 @endsection
  
