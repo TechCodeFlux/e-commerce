@@ -96,7 +96,9 @@ class OptionValueController extends Controller
     public function create()
     {
         $option_value = new OptionValue(); // empty model
-        $option_value_list = Option::orderBy('name')->get();
+        $option_value_list = Option::where('status', 1)
+        ->orderBy('name')
+        ->get();
         return view('admin.option_value_management.add_option_value', compact('option_value','option_value_list'));
     }
 
