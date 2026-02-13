@@ -122,8 +122,8 @@ $(document).ready(function () {
             {data: 'email'},
             {data: 'contact'},
             {data: 'address'},
-            {data: 'country_id', name: 'country_id'},
-            {data: 'state_id', name: 'state_id'},
+            {data: 'country', name: 'country'},
+            {data: 'state', name: 'state'},
             {data: 'city'},
             {data: 'zip_code'},
             {data: 'action', orderable:false, searchable:false}

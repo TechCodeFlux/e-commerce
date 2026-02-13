@@ -26,10 +26,17 @@ class ClubController extends Controller
     public function index(Request $request)
     {
          if($request->ajax()){
-            $club=Club::query();
+            $club=Club::with(['country','state']);
             // return DataTables::eloquent($club)
             return datatables()
-    ->eloquent($club)
+            ->eloquent($club)
+            ->addColumn('country', function ($row) {
+                return optional($row->country)->name ?? '--';
+            })
+
+            ->addColumn('state', function ($row) {
+                return optional($row->state)->name ?? '--';
+            })
             ->addColumn('action', function (Club $club) use ($request) {
                 $actions= '<div class="d-flex gap-1"><div class="dropdown">';
                 //view button
@@ -51,10 +58,6 @@ class ClubController extends Controller
 
         return view('admin.club.clubview');
     }
-
-    
-
-
     /**
      * Show the form for creating a new resource.
      */
