@@ -17,6 +17,10 @@ use App\Http\Controllers\Clubmember\ClubmemberDashboardController;
 use App\Http\Controllers\Club\ClubDashboardController;
 
 use App\Http\Controllers\Admin\ClubMemberController;
+use App\Http\Controllers\Admin\OptionController;
+use App\Http\Controllers\Admin\OptionValueController;
+use App\Http\Controllers\Admin\CategoryController;
+
 
 
 // admin (done by pauljo)
@@ -48,11 +52,29 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('club/editmember/{id}',[ClubMemberController::class,'editmember'])->name('clubmember.editmember');
     Route::post('club/updatemember/{id}',[ClubMemberController::class,'updatemember'])->name('clubmember.updatemember');
     Route::delete('club/deletemember/{id}',[ClubMemberController::class,'deletemember'])->name('clubmember.deletemember');
-
+     //profile
     Route::get('club/profile/{id}',[ClubController::class,'profile'])->name('club.profile');
     Route::post('club/editprofile/{id}',[ClubController::class,'editprofile'])->name('club.editprofile');
     
-    //
+     //option
+    Route::get('show_option', [OptionController::class, 'index'])->name('show_option');//view options
+    Route::get('add_option', [OptionController::class, 'create'])->name('add_option');//add options
+    Route::post('addoption', [OptionController::class, 'store'])->name('addoption'); //add option data to table (submit form)
+    Route::post('option_change_status', [OptionController::class, 'changeStatus'])->name('option_change_status');
+    Route::get('edit_option/{id}', [OptionController::class, 'edit'])->name('editoption'); //edit option form
+    Route::put('update_option/{id}', [OptionController::class, 'update'])->name('updateoption'); //update option data to table (submit form)
+    Route::delete('delete_option/{id}', [OptionController::class, 'destroy'])->name('deleteoption'); //delete option
+
+     //option value
+    Route::get('show_option_value', [OptionValueController::class, 'index'])->name('show_option_value');//view options
+    Route::get('add_option_value', [OptionValueController::class, 'create'])->name('add_option_value');//add options 
+    Route::post('addoptionvalue', [OptionValueController::class, 'store'])->name('addoptionvalue'); //add option value data to table (submit form)
+    Route::post('option_value_change_status', [OptionValueController::class, 'changeStatus'])->name('option_value_change_status');
+    Route::delete('delete_option_value/{id}', [OptionValueController::class, 'destroy'])->name('deleteoptionvalue'); //delete option value
+
+
+
+    
 });
 
 

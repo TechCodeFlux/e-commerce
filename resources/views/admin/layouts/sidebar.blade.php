@@ -558,7 +558,53 @@
                     <span>Club</span>
                 </a>
             </li>
-            
+            <li>
+                <a class="{{ request()->routeIs()? 'active' : '' }}"  
+                    href="#">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-tags me-2"></i>
+                    </span>
+                    <span>Categoies</span>
+                </a>
+            </li>
+            <li>
+                <a class="{{ request()->routeIs()? 'active' : '' }}"
+                 href="#">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-box-seam me-2"></i>
+                    </span>
+                    <span>Products</span>
+                </a>
+            </li>
+             <li>
+                <a class="{{ request()->routeIs()? 'active' : '' }}"  href="">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-sliders me-2"></i>
+                    </span>
+                    <span>Option</span>
+                </a>
+                <ul>
+                    <li>
+                         <a class="{{ request()->routeIs('admin.show_option','admin.add_option')? 'active' : '' }}" href="{{ route('admin.show_option') }}"> 
+
+                            Option</a> 
+                    </li>
+                    <li>
+                         <a 
+                         class="{{ request()->routeIs('admin.show_option_value','admin.add_option_value')? 'active' : '' }}" href="{{ route('admin.show_option_value') }}">
+                         Option Value</a> 
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a  class="{{ request()->routeIs()? 'active' : '' }}"
+                  href="#">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-diagram-3 me-2"></i>
+                    </span>
+                    <span>Varient</span>
+                </a>
+            </li>
            
 
             

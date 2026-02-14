@@ -98,26 +98,26 @@
                         <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">Delete Club Member</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Delete Club Member</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form>
+                                <div class="modal-body">
+                                        <!-- <input type="hidden" name="_method" value="DELETE"> -->
+                                            {{-- <input type="hidden" name="_token" > --}}
+                                            <input type="hidden" id="deleteId" name="deleteId">
+                                            <p>Are you sure you want to delete this club</p>
+                                            <div class="modal-footer">
+                                            
+                                                <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-sm btn-danger btn_delete_club_member" data-loading-text="">Delete</button>
+                                            </div>
+                                </div>
+                                </form>
                             </div>
-                            <form>
-                            <div class="modal-body">
-                                    <!-- <input type="hidden" name="_method" value="DELETE"> -->
-                                        {{-- <input type="hidden" name="_token" > --}}
-                                        <input type="hidden" id="deleteId" name="deleteId">
-                                        <p>Are you sure you want to delete this club</p>
-                                        <div class="modal-footer">
-                                        
-                                            <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-sm btn-danger btn_delete_club_member" data-loading-text="">Delete</button>
-                                        </div>
-                            </div>
-                            </form>
+                        </div>   
                         </div>
-                    </div>   
-                </div>
                 </div>
                 </div> 
 
@@ -301,35 +301,7 @@ $(document).ready(function () {
     });
 });
             
-                // delete club member
-    //             $('table').off('click').on('click','.delete-club-member',function(){
-    //                 var href=$(this).data('href');
-    //                 $('.btn_delete_club_member').click(function(){
-    //                     $.ajax({
-    //                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
-    //                         type: 'DELETE',
-    //                         dataType : 'JSON',
-    //                         url : href,
-    //                         success:function(response){
-    //                             $('#delete-modal').modal('hide');
-    //                             $('#clubmember').DataTable().ajax.reload();
-    //                             Swal.fire({
-    //                                 icon: 'success',
-    //                                 title: 'Member deleted successfully',
-    //                                 footer: ''
-    //                             })
-    //                         }  
-    //                     })
-    //                 })
 
-    //             })
-
-    // OPEN DELETE MODAL
-    // $(document).on('click', '.delete-club_member', function () {
-    //     let id = $(this).data('id');
-    //     $('#deleteId').val(id);
-    //     $('#delete-modal').modal('show');
-    // });
 
 
    
