@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="" >
-                    <table id="optionvalue" class="table table-custom table-lg mb-0" >
+                    <table id="optionvalue" class="table table-custom table-lg mb-0 " >
                     <thead>
                       <tr>
                          <th >Option Value</th>
@@ -145,6 +145,32 @@
     </div>
 </div>
 
+{{-- change/update status model --}}
+
+<!-- Status Change Modal -->
+<div class="modal fade" id="status-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Change Status</h5>
+            </div>
+
+            <div class="modal-body">
+                Are you sure you want to change the status?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="confirmStatusChange">
+                    Yes, Change
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 
 {{-- end modal --}}
 @section('script')
@@ -159,11 +185,22 @@
 //status toggle
     
 
+
+let categoryId;
+let status;
+let label;
+
 $(document).on('change', '.toggle-status', function () {
 
-    let categoryId = $(this).data('id');
-    let status = $(this).is(':checked') ? 1 : 0;
-    let label = $('#status-label-' + categoryId);
+    categoryId = $(this).data('id');
+    status = $(this).is(':checked') ? 1 : 0;
+    label = $('#status-label-' + categoryId);
+
+    let statusModal = new bootstrap.Modal(document.getElementById('status-modal'));
+    statusModal.show();
+});
+
+$(document).on('click', '#confirmStatusChange', function () {
 
     $.ajax({
         url: "{{ route('admin.option_value_change_status') }}",
@@ -174,7 +211,8 @@ $(document).on('change', '.toggle-status', function () {
             status: status
         },
         success: function (res) {
-           alert('Status Changed!');
+            // alert('Status Changed!');
+            bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
            if (status === 1) {
                     label.text('Active')
                          .removeClass('bg-secondary-subtle text-secondary')
@@ -191,6 +229,16 @@ $(document).on('change', '.toggle-status', function () {
     });
 
 });
+
+
+
+
+
+
+
+
+
+
 
 //table rows
 

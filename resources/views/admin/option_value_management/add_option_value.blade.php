@@ -35,7 +35,7 @@
             </h4>
 
             <form
-                action="{{ $option_value->id ? route('admin.update', $option_value->id) : route('admin.addoptionvalue') }}"
+                action="{{ $option_value->id ? route('admin.updateoptionvalue', $option_value->id) : route('admin.addoptionvalue') }}"
                 method="POST">
 
                 @csrf

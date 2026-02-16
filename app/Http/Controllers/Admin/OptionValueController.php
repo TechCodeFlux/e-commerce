@@ -47,12 +47,12 @@ class OptionValueController extends Controller
                     $actions = '<div class="d-flex gap-1">';
 
                     // Edit
-                    // $actions .= '
-                    //     <a href="' . route('admin.edit_option_value', $row->id) . '" 
-                    //     class="btn btn-sm btn-outline-secondary me-2" title="Edit">
-                    //         <i class="fas fa-pencil-alt"></i>
-                    //     </a>
-                    // ';
+                    $actions .= '
+                        <a href="' . route('admin.editoptionvalue', $optionValues->id) . '" 
+                        class="btn btn-sm btn-outline-secondary me-2" title="Edit">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                    ';
 
                     // Delete
                    $actions .= '
@@ -137,18 +137,40 @@ class OptionValueController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(OptionValue $optionValue)
+    public function edit($id)
     {
-        //
+        $option_value=OptionValue::findorfail($id);
+        $option_value_list = Option::findOrFail($option_value->option_value_id)
+                            ->orderBy('name')
+                            ->get();
+        return view('admin.option_value_management.add_option_value',compact('option_value','option_value_list'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, OptionValue $optionValue)
+    public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|regex:/^[A-Za-z\s]+$/', 
+            'option_id' => 'required|exists:options,id',
+            'status' => 'nullable|boolean'
+        ], [
+            'name.required' => 'Option value name is required',
+            'name.regex' => 'Only letters and spaces allowed',
+        ]);
+         OptionValue::where('id', $id)->update([
+            'name' => $validated['name'],
+            'option_value_id' => $validated['option_id'],
+            'status' => $validated['status'] ?? 0,
+        ]);
+
+        return redirect()
+            ->route('admin.show_option_value')
+            ->with('success', 'Option Value update successfully!');
     }
+
+    
 
     /**
      * Remove the specified resource from storage.

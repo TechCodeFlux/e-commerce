@@ -112,6 +112,32 @@
     </div> --}}
 
 
+    {{-- change/update status model --}}
+
+<!-- Status Change Modal -->
+<div class="modal fade" id="status-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Change Status</h5>
+            </div>
+
+            <div class="modal-body">
+                Are you sure you want to change the status?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="confirmStatusChange">
+                    Yes, Change
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 
     {{-- modal --}}
 
@@ -153,22 +179,66 @@
 //status toggle
     
 
+// $(document).on('change', '.toggle-status', function () {
+
+//     let OptionsId = $(this).data('id');
+//     let status = $(this).is(':checked') ? 1 : 0;
+//     let label = $('#status-label-' + OptionsId);
+
+//     $.ajax({
+//         url: "{{ route('admin.option_change_status') }}",
+//         type: "POST",
+//         data: {
+//             _token: "{{ csrf_token() }}",
+//             id: OptionsId,
+//             status: status
+//         },
+//         success: function (res) {
+//            alert('Status Changed!');
+//            if (status === 1) {
+//                     label.text('Active')
+//                          .removeClass('bg-secondary-subtle text-secondary')
+//                          .addClass('bg-success-subtle text-success');
+//                 } else {
+//                     label.text('Inactive')
+//                          .removeClass('bg-success-subtle text-success')
+//                          .addClass('bg-secondary-subtle text-secondary');
+//                 }
+//         },
+//         error: function () {
+//             alert('Status update failed');
+//         }
+//     });
+
+// });
+
+let categoryId;
+let status;
+let label;
+
 $(document).on('change', '.toggle-status', function () {
 
-    let OptionsId = $(this).data('id');
-    let status = $(this).is(':checked') ? 1 : 0;
-    let label = $('#status-label-' + OptionsId);
+    categoryId = $(this).data('id');
+    status = $(this).is(':checked') ? 1 : 0;
+    label = $('#status-label-' + categoryId);
+
+    let statusModal = new bootstrap.Modal(document.getElementById('status-modal'));
+    statusModal.show();
+});
+
+$(document).on('click', '#confirmStatusChange', function () {
 
     $.ajax({
         url: "{{ route('admin.option_change_status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
-            id: OptionsId,
+            id: categoryId,
             status: status
         },
         success: function (res) {
-           alert('Status Changed!');
+            // alert('Status Changed!');
+            bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
            if (status === 1) {
                     label.text('Active')
                          .removeClass('bg-secondary-subtle text-secondary')
@@ -185,6 +255,7 @@ $(document).on('change', '.toggle-status', function () {
     });
 
 });
+
 
 //table rows
 

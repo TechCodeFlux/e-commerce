@@ -26,19 +26,19 @@ class OptionController extends Controller
     return datatables()
         ->eloquent($options)
 
-        ->addColumn('status', function ($option) {
+->addColumn('status', function ($option) {
 
-    $checked = $option->status ? 'checked' : '';
+                    $checked = $option->status ? 'checked' : '';
 
-    return '
-        <div class="form-check form-switch">
-            <input class="form-check-input toggle-status"
-                type="checkbox"
-                data-id="delete_option('.$option->id.') "
-                '.$checked.'>
-        </div>
-    ';
-})
+                    return '
+                        <div class="form-check form-switch">
+                            <input class="form-check-input toggle-status"
+                                type="checkbox"
+                                data-id="' . $option->id . '"
+                                ' . $checked . '>
+                        </div>
+                    ';
+                })
 ->rawColumns(['status','action'])
 
 

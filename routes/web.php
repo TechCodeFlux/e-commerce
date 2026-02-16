@@ -70,6 +70,8 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('add_option_value', [OptionValueController::class, 'create'])->name('add_option_value');//add options 
     Route::post('addoptionvalue', [OptionValueController::class, 'store'])->name('addoptionvalue'); //add option value data to table (submit form)
     Route::post('option_value_change_status', [OptionValueController::class, 'changeStatus'])->name('option_value_change_status');
+    Route::get('edit_option_values/{id}',[OptionValueController::class,'edit'])->name('editoptionvalue');
+    Route::put('update_option_value/{id}', [OptionValueController::class, 'update'])->name('updateoptionvalue'); //update option value data to table (submit form)
     Route::delete('delete_option_value/{id}', [OptionValueController::class, 'destroy'])->name('deleteoptionvalue'); //delete option value
 
 
