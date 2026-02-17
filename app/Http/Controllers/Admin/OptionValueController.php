@@ -83,9 +83,12 @@ class OptionValueController extends Controller
             $optionvalue->status = $request->status;
             $optionvalue->save();
 
-            return response()->json(['success' => 'Status changed successfully.']);
+           return redirect()
+            ->route('admin.show_option_value')
+            ->with('success', 'Option Value status updated successfully!');
+    
         }
-        return response()->json(['error' => 'Option value not found.'], 404);
+        // return response()->json(['error' => 'Option value not found.'], 404);
     }
 
     /**

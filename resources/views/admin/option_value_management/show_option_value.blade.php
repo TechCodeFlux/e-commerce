@@ -196,11 +196,11 @@ $(document).on('change', '.toggle-status', function () {
     status = $(this).is(':checked') ? 1 : 0;
     label = $('#status-label-' + categoryId);
 
-    let statusModal = new bootstrap.Modal(document.getElementById('status-modal'));
-    statusModal.show();
-});
+//     let statusModal = new bootstrap.Modal(document.getElementById('status-modal'));
+//     statusModal.show();
+// });
 
-$(document).on('click', '#confirmStatusChange', function () {
+// $(document).on('click', '#confirmStatusChange', function () {
 
     $.ajax({
         url: "{{ route('admin.option_value_change_status') }}",
@@ -212,7 +212,13 @@ $(document).on('click', '#confirmStatusChange', function () {
         },
         success: function (res) {
             // alert('Status Changed!');
-            bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
+            // bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
+            Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "Status changed successfully!",
+                    confirmButtonText: 'OK'
+                });
            if (status === 1) {
                     label.text('Active')
                          .removeClass('bg-secondary-subtle text-secondary')
@@ -222,6 +228,7 @@ $(document).on('click', '#confirmStatusChange', function () {
                          .removeClass('bg-success-subtle text-success')
                          .addClass('bg-secondary-subtle text-secondary');
                 }
+                
         },
         error: function () {
             alert('Status update failed');

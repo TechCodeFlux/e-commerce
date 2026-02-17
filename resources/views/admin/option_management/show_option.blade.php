@@ -177,40 +177,7 @@
 
 
 //status toggle
-    
 
-// $(document).on('change', '.toggle-status', function () {
-
-//     let OptionsId = $(this).data('id');
-//     let status = $(this).is(':checked') ? 1 : 0;
-//     let label = $('#status-label-' + OptionsId);
-
-//     $.ajax({
-//         url: "{{ route('admin.option_change_status') }}",
-//         type: "POST",
-//         data: {
-//             _token: "{{ csrf_token() }}",
-//             id: OptionsId,
-//             status: status
-//         },
-//         success: function (res) {
-//            alert('Status Changed!');
-//            if (status === 1) {
-//                     label.text('Active')
-//                          .removeClass('bg-secondary-subtle text-secondary')
-//                          .addClass('bg-success-subtle text-success');
-//                 } else {
-//                     label.text('Inactive')
-//                          .removeClass('bg-success-subtle text-success')
-//                          .addClass('bg-secondary-subtle text-secondary');
-//                 }
-//         },
-//         error: function () {
-//             alert('Status update failed');
-//         }
-//     });
-
-// });
 
 let categoryId;
 let status;
@@ -222,11 +189,11 @@ $(document).on('change', '.toggle-status', function () {
     status = $(this).is(':checked') ? 1 : 0;
     label = $('#status-label-' + categoryId);
 
-    let statusModal = new bootstrap.Modal(document.getElementById('status-modal'));
-    statusModal.show();
-});
+//     let statusModal = new bootstrap.Modal(document.getElementById('status-modal'));
+//     statusModal.show();
+// });
 
-$(document).on('click', '#confirmStatusChange', function () {
+// $(document).on('click', '#confirmStatusChange', function () {
 
     $.ajax({
         url: "{{ route('admin.option_change_status') }}",
@@ -238,7 +205,13 @@ $(document).on('click', '#confirmStatusChange', function () {
         },
         success: function (res) {
             // alert('Status Changed!');
-            bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
+            // bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
+             Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "Status changed successfully!",
+                    confirmButtonText: 'OK'
+                });
            if (status === 1) {
                     label.text('Active')
                          .removeClass('bg-secondary-subtle text-secondary')
