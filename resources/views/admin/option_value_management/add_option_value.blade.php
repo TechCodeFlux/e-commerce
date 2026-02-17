@@ -56,7 +56,7 @@
                             @foreach($option_value_list as $opt)
 
                                 <option value="{{ $opt->id }}"
-                                    {{ old('option_value', $option_value->parent_id ?? '') == $opt->id ? 'selected' : '' }}>
+                                    {{ old('option_value', $option_value->option_value_id ?? '') == $opt->id ? 'selected' : '' }}>
                                     {{ $opt->name }}
                                 </option>
 
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
-</script>
+
 
 @endsection
 @endsection

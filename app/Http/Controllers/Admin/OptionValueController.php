@@ -15,13 +15,13 @@ class OptionValueController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-
-            $optionValues = OptionValue::query()
-                ->leftJoin('options', 'options.id', '=', 'option_values.option_value_id') // ← change if needed
-                ->select([
-                    'option_values.*',
-                    'options.name as option_name'
-                ]);
+            // $options = Option::where('deleted_at', Null)->pluck('name', 'id'); // Fetch active options for filter
+            $optionValues = OptionValue::leftJoin('options', 'options.id', '=', 'option_values.option_value_id') // ← change if needed
+                            ->whereNull('options.deleted_at')    //only display option values whose option are not soft deleted
+                            ->select([
+                                    'option_values.*',
+                                    'options.name as option_name'
+                                ]);
 
             return datatables()
                 ->eloquent($optionValues)
@@ -95,8 +95,8 @@ class OptionValueController extends Controller
     {
         $option_value = new OptionValue(); // empty model
         $option_value_list = Option::where('status', 1)
-        ->orderBy('name')
-        ->get();
+                            ->orderBy('name')
+                            ->get();
         return view('admin.option_value_management.add_option_value', compact('option_value','option_value_list'));
     }
 
@@ -140,9 +140,7 @@ class OptionValueController extends Controller
     public function edit($id)
     {
         $option_value=OptionValue::findorfail($id);
-        $option_value_list = Option::findOrFail($option_value->option_value_id)
-                            ->orderBy('name')
-                            ->get();
+        $option_value_list = Option::orderBy('name')->get(); 
         return view('admin.option_value_management.add_option_value',compact('option_value','option_value_list'));
     }
 

@@ -231,6 +231,9 @@ $(document).on('click', '#confirmStatusChange', function () {
 });
 
 
+ 
+
+
 
 
 
@@ -335,7 +338,20 @@ $(document).on('click', '.btn_delete_option_value', function () {
 
 });
 
+</script>
 
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
 
 </script>
 
