@@ -15,13 +15,13 @@ class OptionValueController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-
-            $optionValues = OptionValue::query()
-                ->leftJoin('options', 'options.id', '=', 'option_values.option_value_id') // ← change if needed
-                ->select([
-                    'option_values.*',
-                    'options.name as option_name'
-                ]);
+            // $options = Option::where('deleted_at', Null)->pluck('name', 'id'); // Fetch active options for filter
+            $optionValues = OptionValue::leftJoin('options', 'options.id', '=', 'option_values.option_value_id') // ← change if needed
+                            ->whereNull('options.deleted_at')    //only display option values whose option are not soft deleted
+                            ->select([
+                                    'option_values.*',
+                                    'options.name as option_name'
+                                ]);
 
             return datatables()
                 ->eloquent($optionValues)
@@ -42,29 +42,27 @@ class OptionValueController extends Controller
                 })
 
                 // ✅ Action Buttons Column
-                ->addColumn('action', function ($row) {
+                ->addColumn('action', function ($optionValues) {
 
                     $actions = '<div class="d-flex gap-1">';
 
                     // Edit
-                    // $actions .= '
-                    //     <a href="' . route('admin.edit_option_value', $row->id) . '" 
-                    //     class="btn btn-sm btn-outline-secondary me-2" title="Edit">
-                    //         <i class="fas fa-pencil-alt"></i>
-                    //     </a>
-                    // ';
+                    $actions .= '
+                        <a href="' . route('admin.editoptionvalue', $optionValues->id) . '" 
+                        class="btn btn-sm btn-outline-secondary me-2" title="Edit">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                    ';
 
                     // Delete
-                    $actions .= '
-                        <button type="button" 
-                            class="btn btn-sm btn-outline-danger delete-option"
-                            data-id="' . $row->id . '"
-                            data-bs-toggle="modal"
-                            data-bs-target="#delete-modal"
-                            title="Delete">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    ';
+                   $actions .= '
+                            <button 
+                                class="btn btn-sm btn-outline-danger delete-btn"
+                                data-id="' . $optionValues->id . '"
+                                title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        ';
 
                     $actions .= '</div>';
 
@@ -97,8 +95,8 @@ class OptionValueController extends Controller
     {
         $option_value = new OptionValue(); // empty model
         $option_value_list = Option::where('status', 1)
-        ->orderBy('name')
-        ->get();
+                            ->orderBy('name')
+                            ->get();
         return view('admin.option_value_management.add_option_value', compact('option_value','option_value_list'));
     }
 
@@ -139,24 +137,48 @@ class OptionValueController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(OptionValue $optionValue)
+    public function edit($id)
     {
-        //
+        $option_value=OptionValue::findorfail($id);
+        $option_value_list = Option::orderBy('name')->get(); 
+        // dd($option_value_list);
+        return view('admin.option_value_management.add_option_value',compact('option_value','option_value_list'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, OptionValue $optionValue)
+    public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|regex:/^[A-Za-z\s]+$/', 
+            'option_id' => 'required|exists:options,id',
+            'status' => 'nullable|boolean'
+        ], [
+            'name.required' => 'Option value name is required',
+            'name.regex' => 'Only letters and spaces allowed',
+        ]);
+         OptionValue::where('id', $id)->update([
+            'name' => $validated['name'],
+            'option_value_id' => $validated['option_id'],
+            'status' => $validated['status'] ?? 0,
+        ]);
+
+        return redirect()
+            ->route('admin.show_option_value')
+            ->with('success', 'Option Value update successfully!');
     }
+
+    
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(OptionValue $optionValue)
+    public function destroy($id)
     {
-        //
+        $optionValue = OptionValue::findOrFail($id);
+        $optionValue->delete();
+
+        return response()->json(['success' => 'Option value deleted successfully.']);
     }
 }

@@ -46,7 +46,7 @@ class OptionController extends Controller
             $actions = '<div class="d-flex gap-1">';
 
             // Edit
-            $actions .= '<a href="" 
+            $actions .= '<a href="'.route('admin.editoption', $option->id).'" 
                 class="btn btn-sm btn-outline-secondary me-2" title="Edit">
                 <i class="fas fa-pencil-alt"></i>
             </a>';
@@ -54,12 +54,13 @@ class OptionController extends Controller
             // Delete
             $actions .= '<button type="button" 
                 class="btn btn-sm btn-outline-danger delete-option"
-                data-id="'.$option->id.'"
+                data-id="' . $option->id . '"
                 data-bs-toggle="modal"
                 data-bs-target="#delete-modal"
                 title="Delete">
                 <i class="fas fa-trash-alt"></i>
             </button>';
+
 
             $actions .= '</div>';
 
@@ -131,24 +132,44 @@ return view('admin.option_management.show_option');
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Option $option)
+    public function edit($id)
     {
-        //
+        $option = Option::findOrFail($id);
+        return view('admin.option_management.add_option', compact('option'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Option $option)
+    public function update(Request $request, $id)
     {
-        //
+        $option = Option::findOrFail($id);
+        // dd($option);
+        $validated = $request->validate([
+            'name'   => 'required|string',
+            'status' => 'nullable|boolean'
+        ]);
+
+        $option->update([
+            'name'   => $validated['name'],
+            'status' => $validated['status'] ?? 0,
+        ]);
+
+        return redirect()
+            ->route('admin.show_option')
+            ->with('success', 'Option updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Option $option)
+    public function destroy($id)
     {
-        //
+        $option = Option::findOrFail($id);
+        $option->delete();
+        return redirect()
+            ->route('admin.show_option')
+            ->with('success', 'Option deleted successfully!');
     }
 }

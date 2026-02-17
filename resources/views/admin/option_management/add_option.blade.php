@@ -3,7 +3,7 @@
 @section('content')
 @section('page-title', 'Add Clubs')
 <div class="mb-4">
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb"> 
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="{{ route('admin.dashboard') }}">
@@ -29,7 +29,7 @@
             </h4>
 
             <form
-                action="{{ $option->id ? route('admin.update', $option->id) : route('admin.addoption') }}" 
+                action="{{ $option->id ? route('admin.updateoption', $option->id) : route('admin.addoption') }}" 
                 method="POST">
                 @csrf
                 @if($option->id) @method('PUT') @endif

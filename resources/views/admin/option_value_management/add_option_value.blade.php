@@ -34,7 +34,7 @@
             </h4>
 
             <form
-                action="{{ $option_value->id ? route('admin.update', $option_value->id) : route('admin.addoptionvalue') }}"
+                action="{{ $option_value->id ? route('admin.updateoptionvalue', $option_value->id) : route('admin.addoptionvalue') }}"
                 method="POST">
 
                 @csrf
@@ -55,7 +55,7 @@
                             @foreach($option_value_list as $opt)
 
                                 <option value="{{ $opt->id }}"
-                                    {{ old('option_value', $option_value->parent_id ?? '') == $opt->id ? 'selected' : '' }}>
+                                    {{ old('option_value', $option_value->option_value_id ?? '') == $opt->id ? 'selected' : '' }}>
                                     {{ $opt->name }}
                                 </option>
 

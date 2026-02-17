@@ -1,4 +1,5 @@
 
+
 @extends('admin.components.app')
 @section('page-title', 'Options')
 @section('content')
@@ -71,77 +72,31 @@
 
 
 
-{{-- View once row --}}
-
-
-    <div class="modal fade" id="productListModal" tabindex="-1" aria-labelledby="productListModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                
-                <!-- Modal Header with Close Button -->
-                <div class="modal-header bg-light">
-                    <h5 class="modal-title" id="productListModalLabel">Available Products</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <!-- Modal Body: The Product List -->
-                <div class="modal-body p-0">
-                    <div class="list-group list-group-flush">
-                        
-                        <!-- Product Item 1 -->
-                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center p-3">
-                          <div class="flex-grow-1">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1 fw-bold" id="modalOptionsName"   ></h6>
-                                  
-                                </div>
-                              
-                            </div>
-                        </a>
-
-                    
-                    </div>
-                </div>
-
-                <!-- Modal Footer -->
-               
-                
-            </div>
-        </div>
-    </div>
-
-
-
     {{-- modal --}}
 
-        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Options</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-                <input type="hidden" id="deleteId">
-                <p>Are you sure you want to delete this Options?</p>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-
-                <!-- ✅ class used in JS -->
-                <button type="button" class="btn btn-sm btn-danger btn_delete_club_member">
-                    Delete
-                </button>
-            </div>
-
+        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Delete Option</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form>
+                    <div class="modal-body">
+                        <!-- <input type="hidden" name="_method" value="DELETE"> -->
+                        {{-- <input type="hidden" name="_token" > --}}
+                        <input type="hidden" id="deleteId" name="deleteId">
+                        <p>Are you sure you want to delete this option?</p>
+                        <div class="modal-footer">
+                        
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-sm btn-danger btn_delete_option" data-loading-text="">Delete</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>   
         </div>
-    </div>
-</div>
 
 
     {{-- end modal --}}
@@ -155,24 +110,41 @@
 
 
 //status toggle
-    
+
+
+let categoryId;
+let status;
+let label;
 
 $(document).on('change', '.toggle-status', function () {
 
-    let OptionsId = $(this).data('id');
-    let status = $(this).is(':checked') ? 1 : 0;
-    let label = $('#status-label-' + OptionsId);
+    categoryId = $(this).data('id');
+    status = $(this).is(':checked') ? 1 : 0;
+    label = $('#status-label-' + categoryId);
+
+//     let statusModal = new bootstrap.Modal(document.getElementById('status-modal'));
+//     statusModal.show();
+// });
+
+// $(document).on('click', '#confirmStatusChange', function () {
 
     $.ajax({
         url: "{{ route('admin.option_change_status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
-            id: OptionsId,
+            id: categoryId,
             status: status
         },
         success: function (res) {
-           alert('Status Changed!');
+            // alert('Status Changed!');
+            // bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
+             Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "Status changed successfully!",
+                    confirmButtonText: 'OK'
+                });
            if (status === 1) {
                     label.text('Active')
                          .removeClass('bg-secondary-subtle text-secondary')
@@ -189,6 +161,7 @@ $(document).on('change', '.toggle-status', function () {
     });
 
 });
+
 
 //table rows
 
@@ -240,8 +213,10 @@ $(document).ready(function() {
 })
 
 
+//delete option
+// delete modal
 
-function deleteOptions(id) {
+    function delete_option(id) {
     $('#deleteId').val(id);
     const modal = new bootstrap.Modal(document.getElementById('delete-modal'));
     modal.show();
@@ -249,20 +224,25 @@ function deleteOptions(id) {
 
 $(document).ready(function () {
 
-    $(document).on('click', '.btn_delete_club_member', function () {
+            $(document).on('click', '.delete-option', function () {
+            let id = $(this).data('id');
+            $('#deleteId').val(id);
+        });
+
+    $(document).on('click', '.btn_delete_option', function () {
 
         let id = $('#deleteId').val();
         let $btn = $(this);
 
         if (!id) {
-            Swal.fire('Error', 'Invalid Options ID', 'error');
+            Swal.fire('Error', 'Invalid Option ID', 'error');
             return;
         }
 
         $btn.prop('disabled', true).text('Deleting...');
 
         $.ajax({
-            url: "{{ url('admin/Options_management/destroy_Options') }}/" + id,
+            url: "{{ url('admin/delete_option') }}/" + id,
             type: "POST",
             data: {
                 _token: "{{ csrf_token() }}",
@@ -277,7 +257,7 @@ $(document).ready(function () {
                 Swal.fire({
                     icon: 'success',
                     title: 'Deleted!',
-                    text: 'Options deleted successfully',
+                    text: 'Option deleted successfully',
                     confirmButtonText: 'OK'
                 }).then(() => {
                     location.reload(); 
@@ -293,6 +273,22 @@ $(document).ready(function () {
         });
     });
 });
+
+
+</script>
+
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
 
 </script>
 

@@ -83,12 +83,18 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('add_option', [OptionController::class, 'create'])->name('add_option');//add options
     Route::post('addoption', [OptionController::class, 'store'])->name('addoption'); //add option data to table (submit form)
     Route::post('option_change_status', [OptionController::class, 'changeStatus'])->name('option_change_status');
+    Route::get('edit_option/{id}', [OptionController::class, 'edit'])->name('editoption'); //edit option form
+    Route::put('update_option/{id}', [OptionController::class, 'update'])->name('updateoption'); //update option data to table (submit form)
+    Route::delete('delete_option/{id}', [OptionController::class, 'destroy'])->name('deleteoption'); //delete option
 
-    //option value
+    //option value 
     Route::get('show_option_value', [OptionValueController::class, 'index'])->name('show_option_value');//view options
     Route::get('add_option_value', [OptionValueController::class, 'create'])->name('add_option_value');//add options 
     Route::post('addoptionvalue', [OptionValueController::class, 'store'])->name('addoptionvalue'); //add option value data to table (submit form)
     Route::post('option_value_change_status', [OptionValueController::class, 'changeStatus'])->name('option_value_change_status');
+    Route::get('edit_option_values/{id}',[OptionValueController::class,'edit'])->name('editoptionvalue');
+    Route::put('update_option_value/{id}', [OptionValueController::class, 'update'])->name('updateoptionvalue'); //update option value data to table (submit form)
+    Route::delete('delete_option_value/{id}', [OptionValueController::class, 'destroy'])->name('deleteoptionvalue'); //delete option value
     //microsite
     Route::get('show_microsites', [MicrositeController::class, 'index'])->name('show_microsites');//view microsites
 
