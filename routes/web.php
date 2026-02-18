@@ -1,6 +1,6 @@
 
 <?php
-
+ use App\Http\Controllers\Admin\Club\MicrositeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
@@ -57,7 +57,18 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     //Club dashboard
     Route::get('/clubs/{club}/dashboard', [ClubController::class, 'dashboard'])->name('clubs.dashboard');//dashboard for each club
     Route::delete('clubs/{club}', [ClubController::class, 'destroy'])->name('clubs.destroy');//delete club
+   
 
+Route::prefix('clubs')->name('clubs.')->group(function () {
+
+    // Display Create Microsite Page
+    Route::get('/{club}/microsites', [MicrositeController::class, 'create'])
+        ->name('microsites');
+
+    // Store Microsite
+    Route::post('/microsites/store', [MicrositeController::class, 'store'])
+        ->name('microsites.store');
+});
 
     //Category-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     Route::get('category_management/add_category_index', [CategoryController::class, 'add_category_index'])->name('category_management.add_category_index');

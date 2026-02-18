@@ -24,10 +24,12 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link">
-                        <i class="bi bi-globe me-2"></i> Microsites
-                    </a>
-                </li>
+    <a class="nav-link {{ request()->routeIs('admin.clubs.microsites') ? 'active' : '' }}"
+       href="{{ route('admin.clubs.microsites', $club->id) }}">
+        <i class="bi bi-globe me-2"></i> Microsites
+    </a>
+</li>
+
 
                 <li class="nav-item">
                     <a class="nav-link">
