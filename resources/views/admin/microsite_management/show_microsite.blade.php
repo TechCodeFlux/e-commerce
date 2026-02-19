@@ -13,7 +13,12 @@
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('admin.clubsindex') }}">
-                    <i class="bi bi-people-fill small me-2"></i> Clubs{{$club->name}}
+                    <i class="bi bi-person-badge small me-2"></i> Clubs
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ route('admin.clubsindex') }}">
+                    <i class="bi bi-people-fill small me-2"></i>{{$club->name}}
                 </a>
             </li>
             <li class="breadcrumb-item active">
