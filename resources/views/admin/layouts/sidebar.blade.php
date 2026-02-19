@@ -499,7 +499,7 @@
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown">
                 <div class="avatar me-3">
-                    <img src="{{url('assets/images/user/man_avatar3.jpg')}}"
+                    <img src="{{url('assets/images/grabit/admin-logo.webp')}}"
                          class="rounded-circle" alt="image">
                 </div>
                 <div>
@@ -564,14 +564,7 @@
                     <span>Categoies</span>
                 </a>
             </li>
-            <li>
-                <a  href="">
-                    <span class="nav-link-icon">
-                        <i class="bi bi-box-seam me-2"></i>
-                    </span>
-                    <span>Products</span>
-                </a>
-            </li>
+            
              <li>
                 <a class="{{ request()->routeIs()? 'active' : '' }}"  href="">
                     <span class="nav-link-icon">
@@ -591,12 +584,20 @@
             <li>
                 <a  href="">
                     <span class="nav-link-icon">
+                        <i class="bi bi-box-seam me-2"></i>
+                    </span>
+                    <span>Products</span>
+                </a>
+            </li>
+            <li>
+                <a  href="">
+                    <span class="nav-link-icon">
                         <i class="bi bi-diagram-3 me-2"></i>
                     </span>
                     <span>Varient</span>
                 </a>
             </li>
-             
+            
             
            
 

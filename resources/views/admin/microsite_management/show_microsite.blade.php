@@ -17,7 +17,7 @@
                 </a>
             </li>
             <li class="breadcrumb-item active">
-                <i class="bi bi-building small me-2"></i> Microsites
+                <i class="bi bi-building small me-2"></i> Microsites 
             </li>
         </ol>
     </nav>
@@ -109,7 +109,13 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         dom: 'rtip',
-        ajax: "{{ route('admin.show_microsites') }}",
+        ajax: {
+            url: "{{ route('admin.show_microsites') }}",
+            type: "GET", // or POST if your route expects POST
+            data: function(d) {
+                d.club_id = {{ $club->id }}; // pass current club ID
+            }
+        },
         columns: [
             { data: 'name', name: 'name' },
             { data: 'start_date', name: 'start_date' },
@@ -121,6 +127,7 @@ $(document).ready(function() {
     });
 
 });
+
 
 
 // ===============================

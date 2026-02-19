@@ -12,7 +12,7 @@
                         <div class="d-flex flex-column flex-md-row text-center text-md-start mb-3">
                             <figure class="me-4 flex-shrink-0">
                                 <img width="100" class="rounded-pill"
-                                     src="../../assets/images/user/man_avatar3.jpg" alt="...">
+                                     src="{{url('assets/images/grabit/admin-logo.webp')}}" alt="...">
                             </figure>
                             <div class="flex-fill">
                                 <h3 class="mb-6">{{$user->name}}</h3>

@@ -7,7 +7,7 @@
                     href="{{ route('admin.clubs.dashboard', $club->id) }}">
                         <i class="bi bi-graph-up me-2"></i> Dashboard
                     </a>
-
+ 
                 </li>
                 
                 <li class="nav-item" role="presentation">
