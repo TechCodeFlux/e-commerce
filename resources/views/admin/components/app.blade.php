@@ -64,7 +64,8 @@
 <!-- Main Javascript file -->
 <script src="{{url('dist/js/app.min.js')}}"></script>
 
-@yield('script')
+@yield('scripts')
+
 </body>
 </html>
 
