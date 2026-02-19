@@ -96,7 +96,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::put('update_option_value/{id}', [OptionValueController::class, 'update'])->name('updateoptionvalue'); //update option value data to table (submit form)
     Route::delete('delete_option_value/{id}', [OptionValueController::class, 'destroy'])->name('deleteoptionvalue'); //delete option value
     //microsite
-    Route::get('show_microsites', [MicrositeController::class, 'index'])->name('show_microsites');//view microsites
+    Route::get('show_microsites/{club}', [MicrositeController::class, 'index'])->name('show_microsites');//view microsites
     Route::get('add_microsites/{id}', [MicrositeController::class, 'create'])->name('add_microsites');//add microsite form
     Route::post('microsite_store', [MicrositeController::class, 'store'])->name('microsite_store');//store microsite data
     Route::post('microsite_change_status', [MicrositeController::class, 'changeStatus'])->name('microsite_change_status');

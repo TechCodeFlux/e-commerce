@@ -13,14 +13,12 @@ class MicrositeController extends Controller
     /** 
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        $club = Club::first();
-
+    public function index(Request $request, Club $club)
+{
     if ($request->ajax()) {
 
         $microsites = Microsite::query()
-            ->where('club_id', $club->id)
+            ->where('club_id', $club->id) // use $club->id here
             ->select([
                 'microsites.id',
                 'microsites.name',
@@ -35,7 +33,6 @@ class MicrositeController extends Controller
             ->eloquent($microsites)
             ->editColumn('start_date', fn($m) => $m->start_date->format('d M Y'))
             ->editColumn('end_date', fn($m) => $m->end_date->format('d M Y'))
-
             ->addColumn('microsite_status', function ($microsite) {
 
                 $today = Carbon::today();
@@ -50,7 +47,6 @@ class MicrositeController extends Controller
 
                 return '<span class="badge bg-danger">Expired</span>';
             })
-
             ->addColumn('status', function ($microsite) {
 
                 $checked = $microsite->status ? 'checked' : '';
@@ -64,37 +60,35 @@ class MicrositeController extends Controller
                     </div>
                 ';
             })
- 
             ->addColumn('action', function ($microsite) {
 
                 $actions = '<div class="d-flex gap-1">';
-                $actions .= '<a href="" 
-                class="btn btn-sm btn-clean btn-icon" title="Show"><i class="fas fa-eye" style="color: #ffc107;"></i></a>';
-                $actions .= '<a href="" 
-                    class="btn btn-sm btn-outline-secondary me-2" title="Edit">
-                    <i class="fas fa-pencil-alt"></i>
-                </a>';
-
+                $actions .= '<a href="" class="btn btn-sm btn-clean btn-icon" title="Show">
+                                <i class="fas fa-eye" style="color: #ffc107;"></i>
+                             </a>';
+                $actions .= '<a href="" class="btn btn-sm btn-outline-secondary me-2" title="Edit">
+                                <i class="fas fa-pencil-alt"></i>
+                             </a>';
                 $actions .= '<button type="button" 
-                    class="btn btn-sm btn-outline-danger delete-microsite"
-                    data-id="' . $microsite->id . '"
-                    data-bs-toggle="modal"
-                    data-bs-target="#delete-modal"
-                    title="Delete">
-                    <i class="fas fa-trash-alt"></i>
-                </button>';
-
+                                class="btn btn-sm btn-outline-danger delete-microsite"
+                                data-id="' . $microsite->id . '"
+                                data-bs-toggle="modal"
+                                data-bs-target="#delete-modal"
+                                title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                             </button>';
                 $actions .= '</div>';
 
                 return $actions;
             })
-
             ->rawColumns(['microsite_status','status','action'])
             ->make(true);
     }
 
+    // pass the Club object to the view, NOT its ID
     return view('admin.microsite_management.show_microsite', compact('club'));
-    }
+}
+
     public function changeStatus(Request $request)
     {
         $microsite = Microsite::find($request->id);
@@ -156,7 +150,7 @@ class MicrositeController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.show_microsites')
+            ->route('admin.show_microsites', $validated['club_id'])
             ->with('success', 'Microsite registered successfully!');
     }
 

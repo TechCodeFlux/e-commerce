@@ -13,7 +13,7 @@
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('admin.clubsindex') }}">
-                    <i class="bi bi-people-fill small me-2"></i> Clubs
+                    <i class="bi bi-people-fill small me-2"></i> Clubs{{$club->name}}
                 </a>
             </li>
             <li class="breadcrumb-item active">
@@ -110,7 +110,7 @@ $(document).ready(function() {
         serverSide: true,
         dom: 'rtip',
         ajax: {
-            url: "{{ route('admin.show_microsites') }}",
+            url: "{{ route('admin.show_microsites', $club->id) }}",
             type: "GET", // or POST if your route expects POST
             data: function(d) {
                 d.club_id = {{ $club->id }}; // pass current club ID

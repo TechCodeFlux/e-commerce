@@ -4,12 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; 
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-// use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Validation\Rule;
 
 //datatables
 use App\Models\Club;
@@ -17,12 +12,12 @@ use App\Models\ClubMember;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\Address;
-use index;
  
 class ClubMemberController extends Controller
 {
     public function index(Request $request, Club $club)
    {
+    // dd($club);
          if($request->ajax()){
             $clubmember = ClubMember::where('club_id', $club->id);
             // return DataTables::eloquent($club)
