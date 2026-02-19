@@ -46,29 +46,42 @@ public function generate_varient()
 }
 
 
-    
-    public function store(Request $request)
+public function store(Request $request)
 {
-    $validated = $request->validate([
-        'size'      => 'required|string|max:25',
-        'color'      => 'required|string|max:25',
-        'stock'      => 'required|integer|min:0|max:50',
-        'status'    => 'nullable|boolean',
+    $request->validate([
+        'variants' => 'required|array|min:1',
+        'variants.*.color' => 'required',
+        'variants.*.size'  => 'required',
+        'variants.*.stock'    => 'required|integer|min:0',
     ]);
 
-   
+   $productData = session('product');
 
-    Varient::create([
-        'size'       => $request->size,
-        'color'       => $request->color,
-        'stock'       => $request->stock,
-        'status'     => $request->status,
-    ]);
+    Product::create([
+            'name'        => $productData['name'],
+            'description' => $productData['description'],
+            'image'       => $productData['image'],
+            'status'      => $productData['status'],
+            'category_id' => $productData['category_id'],
+     ]);
+
+    session()->forget('product');
+
+
+    foreach ($request->variants as $variant) {
+
+        Varient::create([
+            'color' => $variant['color'],   // store ID
+            'size'  => $variant['size'],    // store ID
+            'stock' => $variant['stock'],   
+        ]);
+    }
 
     return redirect()
-            ->route('admin.varient_management.form_varient_index')
-            ->with('success', 'Varient updated successfully');
+        ->route('admin.product_management.form_products_index')
+        ->with('success', 'Variants saved successfully');
 }
+
 
 
 

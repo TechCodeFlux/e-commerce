@@ -27,7 +27,10 @@
             <div class="row justify-content-center">
                 <div class="col-lg-12">
 
-                    <form class="VarientForm" enctype="multipart/form-data">
+                    <form  class="VarientForm" 
+                        method="POST" 
+                        action="{{ route('admin.varient_management.add_varient') }}" 
+                        enctype="multipart/form-data">
                         @csrf
                         
                         {{-- Added align-items-end to align button with inputs --}}
@@ -80,7 +83,7 @@
                             {{-- Removed 'card-body' class from here to fix alignment padding issues --}}
                            
                         </div> 
-                        <div id="variant-matrix-container" class="mt-4"></div>
+                        
 
                         {{-- Footer Buttons --}}
                         <div class="d-flex justify-content-end gap-3 mt-4">
@@ -105,11 +108,34 @@
 
 @section('script')
 <script>
+
     $(document).ready(function() {
     $('.js-example-basic-multiple').select2();
 });
 
 
+
+const STORAGE_KEY = "variant_matrix_data";
+function saveVariantData() {
+
+        const colors = $('#color').val();
+        const sizes  = $('#size').val();
+        const tableHtml = $('#variant-matrix-container').html();
+
+        const data = {
+            colors: colors,
+            sizes: sizes,
+            tableHtml: tableHtml
+        };
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    // ✅ CLEAR STORAGE AFTER FINAL SUBMIT
+    $('.VarientForm').on('submit', function () {
+        localStorage.removeItem(STORAGE_KEY);
+         localStorage.removeItem('productForm');
+    });
 
 
 
@@ -149,7 +175,7 @@
 
             colors.each(function () {
                 const colorId   = $(this).val();
-                const colorName = $(this).text().trim();
+                const colorName = $(this).text().trim();    
 
                 sizes.each(function () {
                     const sizeId   = $(this).val();
@@ -158,13 +184,13 @@
                     table += `
                         <tr>
                             <td class="col-2">
-                                ${colorName.toUpperCase()}
-                                <input type="hidden" name="variants[${index}][color_id]" value="${colorId}">
+                               <input type="text" name="variants[${index}][color]" value="${colorName.toUpperCase()}"  class="border-0 text-center" readonly> 
+                               
                             </td>
 
                             <td class="col-2">
-                                ${sizeName.toUpperCase()}
-                                <input type="hidden" name="variants[${index}][size_id]" value="${sizeId}">
+                                 <input type="text" name="variants[${index}][size]" value="${sizeName.toUpperCase()}"  class="border-0 text-center" readonly> 
+                                
                             </td>
 
                             <td class="col-2">
@@ -200,7 +226,93 @@
 
             $('#variant-matrix-container').html(table);
         });
+
+    
+    $(document).on('click', '.delete-club-member', function () {
+
+    $(this).closest('tr').remove();
+
+    reIndexVariants();
+
+    // If no rows left → clear storage
+    if ($('#variant-matrix-container tbody tr').length === 0) {
+        localStorage.removeItem(STORAGE_KEY);
+        
+    } else {
+        saveVariantData();
+    }
+});
+
+
+   function reIndexVariants() {
+
+    
+    $('#variant-matrix-container tbody tr').each(function (index) {
+
+        // Update color input
+        $(this).find('input[name*="[color]"]')
+            .attr('name', `variants[${index}][color]`);
+
+        // Update size input
+        $(this).find('input[name*="[size]"]')
+            .attr('name', `variants[${index}][size]`);
+
+        // Update stock input
+        $(this).find('input[name*="[stock]"]')
+            .attr('name', `variants[${index}][stock]`);
     });
+}
+
+    });
+
+
+
+
+$(document).ready(function () {
+
+    const STORAGE_KEY = "variant_matrix_data";
+
+    // ✅ RESTORE DATA ON PAGE LOAD
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        const data = JSON.parse(saved);
+
+        // Restore Select2 values
+        if (data.colors) {
+            $('#color').val(data.colors).trigger('change');
+        }
+
+        if (data.sizes) {
+            $('#size').val(data.sizes).trigger('change');
+        }
+
+        // Restore table
+        if (data.tableHtml) {
+            $('#variant-matrix-container').html(data.tableHtml);
+        }
+    }
+
+    // ✅ SAVE WHEN GENERATE BUTTON CLICKED
+    $('#btn-generate-matrix').on('click', function () {
+
+        setTimeout(function () {
+            saveVariantData();
+        }, 200); // wait for table render
+
+    });
+
+    // ✅ SAVE WHEN STOCK VALUE CHANGES
+    $(document).on('input', 'input[name*="[stock]"]', function () {
+        saveVariantData();
+    });
+
+    // ✅ FUNCTION TO SAVE
+    
+
+});
+
+
+
 
 
 
@@ -211,9 +323,8 @@
 //     if (savedData) {
 //         const formData = JSON.parse(savedData);
 //         // Fixed selectors to match new names
-//         $('.VarientForm select[name="option_size"]').val(formData.size || '');
-//         $('.VarientForm select[name="option_color"]').val(formData.color || '');
-//         $('.VarientForm input[name="stock"]').val(formData.stock || '');
+//         $('.VarientForm select[name="size[]"]').val(formData.size || '');
+//         $('.VarientForm select[name="color[]"]').val(formData.color || '');
             
 //         const statusSwitch = $('#statusSwitch');
 //         if (formData.status === '1' || formData.status === 1) {
@@ -230,10 +341,9 @@
 //     function saveFormData() {
 //         const formData = {
 //             // Updated selectors to get value from SELECT inputs, not text inputs
-//             size: $('.VarientForm select[name="option_size"]').val(),
-//             color: $('.VarientForm select[name="option_color"]').val(),
-//             stock: $('.VarientForm input[name="stock"]').val(),
-//             status: $('#statusSwitch').is(':checked') ? '1' : '0'
+//             size: $('.VarientForm select[name="size[]"]').val(),
+//             color: $('.VarientForm select[name="color[]"]').val(),
+
 //         };
 //         localStorage.setItem('varientForm', JSON.stringify(formData));
 //     }
