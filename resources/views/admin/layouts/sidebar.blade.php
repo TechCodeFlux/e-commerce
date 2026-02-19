@@ -531,7 +531,7 @@
                 </a>
             </li>
             <li>
-                <a class="{{ request()->routeIs('admin.product_management.show_products','admin.product_management.form_products_index')? 'active' : '' }}"
+                <a class="{{ request()->routeIs('admin.product_management.show_products','admin.product_management.form_products_index','admin.varient_management.generate_varient')? 'active' : '' }}"
                      href="{{ route('admin.product_management.show_products') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
@@ -555,6 +555,15 @@
                         <i class="bi bi-receipt"></i>
                     </span>
                     <span>Option</span>
+                </a>
+            </li>
+             <li>
+                <a  class="{{ request()->routeIs('admin.option_value_management.show_option_value')? 'active' : '' }}"
+                href="{{ route('admin.option_value_management.show_option_value') }}">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-receipt"></i>
+                    </span>
+                    <span>Option Value</span>
                 </a>
             </li>
               <li>

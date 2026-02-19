@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Auth\CategoryController;
 use App\Http\Controllers\Admin\Auth\ExController;
 use App\Http\Controllers\Admin\Auth\OptionController;
+use App\Http\Controllers\Admin\Auth\OptionValueController;
 use App\Http\Controllers\Admin\Auth\ProductController;
 use App\Http\Controllers\Admin\Auth\VarientController;
 use App\Http\Controllers\IndexPageController;
@@ -102,6 +103,29 @@ Route::get('varient_management/show_single/{id}', [VarientController::class, 'si
 
 
 Route::post('varient_management/change-status', [VarientController::class, 'changeStatus'])->name('varient_management.change-status');
+
+Route::post(
+    'varient/get-option-values',
+    [VarientController::class, 'getOptionValues']
+)->name('varient_management.get_option_values');
+
+
+
+
+
+Route::get('option_value_management/show_option_value', [OptionValueController::class, 'index'])->name('option_value_management.show_option_value');//view options
+
+    Route::get('option_value_management/add_option_value', [OptionValueController::class, 'create'])->name('option_value_management.add_option_value');//add options 
+
+    Route::post('option_value_management/addoptionvalue', [OptionValueController::class, 'store'])->name('option_value_management.addoptionvalue'); //add option value data to table (submit form)
+    
+    Route::get('option_value_management/add_option_value/{id}', [OptionValueController::class, 'edit_option_value'])->name('option_value_management.edit_option_value');
+
+    Route::put('option_value_management/edit_optionvalue/{id}', [OptionValueController::class, 'update'])->name('option_value_management.edit_optionvalue');
+
+    Route::post('option_value_management/change_status', [OptionValueController::class, 'changeStatus'])->name('option_value_management.change_status');
+
+    Route::delete('option_value_management/destroy_option_value/{id}', [OptionValueController::class, 'destroy'])->name('option_value_management.destroy_option_value');
 
 // Route::post('varient_management/add_varient', [VarientController::class, 'add_varient'])->name('varient_management.add_varient');
 });

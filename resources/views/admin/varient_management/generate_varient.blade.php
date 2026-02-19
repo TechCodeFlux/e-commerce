@@ -32,34 +32,49 @@
                         
                         {{-- Added align-items-end to align button with inputs --}}
                       <div class="row align-items-end">
-    <div class="col-md-5 mb-3">
-        <label class="form-label">Color</label>
-        <select id="option_color" class="form-select">
-            <option value="">Select Color</option>
-            @foreach($options->unique('color') as $option)
-                <option value="{{ $option->color }}">{{ $option->color }}</option>
-            @endforeach
-</select>
-    </div>
+                         {{-- color-input --}}
+                           <div class="col-md-5 mb-3">
+                               <label class="form-label">Color</label>
+                                  <select name="color[]" id="color"  class="js-example-basic-multiple" multiple="multiple">
+                                            
+                                            <option value="">Select Color</option>
+                                        
+                                            @foreach($optioncolorvalues as $optionvalue)
+                                                <option value="{{ $optionvalue->id }}">
+                                                    {{  ucfirst($optionvalue->name)  }}
+                                                    
+                                                </option>
+                                                
+                                            @endforeach
+                                            
+                                        </select>
+                            </div>
+                                    {{-- size-input --}}
+                             <div class="col-md-5 mb-3">
+                                    <label class="form-label">Size </label>
+                                         <select name="size[]" id="size"  class="js-example-basic-multiple " multiple="multiple">
+                                            
+                                            <option value="">Select Size</option>
+                                        
+                                            @foreach($optionsizevalues as $optionvalue)
+                                                <option  value="{{ $optionvalue->id }}">
+                                                    {{  ucfirst($optionvalue->name) }}
+                                                    
+                                                </option>
+                                                
+                                            @endforeach
+                                            
+                                        </select>
+                            </div>
 
-    <div class="col-md-5 mb-3">
-        <label class="form-label">Size </label>
-        <select id="option_size" class="form-select">
-            <option value="">Select Size</option>
-            @foreach($options->unique('size') as $option)
-           <option value="{{ $option->size }}">{{ $option->size }}</option>
-    @endforeach
-</select>
-    </div>
+                            <div class="col-md-2 mb-3">
+                                <button type="button" id="btn-generate-matrix" class="btn btn-secondary w-100">
+                                    Generate
+                                </button>
+                            </div>
+                        </div>
 
-    <div class="col-md-2 mb-3">
-        <button type="button" id="btn-generate-matrix" class="btn btn-secondary w-100">
-            Generate
-        </button>
-    </div>
-</div>
-
-<div id="variant-matrix-container" class="mt-4"></div>
+                        <div id="variant-matrix-container" class="mt-4"></div>
 
                             {{-- Generate Button --}}
                             {{-- Removed 'card-body' class from here to fix alignment padding issues --}}
@@ -90,87 +105,102 @@
 
 @section('script')
 <script>
-    const EXISTING_VARIANTS = @json($variants);
-
-$(document).ready(function () {
-
-    $('#btn-generate-matrix').on('click', function () {
-
-        let colorValue = $('#option_color').val(); // "red,white"
-        let sizeValue  = $('#option_size').val();  // "S,M,L"
-
-        if (!colorValue || !sizeValue) {
-            alert('Please select Color and Size');
-            return;
-        }
-
-        let colors = colorValue.split(',').map(c => c.trim());
-        let sizes  = sizeValue.split(',').map(s => s.trim());
-
-        let html = `
-            <table class="table table-bordered mt-3">
-                <thead class="table-light">
-                    <tr>
-                        <th>Color</th>
-                        <th>Size</th>
-                        <th>Stock</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
-        let found = false;
-
-        EXISTING_VARIANTS.forEach(function (variant) {
-
-            if (
-                colors.includes(variant.color) &&
-                sizes.includes(variant.size)
-            ) {
-                found = true;
-
-                html += `
-                    <tr>
-                        <td>
-                            ${variant.color}
-                            <input type="hidden" name="variants[${variant.id}][color]" value="${variant.color}">
-                        </td>
-                        <td>
-                            ${variant.size}
-                            <input type="hidden" name="variants[${variant.id}][size]" value="${variant.size}">
-                        </td>
-                        <td>
-                            <input type="number"
-                                   class="form-control"
-                                   name="variants[${variant.id}][stock]"
-                                   value="${variant.stock}"
-                                   min="0">
-                        </td>
-                    </tr>
-                `;
-            }
-        });
-
-        if (!found) {
-            html += `
-                <tr>
-                    <td colspan="3" class="text-center text-muted">
-                        No variants found for selected options
-                    </td>
-                </tr>
-            `;
-        }
-
-        html += `</tbody></table>`;
-
-        $('#variant-matrix-container').html(html);
-    });
-
+    $(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
 });
 
 
 
 
+
+  $(document).ready(function () {
+
+        $('.js-example-basic-multiple').select2();
+
+        $('#btn-generate-matrix').on('click', function () {
+
+            const colors = $('#color option:selected');
+            const sizes  = $('#size option:selected');
+
+            // Validation
+            if (colors.length === 0 || sizes.length === 0) {
+                alert('Please select at least one Color and one Size');
+                return;
+            }
+
+            let table = `
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                      
+
+                        <table class="table table-bordered text-center align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Color</th>
+                                    <th>Size</th>
+                                    <th>Stock</th>
+                                     <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+
+            let index = 0;
+
+            colors.each(function () {
+                const colorId   = $(this).val();
+                const colorName = $(this).text().trim();
+
+                sizes.each(function () {
+                    const sizeId   = $(this).val();
+                    const sizeName = $(this).text().trim();
+
+                    table += `
+                        <tr>
+                            <td class="col-2">
+                                ${colorName.toUpperCase()}
+                                <input type="hidden" name="variants[${index}][color_id]" value="${colorId}">
+                            </td>
+
+                            <td class="col-2">
+                                ${sizeName.toUpperCase()}
+                                <input type="hidden" name="variants[${index}][size_id]" value="${sizeId}">
+                            </td>
+
+                            <td class="col-2">
+                                <input 
+                                    type="number" 
+                                    name="variants[${index}][stock]" 
+                                    class="form-control text-center" 
+                                    min="0"
+                                    required
+                                >
+                            </td>
+                             <td class="col-2">
+                               <button 
+                                 type="button"
+                                 class=" btn btn-sm btn-outline-danger delete-club-member"
+                                
+                                 title="Delete">
+                                                              <i class="fas fa-trash-alt"></i>
+                            </button>
+                            </td>
+                        </tr>
+                    `;
+                    index++;
+                });
+            });
+
+            table += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            $('#variant-matrix-container').html(table);
+        });
+    });
 
 
 
@@ -269,6 +299,99 @@ $(document).ready(function () {
 //         });
 //     });
 // });
+
+
+
+
+
+// $(document).ready(function () {
+
+//     $('#btn-generate-matrix').on('click', function () {
+
+//         let colorValue = $('#option_color').val(); // "red,white"
+//         let sizeValue  = $('#option_size').val();  // "S,M,L"
+
+//         if (!colorValue || !sizeValue) {
+//             alert('Please select Color and Size');
+//             return;
+//         }
+
+//         let colors = colorValue.split(',').map(c => c.trim());
+//         let sizes  = sizeValue.split(',').map(s => s.trim());
+
+//         let html = `
+//             <table class="table table-bordered mt-3">
+//                 <thead class="table-light text-sm-center">
+//                     <tr>
+//                         <th>Color</th>
+//                         <th>Size</th>
+//                         <th>Stock</th>
+//                         <th>Action</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody>
+//         `;
+
+//         let found = false;
+
+//         EXISTING_VARIANTS.forEach(function (variant) {
+
+//             if (
+//                 colors.includes(variant.color) &&
+//                 sizes.includes(variant.size)
+//             ) {
+//                 found = true;
+
+//                 html += `
+//                     <tr>
+//                         <td class="text-md-center">
+//                             ${variant.color}
+//                             <input type="hidden" name="variants[${variant.id}][color]" value="${variant.color}">
+//                         </td>
+//                         <td class="text-md-center">
+//                             ${variant.size}
+//                             <input type="hidden" name="variants[${variant.id}][size]" value="${variant.size}">
+//                         </td>
+//                         <td class="w-25">
+//                             <input type="number"
+//                                    class="form-control"
+//                                    name="variants[${variant.id}][stock]"
+//                                    value="${variant.stock}"
+//                                    min="0">
+//                         </td>
+//                          <td class="text-md-center">
+//                             <button 
+//                                  type="button"
+//                                  class="bi-trash-fill btn btn-sm btn-outline-danger delete-club-member"
+//                                  onclick="deleteCategory(' . $category->id . ')"
+//                                  title="Delete">
+//                                                               <i class="fas fa-trash-alt"></i>
+//                             </button>
+//                         </td>
+//                     </tr>
+//                 `;
+//             }
+//         });
+
+//         if (!found) {
+//             html += `
+//                 <tr>
+//                     <td colspan="3" class="text-center text-muted">
+//                         No variants found for selected options
+//                     </td>
+//                 </tr>
+//             `;
+//         }
+
+//         html += `</tbody></table>`;
+
+//         $('#variant-matrix-container').html(html);
+//     });
+
+// });
+
+
+
 // </script>
  @endsection
  @endsection

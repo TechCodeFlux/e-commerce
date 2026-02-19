@@ -1,5 +1,5 @@
 @extends('admin.components.app')
-
+@section('page-title', $option->id ? 'Edit Option form' : 'Add Option Form')
 @section('content')
 
  <div class="mb-4">
@@ -25,9 +25,7 @@
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
 
-            <h6 class="card-title mb-4 text-center">
-                {{ $option->id ? 'Edit' : 'Add' }} Option Form
-            </h6>
+           
 
             @if(session('success'))
                 <div class="alert alert-success text-center">
@@ -50,19 +48,10 @@
                         <div class="row">
 
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Color:</label>
-                                <input type="text" name="color" class="form-control" placeholder="Color" 
-                                    value="{{ old('color', $option->color ?? '') }}">
-                                @error('color')
-                                    <small class="text-danger d-block mt-1">{{ $message }}</small>
-                                @enderror
-                            </div>   
-                            
-                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Size:</label>
-                                <input type="text" name="size" class="form-control" placeholder="Size" 
-                                    value="{{ old('size', $option->size ?? '') }}">
-                                @error('size')
+                                <label class="form-label">Name:</label>
+                                <input type="text" name="name" class="form-control" placeholder="Name" 
+                                    value="{{ old('name', $option->name ?? '') }}">
+                                @error('name')
                                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                                 @enderror
                             </div>   

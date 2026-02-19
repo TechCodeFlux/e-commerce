@@ -9,7 +9,7 @@
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Products</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-collection small me-2 "></i>Products</li>
             </ol>
         </nav>
     </div>
@@ -25,8 +25,8 @@
             <ol class="breadcrumb d-flex gap-3">
                
                 <li class="breadcrumb-item">
-                    <a class="list-group-item-primary px-sm-4 border p-2 d-inline-block" href="{{ route('admin.product_management.form_products_index') }}">
-                        Product Details 
+                    <a class="list-group-item-primary px-sm-4 border p-2 d-inline-block " href="{{ route('admin.product_management.form_products_index') }}">
+                         Product Details 
                     </a>
                 </li>
                 <li class="list-group-item-dark px-sm-4 border p-2 d-inline-block" >Varient Details</li>
@@ -44,12 +44,12 @@
             <div class="row justify-content-center">
                 <div class="col-lg-12">
 
-                    <form class="productForm"
-                     action="{{ route('admin.product_management.add_products') }}"
-                     method="POST"
+            <form class="productForm"
+                    action="{{ route('admin.product_management.add_products') }}"
+                    method="POST"
                     enctype="multipart/form-data"
                     autocomplete="off">
-                        @csrf
+                    @csrf
                         
                         {{-- Row 1: Name, Category, Description --}}
                         <div class="row justify-content-center">
@@ -86,24 +86,6 @@
                                     </div>
                             {{-- category --}}
 
-                            {{-- ---Option (Commented out) --- --}}
-                                    {{-- <div class="col-md-6 mb-3">
-                                        <label class="form-label">Options</label>
-                                        <select name="option" id="option" class="form-select">
-                                            <option value="">Select Option</option>
-                                            @foreach( $options as $option)
-                                                <option value="{{ $option->id }}"
-                                                    {{ old('option', $product->option_id ?? '') == $option->id ? 'selected' : '' }}>
-                                                    {{ $option->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('option')
-                                                <small class="text-danger d-block mt-1">{{ $message }}</small>
-                                        @enderror
-                                    </div> --}}
-                            {{-- ---Option--- --}}
-
                             {{-- ---Description--- --}}
                             <!-- Increased width to col-md-12 (Full Width) -->
                                     <div class="col-md-12 mb-3">
@@ -118,9 +100,9 @@
                         </div>
 
                         {{-- Row 2: Image & Status --}}
-                         <div class="row ">
+                     <div class="row ">
                             {{---image---}}
-                            <!-- Increased width to col-md-6 -->
+                            
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Image</label>
                                 {{-- Pre-View image --}}
@@ -131,16 +113,16 @@
                                                 class="col-7 d-none img-fluid w-25">
                                         </div>
                                 {{-- end-pre -View image --}}
-                                <input type="file"
-                                 name="image" 
-                                 class="form-control swal2-radio"
-                                 id="imageInput" 
-                                 accept="image/*"
-                                 onchange="previewImage(event)">
-                                        
-                                @error('image')
-                                    <small class="text-danger d-block mt-1">{{ $message }}</small>
-                                @enderror
+                                                <input type="file"
+                                                name="image" 
+                                                class="form-control swal2-radio"
+                                                id="imageInput" 
+                                                accept="image/*"
+                                                onchange="previewImage(event)">
+                                                        
+                                                @error('image')
+                                                    <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                                @enderror
                             </div>
                            
                        
@@ -169,12 +151,13 @@
                                 </div>
 
                             </div>
- </div>
+                    </div>
+                       
                         <div class="text-center mt-3 w-25 ms-sm-auto">
                            <button type="submit" class="btn btn-primary px-5"> {{ $product->id ? 'Update' : 'Next' }}</button>
                         </div>
 
-                    </form>
+            </form>
                     
 
                 </div>
@@ -254,205 +237,6 @@ $(document).ready(function () {
     }
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// $('.productForm').on('submit', function (e) {
-//     e.preventDefault();
-
-//     let formData = new FormData(this);
-
-//     $.ajax({
-//         url: "{{ route('admin.product_management.add_products') }}",
-//         type: "POST",
-//         data: formData,
-//         processData: false,
-//         contentType: false,
-
-//        success: function (response) {
-
-//             // 🔹 Convert FormData → Object (for localStorage)
-//             let formObject = {};
-//             formData.forEach((value, key) => {
-//                 formObject[key] = value;
-//             });
-
-//             // 🔹 Save form data temporarily
-//             localStorage.setItem('productForm', JSON.stringify(formObject));
-           
-
-//             // 🔹 Redirect to Variant page
-//             window.location.href =
-//                 "{{ route('admin.varient_management.generate_varient') }}" 
-//         },
-
-//         error: function (xhr) {
-//             if (xhr.status === 422) {
-//                 $('.text-danger').remove();
-
-//                 let errors = xhr.responseJSON.errors;
-//                 $.each(errors, function (field, messages) {
-//                     $('[name="' + field + '"]')
-//                         .after('<small class="text-danger d-block mt-1">' + messages[0] + '</small>');
-//                 });
-//             }
-//         }
-//     });
-// });
-
-
-
-
-// $(document).ready(function () {
-
-//     let savedData = localStorage.getItem('productForm');
-
-//     if (savedData) {
-//         let data = JSON.parse(savedData);
-
-//         $.each(data, function (key, value) {
-//             let field = $('[name="' + key + '"]');
-
-//             if (!field.length) return;
-
-//             if (field.attr('type') === 'checkbox') {
-//                 field.prop('checked', value == 1);
-//             } else {
-//                 field.val(value);
-//             }
-//         });
-//     }
-
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//     error: function (xhr) {
-//         if (xhr.status === 422) {
-//             let errors = xhr.responseJSON.errors;
-
-//             $.each(errors, function (field, messages) {
-//                 let input = $('[name="' + field + '"]');
-
-//                 if (input.length) {
-//                     input.after(
-//                         '<small class="text-danger d-block mt-1">' +
-//                         messages[0] +
-//                         '</small>'
-//                     );
-//                 }
-//             });
-//         }
-//     },
-
-//     complete: function () {
-//         // ✅ ALWAYS runs (success or error)
-//         $('button[type=submit]')
-//             .prop('disabled', false)
-//             .text('Next');
-//     }
-// });
-//     });
-
-// });
 
 
 

@@ -1,5 +1,6 @@
-@extends('admin.components.app')
 
+@extends('admin.components.app')
+@section('page-title', 'Option Value')
 @section('content')
     <div class="mb-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -9,7 +10,7 @@
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Option</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-sliders me-2"></i>Option Value</li>
             </ol>
         </nav>
     </div>
@@ -18,7 +19,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-md-flex gap-4 align-items-center">
-                        <div class="d-none d-md-flex">All Options</div>
+                        <div class="d-none d-md-flex">All Option Values</div>
                         <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
@@ -43,9 +44,9 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="{{ route('admin.option_management.form_option_index') }}">
+                            <a href="{{ route('admin.option_value_management.add_option_value') }}">
                                 <button class="btn btn-primary btn-icon">
-                                        <i class="bi bi-plus-circle"></i> Add Option
+                                        <i class="bi bi-plus-circle"></i> Add Options Values
                                 </button>
                             </a>
                         </div>
@@ -54,42 +55,20 @@
                     </div>
                 </div>
                 <div class="" >
-                    <table id="club" class="table table-custom table-lg mb-0" >
+                    <table id="optionvalue" class="table table-custom table-lg mb-0" >
                     <thead>
                       <tr>
+                         <th >Option Value</th>
                          <th >Option Name</th>  
-               
                           <th>Status</th>
-                        <th >Action</th>
+                        <th  class=" ps-5" >Action</th>
                      </tr>
                     </thead>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Delete Option</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form>
-            <div class="modal-body">
-                    <!-- <input type="hidden" name="_method" value="DELETE"> -->
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input type="hidden" id="deleteId" name="deleteId">
-                        <p>Are you sure you want to delete this option</p>
-                        <div class="modal-footer">
-                        
-                            <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-sm btn-danger btn_delete_club_member" data-loading-text="">Delete</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>   
-</div> 
+       
 
 
 
@@ -114,7 +93,7 @@
                         <a href="#" class="list-group-item list-group-item-action d-flex align-items-center p-3">
                           <div class="flex-grow-1">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1 fw-bold" id="modalOptionName"   ></h6>
+                                    <h6 class="mb-1 fw-bold" id="modalCategoryName"   ></h6>
                                   
                                 </div>
                               
@@ -126,22 +105,28 @@
                 </div>
 
                 <!-- Modal Footer -->
+               
                 
             </div>
         </div>
     </div>
-      <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+
+
+
+    {{-- modal --}}
+
+        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">Delete Option</h5>
+                <h5 class="modal-title">Delete Category</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
                 <input type="hidden" id="deleteId">
-                <p>Are you sure you want to delete this Option?</p>
+                <p>Are you sure you want to delete this category?</p>
             </div>
 
             <div class="modal-footer">
@@ -158,48 +143,71 @@
         </div>
     </div>
 </div>
+
+
+    {{-- end modal --}}
+
+
+
+
+            
+        <!-- Status Change Modal -->
+        <div class="modal fade" id="status-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Change Status</h5>
+                    </div>
+
+                    <div class="modal-body">
+                        Are you sure you want to change the status?
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id="confirmStatusChange">
+                            Yes, Change
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+     {{-- end modal --}}
 @section('script')
 <script src="{{ url('libs/dataTable/datatables.min.js') }}"></script>
 <script src="{{ url('libs/range-slider/js/ion.rangeSlider.min.js') }}"></script>
 <script>
 
-//view single row
-$(document).on('click', '.view-option', function () {
-
-    let optionId = $(this).data('id');
-
-    $.ajax({
-        url: "{{ route('admin.option_management.show_single', ':id') }}".replace(':id', optionId),
-        type: "GET",
-        success: function (res) {
-            $('#modalOptionName').text(res.name);
-        },
-        error: function () {
-            alert('Failed to load Option');
-        }
-    });
-});
 
 
 
 //status toggle
-    
+   
+let categoryId;
+let status;
+let label;
 
 $(document).on('change', '.toggle-status', function () {
 
-    let optionId = $(this).data('id');
-    let status = $(this).is(':checked') ? 1 : 0;
-    let label = $('#status-label-' + optionId);
+    categoryId = $(this).data('id');
+    status = $(this).is(':checked') ? 1 : 0;
+    label = $('#status-label-' + categoryId);
+
+   // let statusModal = new bootstrap.Modal(document.getElementById('status-modal'));
+   // statusModal.show();
+//});
+
+//$(document).on('click', '#confirmStatusChange', function () {
 
     $.ajax({
-        url: "{{ route('admin.option_management.change-status') }}",
+        url: "{{ route('admin.option_value_management.change_status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
-            id: optionId,
+            id: categoryId,
             status: status
         },
-        success: function (res) {
+          success: function (res) {
             // alert('Status Changed!');
             // bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
             Swal.fire({
@@ -226,27 +234,33 @@ $(document).on('change', '.toggle-status', function () {
 
 });
 
+
+
+
 //table rows
 
 $(document).ready(function() {
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
-    $optionTable= $('#club').DataTable({
+    $categoryTable= $('#optionvalue').DataTable({
         processing: true,
         serverSide: true,
+        dom: 'rtip',
         ajax: {
-           url: "{{ route('admin.option_management.show_option') }}",
+           url: "{{ route('admin.option_value_management.show_option_value') }}",
             data: function(d) {
                 
             }
         },
 
         columns: [
-            { data: 'name', name: 'name', orderable: false,searchable: false },
-            { data: 'status', name: 'status', orderable: false, searchable: false },
-            { data: 'action', name: 'action', orderable: false, searchable: false }
-        ],
+    { data: 'name', name: 'option_values.name' },
+    { data: 'option_name', name: 'options.name' },
+    { data: 'status', name: 'option_values.status', orderable:false, searchable:false },
+    { data: 'action', orderable:false, searchable:false }
+]
+,
 
         columnDefs: [{
             'defaultContent': '--',
@@ -255,7 +269,7 @@ $(document).ready(function() {
     });
     
     $(document).on("keyup", ".searchInput", function(e) {
-        $optionTable.search($(this).val()).draw();
+        $categoryTable.search($(this).val()).draw();
     });
     $("#club_filter").css({
         "display": "none"
@@ -266,47 +280,17 @@ $(document).ready(function() {
     $('#sort').on('change', function() {
         $column = $(this).find(':selected').data('column');
         $sort = $(this).find(':selected').data('sort');
-        $optionTable.order([$column, $sort]).draw();
+        $categoryTable.order([$column, $sort]).draw();
     })
     $('#pageLength').on('change',function(){
-        $optionTable.page.len($(this).val()).draw();
+        $categoryTable.page.len($(this).val()).draw();
     })
-    $('#pageLength').val($optionTable.page.len());
+    $('#pageLength').val($categoryTable.page.len());
 })
 
 
 
-
-
-
-function deleteOption(id) {
-
-    if (!confirm("Are you sure you want to delete this option?")) {
-        return;
-    }
-
-    $.ajax({
-       url: "{{ url('club/option_management/destroy_option') }}/" + id,
-        type: "DELETE",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (response) {
-            alert(response.message);
-
-            // Reload DataTable
-            $('#club').DataTable().ajax.reload(null, false);
-        },
-        error: function (xhr) {
-            alert("Something went wrong. Try again.");
-        }
-    });
-}
-
-
-
-
-function deleteOption(id) {
+function deleteOptionValue(id) {
     $('#deleteId').val(id);
     const modal = new bootstrap.Modal(document.getElementById('delete-modal'));
     modal.show();
@@ -327,7 +311,7 @@ $(document).ready(function () {
         $btn.prop('disabled', true).text('Deleting...');
 
         $.ajax({
-            url: "{{ url('admin/option_management/destroy_option') }}/" + id,
+            url: "{{ url('admin/option_value_management/destroy_option_value') }}/" + id,
             type: "POST",
             data: {
                 _token: "{{ csrf_token() }}",
@@ -342,7 +326,7 @@ $(document).ready(function () {
                 Swal.fire({
                     icon: 'success',
                     title: 'Deleted!',
-                    text: 'Option deleted successfully',
+                    text: 'Category deleted successfully',
                     confirmButtonText: 'OK'
                 }).then(() => {
                     location.reload(); 
@@ -361,8 +345,21 @@ $(document).ready(function () {
 
 
 
+// modal js
 
 
+
+
+
+
+
+
+
+
+
+
+
+// end---------------------------
 
 //delete club member
 // $('table').off('click').on('click','.delete-club-member',function(){
@@ -384,7 +381,6 @@ $(document).ready(function () {
 //             }  
 //         })
 //     })
-
 // })
 </script>
 

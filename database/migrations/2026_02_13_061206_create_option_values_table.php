@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('options', function (Blueprint $table) {
+        Schema::create('option_values', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('status')->default('0');
-            $table->softdeletes();
-            $table->timestamps();
+            $table->unsignedInteger('option_value_id');
+            $table->boolean('status');
+             $table->softdeletes();
+             $table->timestamps();
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('options');
+        Schema::dropIfExists('option_values');
     }
 };

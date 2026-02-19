@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Option;
+use App\Models\OptionValue;
 use App\Models\Product;
 use App\Models\Varient;
 use Illuminate\Http\Request;
@@ -13,25 +14,34 @@ class VarientController extends Controller
     public function form_varient_index()
 {
     $varient = new Varient();
+    $optionColorId  =  Option::where('name', 'Color')->value('id');
+    $optioncolorvalues  = OptionValue::where('option_value_id', $optionColorId)->get();
+
+    $optionSizeId  =  Option::where('name', 'Size')->value('id');
+    $optionsizevalues  = OptionValue::where('option_value_id', $optionSizeId)->get();
    
 
 
     return view(
         'admin.varient_management.form_varient_index',
-        compact('varient')
+        compact('varient','optioncolorvalues','optionsizevalues')
     );
 }
 
 
 public function generate_varient()
 {
-    $varient  = new Varient();
-    $options  = Option::orderBy('color')->get();
+   $varient = new Varient();
+    $optionColorId  =  Option::where('name', 'Color')->value('id');
+    $optioncolorvalues  = OptionValue::where('option_value_id', $optionColorId)->get();
+
+    $optionSizeId  =  Option::where('name', 'Size')->value('id');
+    $optionsizevalues  = OptionValue::where('option_value_id', $optionSizeId)->get();
     $variants = Varient::whereNull('deleted_at')->get();
 
     return view(
         'admin.varient_management.generate_varient',
-        compact('varient', 'options', 'variants')
+        compact('varient','optioncolorvalues','optionsizevalues','variants')
     );
 }
 
@@ -129,7 +139,7 @@ public function generate_varient()
                                  class="btn btn-sm  delete-admin"
                                  onclick="deleteVarient(' . $varient->id . ')"
                                  title="Delete">
-                                                              <i class="bi-trash-fill btn btn-outline-danger btn btn-sm "></i>
+                                                               <i class="fas fa-trash-alt"></i>
                             </button>';
                 
               

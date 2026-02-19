@@ -23,16 +23,14 @@ class OptionController extends Controller
     public function store(Request $request)
 {
     $validated = $request->validate([
-        'color'      => 'required|string|max:255',
-         'size'      => 'required|string|max:255',
+        'name'      => 'required|string|max:255',
         'status'    => 'nullable|boolean',
     ]);
 
     
 
     Option::create([
-        'color'       => $request->color,
-        'size'       => $request->size,
+        'name'       => $request->name,
         'status'     => $request->has('status'),
     ]);
 
@@ -63,11 +61,7 @@ class OptionController extends Controller
              ->addColumn('status', function (Option $option) {
 
                 return '
-                 <span
-                         id="status-label-'.$option->id.'" 
-                          class=" '.( $option->status ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' ).' ">
-                            '.($option->status ? 'Active' : 'Inactive' ).'
-                 </span>
+              
                        
                         <div class="form-check form-switch">
                                      <input 
@@ -84,26 +78,18 @@ class OptionController extends Controller
 
 
             ->addColumn('action', function (Option $option) use ($request) {
-                $actions= '<div class="d-flex gap-1"><div class="dropdown">';
+                $actions= '<div class="d-flex gap-1"><div class="card-header-tabs dropdown">';
 
 
-                //view button
-                $actions .= '<button 
-                                     type="button"
-                                     class="btn btn-sm view-option"
-                                     data-id="'.$option->id.'"
-                                     data-bs-toggle="modal"
-                                     data-bs-target="#productListModal">
-                                                             <i class="bi bi-eye-fill btn btn-outline-warning btn-sm"></i>
-                            </button>';
+              
 
 
                 //edit button
                 $actions .= '<a
                                 href="' . route('admin.option_management.edit_option_index', $option->id) . '"
-                                class="btn btn-sm 
+                                class="btn btn-sm btn-outline-secondary me-2 
                                 title="Edit">
-                                                              <i class="bi bi-pencil-square btn btn-outline-success btn btn-sm"></i>
+                                                              <i class="fas fa-pencil-alt"></i> 
                             </a>';
 
 

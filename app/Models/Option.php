@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Option extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['color','size','status'];
+    protected $fillable = ['name','status'];
 }

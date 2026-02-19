@@ -53,7 +53,6 @@ class CategoryController extends Controller
              ->addColumn('status', function (Category $category) {
 
                 return '
-                
                        
                         <div class="form-check form-switch">
                                      <input 
@@ -68,7 +67,7 @@ class CategoryController extends Controller
 
 //toggle button
             ->addColumn('action', function (Category $category) use ($request) {
-                $actions= '<div class="d-flex gap-1"><div class="dropdown">';
+                $actions= '<div class="d-flex gap-1"><div class="container-xxl dropdown">';
 
 
                 //view button
@@ -78,7 +77,7 @@ class CategoryController extends Controller
                 //edit button
                 $actions .= '<a
                                 href="' . route('admin.category_management.edit_category_index', $category->id) . '"
-                                 class="bi-pencil-fill btn btn-sm btn-outline-secondary me-2"
+                                 class=" btn btn-sm btn-outline-secondary me-2 "
                                 title="Edit">
                                     <i class="fas fa-pencil-alt"></i> 
                             </a>';
@@ -87,7 +86,7 @@ class CategoryController extends Controller
                 //delete button
                 $actions .= '<button 
                                  type="button"
-                                 class="bi-trash-fill btn btn-sm btn-outline-danger delete-club-member"
+                                 class=" btn btn-sm btn-outline-danger delete-club-member"
                                  onclick="deleteCategory(' . $category->id . ')"
                                  title="Delete">
                                                               <i class="fas fa-trash-alt"></i>
