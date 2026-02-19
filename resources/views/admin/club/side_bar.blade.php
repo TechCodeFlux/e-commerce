@@ -24,7 +24,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.show_microsites') ? 'active' : '' }}" href="{{ route('admin.show_microsites') }}">
+                    <a class="nav-link {{ request()->routeIs('admin.show_microsites','admin.add_microsites') ? 'active' : '' }}" href="{{ route('admin.show_microsites', $club->id) }}">
                         <i class="bi bi-globe me-2"></i> Microsites
                     </a>
                 </li>
