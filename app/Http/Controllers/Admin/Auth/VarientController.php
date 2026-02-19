@@ -11,22 +11,22 @@ use Illuminate\Http\Request;
 
 class VarientController extends Controller
 {
-    public function form_varient_index()
-{
-    $varient = new Varient();
-    $optionColorId  =  Option::where('name', 'Color')->value('id');
-    $optioncolorvalues  = OptionValue::where('option_value_id', $optionColorId)->get();
+//     public function form_varient_index()
+// {
+//     $varient = new Varient();
+//     $optionColorId  =  Option::where('name', 'Color')->value('id');
+//     $optioncolorvalues  = OptionValue::where('option_value_id', $optionColorId)->get();
 
-    $optionSizeId  =  Option::where('name', 'Size')->value('id');
-    $optionsizevalues  = OptionValue::where('option_value_id', $optionSizeId)->get();
+//     $optionSizeId  =  Option::where('name', 'Size')->value('id');
+//     $optionsizevalues  = OptionValue::where('option_value_id', $optionSizeId)->get();
    
 
 
-    return view(
-        'admin.varient_management.form_varient_index',
-        compact('varient','optioncolorvalues','optionsizevalues')
-    );
-}
+//     return view(
+//         'admin.varient_management.form_varient_index',
+//         compact('varient','optioncolorvalues','optionsizevalues')
+//     );
+// }
 
 
 public function generate_varient()
@@ -57,7 +57,7 @@ public function store(Request $request)
 
    $productData = session('product');
 
-    Product::create([
+    $product = Product::create([
             'name'        => $productData['name'],
             'description' => $productData['description'],
             'image'       => $productData['image'],
@@ -74,12 +74,13 @@ public function store(Request $request)
             'color' => $variant['color'],   // store ID
             'size'  => $variant['size'],    // store ID
             'stock' => $variant['stock'],   
+            'product_id' => $product->id,
         ]);
     }
 
     return redirect()
         ->route('admin.product_management.form_products_index')
-        ->with('success', 'Variants saved successfully');
+        ->with('success', 'Products saved successfully');
 }
 
 

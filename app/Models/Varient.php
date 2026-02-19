@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Varient extends Model
 {
     use SoftDeletes;
-           protected $fillable = ['color', 'size', 'stock'];
+           protected $fillable = ['color', 'size', 'stock','product_id'];
 
 }
