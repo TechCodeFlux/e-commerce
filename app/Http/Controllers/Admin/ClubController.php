@@ -40,7 +40,7 @@ class ClubController extends Controller
             ->addColumn('action', function (Club $club) use ($request) {
                 $actions= '<div class="d-flex gap-1"><div class="dropdown">';
                 //view button
-                $actions .= '<a href="' . route('admin.clubs.dashboard', $club->id) . '" class="btn btn-sm btn-clean btn-icon" title="Show"><i class="fas fa-eye" style="color: #ffc107;"></i></a>';
+                $actions .= '<a href="' . route('admin.clubs.dashboard', $club->id) . '" class="btn btn-sm btn-clean me-2" title="Show"><i class="fas fa-eye" style="color: #ffc107;"></i></a>';
                 //edit button
                 $actions .= '<a href="' . route('admin.editclub', $club->id) . '" class="btn btn-sm btn-outline-secondary me-2" title="Edit">
                     <i class="fas fa-pencil-alt"></i>

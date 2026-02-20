@@ -1,6 +1,8 @@
 @extends('admin.components.app')
 @section('page-title', 'Club ' . $club->name)
-
+@php
+    $hideSearch = true;
+@endphp
 @section('head')
 @endsection 
 

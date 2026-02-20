@@ -1,5 +1,8 @@
 @extends('admin.components.app')
-@section('page-title', 'Categories')
+@section('page-title', 'Add Categories')
+@php
+    $hideSearch = true;
+@endphp
 @section('content')
 
  <div class="mb-4">
@@ -151,6 +154,7 @@ $(document).on('change', '.toggle-status', function () {
         },
     });
 });
+
 
 </script>
 @endsection

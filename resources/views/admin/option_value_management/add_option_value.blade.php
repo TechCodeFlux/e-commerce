@@ -1,5 +1,7 @@
 @extends('admin.components.app')
-
+@php
+    $hideSearch = true;
+@endphp
 @section('page-title', 'Add Option Values')
 
 @section('content')
@@ -139,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
+
 </script>
 
 @endsection

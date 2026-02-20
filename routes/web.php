@@ -46,7 +46,7 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
 Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
     Auth::routes(['register' => false]);    
     //dashboard controller
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');//dashboard
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');//dashboard 
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');//profile view
     Route::post('profile', [DashboardController::class, 'profile_update'])->name('profile_update');//profile update
     //admin club controller

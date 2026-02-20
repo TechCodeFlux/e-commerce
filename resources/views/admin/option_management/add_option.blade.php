@@ -1,5 +1,7 @@
 @extends('admin.components.app')
-
+@php
+    $hideSearch = true;
+@endphp
 @section('content')
 @section('page-title', 'Add Clubs')
 <div class="mb-4">
