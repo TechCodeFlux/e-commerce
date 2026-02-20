@@ -35,10 +35,28 @@
     </div>
             
 
-            @if(session('success'))
-                <div class="alert alert-success text-center">
-                    {{ session('success') }}
-                </div>
+           @if(session('success'))
+                    <div class="modal fade" id="successModal" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content shadow-lg border-0">
+                                <div class="modal-header bg-success text-white">
+                                    <h5 class="modal-title">Success</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body text-center py-4">
+                                    <i class="bi bi-check-circle-fill text-success" style="font-size: 50px;"></i>
+                                    <p class="mt-3 mb-0 fw-semibold">
+                                        {{ session('success') }}
+                                    </p>
+                                </div>
+                                <div class="modal-footer justify-content-center border-0">
+                                    <button type="button" class="btn btn-success px-4" data-bs-dismiss="modal">
+                                        OK
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             @endif
 
             <div class="row justify-content-center">
@@ -170,6 +188,16 @@
 
 @section('script')
 <script>
+
+$(document).ready(function () {
+
+    @if(session('success'))
+        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+    @endif
+
+});
+
 $('.productForm').on('submit', function (e) {
     e.preventDefault();
 

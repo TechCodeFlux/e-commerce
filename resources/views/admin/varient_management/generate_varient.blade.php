@@ -91,9 +91,11 @@
                                 Previous
                             </button> 
 
-                            <button type="submit" class="btn btn-primary px-5 p-md-2">
-                                {{$varient->id ?? '' ? 'Update' : 'Submit' }}
-                            </button> 
+                           <button type="submit"
+        id="submitBtn"
+        class="btn btn-primary px-5 p-md-2 d-none">
+    {{$varient->id ?? '' ? 'Update' : 'Submit' }}
+</button>
                         </div>        
                     </form>
                     
@@ -265,6 +267,9 @@ if (hasError) {
             `;
 
             $('#variant-matrix-container').html(table);
+            if ($('#variant-matrix-container tbody tr').length > 0) {
+    $('#submitBtn').removeClass('d-none');
+}
         });
 
     
@@ -277,6 +282,7 @@ if (hasError) {
     // If no rows left → clear storage
     if ($('#variant-matrix-container tbody tr').length === 0) {
         localStorage.removeItem(STORAGE_KEY);
+         $('#submitBtn').addClass('d-none');
         
     } else {
         saveVariantData();
@@ -329,6 +335,9 @@ $(document).ready(function () {
         // Restore table
         if (data.tableHtml) {
             $('#variant-matrix-container').html(data.tableHtml);
+             if ($('#variant-matrix-container tbody tr').length > 0) {
+              $('#submitBtn').removeClass('d-none');
+    }
         }
     }
 

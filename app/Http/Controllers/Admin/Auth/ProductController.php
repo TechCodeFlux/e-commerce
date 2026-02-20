@@ -102,10 +102,30 @@ $imagePath = $request->file('image')->store('products', 'public');
     public function show(Request $request)
     {
          if($request->ajax()){
-            $product=Product::latest();
+            $product = Product::with('varients')->latest();
             // return DataTables::eloquent($club)
             return datatables()
     ->eloquent($product)
+
+
+//varient connection
+
+//     ->addColumn('varients', function (Product $product) {
+
+//     if ($product->varients->count() > 0) {
+//         $output = '';
+
+//         foreach ($product->varients as $varient) {
+//             $output .= '<span class="badge bg-info me-1 bg-purple">'
+//             . $varient->color . ' - ' . $varient->size .
+//            '</span><br>';
+//         }
+
+//         return $output;
+//     }
+
+//     return '--';
+// })
       
 //add product-image for image scale
               ->addColumn('image', function (Product $product) {
@@ -123,11 +143,7 @@ $imagePath = $request->file('image')->store('products', 'public');
              ->addColumn('status', function (Product $product) {
 
                 return '
-                 <span
-                         id="status-label-'.$product->id.'" 
-                          class=" '.( $product->status ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' ).' ">
-                            '.($product->status ? 'Active' : 'Inactive' ).'
-                 </span>
+                 
                        
                         <div class="form-check form-switch">
                                      <input 
@@ -148,37 +164,37 @@ $imagePath = $request->file('image')->store('products', 'public');
                 //view button
                 $actions .= '<button 
                                      type="button"
-                                     class="btn btn-sm view-product"
+                                     class="btn btn-sm view-product btn-outline-warning me-2 "
                                      data-id="'.$product->id.'"
                                      data-bs-toggle="modal"
                                      data-bs-target="#productListModal">
-                                                             <i class="bi bi-eye-fill btn btn-outline-warning btn-sm"></i>
+                                                              <i class="fas fa-eye"></i> 
                             </button>';
 
 
                 //edit button
                 $actions .= '<a
                                 href="' . route('admin.product_management.edit_products_index', $product->id) . '"
-                                class="btn btn-sm 
+                                class="btn btn-sm btn-outline-secondary me-2 
                                 title="Edit">
-                                                              <i class="bi bi-pencil-square btn btn-outline-success btn btn-sm"></i>
+                                                             <i class="fas fa-pencil-alt"></i> 
                             </a>';
 
 
                 //delete button
                 $actions .= '<button 
                                  type="button"
-                                 class="btn btn-sm  delete-admin"
+                                 class=" btn btn-sm btn-outline-danger delete-club-member"
                                  onclick="deleteProduct(' . $product->id . ')"
                                  title="Delete">
-                                                              <i class="bi-trash-fill btn btn-outline-danger btn btn-sm "></i>
+                                                               <i class="fas fa-trash-alt"></i> 
                             </button>';
                 
               
 
                 $actions .= '</div>';
                 return  $actions;
-            })->rawColumns(['image', 'status','action'])->make(true);
+            })->rawColumns(['image', 'status','action','varients'])->make(true);
         }
 
         return view('admin.product_management.show_products');
@@ -187,14 +203,16 @@ $imagePath = $request->file('image')->store('products', 'public');
 
     public function single_show($id)
 {
-    $product = Product::findOrFail($id);
+   $product = Product::with('varients','categories')->findOrFail($id);
 
     return response()->json([
         'id' => $product->id,
         'name' => $product->name,
-        'stock' => $product->stock,
         'image' => asset('storage/' . $product->image),
         'description' => $product->description,
+        'status' => $product->status,
+        'varients' => $product->varients,
+        'categories' => $product->categories
     ]);
 }
 

@@ -60,7 +60,6 @@
                          <th >Size</th>  
                          <th >Color</th> 
                          <th >Stock</th> 
-                          <th>Status</th>
                         <th  class=" ps-5" >Action</th>
                      </tr>
                     </thead>
@@ -214,7 +213,7 @@ $(document).ready(function() {
             { data: 'size', size: 'size' },
             { data: 'color', size: 'color' },
             { data: 'stock', size: 'stock' },
-            { data: 'status', name: 'status', orderable: false, searchable: false },
+            // { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ],
 

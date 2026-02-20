@@ -102,23 +102,19 @@ public function store(Request $request)
             
             
 //toggle button
-             ->addColumn('status', function (Varient $varient) {
+            //  ->addColumn('status', function (Varient $varient) {
 
-                return '
-                 <span
-                         id="status-label-'.$varient->id.'" 
-                          class=" '.( $varient->status ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' ).' ">
-                            '.($varient->status ? 'Active' : 'Inactive' ).'
-                 </span>
+            //     return '
+                
                        
-                        <div class="form-check form-switch">
-                                     <input 
-                                          class="form-check-input toggle-status"
-                                          type="checkbox"
-                                          name="status"
-                                          data-id="'.$varient->id.'"  '.($varient->status ? 'checked' : '').'>
-                         </div>';
-            })
+            //             <div class="form-check form-switch">
+            //                          <input 
+            //                               class="form-check-input toggle-status"
+            //                               type="checkbox"
+            //                               name="status"
+            //                               data-id="'.$varient->id.'"  '.($varient->status ? 'checked' : '').'>
+            //              </div>';
+            // })
 
 
 
