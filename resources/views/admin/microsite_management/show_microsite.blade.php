@@ -96,6 +96,91 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="micrositeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+
+            <!-- Header -->
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-eye me-2"></i> Microsite Details
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <!-- LEFT: DETAILS -->
+                    <div class="col-md-7">
+
+                        <table class="table table-borderless mb-0">
+                            <tr>
+                                <th width="40%">Microsite Name</th>
+                                <td id="ms_name"></td>
+                            </tr>
+                            <tr>
+                                <th>Club Name</th>
+                                <td id="ms_club"></td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td id="ms_description"></td>
+                            </tr>
+                            <tr>
+                                <th>Start Date</th>
+                                <td id="ms_start"></td>
+                            </tr>
+                            <tr>
+                                <th>End Date</th>
+                                <td id="ms_end"></td>
+                            </tr>
+                            <tr>
+                                <th>Microsite Status</th>
+                                <td>
+                                    <span id="ms_microsite_status" class="badge"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>
+                                    <span id="ms_status" class="badge bg-success"></span>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <!-- RIGHT: IMAGE -->
+                    <div class="col-md-5 text-center">
+
+                        <img id="ms_image"
+                             class="img-fluid rounded shadow-sm d-none"
+                             style="max-height: 250px; object-fit: cover;">
+
+                        <div id="no_image" class="text-muted d-none">
+                            <i class="fas fa-image fa-3x mb-2"></i>
+                            <p>No Image Available</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 @endsection
 
@@ -213,6 +298,57 @@ $('#confirmDelete').on('click', function () {
     });
 
 });
+
+// SHOW MODAL
+    document.addEventListener('click', function (e) {
+
+        if (e.target.closest('.showMicrosite')) {
+
+            let id = e.target.closest('.showMicrosite').dataset.id;
+
+            fetch("{{ route('admin.microsite_show', ':id') }}".replace(':id', id))
+                .then(res => res.json())
+                .then(data => {
+                        document.getElementById('ms_name').innerText = data.name;
+                        document.getElementById('ms_club').innerText = data.club;
+                        document.getElementById('ms_description').innerText = data.description;
+                        document.getElementById('ms_start').innerText = data.start_date;
+                        document.getElementById('ms_end').innerText = data.end_date;
+
+                        // NORMAL STATUS (toggle)
+                        let statusEl = document.getElementById('ms_status');
+                        statusEl.innerText = data.status;
+                        statusEl.className = 'badge ' + (data.status === 'Active' ? 'bg-success' : 'bg-secondary');
+
+                        // MICROSITE STATUS (date-based)
+                        let msStatusEl = document.getElementById('ms_microsite_status');
+                        msStatusEl.innerText = data.microsite_status;
+
+                        if (data.microsite_status === 'Upcoming') {
+                            msStatusEl.className = 'badge bg-warning';
+                        } else if (data.microsite_status === 'Active') {
+                            msStatusEl.className = 'badge bg-success';
+                        } else {
+                            msStatusEl.className = 'badge bg-danger';
+                        }
+
+                        let img = document.getElementById('ms_image');
+                        let noImg = document.getElementById('no_image');
+
+                        if (data.image) {
+                            img.src = data.image;
+                            img.classList.remove('d-none');
+                            noImg.classList.add('d-none');
+                        } else {
+                            img.classList.add('d-none');
+                            noImg.classList.remove('d-none');
+                        }
+
+                        new bootstrap.Modal(document.getElementById('micrositeModal')).show();
+                    });
+        }
+
+    });
 </script>
 
 @endsection

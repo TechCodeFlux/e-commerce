@@ -99,8 +99,11 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('show_microsites/{club}', [MicrositeController::class, 'index'])->name('show_microsites');//view microsites
     Route::get('add_microsites/{id}', [MicrositeController::class, 'create'])->name('add_microsites');//add microsite form
     Route::post('microsite_store', [MicrositeController::class, 'store'])->name('microsite_store');//store microsite data
-    Route::post('microsite_change_status', [MicrositeController::class, 'changeStatus'])->name('microsite_change_status');
-    Route::post('delete_microsite', [MicrositeController::class, 'destroy'])->name('delete_microsite');
+    Route::post('microsite_change_status', [MicrositeController::class, 'changeStatus'])->name('microsite_change_status');//change status of microsite
+    Route::post('delete_microsite', [MicrositeController::class, 'destroy'])->name('delete_microsite');//delete microsite
+    Route::get('edit_microsite/{id}',[MicrositeController::class,'edit'])->name('editmicrosite');//edit microsite form
+    Route::put('microsite_update/{microsite}', [MicrositeController::class, 'update'])->name('microsite_update');//update microsite data
+    Route::get('microsite_show/{microsite}', [MicrositeController::class, 'show'])->name('microsite_show');//show microsite details modal
 
 });
 

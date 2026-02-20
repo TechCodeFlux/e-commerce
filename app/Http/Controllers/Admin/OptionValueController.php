@@ -139,7 +139,7 @@ class OptionValueController extends Controller
      */
     public function edit($id)
     {
-        $option_value=OptionValue::findorfail($id);
+        $option_value=OptionValue::findorfail($id); 
         $option_value_list = Option::orderBy('name')->get(); 
         // dd($option_value_list);
         return view('admin.option_value_management.add_option_value',compact('option_value','option_value_list'));
