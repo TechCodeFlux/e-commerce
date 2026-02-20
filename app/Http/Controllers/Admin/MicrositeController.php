@@ -9,7 +9,7 @@ use App\Models\Microsite;
 use App\Models\Club;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
+// use Illuminate\Support\Facades\Hash;
 
 class MicrositeController extends Controller
 {
@@ -66,7 +66,7 @@ class MicrositeController extends Controller
                 ->addColumn('action', function ($microsite) {
 
                     $actions = '<div class="d-flex gap-1">';
-                    $actions .= '<button class="btn btn-sm btn-clean btn-icon showMicrosite" data-id="'.$microsite->id.'" title="Show">
+                    $actions .= '<button class="btn btn-sm btn-clean btn-outline-warning showMicrosite" data-id="'.$microsite->id.'" title="Show">
                         <i class="fas fa-eye" style="color: #ffc107;"></i></button>';
                     $actions .= '<a href="' . route('admin.editmicrosite', $microsite->id) . '" class="btn btn-sm btn-outline-secondary 
                         me-2" title="Edit"><i class="fas fa-pencil-alt"></i></a>';
