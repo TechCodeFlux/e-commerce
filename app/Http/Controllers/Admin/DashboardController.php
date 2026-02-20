@@ -73,6 +73,7 @@ class DashboardController extends Controller
             'name' => $request->club_name,
             'address' => $request->club_address,
             'contact' => $request->club_contact,
+            
             'email' => $request->email,
             'country_id' => $request->country_id,
             'state_id' => $request->state_id,
