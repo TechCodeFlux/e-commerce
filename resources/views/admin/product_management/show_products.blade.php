@@ -59,7 +59,6 @@
                       <tr>
                         <th class="tooltip-inner link-dark">Image</th>  
                          <th >Name</th>  
-                         <th>Stock</th>
                          <th>Description</th>
                           <th>Status</th>
                         <th  class=" ps-5" >Action</th>
@@ -162,7 +161,7 @@ $(document).on('click', '.view-product', function () {
         type: "GET",
         success: function (res) {
             $('#modalProductName').text(res.name);
-            $('#modalProductStock').text( res.stock);
+           
             $('#modalProductDescription').text(res.description);
             $('#modalProductImage').attr('src', res.image);
         },
@@ -229,7 +228,6 @@ $(document).ready(function() {
         columns: [
             { data: 'image', name: 'image' },
             { data: 'name', name: 'name', orderable: false,searchable: false },
-            { data: 'stock', name: 'stock' },
             { data: 'description', name: 'description' },
             { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false }

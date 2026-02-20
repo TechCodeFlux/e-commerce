@@ -111,6 +111,12 @@
 
     $(document).ready(function() {
     $('.js-example-basic-multiple').select2();
+    $('#color, #size').on('change', function () {
+    $(this).next('.select2-container').find('.select2-selection')
+        .removeClass('is-invalid');
+    $(this).next('.select2-container')
+        .siblings('.select-error').remove();
+});
 });
 
 
@@ -148,11 +154,45 @@ function saveVariantData() {
             const colors = $('#color option:selected');
             const sizes  = $('#size option:selected');
 
+
+
+
+
+
+
             // Validation
-            if (colors.length === 0 || sizes.length === 0) {
-                alert('Please select at least one Color and one Size');
-                return;
-            }
+           $('.select-error').remove();
+$('#color, #size').removeClass('is-invalid');
+
+let hasError = false;
+
+if (colors.length === 0) {
+    $('#color').next('.select2-container').find('.select2-selection')
+        .addClass('is-invalid');
+
+    $('#color').next('.select2-container')
+        .after('<div class="text-danger select-error mt-1">Please select at least one Color</div>');
+
+    hasError = true;
+}
+
+if (sizes.length === 0) {
+    $('#size').next('.select2-container').find('.select2-selection')
+        .addClass('is-invalid');
+
+    $('#size').next('.select2-container')
+        .after('<div class="text-danger select-error mt-1">Please select at least one Size</div>');
+
+    hasError = true;
+}
+
+if (hasError) {
+    return;
+}
+
+
+
+
 
             let table = `
                 <div class="card shadow-sm">
