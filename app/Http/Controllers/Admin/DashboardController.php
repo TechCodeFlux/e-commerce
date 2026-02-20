@@ -44,7 +44,7 @@ class DashboardController extends Controller
 
         $user->name = $validate['name'];
         $user->email = $validate['email'];
-        // $user->save();
+        $user->save();
 
         return redirect()->route('admin.profile')->with('success', 'Profile updated successfully.');
     }
@@ -73,7 +73,6 @@ class DashboardController extends Controller
             'name' => $request->club_name,
             'address' => $request->club_address,
             'contact' => $request->club_contact,
-            
             'email' => $request->email,
             'country_id' => $request->country_id,
             'state_id' => $request->state_id,

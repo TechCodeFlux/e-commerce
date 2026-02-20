@@ -14,7 +14,7 @@
     </a>
     <!-- ./ Logo -->
     <div class="page-title"> @yield('page-title', 'Overview')</div>
-    <form class="search-form">
+    {{-- <form class="search-form">
         <div class="input-group">
             <button class="btn btn-outline-light" type="button" id="button-addon1">
                 <i class="bi bi-search"></i>
@@ -25,7 +25,7 @@
                 <i class="bi bi-x"></i>
             </a>
         </div>
-    </form>
+    </form> --}}
     <div class="header-bar ms-auto">
         <ul class="navbar-nav justify-content-end">
             {{-- <li class="nav-item">
@@ -109,18 +109,6 @@
                     <button class="btn btn-primary btn-icon">
         <i class="bi bi-plus-circle"></i> Add Product
     </button>
-            </li>
-            <li class="nav-item ms-3">
-    <a href="{{ route('admin.club.create') }}" class="btn btn-primary btn-icon">
-        <i class="bi bi-plus-circle"></i> Add Club
-    </a>
-</li>
-<li class="nav-item ms-3">
-    <a href="{{ route('admin.anadmin.create') }}" class="btn btn-primary btn-icon">
-        <i class="bi bi-plus-circle"></i> Add Admin
-    </a>
-</li>
-
             </li> --}}
         </ul>
     </div>

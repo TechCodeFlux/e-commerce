@@ -15,7 +15,7 @@
                 </li>
                 <li class="breadcrumb-item">
                     <a href="{{ route('admin.clubsindex') }}">
-                        <i class="bi bi-people-fill small me-2"></i> Clubs
+                        <i class="bi bi-person-badge small me-2"></i> Clubs
                     </a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-building small me-2"></i>{{$club->name}}</li>
@@ -39,7 +39,7 @@
                                     <div class="row">
                                         <div class="col-md-6"> 
                                             <div class="card border-0"> 
-                                                <a href="">
+                                                <a href="{{ route('admin.show_microsites', $club->id) }}">
 
                                                     <div class="card-body text-center">
                                                         <div class="display-5">

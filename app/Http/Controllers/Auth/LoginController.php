@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 
 
@@ -30,7 +29,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = 'admin/dashboard';
+    protected $redirectTo = 'dashboard';
 
     /**
      * Create a new controller instance.
@@ -60,23 +59,18 @@ class LoginController extends Controller
     public function showLoginForm()
     {
     
-        return view('admin.auth.login');
+        return view('auth.login');
     }
     protected function redirectTo()
     {
-        return route('admin.dashboard');
+        return route('dashboard');
     }
  protected function guard()
     {
-        return Auth::guard('admin');
+        return Auth::guard('web');
     }
 public function logout(Request $request)
     {
-        Auth::guard('admin')->logout();
+        Auth::guard('web')->logout();
      }
-public function create()
-{
-    return view('admin.club'); // club.blade.php
-}
-
 }

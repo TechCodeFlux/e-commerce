@@ -25,7 +25,7 @@
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
 
-            <h6 class="card-title mb-4 text-center">
+            <h6 class="card-title mb-4 text-start">
                 {{ $category->id ? 'Edit' : 'Add' }} Category Form
             </h6>
 
@@ -49,7 +49,7 @@
                        
                         <div class="row">
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Name</label>
                                 <input type="text" name="name" class="form-control" placeholder="Name" 
                                     value="{{ old('name', $category->name ?? '') }}">
@@ -105,7 +105,7 @@
 
                         </div>
 
-                        <div class="text-center">
+                        <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-5">
                                 {{ $category->id ? 'Update' : 'Submit' }}
                             </button> 
@@ -152,50 +152,6 @@ $(document).on('change', '.toggle-status', function () {
     });
 });
 
-
-// document.addEventListener('DOMContentLoaded', function () {
-
-//     const countrySelect = document.getElementById('country');
-//     const stateSelect   = document.getElementById('state');
-//     const selectedState = "{{ old('state', $clubmember->state_id ?? '') }}";
-
-//     function loadStates(countryId) {
-//         stateSelect.innerHTML = '<category value="">Loading...</category>';
-
-//        fetch(`/admin/get-states/${countryId}`)
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error('Network error');
-//         }
-//         return response.json();
-//     })
-//     .then(states => {
-//         stateSelect.innerHTML = '<category value="">Select State</category>';
-//         states.forEach(state => {
-//             stateSelect.innerHTML +=
-//                 `<category value="${state.id}">${state.name}</category>`;
-//         });
-//     })
-//     .catch(error => {
-//         console.error(error);
-//         stateSelect.innerHTML = '<category value="">Failed to load states</category>';
-//     });
-
-//     }
-
-//     countrySelect.addEventListener('change', function () {
-//         if (this.value) {
-//             loadStates(this.value);
-//         } else {
-//             stateSelect.innerHTML = '<category value="">Select State</category>';
-//         }
-//     });
-
-//     // AUTO LOAD STATES ON EDIT
-//     if (countrySelect.value) {
-//         loadStates(countrySelect.value);
-//     }
-// });
 </script>
 @endsection
 @endsection

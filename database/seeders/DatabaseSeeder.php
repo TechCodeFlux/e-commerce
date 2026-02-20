@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Club;
-use App\Models\Clubmember;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -22,20 +20,16 @@ class DatabaseSeeder extends Seeder
 
         
         User::updateOrCreate(
-            ['email' => 'admin@example.com'], // Admin
+            ['email' => 'admin@example.com'], // condition
             [   'name' => 'Admin User',
                 'password' => 'password',
             ]
         );
-        
-        Clubmember::updateOrCreate(
-            ['email' => 'clubmember@example.com'], // clubmember
-            [   'name' => 'Clubmember'
-            ]
-        );
 
-       
-        
+        // countrySeeder
+        $this->call([
+            CountrySeeder::class,
+        ]);
 
     }
 }

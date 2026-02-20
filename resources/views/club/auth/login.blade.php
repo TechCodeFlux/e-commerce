@@ -27,7 +27,7 @@
 <div class="preloader">
     <div class="preloader-icon"></div>
 </div>
-<!-- end::preloader --> 
+<!-- end::preloader -->
 
 
     <div class="form-wrapper">
@@ -103,7 +103,6 @@
 <!-- Main Javascript file -->
 <script src="{{ url('dist/js/app.min.js') }}"></script>
 </body>
-
 </html>
 
                 

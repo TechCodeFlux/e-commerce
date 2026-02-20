@@ -32,7 +32,8 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body>
+
 <!-- preloader -->
 <div class="preloader">
     <img src="{{url('assets/images/grabit/logo.png')}}" alt="logo">
@@ -64,8 +65,6 @@
 <!-- Main Javascript file -->
 <script src="{{url('dist/js/app.min.js')}}"></script>
 
-@yield('scripts')
-
+@yield('script')
 </body>
 </html>
-

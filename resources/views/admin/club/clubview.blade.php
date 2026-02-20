@@ -1,3 +1,4 @@
+
 @extends('admin.components.app')
 @section('page-title', 'Clubs')
 

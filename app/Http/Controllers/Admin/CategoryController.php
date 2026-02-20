@@ -7,7 +7,7 @@ use App\Models\Category;
 use Illuminate\Container\Attributes\Storage;
 //use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str; 
 
@@ -56,11 +56,8 @@ class CategoryController extends Controller
                 
                        
                         <div class="form-check form-switch">
-                                     <input 
-                                          class="form-check-input toggle-status"
-                                          type="checkbox"
-                                          name="status"
-                                          data-id="'.$category->id.'"  '.($category->status ? 'checked' : '').'>
+                                    <input class="form-check-input toggle-status" type="checkbox" name="status" 
+                                    data-id="'.$category->id.'"  '.($category->status ? 'checked' : '').'>
                          </div>';
             })
 

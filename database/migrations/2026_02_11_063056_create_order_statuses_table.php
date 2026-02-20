@@ -6,15 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('order_statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('status'); // false = inactive, true = active
+            $table->string('status')->default('0');
+            $table->softdeletes();
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('order_statuses');

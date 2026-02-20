@@ -16,7 +16,7 @@
                 </li>
                 <li class="breadcrumb-item">
                     <a href="{{ route('admin.clubsindex') }}">
-                        <i class="bi bi-people-fill small me-2"></i> Clubs
+                        <i class="bi bi-person-badge small me-2"></i> Clubs
                     </a>
                 </li>
                 <li class="breadcrumb-item">
@@ -26,10 +26,10 @@
                 </li>
                     <li class="breadcrumb-item">
                     <a href="{{ route('admin.clubmember.viewmembers', $club->id) }}">
-                        <i class="bi bi-people-fill small me-2"></i>club members
+                        <i class="bi bi-people-fill small me-2"></i>Club members
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-building small me-2"></i>add member/edit</li>  
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-building small me-2"></i>Add member</li>  
             </ol>
         </nav>
     </div>

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Clubmember\Auth;
+namespace App\Http\Controllers\ClubMember\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 class LoginController extends Controller
 { 
     /*

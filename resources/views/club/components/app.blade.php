@@ -21,8 +21,7 @@
         <!-- Slick -->
     <link rel="stylesheet" href="{{url('libs/slick/slick.css')}}" type="text/css">
 
-
-
+    <!-- Main style file -->
     <link rel="stylesheet" href="{{ url('dist/css/app.min.css')}}" type="text/css">
 
     <!--[if lt IE 9]>
@@ -42,19 +41,9 @@
 @include('club.layouts.sidebar')
 @include('club.layouts.topbar')
 
-<main class="flex-fill">
-    <div class="content @yield('contentClassName')">
-        @yield('content')
-    </div>
-</main>
-
-<footer class="mt-auto">
-
-
-
-
-    @include('club.layouts.footer')
-</footer>
+<div class="content @yield('contentClassName')">
+    @yield('content')
+</div>
 
 @include('club.layouts.footer')
 
@@ -76,5 +65,3 @@
 @yield('script')
 </body>
 </html>
-
-

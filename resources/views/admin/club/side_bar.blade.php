@@ -7,11 +7,11 @@
                     href="{{ route('admin.clubs.dashboard', $club->id) }}">
                         <i class="bi bi-graph-up me-2"></i> Dashboard
                     </a>
-
+ 
                 </li>
                 
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="profile-tab" href="{{ route('admin.clubmember.viewmembers',$club->id) }}" role="tab" aria-controls="profile" aria-selected="true">
+                    <a class="nav-link {{ request()->routeIs('admin.clubmember.viewmembers','admin.clubmember.addmember') ? 'active' : '' }}" id="profile-tab" href="{{ route('admin.clubmember.viewmembers',$club->id) }}" role="tab" aria-controls="profile" aria-selected="true">
                         <i class="bi-people me-2"></i> Club Members
                     </a>
                 </li>
@@ -24,21 +24,20 @@
                 </li>
 
                 <li class="nav-item">
-    <a class="nav-link {{ request()->routeIs('admin.clubs.microsites') ? 'active' : '' }}"
-       href="{{ route('admin.clubs.microsites', $club->id) }}">
-        <i class="bi bi-globe me-2"></i> Microsites
-    </a>
-</li>
-
+                    <a class="nav-link {{ request()->routeIs('admin.show_microsites','admin.add_microsites') ? 'active' : '' }}" href="{{ route('admin.show_microsites', $club->id) }}">
+                        <i class="bi bi-globe me-2"></i> Microsites
+                    </a>
+                </li>
 
                 <li class="nav-item">
-                    <a class="nav-link">
+                    <a class="nav-link {{ request()->routeIs('admin.club.profile') ? 'active' : '' }}" id="profile-tab" href="{{ route('admin.club.profile',$club->id) }}" role="tab" aria-controls="profile" aria-selected="true">
+
                         <i class="bi bi-person me-2"></i> Profile
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link">
+                    <a class="nav-link" href="{{ route('admin.clubsindex') }}">
                         <i class="bi bi-box-arrow-right me-2"></i> Logout
                     </a>
                 </li>

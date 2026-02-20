@@ -24,7 +24,7 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            <h4 class="text-center mb-4">
+            <h4 class="text-start mb-4">
                 {{ $clubuser->id ? 'Edit' : 'Add' }} Club User
             </h4>
 
@@ -132,7 +132,7 @@
 
                 </div>
 
-                <div class="text-center mt-3">
+                <div class="d-flex justify-content-end mt-3">
                     <button class="btn btn-primary px-5">
                         {{ $clubuser->id ? 'Update' : 'Submit' }}
                     </button>

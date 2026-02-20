@@ -1,6 +1,5 @@
-
 <?php
- use App\Http\Controllers\Admin\Club\MicrositeController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
@@ -16,8 +15,11 @@ use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 // use App\Http\Controllers\Club\ClubMemberController;
 //category controller
 use App\Http\Controllers\Admin\CategoryController;
-// use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
-
+use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
+//for option
+use App\Http\Controllers\Admin\OptionController;
+use App\Http\Controllers\Admin\OptionValueController;
+use App\Http\Controllers\Admin\MicrositeController;
 //arjun
 Route::get('/', function () {return view('club.auth.login');})->name('club.login');
 // Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
@@ -57,19 +59,6 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     //Club dashboard
     Route::get('/clubs/{club}/dashboard', [ClubController::class, 'dashboard'])->name('clubs.dashboard');//dashboard for each club
     Route::delete('clubs/{club}', [ClubController::class, 'destroy'])->name('clubs.destroy');//delete club
-   
-
-Route::prefix('clubs')->name('clubs.')->group(function () {
-
-    // Display Create Microsite Page
-    Route::get('/{club}/microsites', [MicrositeController::class, 'create'])
-        ->name('microsites');
-
-    // Store Microsite
-    Route::post('/microsites/store', [MicrositeController::class, 'store'])
-        ->name('microsites.store');
-});
-
     //Category-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     Route::get('category_management/add_category_index', [CategoryController::class, 'add_category_index'])->name('category_management.add_category_index');
     Route::post('category_management/add_category', [CategoryController::class, 'store'])->name('category_management.add_category');
@@ -86,7 +75,33 @@ Route::prefix('clubs')->name('clubs.')->group(function () {
     Route::post('club/storemember/{id}',[ClubMemberController::class,'storemember'])->name('clubmember.storemember');//store club members
     Route::get('club/editmember/{id}',[ClubMemberController::class,'editmember'])->name('clubmember.editmember');
     Route::post('club/updatemember/{id}',[ClubMemberController::class,'updatemember'])->name('clubmember.updatemember');
-    Route::get('club/deletemember/{id}',[ClubMemberController::class,'deletemember'])->name('clubmember.deletemember');
+    Route::delete('club/deletemember/{id}',[ClubMemberController::class,'deletemember'])->name('clubmember.deletemember');
+    Route::get('club/profile/{id}',[ClubController::class,'profile'])->name('club.profile');
+    Route::post('club/editprofile/{id}',[ClubController::class,'editprofile'])->name('club.editprofile');
+    //option
+    Route::get('show_option', [OptionController::class, 'index'])->name('show_option');//view options
+    Route::get('add_option', [OptionController::class, 'create'])->name('add_option');//add options
+    Route::post('addoption', [OptionController::class, 'store'])->name('addoption'); //add option data to table (submit form)
+    Route::post('option_change_status', [OptionController::class, 'changeStatus'])->name('option_change_status');
+    Route::get('edit_option/{id}', [OptionController::class, 'edit'])->name('editoption'); //edit option form
+    Route::put('update_option/{id}', [OptionController::class, 'update'])->name('updateoption'); //update option data to table (submit form)
+    Route::delete('delete_option/{id}', [OptionController::class, 'destroy'])->name('deleteoption'); //delete option
+
+    //option value 
+    Route::get('show_option_value', [OptionValueController::class, 'index'])->name('show_option_value');//view options
+    Route::get('add_option_value', [OptionValueController::class, 'create'])->name('add_option_value');//add options 
+    Route::post('addoptionvalue', [OptionValueController::class, 'store'])->name('addoptionvalue'); //add option value data to table (submit form)
+    Route::post('option_value_change_status', [OptionValueController::class, 'changeStatus'])->name('option_value_change_status');
+    Route::get('edit_option_values/{id}',[OptionValueController::class,'edit'])->name('editoptionvalue');
+    Route::put('update_option_value/{id}', [OptionValueController::class, 'update'])->name('updateoptionvalue'); //update option value data to table (submit form)
+    Route::delete('delete_option_value/{id}', [OptionValueController::class, 'destroy'])->name('deleteoptionvalue'); //delete option value
+    //microsite
+    Route::get('show_microsites/{club}', [MicrositeController::class, 'index'])->name('show_microsites');//view microsites
+    Route::get('add_microsites/{id}', [MicrositeController::class, 'create'])->name('add_microsites');//add microsite form
+    Route::post('microsite_store', [MicrositeController::class, 'store'])->name('microsite_store');//store microsite data
+    Route::post('microsite_change_status', [MicrositeController::class, 'changeStatus'])->name('microsite_change_status');
+    Route::post('delete_microsite', [MicrositeController::class, 'destroy'])->name('delete_microsite');
+
 });
 
 
@@ -102,3 +117,4 @@ Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controller
     Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
 
 });
+

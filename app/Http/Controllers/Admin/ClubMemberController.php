@@ -4,12 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; 
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-// use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Validation\Rule;
 
 //datatables
 use App\Models\Club;
@@ -17,11 +12,12 @@ use App\Models\ClubMember;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\Address;
-
+ 
 class ClubMemberController extends Controller
 {
     public function index(Request $request, Club $club)
    {
+    // dd($club);
          if($request->ajax()){
             $clubmember = ClubMember::where('club_id', $club->id);
             // return DataTables::eloquent($club)
@@ -43,9 +39,10 @@ class ClubMemberController extends Controller
                         <a href="'. route('admin.clubmember.editmember',$clubmember->id).'" class="btn btn-sm btn-outline-secondary" title="Edit">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
-                        <a href="'. route('admin.clubmember.deletemember',$clubmember->id).'" class="btn btn-sm btn-outline-danger" title="Delete">
-                            <i class="fas fa-trash-alt"></i>
-                        </a>
+                        
+                        <button type="button" class="btn btn-sm btn-outline-danger delete-club" onclick="deletemember(' . $clubmember->id . ')" title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
                     </div>
                 ';
             })
@@ -62,11 +59,11 @@ class ClubMemberController extends Controller
     {
         $club = Club::findOrFail($id);
         $clubmember = new ClubMember();
-        $address = new Address();
         $countries = Country::orderBy('name')->get();
+        $address= new Address();
         // $state=State::all();
         $message=" ";
-        return view('admin.clubmember.addmember', compact('club','clubmember','address','message','countries'));
+        return view('admin.clubmember.addmember', compact('club','clubmember','message','countries','address'));
     }
 
     public function storemember(Request $request, $id)
@@ -173,7 +170,7 @@ class ClubMemberController extends Controller
 
     public function deletemember($id)
     {
-        $clubmember = Clubmember::findOrFail($id);
+        $clubmember = ClubMember::findOrFail($id);
         $clubmember->delete(); 
         return redirect()->back()->with('success', 'club member as deleted successfully');
     }

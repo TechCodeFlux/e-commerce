@@ -1,5 +1,5 @@
 @extends('admin.components.app')
-@section('page-title', 'Club #' . $club->id)
+@section('page-title', 'Club ' . $club->name)
 
 @section('head')
 @endsection 
@@ -15,12 +15,23 @@
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('admin.clubsindex') }}">
-                    <i class="bi bi-people-fill small me-2"></i> Clubs
+                    <i class="bi bi-person-badge small me-2"></i> Clubs
                 </a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                <i class="bi bi-building small me-2"></i> Club #{{ $club->id }}
+            <li class="breadcrumb-item">
+                <a href="{{ route('admin.clubsindex') }}">
+                    <i class="bi bi-people-fill small me-2"></i>{{$club->name}}
+                </a>
             </li>
+            <li class="breadcrumb-item">
+                <a href="{{ route('admin.show_microsites', $club->id) }}">
+                <i class="bi bi-building small me-2"></i> Microsites 
+                </a>
+            </li>
+            <li class="breadcrumb-item active">
+                <i class="bi bi-building small me-2"></i>Add  Microsites 
+            </li>
+            
         </ol>
     </nav>
 </div>
@@ -34,9 +45,9 @@
         {{-- Main Content --}}
         <div class="col-md-9">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Create Microsite</h5>
-                </div>
+                
+                    <h5 class="card-header border-0">Create Microsite</h5>
+                
 
                 <div class="card-body">
 
@@ -44,40 +55,38 @@
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                  <form action="{{ route('admin.clubs.microsites.store') }}" method="POST" enctype="multipart/form-data">
+                  <form action="{{ route('admin.microsite_store') }}" method="POST" enctype="multipart/form-data">
 
                         @csrf
 
                         <div class="mb-3">
                             <label class="form-label">Name</label>
-                            <input type="text" name="event_name" class="form-control" value="{{ old('event_name') }}">
-                            @error('event_name') <small class="text-danger">{{ $message }}</small> @enderror
+                            <input type="text" name="name" class="form-control" value="{{ old('name') }}">
+                            @error('name') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Description</label>
-                            <textarea name="description" rows="4" class="form-control">{{ old('description') }}</textarea>
+                            <textarea name="description" rows="3" class="form-control">{{ old('description') }}</textarea>
                             @error('description') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
 
                         <div class="mb-3">
-    <label class="form-label">Event Banner</label>
-    
-    <input type="file" name="banner" id="bannerInput" class="form-control" accept="image/*">
+                            <label class="form-label">Event Banner</label>
+                            <input type="file" name="image" id="bannerInput" class="form-control" accept="image/*">
+                            @error('image') 
+                                <small class="text-danger">{{ $message }}</small> 
+                            @enderror
 
-    @error('banner') 
-        <small class="text-danger">{{ $message }}</small> 
-    @enderror
-
-    <!-- Image Preview -->
-    <div class="mt-3">
-        <img id="bannerPreview" 
-             src="#" 
-             alt="Banner Preview" 
-             class="img-fluid rounded d-none" 
-             style="max-height: 200px;">
-    </div>
-</div>
+                            <!-- Image Preview -->
+                            <div class="mt-3">
+                                <img id="bannerPreview" 
+                                    src="#" 
+                                    alt="Banner Preview" 
+                                    class="img-fluid rounded d-none" 
+                                    style="max-height: 200px;">
+                            </div>
+                        </div>
 
 
                         <div class="row">
@@ -95,29 +104,29 @@
                         </div>
 
                         {{-- Hidden Club ID --}}
-                        {{-- <input type="hidden" name="club_id" value="{{ $club->id }}"> --}}
+                        <input type="hidden" name="club_id" value="{{ $club->id }}"  readonly>
 
                         <div class="d-flex justify-content-between align-items-center mt-4">
 
-    <!-- Status Toggle -->
-    <div class="form-check form-switch">
-        <input class="form-check-input" 
-               type="checkbox" 
-               name="status" 
-               id="statusToggle" 1
-               value="1" 
-               checked>
-        <label class="form-check-label ms-2" for="statusToggle">
-            Active
-        </label>
-    </div>
+                        <!-- Status Toggle -->
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" 
+                                type="checkbox" 
+                                name="status" 
+                                id="statusToggle" 1
+                                value="1" 
+                                checked>
+                            <label class="form-check-label ms-2" for="statusToggle">
+                                Active
+                            </label>
+                        </div>
 
-    <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary">
-        <i class="bi bi-check-circle me-1"></i> Create Microsite
-    </button>
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-1"></i> Create Microsite
+                        </button>
 
-</div>
+                </div>
 
                     </form>
 

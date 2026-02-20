@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_statuses', function (Blueprint $table) {
+        Schema::create('option_values', function (Blueprint $table) { 
             $table->id();
+            $table->string('name');
+            $table->boolean('status')->default('0');
+            $table->integer('option_value_id');
+            $table->softdeletes();
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_statuses');
+        Schema::dropIfExists('option_values');
     }
 };

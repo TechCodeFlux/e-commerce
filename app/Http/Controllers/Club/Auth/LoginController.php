@@ -9,35 +9,52 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Login Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller handles authenticating users for the application and
+    | redirecting them to your home screen. The controller uses a trait
+    | to conveniently provide its functionality to your applications.
+    |
+    */
+
     use AuthenticatesUsers;
 
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = 'club/dashboard';
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
     // public function __construct()
     // {
-    //     $this->middleware('guest:club')->except('logout');
+    //     $this->middleware('guest')->except('logout');
+    //     $this->middleware('auth')->only('logout');
     // }
+    public function showLoginForm()
+    {
 
+        return view('club.auth.login');
+    }
+    protected function redirectTo() 
+    {
+        return route('club.dashboard');
+    }
     protected function guard()
     {
         return Auth::guard('club');
     }
-
-    protected function redirectTo()
-    {
-        return '/club/dashboard';
-    }
-
-    public function showLoginForm()
-    {
-        return view('club.auth.login');
-    }
-
     public function logout(Request $request)
     {
         Auth::guard('club')->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/club/login');
     }
+
 }
