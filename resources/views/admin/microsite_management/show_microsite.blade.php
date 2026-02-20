@@ -49,7 +49,7 @@
             </div>
 
             <!-- Table -->
-            <table id="options" class="table table-custom table-lg">
+            <table id="micrositeTable" class="table table-custom table-lg">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -138,6 +138,10 @@
                                 <td id="ms_end"></td>
                             </tr>
                             <tr>
+                                <th>password</th>
+                                <td id="ms_password"></td>
+                            </tr>
+                            <tr>
                                 <th>Microsite Status</th>
                                 <td>
                                     <span id="ms_microsite_status" class="badge"></span>
@@ -181,7 +185,34 @@
         </div>
     </div>
 </div>
+//
+<!-- Success Modal -->
+@if(session('success'))
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-success">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">Success</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ session('success') }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+    });
+</script>
+@endif
+//
 @endsection
 
 @section('script')
@@ -195,11 +226,11 @@ let deleteId;
 // Initialize DataTable
 $(document).ready(function() {
 
-    table = $('#options').DataTable({
+    table = $('#micrositeTable').DataTable({
         processing: true,
         serverSide: true,
         dom: 'rtip',
-        ajax: {
+        ajax: { 
             url: "{{ route('admin.show_microsites', $club->id) }}",
             type: "GET", // or POST if your route expects POST
             data: function(d) {
@@ -314,6 +345,8 @@ $('#confirmDelete').on('click', function () {
                         document.getElementById('ms_description').innerText = data.description;
                         document.getElementById('ms_start').innerText = data.start_date;
                         document.getElementById('ms_end').innerText = data.end_date;
+
+                         document.getElementById('ms_password').innerText = data.password;
 
                         // NORMAL STATUS (toggle)
                         let statusEl = document.getElementById('ms_status');

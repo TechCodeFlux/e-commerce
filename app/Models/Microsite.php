@@ -9,6 +9,8 @@ class Microsite extends Model
 {
     use SoftDeletes;
 
+    protected $table = 'microsite';
+    
     protected $fillable = [
         'name',
         'description',
@@ -16,6 +18,7 @@ class Microsite extends Model
         'end_date',
         'image',
         'club_id',
+        'password',
         'status',
     ];
 

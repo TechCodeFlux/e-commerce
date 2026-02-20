@@ -183,13 +183,13 @@
                                 data: 'name',
                                 name: 'name'
                             },
+                             {
+                                data: 'contact',
+                                name: 'contact'
+                            },
                             {
                                 data: 'email',
                                 name: 'email'
-                            },
-                            {
-                                data: 'contact',
-                                name: 'contact'
                             },
                             {
                                 data: 'address',

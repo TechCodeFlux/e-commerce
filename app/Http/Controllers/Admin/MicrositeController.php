@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Microsite;
 use App\Models\Club;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class MicrositeController extends Controller
 {
@@ -21,13 +23,13 @@ class MicrositeController extends Controller
             $microsites = Microsite::query()
                 ->where('club_id', $club->id) // use $club->id here
                 ->select([
-                    'microsites.id',
-                    'microsites.name',
-                    'microsites.start_date',
-                    'microsites.end_date',
-                    'microsites.image',
-                    'microsites.status',
-                    'microsites.created_at'
+                    'microsite.id',
+                    'microsite.name',
+                    'microsite.start_date',
+                    'microsite.end_date',
+                    'microsite.image',
+                    'microsite.status',
+                    'microsite.created_at'
                 ]);
 
             return datatables()
@@ -124,12 +126,10 @@ class MicrositeController extends Controller
             'club_id.required'     => 'Club ID is required',
         ]);
 
-        if (!$request->hasFile('image')) {
-            dd('File not received');
-        }
-
         $imagePath = $request->file('image')
                          ->store('microsite_images', 'public');
+
+        $password = Str::random(6);
 
         Microsite::create([
             'name'   => $validated['name'],
@@ -138,12 +138,15 @@ class MicrositeController extends Controller
             'end_date'   => $validated['end_date'],
             'club_id'   => $validated['club_id'],
             'image'       => $imagePath,
+            'password'    => $password,
+            // 'password'    => Hash::make($password),
             'status' => $validated['status'] ?? 0,
         ]);
 
         return redirect()
             ->route('admin.show_microsites', $validated['club_id'])
-            ->with('success', 'Microsite registered successfully!');
+            ->with('success', 'Microsite registered successfully! ');
+            // ->with('success', 'Microsite registered successfully! Password: ' . $password);
     }
 
     /**
@@ -174,6 +177,7 @@ class MicrositeController extends Controller
             'image' => $microsite->image 
                 ? asset('storage/' . $microsite->image) 
                 : null,
+            'password' => $microsite->password ?? '—',
         ]);
     }
 
