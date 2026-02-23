@@ -55,44 +55,40 @@ $imagePath = $request->file('image')->store('products', 'public');
 
 
 
-     public function edit_product_index($id){
-        
+    public function edit_product_index($id)
+{
+    $product = Product::with('varients')->findOrFail($id);
 
-        $admin = Auth::guard('admin')->user();
+    $categories = Category::orderBy('name')->get();
 
-         $product = Product::where('id', $id)->firstOrFail();
-
-         $categories = Category::orderBy('name')->get();
-         
-         $options = Option::orderBy('name')->get();
-          return view('admin.product_management.form_products_index',compact('product','categories','options'));
-    }
-
+    return view(
+        'admin.product_management.form_products_index',
+        compact('product','categories')
+    );
+}
 
      public function update(Request $request, $id){ 
 
-          $request->validate([
-            'name'    => 'required|string|max:255',
-            'stock' => 'required|string',
-            'description' => 'required|string|max:20',
-            'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-             'category'   => 'required|integer|exists:categories,id',
-            
-        ]);
+          $validated = $request->validate([
+        'name'        => 'required|string|max:255',
+        'description' => 'required|string|max:500',
+        'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        'category'    => 'required|integer|exists:categories,id',
+    ]);
 
-
-         $imagePath = $request->file('image')->store('products', 'public');
-
-        Product::where('id', $id)->update([
-               'name' => $request->name,
-        'stock' => $request->stock,
+    // store image temporarily
+$imagePath = $request->file('image')->store('products', 'public');
+    // ✅ write to session
+    session()->put('product', [
+        'name'        => $request->name,
         'description' => $request->description,
-         'image'       => $imagePath,
-         'category_id' => $request->category,
-]);
-          return redirect('admin/product_management/show_products'); 
+        'image'       => $imagePath,
+        'status'      => $request->status ? 1 : 0,
+        'category_id' => $request->category,
+    ]);
 
-
+         return redirect()
+    ->route('admin.varient_management.edit_varient_generator', $id);
     }
 
 

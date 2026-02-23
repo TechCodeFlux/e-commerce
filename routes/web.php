@@ -86,6 +86,8 @@ Route::get('varient_management/form_varient_index', [VarientController::class, '
 
 Route::get('varient_management/generate_varient', [VarientController::class, 'generate_varient'])->name('varient_management.generate_varient');
 
+Route::get('varient_management/edit_varient_generator/{id}', [VarientController::class, 'edit_varient_generator'])->name('varient_management.edit_varient_generator');
+
 Route::post('varient_management/add_varient',[VarientController::class, 'store'])->name('varient_management.add_varient');
 
 

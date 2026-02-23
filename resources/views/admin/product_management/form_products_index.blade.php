@@ -63,11 +63,16 @@
                 <div class="col-lg-12">
 
             <form class="productForm"
-                    action="{{ route('admin.product_management.add_products') }}"
+                   action="{{ isset($product->id) 
+                          ? route('admin.product_management.edit_product', $product->id) 
+                          : route('admin.product_management.add_products') }}"
                     method="POST"
-                    enctype="multipart/form-data"
+                    enctype="multipart/form-data"   
                     autocomplete="off">
                     @csrf
+                       @if(isset($product->id))
+                             @method('PUT')
+                          @endif
                         
                         {{-- Row 1: Name, Category, Description --}}
                         <div class="row justify-content-center">
@@ -75,7 +80,11 @@
                             <!-- Increased width to col-md-6 -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Name</label>
-                                        <input type="text" name="name" class="form-control" placeholder="Name" >
+                                            <input type="text" 
+                                                    name="name" 
+                                                    class="form-control" 
+                                                    placeholder="Name"
+                                                    value="{{ old('name', $product->name ?? '') }}">
                                         @error('name')
                                             <small class="text-danger d-block mt-1">{{ $message }}</small>
                                         @enderror
@@ -85,18 +94,15 @@
                             <!-- Increased width to col-md-6 -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Categories</label>
-                                        <select name="category" id="category" class="form-select">
-                                            
+                                       <select name="category" id="category" class="form-select">
                                             <option value="">Select Category</option>
-                                        
+
                                             @foreach($categories as $category)
-                                                <option value="{{ $category->id }}">
+                                                <option value="{{ $category->id }}"
+                                                    {{ old('category', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
                                                     {{ $category->name }}
-                                                    
                                                 </option>
-                                                
                                             @endforeach
-                                            
                                         </select>
                                         @error('category')
                                                 <small class="text-danger d-block mt-1">{{ $message }}</small>
@@ -108,7 +114,7 @@
                             <!-- Increased width to col-md-12 (Full Width) -->
                                     <div class="col-md-12 mb-3">
                                             <label class="form-label">Description</label>
-                                            <textarea name="description" class="form-control" ></textarea>
+                                            <textarea name="description" class="form-control">{{ old('description', $product->description ?? '') }}</textarea>
                                             @error('description')
                                             <small class="text-danger d-block mt-1">{{ $message }}</small>
                                             @enderror
@@ -124,11 +130,11 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Image</label>
                                 {{-- Pre-View image --}}
-                                        <div class="mt-3 ">
-                                            <img id="imagePreview" 
-                                                src="{{ isset($product) && $product->image ? asset('storage/' . $product->image) : '#' }}"
-                                                alt="Image Preview" 
-                                                class="col-7 d-none img-fluid w-25">
+                                        <div class="mt-3">
+                                            <img id="imagePreview"
+                                                src="{{ isset($product) && $product->image ? asset('storage/' . $product->image) : '' }}"
+                                                alt="Image Preview"
+                                                class="img-fluid w-25 {{ isset($product) && $product->image ? '' : 'd-none' }}">
                                         </div>
                                 {{-- end-pre -View image --}}
                                                 <input type="file"
@@ -199,53 +205,42 @@ $(document).ready(function () {
 });
 
 $('.productForm').on('submit', function (e) {
-    e.preventDefault();
 
-    let formData = new FormData(this);
-       formData.append('_token', '{{ csrf_token() }}');
-    $.ajax({
-        url: "{{ route('admin.product_management.add_products') }}",
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
+    @if(!isset($product->id))
+        e.preventDefault();
 
-       success: function (response) {
+        let formData = new FormData(this);
+        formData.append('_token', '{{ csrf_token() }}');
 
-            // 🔹 Convert FormData → Object (for localStorage)
-            let formObject = {};
-            formData.forEach((value, key) => {
-                formObject[key] = value;
-            });
+        $.ajax({
+            url: "{{ route('admin.product_management.add_products') }}",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
 
-            // 🔹 Save form data temporarily
-            localStorage.setItem('productForm', JSON.stringify(formObject));
-           
+            success: function (response) {
 
-            // 🔹 Redirect to Variant page
-            window.location.href =
-                "{{ route('admin.varient_management.generate_varient') }}" 
-        },
-
-        error: function (xhr) {
-            if (xhr.status === 422) {
-                $('.text-danger').remove();
-
-                let errors = xhr.responseJSON.errors;
-                $.each(errors, function (field, messages) {
-                    $('[name="' + field + '"]')
-                        .after('<small class="text-danger d-block mt-1">' + messages[0] + '</small>');
+                let formObject = {};
+                formData.forEach((value, key) => {
+                    formObject[key] = value;
                 });
-            }
-        }
-    });
-});
+              
+                localStorage.setItem('productForm', JSON.stringify(formObject));
+              
 
+                window.location.href =
+                    "{{ route('admin.varient_management.generate_varient') }}"
+            }
+        });
+    @endif
+});
 
 
 
 $(document).ready(function () {
 
+   @if(!isset($product->id))
     let savedData = localStorage.getItem('productForm');
 
     if (savedData) {
@@ -263,6 +258,7 @@ $(document).ready(function () {
             }
         });
     }
+      @endif
 
 });
 

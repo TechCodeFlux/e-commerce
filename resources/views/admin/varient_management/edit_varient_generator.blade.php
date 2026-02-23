@@ -29,9 +29,12 @@
 
                     <form  class="VarientForm" 
                         method="POST" 
-                        action="{{ route('admin.varient_management.add_varient') }}" 
+                        action="{{ route('admin.varient_management.edit_varient', $product->id) }}"  
                         enctype="multipart/form-data">
                         @csrf
+                        @if($product->id)
+                            @method('PUT')
+                        @endif
                         
                         {{-- Added align-items-end to align button with inputs --}}
                       <div class="row align-items-end">
@@ -92,10 +95,10 @@
                             </button> 
 
                            <button type="submit"
-        id="submitBtn"
-        class="btn btn-primary px-5 p-md-2 d-none">
-    {{$varient->id ?? '' ? 'Update' : 'Submit' }}
-</button>
+                                id="submitBtn"
+                                class="btn btn-primary px-5 p-md-2 d-none">
+                            {{$varient->id ?? '' ? 'Update' : 'Submit' }}
+                        </button>
                         </div>        
                     </form>
                     
@@ -110,6 +113,83 @@
 
 @section('script')
 <script>
+
+let existingVariants = @json($product->varients ?? []);
+
+$(document).ready(function () {
+    if (existingVariants.length > 0) {
+
+    let table = `
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-bordered text-center align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Color</th>
+                            <th>Size</th>
+                            <th>Stock</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    `;
+
+    existingVariants.forEach(function(item, index){
+
+        table += `
+            <tr>
+                <td>
+                    <input type="text"
+                        name="variants[${index}][color]"
+                        value="${item.color.toUpperCase()}"
+                        class="border-0 text-center"
+                        readonly>
+                </td>
+
+                <td>
+                    <input type="text"
+                        name="variants[${index}][size]"
+                        value="${item.size.toUpperCase()}"
+                        class="border-0 text-center"
+                        readonly>
+                </td>
+
+                <td>
+                    <input type="number"
+                        name="variants[${index}][stock]"
+                        value="${item.stock}"
+                        class="form-control text-center"
+                        min="0"
+                        required>
+                </td>
+
+                <td>
+                    <button type="button"
+                        class="btn btn-sm btn-outline-danger delete-club-member">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+
+    table += `
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+
+    $('#variant-matrix-container').html(table);
+    $('#submitBtn').removeClass('d-none');
+}});
+
+
+
+
+
+
+
 
     $(document).ready(function() {
     $('.js-example-basic-multiple').select2();

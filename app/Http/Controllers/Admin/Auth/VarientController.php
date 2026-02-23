@@ -29,19 +29,30 @@ class VarientController extends Controller
 // }
 
 
-public function generate_varient()
+public function generate_varient($productId = null)
 {
-   $varient = new Varient();
-    $optionColorId  =  Option::where('name', 'Color')->value('id');
-    $optioncolorvalues  = OptionValue::where('option_value_id', $optionColorId)->get();
+    $varient = new Varient();
 
-    $optionSizeId  =  Option::where('name', 'Size')->value('id');
-    $optionsizevalues  = OptionValue::where('option_value_id', $optionSizeId)->get();
-    $variants = Varient::whereNull('deleted_at')->get();
+    $optionColorId = Option::where('name', 'Color')->value('id');
+    $optioncolorvalues = OptionValue::where('option_value_id', $optionColorId)->get();
+
+    $optionSizeId = Option::where('name', 'Size')->value('id');
+    $optionsizevalues = OptionValue::where('option_value_id', $optionSizeId)->get();
+
+    $product = null;
+
+    if ($productId) {
+        $product = Product::with('varients')->findOrFail($productId);
+    }
 
     return view(
         'admin.varient_management.generate_varient',
-        compact('varient','optioncolorvalues','optionsizevalues','variants')
+        compact(
+            'varient',
+            'optioncolorvalues',
+            'optionsizevalues',
+            'product'
+        )
     );
 }
 
@@ -85,8 +96,74 @@ public function store(Request $request)
 
 
 
+public function edit_varient_generator($productId = null)
+{
+     $varient = new Varient();
 
+    $optionColorId = Option::where('name', 'Color')->value('id');
+    $optioncolorvalues = OptionValue::where('option_value_id', $optionColorId)->get();
 
+    $optionSizeId = Option::where('name', 'Size')->value('id');
+    $optionsizevalues = OptionValue::where('option_value_id', $optionSizeId)->get();
+
+    $product = null;
+
+    if ($productId) {
+        $product = Product::with('varients')->findOrFail($productId);
+    }
+
+    return view('admin.varient_management.edit_varient_generator', compact(
+        'product',
+        'optioncolorvalues',
+        'optionsizevalues'
+    ));
+}
+
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'variants' => 'required|array|min:1',
+        'variants.*.color' => 'required',
+        'variants.*.size'  => 'required',
+        'variants.*.stock' => 'required|integer|min:0',
+    ]);
+
+    // ✅ Get existing product directly from DB
+    $product = Product::findOrFail($id);
+
+    // ✅ If session exists (coming from step 1), update product
+    $productData = session('product');
+
+    if ($productData) {
+        $product->update([
+            'name'        => $productData['name'],
+            'description' => $productData['description'],
+            'image'       => $productData['image'],
+            'status'      => $productData['status'],
+            'category_id' => $productData['category_id'],
+        ]);
+
+        session()->forget('product');
+    }
+
+    // ✅ Delete old variants of this product
+    Varient::where('product_id', $id)->delete();
+
+    // ✅ Insert new variants
+    foreach ($request->variants as $variant) {
+
+        Varient::create([
+            'color'      => $variant['color'],
+            'size'       => $variant['size'],
+            'stock'      => $variant['stock'],
+            'product_id' => $id,
+        ]);
+    }
+
+    return redirect()
+        ->route('admin.product_management.form_products_index')
+        ->with('success', 'Products updated successfully');
+}
 
 
 
@@ -172,25 +249,7 @@ public function edit_varient_index($id)
 
 
 
-      public function update(Request $request, $id)
-    {
-        $request->validate([
-          'size'      => 'required|string|max:25',
-          'color'      => 'required|string|max:25',
-          'stock'      => 'required|integer|min:0|max:50',
-          'status'    => 'nullable|boolean',
-        ]);
-
-        Varient::where('id', $id)->update([
-             'size' => $request->size,
-             'color' => $request->color,
-             'stock' => $request->stock,
-        ]);
-        return redirect()
-            ->route('admin.varient_management.show_varient')
-            ->with('success', 'Varient updated successfully');
-    }
-
+      
 
 
 
