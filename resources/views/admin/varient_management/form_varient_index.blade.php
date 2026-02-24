@@ -4,214 +4,192 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Club Member Profile</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/dist/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-
-        .transition-all {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .btn-active {
-            background-color: #3b82f6;
-            color: white;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
-        }
-    </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="bg-light min-vh-100 d-flex align-items-center justify-content-center p-3">
 
-    <div class="max-w-2xl w-full glass-card rounded-3xl shadow-2xl overflow-hidden">
-        <!-- Header / Banner -->
-        <div class="h-32 bg-gradient-to-r from-blue-600 to-indigo-700 relative">
-            <div class="absolute -bottom-12 left-8">
-                <div class="h-24 w-24 rounded-2xl bg-white p-1 shadow-lg">
-                    <img id="profileImage" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" class="h-full w-full rounded-xl bg-slate-100 object-cover">
-                </div>
-            </div>
-        </div>
-
-        <div class="pt-16 px-8 pb-8">
-            <!-- Basic Info Header -->
-            <div class="mb-8">
-                <h1 id="display-name" class="text-3xl font-bold text-slate-800">Alex Thompson</h1>
-                <p class="text-blue-600 font-medium">Premium Gold Member</p>
-            </div>
-
-            <!-- Navigation Buttons -->
-            <div class="flex flex-wrap gap-2 mb-8 bg-slate-100 p-1.5 rounded-xl">
-                <button onclick="switchTab('details')" id="btn-details" class="flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm transition-all btn-active">
-                    <i class="fa-solid fa-user-check mr-2"></i>Details
-                </button>
-                <button onclick="switchTab('edit')" id="btn-edit" class="flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm text-slate-600 hover:bg-white hover:shadow-sm transition-all">
-                    <i class="fa-solid fa-pen-to-square mr-2"></i>Edit
-                </button>
-                
-            </div>
-
-            <!-- Tab: View Details -->
-            <div id="tab-details" class="tab-content active space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-1">
-                        <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Email Address</label>
-                        <p id="view-email" class="text-slate-700 font-medium flex items-center">
-                            <i class="fa-solid fa-envelope w-6 text-slate-400"></i>alex.thompson@example.com
-                        </p>
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Contact Number</label>
-                        <p id="view-contact" class="text-slate-700 font-medium flex items-center">
-                            <i class="fa-solid fa-phone w-6 text-slate-400"></i>+1 (555) 012-3456
-                        </p>
-                    </div>
-                    <div class="space-y-1 md:col-span-2">
-                        <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Physical Address</label>
-                        <p id="view-address" class="text-slate-700 font-medium flex items-center">
-                            <i class="fa-solid fa-location-dot w-6 text-slate-400"></i>123 Membership Lane, Social Circle, NY 10001
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="pt-4 border-t border-slate-100">
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-slate-400">Member since: January 2023</span>
-                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full font-bold text-xs">ACTIVE</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tab: Edit Profile -->
-            <div id="tab-edit" class="tab-content space-y-4">
-                <form id="editForm" onsubmit="saveProfile(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1">Full Name</label>
-                        <input type="text" id="edit-name" value="Alex Thompson" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Email</label>
-                            <input type="email" id="edit-email" value="alex.thompson@example.com" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Contact</label>
-                            <input type="text" id="edit-contact" value="+1 (555) 012-3456" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1">Address</label>
-                        <textarea id="edit-address" rows="2" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none">123 Membership Lane, Social Circle, NY 10001</textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all active:scale-[0.98]">
-                        Save Changes
-                    </button>
-                </form>
-            </div>
-
-            <!-- Tab: Settings -->
-            <div id="tab-settings" class="tab-content space-y-4">
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
-                        <div class="flex items-center gap-3">
-                            <div class="p-2 bg-blue-100 text-blue-600 rounded-lg"><i class="fa-solid fa-bell"></i></div>
-                            <div>
-                                <p class="font-semibold text-slate-800">Notifications</p>
-                                <p class="text-xs text-slate-500">Email & push alerts</p>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <!-- Main Card -->
+                <div class="card border-0 shadow-lg rounded-5 overflow-hidden bg-white">
+                    
+                    <!-- Header Banner -->
+                    <div class="p-5 bg-primary bg-gradient position-relative" style="height: 120px;">
+                        <!-- Avatar Container -->
+                        <div class="position-absolute bottom-0 start-0 ms-4 translate-middle-y" style="margin-bottom: -40px;">
+                            <div class="bg-white p-1 rounded-4 shadow-sm">
+                                <img id="profileImage" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" class="rounded-4 bg-light" style="width: 90px; height: 90px; object-fit: cover;">
                             </div>
                         </div>
-                        <input type="checkbox" checked class="w-10 h-5 appearance-none bg-slate-300 rounded-full checked:bg-blue-500 cursor-pointer transition-all relative after:content-[''] after:absolute after:w-4 after:h-4 after:bg-white after:rounded-full after:top-0.5 after:left-0.5 checked:after:left-5.5 after:transition-all">
                     </div>
 
-                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
-                        <div class="flex items-center gap-3">
-                            <div class="p-2 bg-purple-100 text-purple-600 rounded-lg"><i class="fa-solid fa-lock"></i></div>
-                            <div>
-                                <p class="font-semibold text-slate-800">Privacy Mode</p>
-                                <p class="text-xs text-slate-500">Hide profile from public</p>
+                    <div class="card-body p-4 pt-5 mt-2">
+                        <!-- Profile Header Info -->
+                        <div class="mb-4">
+                            <h2 id="display-name" class="fw-bold text-dark mb-0">Alex Thompson</h2>
+                            <p class="text-primary fw-semibold">Premium Gold Member</p>
+                        </div>
+
+                        <!-- Navigation Tab Buttons -->
+                        <div class="nav nav-pills nav-fill bg-light p-1 rounded-4 mb-4" id="pills-tab" role="tablist">
+                            <button onclick="switchTab('details')" id="btn-details" class="nav-link active rounded-4 fw-bold py-2" type="button">
+                                <i class="fa-solid fa-user-check me-2"></i>Details
+                            </button>
+                            <button onclick="switchTab('edit')" id="btn-edit" class="nav-link text-secondary rounded-4 fw-bold py-2" type="button">
+                                <i class="fa-solid fa-pen-to-square me-2"></i>Edit
+                            </button>
+                            <button onclick="switchTab('settings')" id="btn-settings" class="nav-link text-secondary rounded-4 fw-bold py-2" type="button">
+                                <i class="fa-solid fa-gears me-2"></i>Settings
+                            </button>
+                        </div>
+
+                        <!-- Details Tab Content -->
+                        <div id="tab-details" class="d-block">
+                            <div class="row g-4">
+                                <div class="col-12 col-sm-6">
+                                    <label class="small fw-bold text-uppercase text-secondary ls-wide mb-1 d-block" style="letter-spacing: 0.05em;">Email Address</label>
+                                    <div id="view-email" class="text-dark fw-medium d-flex align-items-center">
+                                        <i class="fa-solid fa-envelope me-3 text-muted opacity-50"></i>alex.thompson@example.com
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <label class="small fw-bold text-uppercase text-secondary ls-wide mb-1 d-block" style="letter-spacing: 0.05em;">Contact Number</label>
+                                    <div id="view-contact" class="text-dark fw-medium d-flex align-items-center">
+                                        <i class="fa-solid fa-phone me-3 text-muted opacity-50"></i>+1 (555) 012-3456
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="small fw-bold text-uppercase text-secondary ls-wide mb-1 d-block" style="letter-spacing: 0.05em;">Physical Address</label>
+                                    <div id="view-address" class="text-dark fw-medium d-flex align-items-center">
+                                        <i class="fa-solid fa-location-dot me-3 text-muted opacity-50"></i>123 Membership Lane, Social Circle, NY 10001
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4 opacity-10">
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="small text-muted">Joined Jan 2023</span>
+                                <span class="badge rounded-pill bg-success px-3 py-2 fw-bold text-uppercase" style="font-size: 0.65rem;">Active Member</span>
                             </div>
                         </div>
-                        <input type="checkbox" class="w-10 h-5 appearance-none bg-slate-300 rounded-full checked:bg-blue-500 cursor-pointer transition-all relative after:content-[''] after:absolute after:w-4 after:h-4 after:bg-white after:rounded-full after:top-0.5 after:left-0.5 checked:after:left-5.5 after:transition-all">
-                    </div>
 
-                    <div class="pt-4">
-                        <button onclick="showAlert('Account deactivation requested. Our team will contact you.')" class="w-full text-red-500 text-sm font-bold py-2 border border-red-100 rounded-xl hover:bg-red-50 transition-colors">
-                            Deactivate Membership
-                        </button>
+                        <!-- Edit Tab Content -->
+                        <div id="tab-edit" class="d-none">
+                            <form onsubmit="saveProfile(event)" class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-secondary">Full Name</label>
+                                    <input type="text" id="edit-name" value="Alex Thompson" class="form-control form-control-lg border-light bg-light rounded-3">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-secondary">Email</label>
+                                    <input type="email" id="edit-email" value="alex.thompson@example.com" class="form-control border-light bg-light rounded-3">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-secondary">Contact</label>
+                                    <input type="text" id="edit-contact" value="+1 (555) 012-3456" class="form-control border-light bg-light rounded-3">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-secondary">Address</label>
+                                    <textarea id="edit-address" rows="2" class="form-control border-light bg-light rounded-3">123 Membership Lane, Social Circle, NY 10001</textarea>
+                                </div>
+                                <div class="col-12 mt-4">
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm rounded-3">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Settings Tab Content -->
+                        <div id="tab-settings" class="d-none">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item px-0 py-3 border-0 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3 me-3">
+                                            <i class="fa-solid fa-bell"></i>
+                                        </div>
+                                        <div>
+                                            <p class="mb-0 fw-bold">Push Notifications</p>
+                                            <p class="mb-0 small text-muted">Alerts for club events</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" checked>
+                                    </div>
+                                </div>
+                                <div class="list-group-item px-0 py-3 border-0 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-secondary bg-opacity-10 text-secondary p-2 rounded-3 me-3">
+                                            <i class="fa-solid fa-eye-slash"></i>
+                                        </div>
+                                        <div>
+                                            <p class="mb-0 fw-bold">Private Profile</p>
+                                            <p class="mb-0 small text-muted">Hide info from members</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox">
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <button onclick="showAlert('Deactivation request sent.')" class="btn btn-outline-danger w-100 rounded-3 small fw-bold">Deactivate Membership</button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Custom Alert (instead of browser alert) -->
-        <div id="custom-alert" class="fixed inset-x-0 top-4 mx-auto w-max px-6 py-3 bg-slate-800 text-white rounded-full shadow-2xl opacity-0 transform -translate-y-12 transition-all duration-500 pointer-events-none z-50">
-            <span id="alert-message">Message here</span>
         </div>
     </div>
 
+    <!-- Alert Toast (Custom Bootstrap) -->
+    <div id="custom-alert" class="position-fixed top-0 start-50 translate-middle-x mt-3 opacity-0 transition shadow-lg px-4 py-2 bg-dark text-white rounded-pill d-none" style="transition: all 0.5s ease; z-index: 1060;">
+        <span id="alert-message">Message here</span>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/dist/bootstrap.bundle.min.js"></script>
+
     <script>
         function switchTab(tabName) {
-            // Update Tab Visibility
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.getElementById('tab-' + tabName).classList.add('active');
+            // Hide all tab content
+            document.getElementById('tab-details').className = 'd-none';
+            document.getElementById('tab-edit').className = 'd-none';
+            document.getElementById('tab-settings').className = 'd-none';
+            
+            // Show selected
+            document.getElementById('tab-' + tabName).className = 'd-block';
 
-            // Update Button Styling
-            const buttons = ['details', 'edit', 'settings'];
-            buttons.forEach(btn => {
-                const element = document.getElementById('btn-' + btn);
-                if (btn === tabName) {
-                    element.classList.add('btn-active');
-                    element.classList.remove('text-slate-600');
-                } else {
-                    element.classList.remove('btn-active');
-                    element.classList.add('text-slate-600');
-                }
+            // Reset all buttons
+            ['details', 'edit', 'settings'].forEach(btn => {
+                const el = document.getElementById('btn-' + btn);
+                el.classList.remove('active', 'btn-primary');
+                el.classList.add('text-secondary');
             });
+
+            // Set active button
+            const activeBtn = document.getElementById('btn-' + tabName);
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('text-secondary');
         }
 
         function saveProfile(event) {
             event.preventDefault();
-            
-            // Get values from form
             const name = document.getElementById('edit-name').value;
             const email = document.getElementById('edit-email').value;
             const contact = document.getElementById('edit-contact').value;
             const address = document.getElementById('edit-address').value;
 
-            // Update display fields
             document.getElementById('display-name').textContent = name;
-            document.getElementById('view-email').innerHTML = `<i class="fa-solid fa-envelope w-6 text-slate-400"></i>${email}`;
-            document.getElementById('view-contact').innerHTML = `<i class="fa-solid fa-phone w-6 text-slate-400"></i>${contact}`;
-            document.getElementById('view-address').innerHTML = `<i class="fa-solid fa-location-dot w-6 text-slate-400"></i>${address}`;
+            document.getElementById('view-email').innerHTML = `<i class="fa-solid fa-envelope me-3 text-muted opacity-50"></i>${email}`;
+            document.getElementById('view-contact').innerHTML = `<i class="fa-solid fa-phone me-3 text-muted opacity-50"></i>${contact}`;
+            document.getElementById('view-address').innerHTML = `<i class="fa-solid fa-location-dot me-3 text-muted opacity-50"></i>${address}`;
 
-            // Show success message and go back to details
-            showAlert("Profile updated successfully!");
+            showAlert("Profile Updated!");
             switchTab('details');
         }
 
@@ -219,12 +197,13 @@
             const alertBox = document.getElementById('custom-alert');
             const message = document.getElementById('alert-message');
             message.textContent = msg;
-            alertBox.classList.remove('opacity-0', '-translate-y-12');
-            alertBox.classList.add('opacity-100', 'translate-y-0');
+            
+            alertBox.classList.remove('d-none', 'opacity-0');
+            alertBox.classList.add('opacity-100');
             
             setTimeout(() => {
-                alertBox.classList.add('opacity-0', '-translate-y-12');
-                alertBox.classList.remove('opacity-100', 'translate-y-0');
+                alertBox.classList.add('opacity-0');
+                setTimeout(() => alertBox.classList.add('d-none'), 500);
             }, 3000);
         }
     </script>

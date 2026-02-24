@@ -40,7 +40,7 @@
                                <label class="form-label">Color</label>
                                   <select name="color[]" id="color"  class="js-example-basic-multiple" multiple="multiple">
                                             
-                                            <option value="">Select Color</option>
+                                            
                                         
                                             @foreach($optioncolorvalues as $optionvalue)
                                                 <option value="{{ $optionvalue->id }}">
@@ -57,7 +57,7 @@
                                     <label class="form-label">Size </label>
                                          <select name="size[]" id="size"  class="js-example-basic-multiple " multiple="multiple">
                                             
-                                            <option value="">Select Size</option>
+                                            
                                         
                                             @foreach($optionsizevalues as $optionvalue)
                                                 <option  value="{{ $optionvalue->id }}">
