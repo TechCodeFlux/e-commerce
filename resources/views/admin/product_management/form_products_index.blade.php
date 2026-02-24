@@ -1,5 +1,5 @@
 @extends('admin.components.app')
-@section('page-title','Product Form')
+@section('page-title', $product->id ? 'Edit Product form' : ' Product Form')
 @section('content')
 <div class="mb-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="modal-footer justify-content-center border-0">
                                     <button type="button" class="btn btn-success px-4" data-bs-dismiss="modal">
-                                        OK
+                                        OK  
                                     </button>
                                 </div>
                             </div>
