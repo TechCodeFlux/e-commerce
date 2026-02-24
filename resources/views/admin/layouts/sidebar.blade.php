@@ -582,22 +582,23 @@
                 </ul>
             </li>
             <li>
-                <a  href="">
+                <a class="{{ request()->routeIs('admin.product_management.show_products','admin.product_management.form_products_index','admin.varient_management.generate_varient')? 'active' : '' }}"
+                     href="{{ route('admin.product_management.show_products') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-box-seam me-2"></i>
                     </span>
                     <span>Products</span>
                 </a>
             </li>
-            <li>
-                <a  href="">
+             {{-- <li>
+                <a class="{{ request()->routeIs('admin.varient_management.show_varient','admin.varient_management.form_varient_index')? 'active' : '' }}"
+                href="{{ route('admin.varient_management.show_varient') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-diagram-3 me-2"></i>
                     </span>
                     <span>Varient</span>
                 </a>
-            </li>
-            
+            </li> --}}
             
            
 

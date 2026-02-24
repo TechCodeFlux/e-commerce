@@ -20,6 +20,8 @@ use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController
 use App\Http\Controllers\Admin\OptionController;
 use App\Http\Controllers\Admin\OptionValueController;
 use App\Http\Controllers\Admin\MicrositeController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\VarientController;
 //arjun
 Route::get('/', function () {return view('club.auth.login');})->name('club.login');
 // Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
@@ -86,7 +88,6 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('edit_option/{id}', [OptionController::class, 'edit'])->name('editoption'); //edit option form
     Route::put('update_option/{id}', [OptionController::class, 'update'])->name('updateoption'); //update option data to table (submit form)
     Route::delete('delete_option/{id}', [OptionController::class, 'destroy'])->name('deleteoption'); //delete option
-
     //option value 
     Route::get('show_option_value', [OptionValueController::class, 'index'])->name('show_option_value');//view options
     Route::get('add_option_value', [OptionValueController::class, 'create'])->name('add_option_value');//add options 
@@ -104,7 +105,27 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('edit_microsite/{id}',[MicrositeController::class,'edit'])->name('editmicrosite');//edit microsite form
     Route::put('microsite_update/{microsite}', [MicrositeController::class, 'update'])->name('microsite_update');//update microsite data
     Route::get('microsite_show/{microsite}', [MicrositeController::class, 'show'])->name('microsite_show');//show microsite details modal
-
+    //PRODUCT-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    Route::get('product_management/form_products_index', [ProductController::class, 'form_products_index'])->name('product_management.form_products_index');
+    Route::post('product_management/add_products', [ProductController::class, 'store'])->name('product_management.add_products');
+    Route::get('product_management/show_products', [ProductController::class, 'show'])->name('product_management.show_products');
+    Route::get('product_management/show_single/{id}', [ProductController::class, 'single_show'])->name('product_management.show_single');
+    Route::delete('product_management/destroy_products/{id}', [ProductController::class, 'destroy'])->name('product_management.destroy_products');
+    Route::get('product_management/form_products_index/{id}', [ProductController::class, 'edit_product_index'])->name('product_management.edit_products_index');
+    Route::put('product_management/edit_product/{id}', [ProductController::class, 'update'])->name('product_management.edit_product');
+    Route::post('product_management/change-status', [ProductController::class, 'changeStatus'])->name('product_management.change-status');
+    //VARIENTS-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    Route::get('varient_management/form_varient_index', [VarientController::class, 'form_varient_index'])->name('varient_management.form_varient_index');
+    Route::get('varient_management/generate_varient', [VarientController::class, 'generate_varient'])->name('varient_management.generate_varient');
+    Route::get('varient_management/edit_varient_generator/{id}', [VarientController::class, 'edit_varient_generator'])->name('varient_management.edit_varient_generator');
+    Route::post('varient_management/add_varient',[VarientController::class, 'store'])->name('varient_management.add_varient');
+    Route::get('varient_management/form_varient_index/{id}', [VarientController::class, 'edit_varient_index'])->name('varient_management.edit_varient_index');
+    Route::put('varient_management/edit_varient/{id}', [VarientController::class, 'update'])->name('varient_management.edit_varient');
+    Route::delete('varient_management/destroy_varient/{id}', [VarientController::class, 'destroy'])->name('varient_management.destroy_varient');
+    Route::get('varient_management/show_varient', [VarientController::class, 'show'])->name('varient_management.show_varient');
+    Route::get('varient_management/show_single/{id}', [VarientController::class, 'single_show'])->name('varient_management.show_single');
+    Route::post('varient_management/change-status', [VarientController::class, 'changeStatus'])->name('varient_management.change-status');
+    Route::post('varient/get-option-values',[VarientController::class, 'getOptionValues'])->name('varient_management.get_option_values');
 });
 
 

@@ -1,0 +1,372 @@
+@extends('admin.components.app')
+@php
+    $hideSearch = true;
+@endphp
+@section('page-title', $product->id ? 'Edit Product form' : ' Product Form')
+@section('content')
+<div class="mb-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ url('/') }}">
+                        <i class="bi bi-globe2 small me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-collection small me-2 "></i>Products</li>
+            </ol>
+        </nav>
+    </div>
+ 
+
+<div class="container mt-4">
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+
+           <div class="mb-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb d-flex gap-3">
+               
+                <li class="breadcrumb-item">
+                    <a class="list-group-item-primary px-sm-4 border p-2 d-inline-block " href="{{ route('admin.product_management.form_products_index') }}">
+                         Product Details 
+                    </a>
+                </li>
+                <li class="list-group-item-dark px-sm-4 border p-2 d-inline-block" >Varient Details</li>
+            </ol>
+        </nav>
+    </div>
+            
+
+           @if(session('success'))
+                    <div class="modal fade" id="successModal" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content shadow-lg border-0">
+                                <div class="modal-header bg-success text-white">
+                                    <h5 class="modal-title">Success</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body text-center py-4">
+                                    <i class="bi bi-check-circle-fill text-success" style="font-size: 50px;"></i>
+                                    <p class="mt-3 mb-0 fw-semibold">
+                                        {{ session('success') }}
+                                    </p>
+                                </div>
+                                <div class="modal-footer justify-content-center border-0">
+                                    <button type="button" class="btn btn-success px-4" data-bs-dismiss="modal">
+                                        OK  
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            @endif
+
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+
+            <form class="productForm"
+                   action="{{ isset($product->id) 
+                          ? route('admin.product_management.edit_product', $product->id) 
+                          : route('admin.product_management.add_products') }}"
+                    method="POST"
+                    enctype="multipart/form-data"   
+                    autocomplete="off">
+                    @csrf
+                       @if(isset($product->id))
+                             @method('PUT')
+                          @endif
+                        
+                        {{-- Row 1: Name, Category, Description --}}
+                        <div class="row justify-content-center">
+                            {{-- product-Name --}}
+                            <!-- Increased width to col-md-6 -->
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Name</label>
+                                            <input type="text" 
+                                                    name="name" 
+                                                    class="form-control" 
+                                                    placeholder="Name"
+                                                    value="{{ old('name', $product->name ?? '') }}">
+                                        @error('name')
+                                            <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                        @enderror
+                                    </div> 
+                                    
+                            {{-- category --}}
+                            <!-- Increased width to col-md-6 -->
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Categories</label>
+                                       <select name="category" id="category" class="form-select">
+                                            <option value="">Select Category</option>
+
+                                            @foreach($categories as $category)
+                                                <option value="{{ $category->id }}"
+                                                    {{ old('category', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                                                    {{ $category->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('category')
+                                                <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                            {{-- category --}}
+
+                            {{-- ---Description--- --}}
+                            <!-- Increased width to col-md-12 (Full Width) -->
+                                    <div class="col-md-12 mb-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea name="description" class="form-control">{{ old('description', $product->description ?? '') }}</textarea>
+                                            @error('description')
+                                            <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                            @enderror
+                                    </div> 
+                            {{-- ---Description--- --}}
+
+                        </div>
+
+                        {{-- Row 2: Image & Status --}}
+                     <div class="row ">
+                            {{---image---}}
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Image</label>
+                                {{-- Pre-View image --}}
+                                        <div class="mt-3">
+                                            <img id="imagePreview"
+                                                src="{{ isset($product) && $product->image ? asset('storage/' . $product->image) : '' }}"
+                                                alt="Image Preview"
+                                                class="img-fluid w-25 {{ isset($product) && $product->image ? '' : 'd-none' }}">
+                                        </div>
+                                {{-- end-pre -View image --}}
+                                                <input type="file"
+                                                name="image" 
+                                                class="form-control swal2-radio"
+                                                id="imageInput" 
+                                                accept="image/*"
+                                                onchange="previewImage(event)">
+                                                        
+                                                @error('image')
+                                                    <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                                @enderror
+                            </div>
+                           
+                       
+                        
+                            {{-- ----status---- --}}
+                         <!-- Increased width to col-md-6 -->
+                            <div class="col-md-6 mb-3 mt-5 w-25 m-auto mt-lg-3">
+                                <label class="form-label d-block">Status</label>
+
+                                <input type="hidden" name="status" value="0">
+
+
+                                <div class="form-check form-switch">
+                                    <input
+                                        class="form-check-input toggle-status"
+                                        @if(isset($product->id)) data-id="{{ $product->id }}" @endif
+                                        type="checkbox"
+                                        name="status"
+                                        id="statusSwitch"
+                                        value="1"
+                                        {{ old('status', $product->status ?? 1) ? 'checked' : '' }}
+                                    >
+                                    <label class="form-check-label" for="statusSwitch" id="statusLabel">
+                                        {{ old('status', $product->status ?? 1) ? 'Active' : 'Inactive' }}
+                                    </label>
+                                </div>
+
+                            </div>
+                    </div>
+                       
+                        <div class="text-center mt-3 w-25 ms-sm-auto">
+                           <button type="submit" class="btn btn-primary px-5"> {{ $product->id ? 'Next' : 'Next' }}</button>
+                        </div>
+
+            </form>
+                    
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section('script')
+<script>
+
+$(document).ready(function () {
+
+    @if(session('success'))
+        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+    @endif
+
+});
+
+
+
+
+$('.productForm').on('submit', function (e) {
+
+    @if(!isset($product->id))
+        e.preventDefault();
+
+        let formData = new FormData(this);
+        formData.append('_token', '{{ csrf_token() }}');
+
+        $.ajax({
+            url: "{{ route('admin.product_management.add_products') }}",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+
+                let formObject = {};
+                formData.forEach((value, key) => {
+                    formObject[key] = value;
+                });
+              
+                localStorage.setItem('productForm', JSON.stringify(formObject));
+              
+
+                window.location.href =
+                    "{{ route('admin.varient_management.generate_varient') }}"
+            }
+        });
+    @endif
+});
+
+
+
+$(document).ready(function () {
+
+   @if(!isset($product->id))
+    let savedData = localStorage.getItem('productForm');
+
+    if (savedData) {
+        let data = JSON.parse(savedData);
+
+        $.each(data, function (key, value) {
+            let field = $('[name="' + key + '"]');
+
+            if (!field.length) return;
+
+            if (field.attr('type') === 'checkbox') {
+                field.prop('checked', value == 1);
+            } else {
+                field.val(value);
+            }
+        });
+    }
+      @endif
+
+});
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const statusSwitch = document.getElementById('statusSwitch');
+    const statusLabel = document.getElementById('statusLabel');
+
+    if (statusSwitch) {
+        statusSwitch.addEventListener('change', function () {
+            statusLabel.innerText = this.checked ? 'Active' : 'Inactive';
+        });
+    }
+});
+
+ $(document).on('change', '.toggle-status', function () {
+
+    let productId = $(this).data('id');
+    let status = $(this).is(':checked') ? 1 : 0;
+
+    // Javascript Conditional:
+    // If productId is undefined (Add Page), do not run AJAX.
+    if (!productId ) {
+        // console.log('Add page detected: Status change will be saved on form submit.');
+        return;
+    }
+
+    // If productId exists (Edit Page), run AJAX.
+    $.ajax({
+        url: "{{ route('admin.product_management.change-status') }}",
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            id: productId,
+            status: status
+        },
+        success: function(response) {
+            // Optional: update label text dynamically if needed
+             if(status == 1){
+                 $('#statusLabel').text('Active');
+             } else {
+                 $('#statusLabel').text('Inactive');
+             }
+        }
+    });
+});
+
+function previewImage(event) {
+        var input = event.target;
+        var imagePreview = document.getElementById('imagePreview');
+         const file = event.target.files[0];
+
+        if (file) {
+        imagePreview.src = URL.createObjectURL(file);
+        imagePreview.classList.remove('d-none'); // show image
+        }
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                // Set the src of the image to the file data
+                imagePreview.src = e.target.result;
+                // Make the image visible
+                imagePreview.style.display = 'block';
+            }
+
+            // Read the file as a data URL
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            // If the user cancels selection, hide the preview
+            imagePreview.src = '#';
+            imagePreview.style.display = 'none';
+        }
+
+
+
+    // Show selected file name
+document.getElementById('imageInput').addEventListener('change', function () {
+    const fileName = this.files.length > 0 ? this.files[0].name : 'No file chosen';
+
+    // Remove existing filename if already added
+    let existingLabel = document.getElementById('fileNameDisplay');
+    if (existingLabel) {
+        existingLabel.remove();
+    }
+
+    // Create new filename display
+    let fileLabel = document.createElement('small');
+    fileLabel.id = 'fileNameDisplay';
+    fileLabel.className = 'd-block mt-2 text-primary fw-semibold';
+    fileLabel.innerText = fileName;
+
+    this.parentNode.appendChild(fileLabel);
+});
+    }
+</script>
+@endsection
+@endsection 

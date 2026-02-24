@@ -2,8 +2,9 @@
 @php
     $hideSearch = true;
 @endphp
-@section('content')
+
 @section('page-title', 'Add Clubs')
+@section('content')
 <div class="mb-4">
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -30,7 +31,7 @@
                 {{ $clubuser->id ? 'Edit' : 'Add' }} Club User
             </h4>
 
-            <form
+            <form 
                 action="{{ $clubuser->id ? route('admin.update', $clubuser->id) : route('admin.addclub') }}"
                 method="POST">
                 @csrf
@@ -43,6 +44,9 @@
                         <label>Name</label>
                         <input type="text" name="name" class="form-control"
                             value="{{ old('name', $clubuser->name ?? '') }}">
+                            @error('name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                     </div>
 
                     {{-- Email --}}
@@ -50,6 +54,9 @@
                         <label>Email</label>
                         <input type="email" name="email" class="form-control"
                             value="{{ old('email', $clubuser->email ?? '') }}">
+                             @error('email')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                     </div>
 
                     {{-- Contact --}}
@@ -57,12 +64,18 @@
                         <label>Contact</label>
                         <input type="text" name="contact" class="form-control"
                             value="{{ old('contact', $clubuser->contact ?? '') }}">
+                             @error('contact')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                     </div>
 
                     {{-- Address --}}
                     <div class="col-md-12 mb-3">
                         <label>Address</label>
                         <textarea name="address" class="form-control">{{ old('address', $clubuser->address ?? '') }}</textarea>
+                         @error('address')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
                     </div>
 
                     {{-- Country --}}
@@ -77,22 +90,28 @@
                                 </option>
                             @endforeach
                         </select>
+                         @error('country')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                     </div>
 
                     {{-- State --}}
                     <div class="col-md-4 mb-3">
                         <label>State</label>
                         <select name="state" id="state" class="form-select">
-                            <option value="">Select State</option>
-                            @isset($states)
-                                @foreach($states as $state)
-                        <option value="{{ $state->id }}"
-                            {{ old('state', $clubuser->state_id ?? '') == $state->id ? 'selected' : '' }}>
-                                {{ $state->name }}
-            </option>
-        @endforeach
-    @endisset
-</select>
+                                <option value="">Select State</option>
+                                @isset($states)
+                                    @foreach($states as $state)
+                            <option value="{{ $state->id }}"
+                                {{ old('state', $clubuser->state_id ?? '') == $state->id ? 'selected' : '' }}>
+                                    {{ $state->name }}
+                            </option>
+                                @endforeach
+                            @endisset
+                        </select>
+                         @error('state')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                     </div>
 
                     {{-- City --}}
@@ -100,6 +119,9 @@
                         <label>City</label>
                         <input type="text" name="city" class="form-control"
                             value="{{ old('city', $clubuser->city ?? '') }}">
+                             @error('city')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                     </div>
 
                     {{-- ZIP --}}
@@ -107,6 +129,9 @@
                         <label>ZIP Code</label>
                         <input type="text" name="zip_code" class="form-control"
                             value="{{ old('zip_code', $clubuser->zip_code ?? '') }}">
+                             @error('zip_code')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                     </div>
 
                     {{-- Status --}}
@@ -178,8 +203,9 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(states => {
         stateSelect.innerHTML = '<option value="">Select State</option>';
         states.forEach(state => {
+            let selected = state.id == selectedState ? 'selected' : '';
             stateSelect.innerHTML +=
-                `<option value="${state.id}">${state.name}</option>`;
+                `<option value="${state.id}" ${selected}>${state.name}</option>`;
         });
     })
     .catch(error => {

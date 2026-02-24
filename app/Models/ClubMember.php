@@ -17,11 +17,12 @@ class ClubMember extends Model
         'status',
    ];
 
-   public function address() {
-    return $this->belongsTo(Address::class, 'address_id');
-}
-public function club() {
-    return $this->belongsTo(Club::class, 'club_id');
-
-}
+    public function address() 
+    {
+        return $this->belongsTo(Address::class, 'address_id');
+    }
+    public function club() 
+    {
+        return $this->belongsTo(Club::class, 'club_id');
+    }
 }

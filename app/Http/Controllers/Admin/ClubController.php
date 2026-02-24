@@ -6,17 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str; 
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-// use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Validation\Rule;
-
+//mail
+use App\Mail\ClubMail;
+use Illuminate\Support\Facades\Mail;
 //datatables
 use App\Models\Club;
-use App\Models\ClubMember;
 use App\Models\Country;
 use App\Models\State;
-use App\Models\Address;
 
 class ClubController extends Controller
 {
@@ -87,7 +84,7 @@ class ClubController extends Controller
         'state'     => 'required|integer|exists:states,id',
 
         'city'      => 'required|string|max:100',
-        'zip_code'  => 'required|integer|digits:6',
+        'zip_code' => 'required|digits:6',
         'status'    => 'nullable|boolean',
     ]);
 
@@ -107,6 +104,15 @@ class ClubController extends Controller
         'status'     => $request->has('status'),
         'password'   => Hash::make($randomPassword),
     ]);
+
+    Mail::to($request->email)->send(new ClubMail($randomPassword, $request->email));
+    
+    if ($request->ajax()) {
+        return response()->json([
+            'success' => true,
+            'message' => 'Club registered successfully!'
+        ]);
+    }
 
     return redirect()
         ->route('admin.clubsindex')
