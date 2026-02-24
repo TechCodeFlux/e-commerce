@@ -21,7 +21,7 @@
 <div class="card">
 <div class="card-body">
 
-<div class="d-md-flex gap-4 align-items-center mb-3">
+<div class="d-md-flex gap-4 align-items-center mb-3">   
 
     <div class="d-none d-md-flex">All Club Members</div>
 

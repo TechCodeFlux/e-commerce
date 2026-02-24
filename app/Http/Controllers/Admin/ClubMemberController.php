@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; 
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+
 // use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Validation\Rule;
 
 //datatables
 use App\Models\Club;
@@ -70,52 +67,60 @@ class ClubMemberController extends Controller
         return view('admin.clubmember.addmember', compact('club','clubmember','message','countries','address'));
     }
 
-    public function storemember(Request $request, $id)
-    {
-        $request->validate([
-            'name'    => 'required|regex:/^[A-Za-z\s]+$/',
-            'address' => 'required|string',
-            'contact' => 'required|string|max:10',
-            'email'   => 'required|email',
-            'country' =>'required|integer',
-            'state'   => 'required|max:100',
-            'city'    => 'required|string|max:100',
-            'zip_code' =>'required|integer',
-            'status'  => 'nullable|boolean',
-        ]);
+public function storemember(Request $request, $id)
+{
+    $request->validate([
+       'name' => 'required|regex:/^[A-Za-z\\s\\.\\-]+$/',
+        'address' => 'required|string',
+        'contact' => 'required|string|max:10',
+        'email'   => 'required|email',
+        'country' =>'required|integer',
+        'state'   => 'required|max:100',
+        'city'    => 'required|string|max:100',
+        'zip_code' =>'required|integer',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        // 1️⃣ Create club member first
-        $clubmember = ClubMember::create([
-            'name'    => $request->name,
-            'contact' => $request->contact,
-            'email'   => $request->email,
-            'club_id' => $id,
-            'address_id'=> 0,
-            'status'  => 1,
-        ]);
+    // Upload image FIRST
+    $imageName = null;
 
-        // 2️⃣ Create address with club_member_id
-       $address = Address::create([
-            'address1'       => $request->address,
-            'country_id'       => $request->country,
-            'state_id'          => $request->state,
-            'country_id'        =>$request->country,
-            'city'           => $request->city,
-            'zip_code'       => $request->zip_code,
-            'status'         => 1,
-        ]);
-
-        // 3️⃣ Update member with address_id
-        $clubmember->update([
-            'address_id' => $address->id,
-        ]);
-
-         
-
-        return redirect()
-            ->route('admin.clubmember.viewmembers', $id)
-            ->with('success', 'Club member added successfully');
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time().'.'.$image->getClientOriginalExtension();
+        $image->storeAs('public/club_members', $imageName);
     }
+
+    // Create club member
+    $clubmember = ClubMember::create([
+        'name'    => $request->name,
+        'contact' => $request->contact,
+        'email'   => $request->email,
+        'club_id' => $id,
+        'address_id'=> 0,
+        'status'  => 1,
+        'image' => $imageName, // SAVE IMAGE NAME
+    ]);
+
+    // Create address
+    $address = Address::create([
+        'address1'  => $request->address,
+        'country_id'=> $request->country,
+        'state_id'  => $request->state,
+        'city'      => $request->city,
+        'zip_code'  => $request->zip_code,
+        'status'    => 1,
+    ]);
+
+    //Update address_id
+    $clubmember->update([
+        'address_id' => $address->id,
+    ]);
+
+    return redirect()
+        ->route('admin.clubmember.viewmembers', $id)
+        ->with('success', 'Club member added successfully');
+}
+
 
     public function editmember($id)
 {
@@ -140,7 +145,7 @@ class ClubMemberController extends Controller
     public function updatemember(Request $request,$id)
     {
          $request->validate([
-            'name'    => 'required|regex:/^[A-Za-z\s]+$/',
+            'name' => 'required|regex:/^[A-Za-z\\s\\.\\-]+$/',
             'address' => 'required|string',
             'contact' => 'required|string|max:20',
             'email'   => 'required|email',
@@ -174,7 +179,7 @@ class ClubMemberController extends Controller
 
     public function deletemember($id)
     {
-        $clubmember = Clubmember::findOrFail($id);
+        $clubmember = ClubMember::findOrFail($id);
         $clubmember->delete(); 
         return redirect()->back()->with('success', 'club member as deleted successfully');
     }

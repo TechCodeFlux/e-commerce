@@ -48,10 +48,10 @@
                         {{ $clubmember->id ? 'Edit' : 'Add' }} Club member
                     </h4>
 
-                    <form
-                        action="{{ $clubmember->id ? route('admin.clubmember.updatemember', $clubmember->id) : route('admin.clubmember.storemember',$club->id) }}"
-                        {{--  --}}
-                        method="POST">
+                  <form
+                    action="{{ $clubmember->id ? route('admin.clubmember.updatemember', $clubmember->id) : route('admin.clubmember.storemember',$club->id) }}"
+                     method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @if($clubmember->id) @method('POST') @endif
 
@@ -99,6 +99,29 @@
                                     </div>
                                 @enderror
                             </div>
+
+                            {{-- Profile Image --}}
+                            <div class="col-md-4 mb-3">
+                            <label>Profile Image</label>
+                            <input type="file" name="image"
+                                class="form-control @error('profile_image') is-invalid @enderror">
+
+                            @error('image')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                            {{-- Show existing image in edit --}}
+                            @if(!empty($clubmember->image))
+                                <div class="mt-2">
+                                    <img src="{{ asset('storage/club_members/'.$clubmember->image) }}"
+                                        width="80" height="80"
+                                        class="rounded-circle"
+                                        style="object-fit: cover;">
+                                </div>
+                            @endif
+                        </div>
 
                             {{-- Address --}}
                             <div class="col-md-12 mb-3">

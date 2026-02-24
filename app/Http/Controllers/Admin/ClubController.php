@@ -6,17 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str; 
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 // use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Validation\Rule;
 
 //datatables
 use App\Models\Club;
-use App\Models\ClubMember;
 use App\Models\Country;
 use App\Models\State;
-use App\Models\Address;
 
 class ClubController extends Controller
 {
@@ -139,7 +135,7 @@ class ClubController extends Controller
     public function update(Request $request, Club $club)
     {
     $request->validate([
-    'name'    => 'required|regex:/^[A-Za-z\s\.\-]+$/',
+    'name' => 'required|regex:/^[A-Za-z\\s\\.\\-]+$/',
     'address' => 'required|string',
     'contact' => 'required|regex:/^\+?[1-9]\d{6,14}$/',
     'email'   => [
@@ -212,7 +208,7 @@ class ClubController extends Controller
         $countries = Country::orderBy('name')->get();
         $states = State::orderBy('name')->get();
         $request->validate([
-            'name'    => 'required|regex:/^[A-Za-z\s\.\-]+$/',
+           'name' => 'required|regex:/^[A-Za-z\\s\\.\\-]+$/',
             'address' => 'required|string',
             'contact' => 'required|regex:/^\+?[1-9]\d{6,14}$/',
             'email'   => [

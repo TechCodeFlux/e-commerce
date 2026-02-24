@@ -7,10 +7,7 @@
                         <i class="bi-graph-up me-2"></i> Dashboard
                     </a>
                 </li>
-                    <a class="nav-link {{ request()->routeIs('admin.clubs.dashboard') ? 'active' : '' }}"
-                    href="{{ route('admin.clubs.dashboard', $club->id) }}">
-                        <i class="bi bi-graph-up me-2"></i> Dashboard
-                    </a>
+                   
 
                 </li>
                 

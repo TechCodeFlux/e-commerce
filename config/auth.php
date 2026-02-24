@@ -36,23 +36,27 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-          'admin' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-        'club' => [
-            'driver' => 'session',
-            'provider' => 'clubs',
-        ],
-        'clubmember' => [
-            'driver' => 'session',
-            'provider' => 'club_members',
-        ],
+
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
     ],
+
+    'admin' => [
+        'driver' => 'session',
+        'provider' => 'admins', // use admins provider
+    ],
+
+    'club' => [
+        'driver' => 'session',
+        'provider' => 'clubs',
+    ],
+
+    'clubmember' => [
+        'driver' => 'session',
+        'provider' => 'club_members',
+    ],
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -71,28 +75,29 @@ return [
     |
     */
 
-    'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
-        ],
-           'admins' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
-        ],
-        'clubs' => [
+  'providers' => [
+
+    'users' => [
         'driver' => 'eloquent',
-        'model' => App\Models\Club::class, 
-        ],
-        'club_members' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\ClubMember::class,
-        ],
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'model' => App\Models\User::class,
     ],
+
+    'admins' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\User::class,
+    ],
+
+    'clubs' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Club::class,
+    ],
+
+    'club_members' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\ClubMember::class,
+    ],
+
+],
 
     /*
     |--------------------------------------------------------------------------

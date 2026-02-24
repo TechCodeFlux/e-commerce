@@ -1,4 +1,3 @@
-
 @extends('admin.components.app')
  @section('page-title', $club->name) 
 
@@ -16,14 +15,14 @@
                 </li>
                 <li class="breadcrumb-item">
                     <a href="{{ route('admin.clubsindex') }}">
-                        <i class="bi bi-people-fill small me-2"></i> Clubs
+                        <i class="bi bi-person-badge small me-2"></i> Clubs
                     </a>
                 </li>
                 <li class="breadcrumb-item">
                     <a href="{{ route('admin.clubs.dashboard', $club->id) }}">
                         <i class="bi bi-people-fill small me-2"></i>{{$club->name}}
                     </a></li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-building small me-2"></i>club members</li>  
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-building small me-2"></i>Club members</li>  
             </ol>
         </nav>
     </div>
@@ -168,7 +167,7 @@
                         serverSide: true,
                         dom:'rtip',
                         scrollY: '400px', 
-                        scrollX: true,  // 👈 height of table
+                        scrollX: true,  // height of table
                         scrollCollapse: true,
                         ajax: {
                             url: "{{ route('admin.clubmember.viewmembers',compact('club')) }}",
@@ -183,13 +182,13 @@
                                 data: 'name',
                                 name: 'name'
                             },
+                             {
+                                data: 'contact',
+                                name: 'contact'
+                            },
                             {
                                 data: 'email',
                                 name: 'email'
-                            },
-                            {
-                                data: 'contact',
-                                name: 'contact'
                             },
                             {
                                 data: 'address',

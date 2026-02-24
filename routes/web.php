@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Auth\LoginController;
+// use App\Http\Controllers\Auth\LoginController;,
 use App\Http\Controllers\Admin\ClubMemberController;
 use App\Http\Controllers\Admin\ClubController;
 //for dashboard
@@ -84,15 +84,32 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
 
 
 
-//aishwarya
-Route::get('/clubmember', function () {return view('clubmember.auth.login');})->name('clubmember.login');
-// Route::post('/clubmember', [ClubMemberLoginController::class, 'login'])->name('clubmember.login.submit');
+//clubmember
 
 
-Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controllers\ClubMember')->group(function () {
-    Auth::routes(['register' => false]); 
-    //dashboard controller
-    Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
+Route::prefix('clubmember')->name('clubmember.')->group(function () {
+
+    // Login page
+    Route::get('login', [ClubMemberController::class, 'showLogin'])
+        ->name('login');
+
+    // Login submit
+    Route::post('login', [ClubMemberController::class, 'login'])
+        ->name('login.submit');
+
+    // Logout
+    Route::post('logout', [ClubMemberController::class, 'logout'])
+        ->name('logout');
+
+    // Protected routes
+    Route::middleware('auth:clubmember')->group(function () {
+
+        Route::get('dashboard', function () {
+            return view('clubmember.dashboard');
+        })->name('dashboard');
+
+    });
 
 });
+
 

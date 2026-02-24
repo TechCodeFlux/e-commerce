@@ -1,108 +1,59 @@
+@extends('clubmember.layouts.app')
 
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login - Vetra | E-Commerce HTML Admin Dashboard Template</title>
+@section('content')
 
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ url('assets/images/favicon.png') }}"/>
+<section class="login_box_area section_gap">
+    <div class="container">
+        <div class="row">
 
-    <!-- Themify icons -->
-    <link rel="stylesheet" href="{{ url('assets/images/favicon.png') }}" type="text/css">
-
-    <!-- Main style file -->
-    <link rel="stylesheet" href="{{ url('dist/css/app.min.css') }}" type="text/css">
-
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
-<body class="auth">
-
-<!-- begin::preloader-->
-<div class="preloader">
-    <div class="preloader-icon"></div>
-</div>
-<!-- end::preloader -->
-
-
-    <div class="form-wrapper">
-        <div class="container">
-            <div class="card">
-                <div class="row g-0">
-                    <div class="col">
-                        <div class="row">
-                            <div class="col-md-10 offset-md-1">
-                                <div class="d-block d-lg-none text-center text-lg-start">
-                                    <img width="120" src="{{ url('assets/images/logo.svg') }}" alt="logo">
-                                </div>
-                                <div class="my-5 text-center text-lg-start">
-                                    <h1 class="display-8">Club Member Sign In</h1>
-                                    <p class="text-muted">Sign in to Vetra to continue</p>
-                                </div>
-                                <form action="{{ route('clubmember.login') }}" method="POST" class="mb-5">
-                                     @csrf 
-                                    <div class="mb-3">
-                                        <input type="email" name="email" class="form-control" placeholder="Enter email" autofocus
-                                               required>
-                                    </div>
-                                    {{-- <div class="mb-3">
-                                        <input type="password" name="password" class="form-control" placeholder="Enter password"
-                                               required>
-                                    </div> --}}
-                                    <div class="text-center text-lg-start">
-                                        {{-- <p class="small">Can't access your account? <a href="#">Reset your password now</a>.</p> --}}
-                                        <button type="submit" class="btn btn-primary">Sign In</button>
-                                    </div>
-                                </form>
-                                {{-- <div class="social-links justify-content-center">
-                                    <a href="#">
-                                        <i class="ti-google bg-google"></i> Sign in with Google
-                                    </a>
-                                    <a href="#">
-                                        <i class="ti-facebook bg-facebook"></i> Sign in with Facebook
-                                    </a>
-                                </div>
-                                <p class="text-center d-block d-lg-none mt-5 mt-lg-0">
-                                    Don't have an account? <a href="#">Sign up</a>.
-                                </p> --}}
-                            </div>
-                        </div>
+            <div class="col-lg-6">
+                <div class="login_box_img">
+                    <img class="img-fluid" src="{{ asset('img/login.jpg') }}" alt="">
+                    <div class="hover">
+                        <h4>EVENT NAME</h4>
                     </div>
-                    {{-- <div class="col d-none d-lg-flex border-start align-items-center justify-content-between flex-column text-center">
-                        <div class="logo">
-                            <img width="120" src="{{ url('assets/images/logo.svg') }}" alt="logo">
-                        </div>
-                        <div>
-                            <h3 class="fw-bold">Welcome to Vetra!</h3>
-                            <p class="lead my-5">If you don't have an account, would you like to register right now?</p>
-                            <a href="#" class="btn btn-primary">Sign Up</a>
-                        </div>
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <a href="#">Privacy Policy</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">Terms & Conditions</a>
-                            </li>
-                        </ul>
-                    </div> --}}
                 </div>
             </div>
+
+            <div class="col-lg-6">
+                <div class="login_form_inner">
+                    <h3>Log in to enter</h3>
+
+                    <form class="row login_form"
+                          action="{{ route('clubmember.login.submit') }}"
+                          method="POST">
+
+                        @csrf
+
+                        <div class="col-md-12 form-group">
+                            <input type="email"
+                                   class="form-control"
+                                   name="email"
+                                   placeholder="Email"
+                                   required>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <input type="password"
+                                   class="form-control"
+                                   name="password"
+                                   placeholder="Password"
+                                   required>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <button type="submit" class="primary-btn">
+                                Log In
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
         </div>
     </div>
+</section>
 
-
-<!-- Bundle scripts -->
-<script src="{{ url('libs/bundle.js') }}"></script>
-
-<!-- Main Javascript file -->
-<script src="{{ url('dist/js/app.min.js') }}"></script>
-</body>
-</html>
-
-                
+@endsection
