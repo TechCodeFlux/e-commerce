@@ -104,7 +104,7 @@
                     
                 </div>
                 
-                <form id="previous-form" method="get" action="{{ route('admin.product_management.form_products_index') }}" class="previous-form d-none">
+                <form id="previous-form" method="get" action="{{  route('admin.product_management.edit_products_index', $product->id) }}" class="previous-form d-none">
                 </form>
             </div>
         </div>
@@ -203,7 +203,7 @@ $(document).ready(function () {
 
 
 
-const STORAGE_KEY = "variant_matrix_data";
+// const STORAGE_KEY = "variant_matrix_data";
 function saveVariantData() {
 
         const colors = $('#color').val();
@@ -270,87 +270,109 @@ if (sizes.length === 0) {
 
 if (hasError) {
     return;
-}
+}   
 
 
 
 
 
-            let table = `
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                      
+         let existingRowCount = $('#variant-matrix-container tbody tr').length;
+let newRows = '';
 
-                        <table class="table table-bordered text-center align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Color</th>
-                                    <th>Size</th>
-                                    <th>Stock</th>
-                                     <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-            `;
+// ✅ Collect existing combinations
+let existingCombinations = [];
 
-            let index = 0;
+$('#variant-matrix-container tbody tr').each(function () {
+    let existingColor = $(this).find('input[name*="[color]"]').val();
+    let existingSize  = $(this).find('input[name*="[size]"]').val();
 
-            colors.each(function () {
-                const colorId   = $(this).val();
-                const colorName = $(this).text().trim();    
+    existingCombinations.push(existingColor + '-' + existingSize);
+});
 
-                sizes.each(function () {
-                    const sizeId   = $(this).val();
-                    const sizeName = $(this).text().trim();
+colors.each(function () {
 
-                    table += `
-                        <tr>
-                            <td class="col-2">
-                               <input type="text" name="variants[${index}][color]" value="${colorName.toUpperCase()}"  class="border-0 text-center" readonly> 
-                               
-                            </td>
+    const colorName = $(this).text().trim().toUpperCase();
 
-                            <td class="col-2">
-                                 <input type="text" name="variants[${index}][size]" value="${sizeName.toUpperCase()}"  class="border-0 text-center" readonly> 
-                                
-                            </td>
+    sizes.each(function () {
 
-                            <td class="col-2">
-                                <input 
-                                    type="number" 
-                                    name="variants[${index}][stock]" 
-                                    class="form-control text-center" 
-                                    min="0"
-                                    required
-                                >
-                            </td>
-                             <td class="col-2">
-                               <button 
-                                 type="button"
-                                 class=" btn btn-sm btn-outline-danger delete-club-member"
-                                
-                                 title="Delete">
-                                                              <i class="fas fa-trash-alt"></i>
-                            </button>
-                            </td>
-                        </tr>
-                    `;
-                    index++;
-                });
-            });
+        const sizeName = $(this).text().trim().toUpperCase();
 
-            table += `
-                            </tbody>
-                        </table>
-                    </div>
+        let combinationKey = colorName + '-' + sizeName;
+
+        // ✅ Skip if already exists
+        if (existingCombinations.includes(combinationKey)) {
+            return;
+        }
+
+        newRows += `
+            <tr>
+                <td>
+                    <input type="text" 
+                        name="variants[${existingRowCount}][color]" 
+                        value="${colorName}"  
+                        class="border-0 text-center" 
+                        readonly>
+                </td>
+
+                <td>
+                    <input type="text" 
+                        name="variants[${existingRowCount}][size]" 
+                        value="${sizeName}"  
+                        class="border-0 text-center" 
+                        readonly>
+                </td>
+
+                <td>
+                    <input type="number" 
+                        name="variants[${existingRowCount}][stock]" 
+                        class="form-control text-center" 
+                        min="0"
+                        required>
+                </td>
+
+                <td>
+                    <button type="button"
+                        class="btn btn-sm btn-outline-danger delete-club-member">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+
+        existingCombinations.push(combinationKey);
+        existingRowCount++;
+    });
+});
+
+    // ✅ If table not exists, create wrapper first
+    if ($('#variant-matrix-container table').length === 0) {
+
+        $('#variant-matrix-container').html(`
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <table class="table table-bordered text-center align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Color</th>
+                                <th>Size</th>
+                                <th>Stock</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
-            `;
+            </div>
+        `);
+    }
 
-            $('#variant-matrix-container').html(table);
-            if ($('#variant-matrix-container tbody tr').length > 0) {
-    $('#submitBtn').removeClass('d-none');
-}
-        });
+    $('#variant-matrix-container tbody').append(newRows);
+
+    if ($('#variant-matrix-container tbody tr').length > 0) {
+        $('#submitBtn').removeClass('d-none');
+    }
+
+});
 
     
     $(document).on('click', '.delete-club-member', function () {

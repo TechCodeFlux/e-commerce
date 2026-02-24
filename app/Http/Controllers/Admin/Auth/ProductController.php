@@ -67,18 +67,26 @@ $imagePath = $request->file('image')->store('products', 'public');
     );
 }
 
-     public function update(Request $request, $id){ 
+   public function update(Request $request, $id)
+{
+    $product = Product::findOrFail($id);
 
-          $validated = $request->validate([
+    $validated = $request->validate([
         'name'        => 'required|string|max:255',
         'description' => 'required|string|max:500',
-        'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        // ✅ image not required while editing
+        'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         'category'    => 'required|integer|exists:categories,id',
     ]);
 
-    // store image temporarily
-$imagePath = $request->file('image')->store('products', 'public');
-    // ✅ write to session
+    // ✅ Use old image if new image not uploaded
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('products', 'public');
+    } else {
+        $imagePath = $product->image; // keep old image
+    }
+
+    // ✅ Save to session (like your existing logic)
     session()->put('product', [
         'name'        => $request->name,
         'description' => $request->description,
@@ -87,9 +95,9 @@ $imagePath = $request->file('image')->store('products', 'public');
         'category_id' => $request->category,
     ]);
 
-         return redirect()
-    ->route('admin.varient_management.edit_varient_generator', $id);
-    }
+    return redirect()
+        ->route('admin.varient_management.edit_varient_generator', $id);
+}
 
 
 

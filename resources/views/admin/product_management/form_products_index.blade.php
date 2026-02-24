@@ -178,7 +178,7 @@
                     </div>
                        
                         <div class="text-center mt-3 w-25 ms-sm-auto">
-                           <button type="submit" class="btn btn-primary px-5"> {{ $product->id ? 'Update' : 'Next' }}</button>
+                           <button type="submit" class="btn btn-primary px-5"> {{ $product->id ? 'Next' : 'Next' }}</button>
                         </div>
 
             </form>
@@ -203,6 +203,9 @@ $(document).ready(function () {
     @endif
 
 });
+
+
+
 
 $('.productForm').on('submit', function (e) {
 
@@ -339,6 +342,27 @@ function previewImage(event) {
             imagePreview.src = '#';
             imagePreview.style.display = 'none';
         }
+
+
+
+    // Show selected file name
+document.getElementById('imageInput').addEventListener('change', function () {
+    const fileName = this.files.length > 0 ? this.files[0].name : 'No file chosen';
+
+    // Remove existing filename if already added
+    let existingLabel = document.getElementById('fileNameDisplay');
+    if (existingLabel) {
+        existingLabel.remove();
+    }
+
+    // Create new filename display
+    let fileLabel = document.createElement('small');
+    fileLabel.id = 'fileNameDisplay';
+    fileLabel.className = 'd-block mt-2 text-primary fw-semibold';
+    fileLabel.innerText = fileName;
+
+    this.parentNode.appendChild(fileLabel);
+});
     }
 </script>
 @endsection

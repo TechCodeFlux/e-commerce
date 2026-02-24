@@ -161,7 +161,7 @@ public function update(Request $request, $id)
     }
 
     return redirect()
-        ->route('admin.product_management.form_products_index')
+        ->route('admin.product_management.show_products')
         ->with('success', 'Products updated successfully');
 }
 
