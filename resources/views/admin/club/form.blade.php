@@ -28,7 +28,7 @@
                 {{ $clubuser->id ? 'Edit' : 'Add' }} Club User
             </h4>
 
-            <form
+            <form enctype="multipart/form-data"
                 action="{{ $clubuser->id ? route('admin.update', $clubuser->id) : route('admin.addclub') }}"
                 method="POST">
                 @csrf
@@ -105,6 +105,13 @@
                         <label>ZIP Code</label>
                         <input type="text" name="zip_code" class="form-control"
                             value="{{ old('zip_code', $clubuser->zip_code ?? '') }}">
+                    </div>
+
+                    {{-- Image --}}
+                    <div class="col-md-4 mb-3">
+                        <label>Profile Picture</label>
+                        <input type="file" name="image" class="form-control"
+                            value="">
                     </div>
 
                     {{-- Status --}}

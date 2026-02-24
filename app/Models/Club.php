@@ -21,6 +21,7 @@ class Club extends Authenticatable
         'status',
         'zip_code',
         'password',
+        'image',
     ];
 
     protected $hidden = [

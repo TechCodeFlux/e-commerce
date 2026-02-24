@@ -39,10 +39,38 @@
                             <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 <div class="mb-4">
                                     <div class="d-flex flex-column flex-md-row text-center text-md-start mb-3">
-                                        <figure class="me-4 flex-shrink-0">
-                                            <img width="100" class="rounded-pill"
-                                                src="../../../assets/images/user/man_avatar3.jpg" alt="...">
-                                        </figure>
+                                        <figure class="me-4 flex-shrink-0 text-center">
+
+                                            <label for="imageUpload" style="cursor:pointer; position:relative; display:inline-block;">
+
+                                                {{-- Profile Image --}}
+                                                <img id="avatarPreview"
+                                                    src="{{ $club->image 
+                                                            ? asset('storage/'.$club->image) 
+                                                            : asset('assets/images/user/man_avatar3.jpg') }}"
+                                                    width="130"
+                                                    height="130"
+                                                    style="object-fit:cover;"
+                                                    class="rounded-circle border shadow">
+
+                                                {{-- Edit Icon Overlay --}}
+                                                <span style="
+                                                    position:absolute;
+                                                    bottom:5px;
+                                                    right:5px;
+                                                    background:#0d6efd;
+                                                    color:white;
+                                                    border-radius:50%;
+                                                    padding:6px 8px;
+                                                    font-size:14px;">
+                                                    <i class="bi bi-camera-fill"></i>
+                                                </span>
+                                            </label>
+
+                                            {{-- Hidden file input --}}
+                                            <input type="file" name="image" id="imageUpload" accept="image/*" style="display:none;">
+
+                                </figure>
                                         <div class="flex-fill">
                                             <h5 class="mb-3">{{$club->name}}</h5>
                                              <h6 class="mb-3">{{$club->email}}</h6>
@@ -219,7 +247,7 @@
                         }
                     });
 
-                    // ✅ AUTO LOAD ON EDIT
+                    //  AUTO LOAD ON EDIT
                     // if (selectedCountry) {
                     //     countrySelect.value = selectedCountry;
                     //     loadStates(selectedCountry, selectedState);
@@ -227,6 +255,19 @@
                     
                 });
                 </script>
+
+            <script>
+                document.getElementById('imageUpload').addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                    document.getElementById('avatarPreview').src = e.target.result;
+                    }
+                reader.readAsDataURL(file);
+                }
+                });
+            </script>
                 @endsection
 
 
