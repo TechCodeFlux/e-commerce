@@ -1,43 +1,34 @@
 <?php
 
 namespace App\Models;
-use App\Models\ClubMember;      
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-// use App\Http\Controllers\ClubController;
 
-
-
-class ClubMember extends Model
+class ClubMember extends Authenticatable
 {
-
     use SoftDeletes;
 
     protected $fillable = [
         'name',
-        'contact',
-        'email',
         'club_id',
         'address_id',
-        
-
+        'contact',
+        'email',
+        'status',
+        'image',
     ];
 
-  // being value to club member table
 
-     public function club()
+    // ================= RELATIONSHIPS =================
+
+    public function address()
     {
-        return $this->belongsTo(Club::class);
+        return $this->belongsTo(Address::class, 'address_id');
     }
 
-    public  function address()
+    public function club()
     {
-         return $this->belongsTo(Address::class);
+        return $this->belongsTo(Club::class, 'club_id');
     }
-    
-
-
 }
-
-

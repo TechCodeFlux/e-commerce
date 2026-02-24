@@ -20,9 +20,10 @@ use App\Http\Controllers\Admin\ClubMemberController;
 use App\Http\Controllers\Admin\OptionController;
 use App\Http\Controllers\Admin\OptionValueController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\VariantController;
 
 
-
+Route::get('/option', function () {return view('list');})->name('option');
 // admin (done by pauljo)
 
 // Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
@@ -55,6 +56,9 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
      //profile
     Route::get('club/profile/{id}',[ClubController::class,'profile'])->name('club.profile');
     Route::post('club/editprofile/{id}',[ClubController::class,'editprofile'])->name('club.editprofile');
+
+    Route::get('club/member/profile/{id}',[ClubMemberController::class,'profile'])->name('clubmember.profile');
+    Route::post('club/member/updateprofile/{id}',[ClubMemberController::class,'update'])->name('clubmember.updateprofile');
     
      //option
     Route::get('show_option', [OptionController::class, 'index'])->name('show_option');//view options
@@ -75,7 +79,8 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::delete('delete_option_value/{id}', [OptionValueController::class, 'destroy'])->name('deleteoptionvalue'); //delete option value
 
 
-
+    // vaients
+    // Route::get('show_variant', [VariantController::class, 'index'])->name('show_variant');//view variants
     
 });
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('email');
             $table->unsignedBigInteger('address_id'); 
             $table->unsignedBigInteger('club_id');
+            $table->string('image');
             $table->boolean('status')->default('0');
             $table->softdeletes();
             $table->timestamps();

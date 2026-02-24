@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; 
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 // use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Validation\Rule;
 
 //datatables
 use App\Models\Club;
@@ -37,7 +35,7 @@ class ClubMemberController extends Controller
             ->addColumn('action', function (ClubMember $clubmember) {
                 return '
                     <div class="d-flex gap-1">
-                        <a href="#" class="btn btn-sm btn-clean btn-icon" title="Show">
+                        <a href="'. route('admin.clubmember.profile',$clubmember->id).'" class="btn btn-sm btn-clean btn-icon" title="Show">
                             <i class="fas fa-eye text-warning"></i>
                         </a>
                         <a href="'. route('admin.clubmember.editmember',$clubmember->id).'" class="btn btn-sm btn-outline-secondary" title="Edit">
@@ -70,52 +68,61 @@ class ClubMemberController extends Controller
         return view('admin.clubmember.addmember', compact('club','clubmember','message','countries','address'));
     }
 
-    public function storemember(Request $request, $id)
-    {
-        $request->validate([
-            'name'    => 'required|regex:/^[A-Za-z\s]+$/',
-            'address' => 'required|string',
-            'contact' => 'required|string|max:10',
-            'email'   => 'required|email',
-            'country' =>'required|integer',
-            'state'   => 'required|max:100',
-            'city'    => 'required|string|max:100',
-            'zip_code' =>'required|integer',
-            'status'  => 'nullable|boolean',
-        ]);
+public function storemember(Request $request, $id)
+{
+    $request->validate([
+       'name' => 'required|regex:/^[A-Za-z\\s\\.\\-]+$/',
+        'address' => 'required|string',
+        'contact' => 'required|string|max:10',
+        'email'   => 'required|email',
+        'country' =>'required|integer',
+        'state'   => 'required|max:100',
+        'city'    => 'required|string|max:100',
+        'zip_code' =>'required|integer',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        // 1️⃣ Create club member first
-        $clubmember = ClubMember::create([
-            'name'    => $request->name,
-            'contact' => $request->contact,
-            'email'   => $request->email,
-            'club_id' => $id,
-            'address_id'=> 0,
-            'status'  => 1,
-        ]);
-
-        // 2️⃣ Create address with club_member_id
-       $address = Address::create([
-            'address1'       => $request->address,
-            'country_id'       => $request->country,
-            'state_id'          => $request->state,
-            'country_id'        =>$request->country,
-            'city'           => $request->city,
-            'zip_code'       => $request->zip_code,
-            'status'         => 1,
-        ]);
-
-        // 3️⃣ Update member with address_id
-        $clubmember->update([
-            'address_id' => $address->id,
-        ]);
-
-         
-
-        return redirect()
-            ->route('admin.clubmember.viewmembers', $id)
-            ->with('success', 'Club member added successfully');
+    // Upload image FIRST
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')
+                         ->store('club_members', 'public');
+    } else {
+        $imagePath = null; // or set a default image path if you have one
     }
+
+    
+
+    // Create club member
+    $clubmember = ClubMember::create([
+        'name'    => $request->name,
+        'contact' => $request->contact,
+        'email'   => $request->email,
+        'club_id' => $id,
+        'address_id'=> 0,
+        'status'  => 1,
+        'image' => $imagePath, // SAVE IMAGE PATH
+    ]);
+
+    // Create address
+    $address = Address::create([
+        'address1'  => $request->address,
+        'country_id'=> $request->country,
+        'state_id'  => $request->state,
+        'city'      => $request->city,
+        'zip_code'  => $request->zip_code,
+        'status'    => 1,
+    ]);
+
+    //Update address_id
+    $clubmember->update([
+        'address_id' => $address->id,
+    ]);
+
+    return redirect()
+        ->route('admin.clubmember.viewmembers', $id)
+        ->with('success', 'Club member added successfully');
+}
+
 
     public function editmember($id)
 {
@@ -140,11 +147,12 @@ class ClubMemberController extends Controller
     public function updatemember(Request $request,$id)
     {
          $request->validate([
-            'name'    => 'required|regex:/^[A-Za-z\s]+$/',
+            'name' => 'required|regex:/^[A-Za-z\\s\\.\\-]+$/',
             'address' => 'required|string',
             'contact' => 'required|string|max:20',
             'email'   => 'required|email',
             'state'   => 'required|string|max:100',
+            'country' => 'required|string|max:100',
             'city'    => 'required|string|max:100',
             'zip_code' =>'required|digits:6',
             'status'  => 'nullable|boolean',
@@ -174,10 +182,69 @@ class ClubMemberController extends Controller
 
     public function deletemember($id)
     {
-        $clubmember = Clubmember::findOrFail($id);
+        $clubmember = ClubMember::findOrFail($id);
         $clubmember->delete(); 
         return redirect()->back()->with('success', 'club member as deleted successfully');
     }
 
+    public function profile($id)
+    {
+        $clubmember = ClubMember::findOrFail($id);
+        $address = Address::find($clubmember->address_id);
+        $club = Club::find($clubmember->club_id);
+        $countries = Country::orderBy('name')->get();
+
+        $address = Address::find($clubmember->address_id); // returns null if not found
+
+        // preload states only if country exists
+        $states = [];
+        if ($address && $address->country_id) {
+            $states = State::where('country_id', $address->country_id)->orderBy('name')->get();
+        }
+        
+        return view('admin.clubmember.profile', compact('clubmember', 'address', 'countries', 'states', 'club'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|regex:/^[A-Za-z\\s\\.\\-]+$/',
+            'address' => 'required|string',
+            'contact' => 'required|string|max:20',
+            'email'   => 'required|email',
+            'state'   => 'required|string|max:100',
+            'city'    => 'required|string|max:100',
+            'image'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'zip_code' =>'required|digits:6',
+        ]);
+
+            if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')
+                            ->store('club_members', 'public');
+            } else {
+                $imagePath = null; // or set a default image path if you have one
+            }
+
+        $clubmember = ClubMember::findOrFail($id);
+        $address = Address::findOrFail($clubmember->address_id);
+
+        $clubmember->update([
+            'name'    => $request->name,
+            'contact' => $request->contact,
+            'email'   => $request->email,
+            'image'   => $imagePath,
+        ]);
+        $address->update([
+            'address1'       => $request->address,
+            'country_id'     =>$request->country,
+            'state_id'        => $request->state,
+            'city'           => $request->city,
+            'zip_code'       => $request->zip_code,
+            
+        ]);
     
+        return redirect()
+            ->route('admin.clubmember.profile', $id)
+            ->with('success', 'Profile updated successfully');
+    }
 }
