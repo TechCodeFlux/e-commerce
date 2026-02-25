@@ -33,8 +33,8 @@ class ClubMemberController extends Controller
             ->addColumn('action', function (ClubMember $clubmember) {
                 return '
                     <div class="d-flex gap-1">
-                        <a href="#" class="btn btn-sm btn-clean btn-icon" title="Show">
-                            <i class="fas fa-eye text-warning"></i>
+                        <a href="#" class="btn btn-sm btn-outline-warning" title="Show">
+                            <i class="fas fa-eye"></i>
                         </a>
                         <a href="'. route('admin.clubmember.editmember',$clubmember->id).'" class="btn btn-sm btn-outline-secondary" title="Edit">
                             <i class="fas fa-pencil-alt"></i>

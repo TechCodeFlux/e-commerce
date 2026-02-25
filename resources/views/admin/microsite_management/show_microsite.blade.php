@@ -185,7 +185,7 @@
         </div>
     </div>
 </div>
-//
+
 <!-- Success Modal -->
 @if(session('success'))
 <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
@@ -212,7 +212,7 @@
     });
 </script>
 @endif
-//
+
 @endsection
 
 @section('script')
