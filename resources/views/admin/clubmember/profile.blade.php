@@ -65,7 +65,7 @@
                                             <img id="profileImage" src="{{ $clubmember->image ? asset('storage/' . $clubmember->image) : asset('assets/images/default-avatar.png') }}" 
                                             alt="Avatar" class="rounded-4 bg-light" style="width: 90px; height: 90px; object-fit: contain;">
                                         </div> --}}
-                                        <figure class="me-4 flex-shrink-0 text-center">
+                                        <figure class="me-4 flex-shrink-0 text-center m-1">
 
                                             <label for="imageUpload" style="cursor:pointer; position:relative; display:inline-block;">
 
@@ -136,7 +136,7 @@
                                             <div class="col-12 ">
                                                 <label class="small fw-bold text-uppercase  ls-wide mb-1 d-block" style="letter-spacing: 0.10em;">Physical Address</label>
                                                 <div id="view-address" class="text-dark fw-medium d-flex align-items-center">
-                                                    <i class="fa fa-map-marker me-3 text-muted opacity-50"></i>{{ $address->address1 }}, {{ $address->state->name }}, {{ $address->country->name }}
+                                                    <i class="fa fa-map-marker me-3 text-muted opacity-50"></i>{{ $address->address1 }}, {{ $address->city }}, {{ $address->state->name }}, {{ $address->country->name }}
                                                 </div> 
                                             </div>
                                         </div>
@@ -162,26 +162,66 @@
                                             class="row g-3">
                                             @csrf
                                             {{-- @method('PUT') --}}
-                                            <div class="col-12">
-                                                <label class="form-label small fw-bold ">Full Name</label>
-                                                <input type="text" id="edit-name"  name="name" value="{{ $clubmember->name }}" class="form-control form-control-lg border-light bg-light rounded-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-bold">Full Name</label>
+
+                                                <input type="text"
+                                                    id="edit-name"
+                                                    name="name"
+                                                    value="{{ old('name', $clubmember->name) }}"
+                                                    class="form-control border-light bg-light rounded-3 @error('name') is-invalid @enderror">
+
+                                                @error('name')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label small fw-bold ">Email</label>
-                                                <input type="email" id="edit-email" name="email" value="{{ $clubmember->email }}" class="form-control border-light bg-light rounded-3">
+                                                <label class="form-label small fw-bold">Email</label>
+
+                                                <input type="email"
+                                                    id="edit-email"
+                                                    name="email"
+                                                    value="{{ old('email', $clubmember->email) }}"
+                                                    class="form-control border-light bg-light rounded-3 @error('email') is-invalid @enderror">
+
+                                                @error('email')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label small fw-bold ">Contact</label>
-                                                <input type="text" id="edit-contact" name="contact" value="{{ $clubmember->contact }}" class="form-control border-light bg-light rounded-3">
+                                                <label class="form-label small fw-bold">Contact</label>
+
+                                                <input type="text"
+                                                    id="edit-contact"
+                                                    name="contact"
+                                                    value="{{ old('contact', $clubmember->contact) }}"
+                                                    class="form-control border-light bg-light rounded-3 @error('contact') is-invalid @enderror">
+
+                                                @error('contact')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
                                             </div>
                                             <div class="col-12">
-                                                <label class="form-label small fw-bold ">Address</label>
-                                                <textarea id="edit-address" name="address" rows="2" class="form-control border-light bg-light rounded-3">{{ $address->address1 ?? '' }}</textarea>
-                                            </div>
+                                             <label class="form-label small fw-bold ">Address</label>
+                                                <textarea id="edit-address" name="address" rows="2" class="form-control border-light bg-light rounded-3 @error('address') is-invalid @enderror">{{ old('address', $address->address1 ?? '') }}
+                                                </textarea>
+
+                                                @error('address')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                                </div>
                                             {{-- Country --}}
                                             <div class="col-md-4 mb-3">
                                                 <label>Country</label>
-                                                <select name="country" id="country" class="form-control border-light bg-light rounded-3">
+                                                <select name="country" id="country" class="form-control border-light bg-light rounded-3 @error('country') is-invalid @enderror">
                                                     <option value="">Select Country</option>
                                                     @foreach($countries as $country)
                                                         <option value="{{ $country->id }}"
@@ -190,13 +230,18 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
+                                                    @error('country')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
                                             </div>
 
                                         
                                             {{-- State --}}
                                         <div class="col-md-4 mb-3">
                                             <label>State</label>
-                                            <select name="state" id="state" class="form-control border-light bg-light rounded-3">
+                                            <select name="state" id="state" class="form-control border-light bg-light rounded-3 @error('state') is-invalid @enderror">
                                                 <option value="">Select State</option>
                                                     @isset($states)
                                                     @foreach($states as $state)
@@ -207,6 +252,11 @@
                                                     @endforeach
                                                 @endisset
                                                 </select>
+                                                @error('state')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
                                             </div>
 
                                             {{-- City --}}
@@ -232,17 +282,7 @@
                                                     </div>
                                                 @enderror
                                             </div>
-                                            <div>
-                                                <label>image</label>
-                                                <input type="file" name="image" class="form-control border-light bg-light rounded-3 @error('image') is-invalid @enderror"
-                                                    value="{{ old('image', $clubmember->image ?? '') }}">
-                                                    @error('image')
-                                                    <div class="invalid-feedback">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-
-                                            </div>
+                                            
                                             <div class="col-12 mt-4">
                                                 <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm rounded-3">Save Changes</button>
                                                 
@@ -299,7 +339,13 @@
                 </div>
 
                
-
+                  @if ($errors->any())
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            switchTab('edit');
+                        });
+                    </script>
+                    @endif
                 <script>
                     function switchTab(tabName) {
                         // Hide all tab content
@@ -313,7 +359,7 @@
                     
 
                         // Reset all buttons
-                        ['details', 'edit', 'settings'].forEach(btn => {
+                        ['details', 'edit'].forEach(btn => {
                             const el = document.getElementById('btn-' + btn);
                             el.classList.remove('active', 'btn-primary');
                             el.classList.add('text-secondary');
@@ -345,16 +391,68 @@ document.addEventListener("DOMContentLoaded", function () {
     const imageInput = document.getElementById('imageUpload');
     const preview = document.getElementById('avatarPreview');
 
-    if (imageInput) {
+    if (imageInput && preview) {
         imageInput.addEventListener('change', function (e) {
             const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    preview.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
+            if (!file) return;
+
+            // 1️⃣ Show preview immediately
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                preview.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            // 2️⃣ Prepare FormData for AJAX upload
+            const formData = new FormData();
+            formData.append('image', file);
+
+            // 3️⃣ Send image to Laravel controller
+            fetch("{{ route('admin.clubmember.editimage', $clubmember->id) }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+             .then(async response => {
+
+                if (!response.ok) {
+
+                    // 🔴 If validation error (422)
+                    // if (response.status === 422) {
+                        const errorData = await response.json();
+
+                        // Switch to Edit Tab
+                        switchTab('edit');
+
+                        // Show first validation error
+                        let firstError = Object.values(errorData.errors)[0][0];
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validation Error',
+                            text: firstError
+                        });
+                   
+
+                    throw new Error("Upload failed");
+                }
+
+                return response.json();
+            })
+            .then(data => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: data.message
+                });
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+            });
+
         });
     }
 });

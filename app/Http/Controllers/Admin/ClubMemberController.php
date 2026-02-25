@@ -162,11 +162,25 @@ public function storemember(Request $request, $id)
         $address = Address::findOrFail($clubmember->address_id);
         $club = Club::findOrFail($clubmember->club_id); 
 
-        $clubmember->update([
-            'name'    => $request->name,
-            'contact' => $request->contact,
-            'email'   => $request->email,
-        ]);
+         $data = [
+                'name'    => $request->name,
+                'contact' => $request->contact,
+                'email'   => $request->email,
+            ];
+
+            // ✅ Only update image if new file uploaded
+            if ($request->hasFile('image')) {
+
+                // (Optional) Delete old image
+                if ($clubmember->image && Storage::exists('public/' . $clubmember->image)) {
+                    Storage::delete('public/' . $clubmember->image);
+                }
+
+                $imagePath = $request->file('image')->store('club_members', 'public');
+                $data['image'] = $imagePath;
+            }
+
+            $clubmember->update($data);
 
         $address->update([
             'address1'       => $request->address,
@@ -177,7 +191,10 @@ public function storemember(Request $request, $id)
             
         ]);
     
-        return view('admin.clubmember.viewmember', compact('club'));
+        // return view('admin.clubmember.viewmember', compact('club'));
+        return redirect()
+                ->route('admin.clubmember.viewmembers', $club->id)
+                ->with('success', 'Updated successfully');
     }
 
     public function deletemember($id)
@@ -205,46 +222,76 @@ public function storemember(Request $request, $id)
         return view('admin.clubmember.profile', compact('clubmember', 'address', 'countries', 'states', 'club'));
     }
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|regex:/^[A-Za-z\\s\\.\\-]+$/',
-            'address' => 'required|string',
-            'contact' => 'required|string|max:20',
-            'email'   => 'required|email',
-            'state'   => 'required|string|max:100',
-            'city'    => 'required|string|max:100',
-            'image'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'zip_code' =>'required|digits:6',
-        ]);
+        public function update(Request $request, $id)
+        {
+            $request->validate([
+                'name' => 'required|regex:/^[A-Za-z\\s\\.\\-]+$/',
+                'address' => 'required|string',
+                'contact' => 'required|string|max:20',
+                'email'   => 'required|email',
+                'state'   => 'required|string|max:100',
+                'city'    => 'required|string|max:100',
+                'image'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                'zip_code' =>'required|digits:6',
+            ]);
 
+            $clubmember = ClubMember::findOrFail($id);
+            $address = Address::findOrFail($clubmember->address_id);
+
+            $data = [
+                'name'    => $request->name,
+                'contact' => $request->contact,
+                'email'   => $request->email,
+            ];
+
+            // ✅ Only update image if new file uploaded
             if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')
-                            ->store('club_members', 'public');
-            } else {
-                $imagePath = null; // or set a default image path if you have one
+
+                // (Optional) Delete old image
+                if ($clubmember->image && Storage::exists('public/' . $clubmember->image)) {
+                    Storage::delete('public/' . $clubmember->image);
+                }
+
+                $imagePath = $request->file('image')->store('club_members', 'public');
+                $data['image'] = $imagePath;
             }
 
-        $clubmember = ClubMember::findOrFail($id);
-        $address = Address::findOrFail($clubmember->address_id);
+            $clubmember->update($data);
 
-        $clubmember->update([
-            'name'    => $request->name,
-            'contact' => $request->contact,
-            'email'   => $request->email,
-            'image'   => $imagePath,
-        ]);
-        $address->update([
-            'address1'       => $request->address,
-            'country_id'     =>$request->country,
-            'state_id'        => $request->state,
-            'city'           => $request->city,
-            'zip_code'       => $request->zip_code,
-            
-        ]);
-    
-        return redirect()
-            ->route('admin.clubmember.profile', $id)
-            ->with('success', 'Profile updated successfully');
-    }
+            $address->update([
+                'address1'   => $request->address,
+                'country_id' => $request->country,
+                'state_id'   => $request->state,
+                'city'       => $request->city,
+                'zip_code'   => $request->zip_code,
+            ]);
+
+            return redirect()
+                ->route('admin.clubmember.profile', $id)
+                ->with('success', 'Profile updated successfully');
+        }
+
+        public function editimage(Request $request, $id)
+        {
+            $request->validate([
+                'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            ]);
+
+            $member = ClubMember::findOrFail($id);
+
+            if ($request->hasFile('image')) {
+                if ($member->image && Storage::exists($member->image)) {
+                    Storage::delete($member->image);
+                }
+
+                $path = $request->file('image')->store('clubmembers', 'public');
+                $member->image = $path;
+                $member->save();
+            }
+
+            return response()->json([
+                'message' => 'Image updated successfully',
+                'image_url' => asset('storage/' . $member->image)
+            ]);
+        }
 }

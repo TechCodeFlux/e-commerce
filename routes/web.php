@@ -59,6 +59,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
 
     Route::get('club/member/profile/{id}',[ClubMemberController::class,'profile'])->name('clubmember.profile');
     Route::post('club/member/updateprofile/{id}',[ClubMemberController::class,'update'])->name('clubmember.updateprofile');
+    Route::post('club/member/editimage/{id}',[ClubMemberController::class,'editImage'])->name('clubmember.editimage');
     
      //option
     Route::get('show_option', [OptionController::class, 'index'])->name('show_option');//view options

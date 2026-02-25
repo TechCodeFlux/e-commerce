@@ -114,7 +114,7 @@
                             {{-- Show existing image in edit --}}
                             @if(!empty($clubmember->image))
                                 <div class="mt-2">
-                                    <img src="{{ asset('storage/club_members/'.$clubmember->image) }}"
+                                    <img src="{{ asset('storage/'.$clubmember->image) }}"
                                         width="80" height="80"
                                         class="rounded-circle"
                                         style="object-fit: cover;">
@@ -252,6 +252,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
+
 @endsection
 
         

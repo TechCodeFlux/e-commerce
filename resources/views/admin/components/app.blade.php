@@ -18,15 +18,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <!-- Bootstrap Docs -->
     <link rel="stylesheet" href="{{url('dist/css/bootstrap-docs.css')}}" type="text/css">
+    {{-- for icons --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
         <!-- Slick -->
     <link rel="stylesheet" href="{{url('libs/slick/slick.css')}}" type="text/css">
 
     <!-- Main style file -->
     <link rel="stylesheet" href="{{ url('dist/css/app.min.css')}}" type="text/css">
-    {{-- Icon Pack --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
+    
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -35,12 +35,7 @@
 </head>
 <body>
 
-<!-- preloader -->
-<div class="preloader">
-    <img src="{{url('assets/images/newlogo1.png')}}" alt="logo">
-    <div class="preloader-icon"></div>
-</div>
-<!-- ./ preloader -->
+
 
 @include('admin.layouts.sidebar')
 @include('admin.layouts.topbar')
@@ -66,7 +61,12 @@
 <!-- Main Javascript file -->
 <script src="{{url('dist/js/app.min.js')}}"></script>
 
-
+<!-- preloader -->
+<div class="preloader">
+    <img src="{{url('assets/images/newlogo1.png')}}" alt="logo">
+    <div class="preloader-icon"></div>
+</div>
+<!-- ./ preloader -->
 
 @yield('script')
 </body>
