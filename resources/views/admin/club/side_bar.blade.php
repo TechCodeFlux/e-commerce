@@ -16,12 +16,12 @@
                     </a>
                 </li>
 
-                
-               <li class="nav-item">
-                    <a class="nav-link">
-                        <i class="bi bi-receipt me-2"></i> Orders
-                    </a>
-                </li>
+                          <li class="nav-item">
+    <a class="nav-link {{ request()->routeIs('admin.clubs.orders') ? 'active' : '' }}"
+       href="{{ route('admin.clubs.orders', $club->id) }}">
+        <i class="bi bi-receipt me-2"></i> Orders
+    </a>
+</li>
 
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.show_microsites','admin.add_microsites') ? 'active' : '' }}" href="{{ route('admin.show_microsites', $club->id) }}">

@@ -1,8 +1,7 @@
-
 @extends('admin.components.app')
 @section('content') 
     <!-- content -->
-    <div class="content ">
+    <div class="content ">             
         
     <div class="row flex-column-reverse flex-md-row">
         <div class="col-md-12">

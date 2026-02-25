@@ -27,7 +27,7 @@
             <div class="tab-pane active" id="activities">
                 <div class="tab-pane-body">
                     <ul class="list-group list-group-flush">
-                        <li class="px-0 list-group-item">
+                        <li class="px-0 list-group-item">0
                             <a href="#" class="d-flex">
                                 <div class="flex-shrink-0">
                                     <figure class="avatar avatar-info me-3">
