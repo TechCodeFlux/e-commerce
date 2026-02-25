@@ -99,7 +99,12 @@
                         <input type="text" name="city" class="form-control"
                             value="{{ old('city', $clubuser->city ?? '') }}">
                     </div>
-
+                    {{-- Image --}}
+                    <div class="col-md-12 mb-3">
+                        <label>Profile Picture</label>
+                        <input type="file" name="image" class="form-control"
+                            value="">
+                    </div>
                     {{-- ZIP --}}
                     <div class="col-md-4 mb-3">
                         <label>ZIP Code</label>
@@ -107,12 +112,6 @@
                             value="{{ old('zip_code', $clubuser->zip_code ?? '') }}">
                     </div>
 
-                    {{-- Image --}}
-                    <div class="col-md-4 mb-3">
-                        <label>Profile Picture</label>
-                        <input type="file" name="image" class="form-control"
-                            value="">
-                    </div>
 
                     {{-- Status --}}
                      <div class="col-md-4 mb-4">
@@ -138,8 +137,7 @@
                             </div>
 
                 </div>
-
-                <div class="text-center mt-3">
+                <div class="col-12 d-flex justify-content-end mt-4">
                     <button class="btn btn-primary px-5">
                         {{ $clubuser->id ? 'Update' : 'Submit' }}
                     </button>

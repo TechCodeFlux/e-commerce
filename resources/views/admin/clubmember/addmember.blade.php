@@ -100,29 +100,6 @@
                                 @enderror
                             </div>
 
-                            {{-- Profile Image --}}
-                            <div class="col-md-4 mb-3">
-                            <label>Profile Image</label>
-                            <input type="file" name="image"
-                                class="form-control @error('profile_image') is-invalid @enderror">
-
-                            @error('image')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-
-                            {{-- Show existing image in edit --}}
-                            @if(!empty($clubmember->image))
-                                <div class="mt-2">
-                                    <img src="{{ asset('storage/club_members/'.$clubmember->image) }}"
-                                        width="80" height="80"
-                                        class="rounded-circle"
-                                        style="object-fit: cover;">
-                                </div>
-                            @endif
-                        </div>
-
                             {{-- Address --}}
                             <div class="col-md-12 mb-3">
                                 <label>Address</label>
@@ -181,6 +158,19 @@ class="form-control @error('address') is-invalid @enderror"
                                     </div>
                                 @enderror
                             </div>
+
+                          {{-- Profile Image (Add Only) --}}
+@if(!$clubmember->id)
+<div class="col-12">
+    <label class="form-label fw-semibold">Profile Image</label>
+    <input type="file" name="image"
+           class="form-control @error('image') is-invalid @enderror">
+
+    @error('image')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+@endif
 
                             {{-- zip code--}}
                             <div class="col-md-4 mb-3">
