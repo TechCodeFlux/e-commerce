@@ -112,24 +112,6 @@ $imagePath = $request->file('image')->store('products', 'public');
     ->eloquent($product)
 
 
-//varient connection
-
-//     ->addColumn('varients', function (Product $product) {
-
-//     if ($product->varients->count() > 0) {
-//         $output = '';
-
-//         foreach ($product->varients as $varient) {
-//             $output .= '<span class="badge bg-info me-1 bg-purple">'
-//             . $varient->color . ' - ' . $varient->size .
-//            '</span><br>';
-//         }
-
-//         return $output;
-//     }
-
-//     return '--';
-// })
       
 //add product-image for image scale
               ->addColumn('image', function (Product $product) {

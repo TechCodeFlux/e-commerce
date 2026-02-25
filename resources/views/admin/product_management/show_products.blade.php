@@ -72,55 +72,7 @@
 
 
 
-{{-- View once row --}}
 
-{{-- 
-    <div class="modal fade" id="productListModal" tabindex="-1" aria-labelledby="productListModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                
-                <!-- Modal Header with Close Button -->
-                <div class="modal-header bg-light">
-                    <h5 class="modal-title" id="productListModalLabel">Available Products</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <!-- Modal Body: The Product List -->
-               <div class="modal-body p-0">
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0 text-center">
-            <thead class="table-light">
-                <tr>
-                    <th scope="col" class=" pe-md-5">Image</th>
-                    <th scope="col" class="py-3 ps-md-4"> Name</th>
-                    <th scope="col" class="py-3"> Description</th>
-                                       
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Product Item Row -->
-                <tr>
-                    <td class="ps-4 py-3">
-                        <img id="modalProductImage" class="rounded shadow-sm object-fit-cover" width="120" height="120" alt="Product">
-                    </td>
-                    <td class="py-3">
-                        <h4 class="mb-1 fw-bold" id="modalProductName"></h4>
-                    </td>
-                    <td> 
-                        <p class="mb-0 text-muted fs-6" id="modalProductDescription"></p>
-                    </td>
-                    
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-                <!-- Modal Footer -->
-               
-                
-            </div>
-        </div>
-    </div> --}}
 <div class="modal fade" id="productListModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content shadow-lg border-0">
@@ -357,8 +309,6 @@ $(document).on('change', '.toggle-status', function () {
             status: status
         },
          success: function (res) {
-            // alert('Status Changed!');
-            // bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
             Swal.fire({
                     icon: 'success',
                     title: 'Success!',
@@ -422,11 +372,7 @@ $(document).ready(function() {
     $("#admin_length").css({
         "display": "none"
     });
-    // $('#sort').on('change', function() {
-    //     $column = $(this).find(':selected').data('column');
-    //     $sort = $(this).find(':selected').data('sort');
-    //     $productTable.order([$column, $sort]).draw();
-    // })
+   
 
     
     //sorting
@@ -467,32 +413,6 @@ $(document).ready(function() {
 
 
 
-
-
-
-// function deleteProduct(id) {
-
-//     if (!confirm("Are you sure you want to delete this product?")) {
-//         return;
-//     }
-
-//     $.ajax({
-//        url: "{{ url('admin/product_management/destroy_products') }}/" + id,
-//         type: "DELETE",
-//         headers: {
-//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//         },
-//         success: function (response) {
-//             alert(response.message);
-
-//             // Reload DataTable
-//             $('#admin').DataTable().ajax.reload(null, false);
-//         },
-//         error: function (xhr) {
-//             alert("Something went wrong. Try again.");
-//         }
-//     });
-// }
 
 
 
@@ -571,35 +491,6 @@ document.addEventListener('mouseout', function (e) {
         e.target.style.zIndex = '1';
     }
 });
-
-
-
-
-
-
-
-//delete club member
-// $('table').off('click').on('click','.delete-club-member',function(){
-//     var href=$(this).data('href');
-//     $('.btn_delete_club_member').click(function(){
-//         $.ajax({
-//             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
-//             type: 'DELETE',
-//             dataType : 'JSON',
-//             url : href,
-//             success:function(response){
-//                 $('#delete-modal').modal('hide');
-//                 $('#club').DataTable().ajax.reload();
-//                 Swal.fire({
-//                     icon: 'success',
-//                     title: 'Member deleted successfully',
-//                     footer: ''
-//                 })
-//             }  
-//         })
-//     })
-
-// })
 </script>
 
 @endsection

@@ -11,24 +11,6 @@ use Illuminate\Http\Request;
 
 class VarientController extends Controller
 {
-//     public function form_varient_index()
-// {
-//     $varient = new Varient();
-//     $optionColorId  =  Option::where('name', 'Color')->value('id');
-//     $optioncolorvalues  = OptionValue::where('option_value_id', $optionColorId)->get();
-
-//     $optionSizeId  =  Option::where('name', 'Size')->value('id');
-//     $optionsizevalues  = OptionValue::where('option_value_id', $optionSizeId)->get();
-   
-
-
-//     return view(
-//         'admin.varient_management.form_varient_index',
-//         compact('varient','optioncolorvalues','optionsizevalues')
-//     );
-// }
-
-
 public function generate_varient($productId = null)
 {
     $varient = new Varient();
@@ -176,26 +158,6 @@ public function update(Request $request, $id)
     ->eloquent($varient)
       
 
-            
-            
-//toggle button
-            //  ->addColumn('status', function (Varient $varient) {
-
-            //     return '
-                
-                       
-            //             <div class="form-check form-switch">
-            //                          <input 
-            //                               class="form-check-input toggle-status"
-            //                               type="checkbox"
-            //                               name="status"
-            //                               data-id="'.$varient->id.'"  '.($varient->status ? 'checked' : '').'>
-            //              </div>';
-            // })
-
-
-
-//toggle button
             ->addColumn('action', function (Varient $varient) use ($request) {
                 $actions= '<div class="d-flex gap-1"><div class="dropdown">';
 
@@ -211,14 +173,7 @@ public function update(Request $request, $id)
                             </button>';
 
 
-                //edit button
-                $actions .= '<a
-                                href="' . route('admin.varient_management.edit_varient_index', $varient->id) . '"
-                                class="btn btn-sm 
-                                title="Edit">
-                                                              <i class="bi bi-pencil-square btn btn-outline-success btn btn-sm"></i>
-                            </a>';
-
+         
 
                 //delete button
                 $actions .= '<button 
@@ -240,20 +195,6 @@ public function update(Request $request, $id)
     }
 
 
-public function edit_varient_index($id)
-    {
-        $varient = Varient::findOrFail($id);
-       
-        return view('admin.varient_management.form_varient_index', compact('varient'));
-    }
-
-
-
-      
-
-
-
-
     public function single_show($id)
 {
     $varient = Varient::findOrFail($id);
@@ -266,8 +207,6 @@ public function edit_varient_index($id)
     ]);
 }
 
-
-    
 
 
      public function changeStatus(Request $request)

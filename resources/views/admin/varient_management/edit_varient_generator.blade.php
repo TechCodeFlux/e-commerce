@@ -1,5 +1,5 @@
 @extends('admin.components.app')
-@section('page-title','Variant Form')
+@section('page-title',' Edit Variant Form')
 @section('content')
 
 <div class="container mt-4">
@@ -10,7 +10,7 @@
                     <ol class="breadcrumb d-flex gap-3">
                         <li class="list-group-item-dark px-sm-4 border p-2 d-inline-block bg-teal">Product Details</li>
                         <li class="breadcrumb-item">
-                            <a class="list-group-item-primary px-sm-4 border p-2 d-inline-block" href="{{ route('admin.varient_management.form_varient_index') }}">
+                            <a class="list-group-item-primary px-sm-4 border p-2 d-inline-block" href="{{  route('admin.varient_management.edit_varient_generator', $product->id)  }}">
                                 Varient Details
                             </a>
                         </li>
@@ -73,11 +73,11 @@
                                         </select>
                             </div>
 
-                            <div class="col-md-2 mb-3">
-                                <button type="button" id="btn-generate-matrix" class="btn btn-secondary w-100">
-                                    Generate
-                                </button>
-                            </div>
+                               <div class="col-md-2 mb-3">
+                                   <button type="button" id="btn-generate-matrix" class="btn btn-secondary w-100">
+                                      Generate
+                                   </button>
+                              </div>
                         </div>
 
                         <div id="variant-matrix-container" class="mt-4"></div>
@@ -90,15 +90,15 @@
 
                         {{-- Footer Buttons --}}
                         <div class="d-flex justify-content-end gap-3 mt-4">
-                            <button type="submit" form="previous-form" class="btn btn-secondary px-5 p-md-2">
-                                Previous
-                            </button> 
+                                <button type="submit" form="previous-form" class="btn btn-secondary px-5 p-md-2">
+                                    Previous
+                                </button> 
 
-                           <button type="submit"
-                                id="submitBtn"
-                                class="btn btn-primary px-5 p-md-2 d-none">
-                            {{$varient->id ?? '' ? 'Update' : 'Submit' }}
-                        </button>
+                            <button type="submit"
+                                    id="submitBtn"
+                                    class="btn btn-primary px-5 p-md-2 d-none">
+                                {{$varient->id ?? '' ? 'Update' : 'Submit' }}
+                            </button>
                         </div>        
                     </form>
                     

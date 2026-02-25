@@ -82,7 +82,6 @@ Route::post('option_management/change-status', [OptionController::class, 'change
  
   //VARIENTS-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Route::get('varient_management/form_varient_index', [VarientController::class, 'form_varient_index'])->name('varient_management.form_varient_index');
 
 Route::get('varient_management/generate_varient', [VarientController::class, 'generate_varient'])->name('varient_management.generate_varient');
 
@@ -90,11 +89,7 @@ Route::get('varient_management/edit_varient_generator/{id}', [VarientController:
 
 Route::post('varient_management/add_varient',[VarientController::class, 'store'])->name('varient_management.add_varient');
 
-
-Route::get('varient_management/form_varient_index/{id}', [VarientController::class, 'edit_varient_index'])->name('varient_management.edit_varient_index');
-
 Route::put('varient_management/edit_varient/{id}', [VarientController::class, 'update'])->name('varient_management.edit_varient');
-
 
 Route::delete('varient_management/destroy_varient/{id}', [VarientController::class, 'destroy'])->name('varient_management.destroy_varient');
 
@@ -106,13 +101,10 @@ Route::get('varient_management/show_single/{id}', [VarientController::class, 'si
 
 Route::post('varient_management/change-status', [VarientController::class, 'changeStatus'])->name('varient_management.change-status');
 
-Route::post(
-    'varient/get-option-values',
-    [VarientController::class, 'getOptionValues']
-)->name('varient_management.get_option_values');
+Route::post('varient/get-option-values',[VarientController::class, 'getOptionValues'])->name('varient_management.get_option_values');
 
 
-
+  //Option value-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 Route::get('option_value_management/show_option_value', [OptionValueController::class, 'index'])->name('option_value_management.show_option_value');//view options
@@ -129,7 +121,6 @@ Route::get('option_value_management/show_option_value', [OptionValueController::
 
     Route::delete('option_value_management/destroy_option_value/{id}', [OptionValueController::class, 'destroy'])->name('option_value_management.destroy_option_value');
 
-// Route::post('varient_management/add_varient', [VarientController::class, 'add_varient'])->name('varient_management.add_varient');
 });
 
 

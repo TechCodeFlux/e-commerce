@@ -193,11 +193,7 @@ $(document).on('change', '.toggle-status', function () {
     status = $(this).is(':checked') ? 1 : 0;
     label = $('#status-label-' + categoryId);
 
-   // let statusModal = new bootstrap.Modal(document.getElementById('status-modal'));
-   // statusModal.show();
-//});
-
-//$(document).on('click', '#confirmStatusChange', function () {
+  
 
     $.ajax({
         url: "{{ route('admin.option_value_management.change_status') }}",
@@ -208,8 +204,7 @@ $(document).on('change', '.toggle-status', function () {
             status: status
         },
           success: function (res) {
-            // alert('Status Changed!');
-            // bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
+           
             Swal.fire({
                     icon: 'success',
                     title: 'Success!',
@@ -358,30 +353,6 @@ $(document).ready(function () {
 
 
 
-
-// end---------------------------
-
-//delete club member
-// $('table').off('click').on('click','.delete-club-member',function(){
-//     var href=$(this).data('href');
-//     $('.btn_delete_club_member').click(function(){
-//         $.ajax({
-//             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
-//             type: 'DELETE',
-//             dataType : 'JSON',
-//             url : href,
-//             success:function(response){
-//                 $('#delete-modal').modal('hide');
-//                 $('#club').DataTable().ajax.reload();
-//                 Swal.fire({
-//                     icon: 'success',
-//                     title: 'Member deleted successfully',
-//                     footer: ''
-//                 })
-//             }  
-//         })
-//     })
-// })
 </script>
 
 @endsection

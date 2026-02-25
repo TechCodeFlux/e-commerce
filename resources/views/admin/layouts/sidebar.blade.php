@@ -566,15 +566,7 @@
                     <span>Option Value</span>
                 </a>
             </li>
-              <li>
-                <a class="{{ request()->routeIs('admin.varient_management.show_varient','admin.varient_management.form_varient_index')? 'active' : '' }}"
-                href="{{ route('admin.varient_management.show_varient') }}">
-                    <span class="nav-link-icon">
-                        <i class="bi bi-receipt"></i>
-                    </span>
-                    <span>Varient</span>
-                </a>
-            </li>
+           
                 {{-- <ul>
                     <li>
                         <a  href="./orders.html">List</a>
