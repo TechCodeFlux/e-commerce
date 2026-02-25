@@ -160,8 +160,11 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-3">
-                    <button class="btn btn-primary px-5">
-                        {{ $clubuser->id ? 'Update' : 'Submit' }}
+                    <button type="submit" class="btn btn-primary px-5" id="submitBtn">
+                        <span id="btnText">
+                            {{ $clubuser->id ? 'Update' : 'Submit' }}
+                        </span>
+                        <span id="btnLoader" class="spinner-border spinner-border-sm d-none ms-2"></span>
                     </button>
                 </div>
 
@@ -225,7 +228,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
+document.addEventListener('DOMContentLoaded', function () {
 
+    const form = document.querySelector('form');
+    const btn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const loader = document.getElementById('btnLoader');
+
+    form.addEventListener('submit', function () {
+        loader.classList.remove('d-none');   // show spinner
+        btn.disabled = true;                 // disable button
+        btnText.innerText = 'Processing...'; // change text
+    });
+
+});
 </script>
 @endsection
 @endsection
