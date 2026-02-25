@@ -86,9 +86,17 @@ class ClubController extends Controller
         'city'      => 'required|string|max:100',
         'zip_code' => 'required|digits:6',
         'status'    => 'nullable|boolean',
+        'image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
     $randomPassword = Str::random(8);
+
+    $imagePath = null;
+
+    if ($request->hasFile('image')) 
+    {
+        $imagePath = $request->file('image')->store('club_profile_images', 'public');
+    }
 
     Club::create([
         'name'       => $request->name,
@@ -103,6 +111,7 @@ class ClubController extends Controller
         'zip_code'   => $request->zip_code,
         'status'     => $request->has('status'),
         'password'   => Hash::make($randomPassword),
+        'image'      => $imagePath,
     ]);
 
     Mail::to($request->email)->send(new ClubMail($randomPassword, $request->email));
@@ -157,7 +166,14 @@ class ClubController extends Controller
     'city'      => 'required|string|max:100',
     'zip_code'  => 'required|regex:/^[A-Za-z0-9\-\s]{3,10}$/',
     'status'    => 'nullable|boolean',
-]);
+    'image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+    
+    $imagePath = $club->image;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('club_profile_images', 'public');
+        }
 
         $club->update([
         'name'       => $request->name,
@@ -169,6 +185,7 @@ class ClubController extends Controller
         'city'       => $request->city,
         'zip_code'   => $request->zip_code,
         'status'     => $request->has('status'),
+        'image'      => $imagePath,
     ]);
 
         return redirect()
@@ -230,8 +247,15 @@ class ClubController extends Controller
             'city'      => 'required|string|max:100',
             'zip_code'  => 'required|regex:/^[A-Za-z0-9\-\s]{3,10}$/',
             'status'    => 'nullable|boolean',
+            'image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+        
+        $imagePath = $club->image;
 
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('club_profile_images', 'public');
+        }
+        
                 $club->update([
                 'name'       => $request->name,
                 'address'    => $request->address,
@@ -242,6 +266,7 @@ class ClubController extends Controller
                 'city'       => $request->city,
                 'zip_code'   => $request->zip_code,
                 'status'     => $request->has('status'),
+                'image'      => $imagePath,
             ]);
 
         

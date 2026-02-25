@@ -127,7 +127,7 @@ class MicrositeController extends Controller
         ]);
 
         $imagePath = $request->file('image')
-                         ->store('microsite_images', 'public');
+                         ->store('microsite_banner_images', 'public');
 
         $password = Str::random(6);
 
