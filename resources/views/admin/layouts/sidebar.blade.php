@@ -485,11 +485,13 @@
 <!-- menu -->
 <div class="menu">
     <div class="menu-header">
-        <a href="{{route('admin.dashboard')}}" class="menu-header-logo" >
-            <img  src="{{ asset('assets/images/grabit/logo.png') }}" alt="logo">
-            <span><b style="front-size:25px">GRABIT</b></span>
+        <a href="{{route('admin.dashboard')}}" class="menu-header-logo" style="display:flex; align-items:center; gap:0.1px;">
+            <img src="{{url('assets/images/grabit/logo1.png')}}" alt="logo" style="width:80px; height:auto;">
+        <span style="font-size:25px; font-family:'Calibri', sans; color:black; font-weight:530; font-style:italic; letter-spacing:2px;">
+        <b>GRABiT</b>
+        </span>
         </a>
-        <a href="index.html" class="btn btn-sm menu-close-btn">
+        <a href="{{route('admin.dashboard')}}" class="btn btn-sm menu-close-btn">
             <i class="bi bi-x"></i>
         </a>
     </div>
@@ -497,7 +499,7 @@
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown">
                 <div class="avatar me-3">
-                    <img src="{{url('assets/images/user/man_avatar3.jpg')}}"
+                    <img src="{{url('assets/images/grabit/admin-logo.webp')}}"
                          class="rounded-circle" alt="image">
                 </div>
                 <div>
@@ -536,23 +538,18 @@
             </div>
         </div>
         <ul>
-            <li class="menu-divider">E-Commerce</li>
+            {{-- <li class="menu-divider">E-Commerce</li> --}}
             <li>
-                <a href="{{route('admin.dashboard')}}"
-                    class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                <a href="{{route('admin.dashboard')}}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-bar-chart"></i>
                     </span>
                     <span> Dashboard</span>
                 </a>
             </li>
-            
-            
-            
             <li>
-                <a  href="{{ route('admin.clubsindex') }}"
-                     class="{{ request()->routeIs('admin.clubsindex') ? 'active' : '' }}">
-                     <span class="nav-link-icon">
+                <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs('admin.clubsindex','admin.club','admin.clubs.dashboard','admin.clubmember.viewmembers','admin.club.profile','admin.show_microsites','admin.clubmember.addmember','admin.add_microsites','admin.editmicrosite') ? 'active' : '' }}">
+                    <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
                     <span>Club</span>
@@ -567,17 +564,9 @@
                     <span>Categoies</span>
                 </a>
             </li>
-            <li>
-                <a class="{{ request()->routeIs()? 'active' : '' }}"
-                 href="#">
-                    <span class="nav-link-icon">
-                        <i class="bi bi-box-seam me-2"></i>
-                    </span>
-                    <span>Products</span>
-                </a>
-            </li>
+            
              <li>
-                <a class="{{ request()->routeIs()? 'active' : '' }}"  href="">
+                <a class="{{ request()->routeIs()? 'active' : '' }}"  href="#">
                     <span class="nav-link-icon">
                         <i class="bi bi-sliders me-2"></i>
                     </span>
@@ -585,26 +574,32 @@
                 </a>
                 <ul>
                     <li>
-                         <a class="{{ request()->routeIs('admin.show_option','admin.add_option')? 'active' : '' }}" href="{{ route('admin.show_option') }}"> 
-
-                            Option</a> 
+                        <a class="{{ request()->routeIs('admin.show_option','admin.add_option')? 'active' : '' }}" href="{{ route('admin.show_option') }}">Option</a>
                     </li>
                     <li>
-                         <a 
-                         class="{{ request()->routeIs('admin.show_option_value','admin.add_option_value')? 'active' : '' }}" href="{{ route('admin.show_option_value') }}">
-                         Option Value</a> 
+                        <a class="{{ request()->routeIs('admin.show_option_value','admin.add_option_value')? 'active' : '' }}" href="{{ route('admin.show_option_value') }}">Option Value</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a  class="{{ request()->routeIs()? 'active' : '' }}"
-                  href="#">
+                <a class="{{ request()->routeIs()? 'active' : '' }}"
+                     href="#">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-box-seam me-2"></i>
+                    </span>
+                    <span>Products</span>
+                </a>
+            </li>
+             {{-- <li>
+                <a class="{{ request()->routeIs('admin.varient_management.show_varient','admin.varient_management.form_varient_index')? 'active' : '' }}"
+                href="{{ route('admin.varient_management.show_varient') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-diagram-3 me-2"></i>
                     </span>
                     <span>Varient</span>
                 </a>
-            </li>
+            </li> --}}
+            
            
 
             
