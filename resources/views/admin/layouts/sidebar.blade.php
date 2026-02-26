@@ -534,7 +534,7 @@
                 <a class="{{ request()->routeIs('admin.product_management.show_products','admin.product_management.form_products_index','admin.varient_management.generate_varient')? 'active' : '' }}"
                      href="{{ route('admin.product_management.show_products') }}">
                     <span class="nav-link-icon">
-                        <i class="bi bi-receipt"></i>
+                        <i class="bi bi-box-seam me-2 col-4"></i>
                     </span>
                     <span>Products</span>
                 </a>
@@ -543,7 +543,7 @@
                 <a class="{{ request()->routeIs('admin.category_management.show_category','admin.category_management.add_category_index')? 'active' : '' }}"
                 href="{{ route('admin.category_management.show_category') }}">
                     <span class="nav-link-icon">
-                        <i class="bi bi-receipt"></i>
+                        <i class="bi bi-tags me-2 col-lg-3"></i>
                     </span>
                     <span>Categoies</span>
                 </a>
@@ -552,7 +552,7 @@
                 <a  class="{{ request()->routeIs('admin.option_management.show_option')? 'active' : '' }}"
                 href="{{ route('admin.option_management.show_option') }}">
                     <span class="nav-link-icon">
-                        <i class="bi bi-receipt"></i>
+                        <i class="bi bi-sliders me-2 col-4"></i>
                     </span>
                     <span>Option</span>
                 </a>

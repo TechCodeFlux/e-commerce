@@ -9,7 +9,7 @@
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Products</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-box-seam small me-2"></i>Products</li>
             </ol>
         </nav>
     </div>
