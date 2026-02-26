@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ClubMember extends Model
+class ClubMember extends Authenticatable
 {
     use SoftDeletes;
+
     protected $fillable = [
         'name',
         'club_id',
@@ -15,13 +16,18 @@ class ClubMember extends Model
         'contact',
         'email',
         'status',
-   ];
+        'image',
+    ];
 
-    public function address() 
+
+    // ================= RELATIONSHIPS =================
+
+    public function address()
     {
         return $this->belongsTo(Address::class, 'address_id');
     }
-    public function club() 
+
+    public function club()
     {
         return $this->belongsTo(Club::class, 'club_id');
     }

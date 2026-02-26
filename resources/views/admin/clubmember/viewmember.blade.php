@@ -122,38 +122,6 @@
                 </div>
                 </div> 
 
-
-
-
-                {{-- model for delete --}}
-                    {{-- <div class="modal fade" id="delete-modal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-
-                            <div class="modal-header">
-                                <h5 class="modal-title">Delete Club Member</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-
-                            <div class="modal-body">
-                                <input type="hidden" id="deleteId">
-                                <p>Are you sure you want to delete this club member?</p>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button class="btn btn-danger btn_delete_club_member">Delete</button>
-                            </div>
-
-                        </div>
-                    </div>
-                </div> --}}
-
-
-
-
-
-
                 @section('script')
                 <script src="{{ url('libs/dataTable/datatables.min.js') }}"></script>
                 <script src="{{ url('libs/range-slider/js/ion.rangeSlider.min.js') }}"></script>
@@ -304,44 +272,21 @@ $(document).ready(function () {
         $('.dataTables_paginate').addClass('d-flex justify-content-center');
 
 });
-            
-                // delete club member
-    //             $('table').off('click').on('click','.delete-club-member',function(){
-    //                 var href=$(this).data('href');
-    //                 $('.btn_delete_club_member').click(function(){
-    //                     $.ajax({
-    //                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
-    //                         type: 'DELETE',
-    //                         dataType : 'JSON',
-    //                         url : href,
-    //                         success:function(response){
-    //                             $('#delete-modal').modal('hide');
-    //                             $('#clubmember').DataTable().ajax.reload();
-    //                             Swal.fire({
-    //                                 icon: 'success',
-    //                                 title: 'Member deleted successfully',
-    //                                 footer: ''
-    //                             })
-    //                         }  
-    //                     })
-    //                 })
-
-    //             })
-
-    // OPEN DELETE MODAL
-    // $(document).on('click', '.delete-club_member', function () {
-    //     let id = $(this).data('id');
-    //     $('#deleteId').val(id);
-    //     $('#delete-modal').modal('show');
-    // });
-
-
-   
-
 
 
                 </script>
-
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
                 @endsection
                 
                         </div>

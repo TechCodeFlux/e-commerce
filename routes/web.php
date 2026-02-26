@@ -2,20 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\ClubMemberController;
 use App\Http\Controllers\Admin\ClubController;
 //for dashboard
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Club\ClubDashboardController;
-//for login
-use App\Http\Controllers\Club\Auth\LoginController as ClubLoginController;
-use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
-//for add user
-// use App\Http\Controllers\Club\ClubMemberController;
 //category controller
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\Auth\LoginController as ClubMemberLoginController;
 //for option
 use App\Http\Controllers\Admin\OptionController;
 use App\Http\Controllers\Admin\OptionValueController;
@@ -80,6 +73,10 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::delete('club/deletemember/{id}',[ClubMemberController::class,'deletemember'])->name('clubmember.deletemember');
     Route::get('club/profile/{id}',[ClubController::class,'profile'])->name('club.profile');
     Route::post('club/editprofile/{id}',[ClubController::class,'editprofile'])->name('club.editprofile');
+
+    Route::get('club/member/profile/{id}',[ClubMemberController::class,'profile'])->name('clubmember.profile');
+    Route::post('club/member/updateprofile/{id}',[ClubMemberController::class,'update'])->name('clubmember.updateprofile');
+    Route::post('club/member/editimage/{id}',[ClubMemberController::class,'editImage'])->name('clubmember.editimage');
     //option
     Route::get('show_option', [OptionController::class, 'index'])->name('show_option');//view options
     Route::get('add_option', [OptionController::class, 'create'])->name('add_option');//add options

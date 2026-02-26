@@ -1,7 +1,9 @@
 @extends('admin.components.app')
 @section('page-title','Variant Form')
 @section('content')
-
+@php
+    $hideSearch = true;
+@endphp
 <div class="container mt-4">
     <div class="card mb-4 shadow-sm">
         <div class="card-body">

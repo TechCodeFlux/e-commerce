@@ -1,4 +1,7 @@
 @extends('admin.components.app')
+@php
+    $hideSearch = true;
+@endphp
 @section('page-title', $product->id ? 'Edit Product form' : ' Product Form')
 @section('content')
 <div class="mb-4">
