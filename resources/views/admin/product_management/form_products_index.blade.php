@@ -216,26 +216,46 @@ $('.productForm').on('submit', function (e) {
         formData.append('_token', '{{ csrf_token() }}');
 
         $.ajax({
-            url: "{{ route('admin.product_management.add_products') }}",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
+    url: "{{ route('admin.product_management.add_products') }}",
+    type: "POST",
+    data: formData,
+    processData: false,
+    contentType: false,
 
-            success: function (response) {
+    success: function (response) {
 
-                let formObject = {};
-                formData.forEach((value, key) => {
-                    formObject[key] = value;
-                });
-              
-                localStorage.setItem('productForm', JSON.stringify(formObject));
-              
-
-                window.location.href =
-                    "{{ route('admin.varient_management.generate_varient') }}"
-            }
+        let formObject = {};
+        formData.forEach((value, key) => {
+            formObject[key] = value;
         });
+
+        localStorage.setItem('productForm', JSON.stringify(formObject));
+
+        window.location.href =
+            "{{ route('admin.varient_management.generate_varient') }}"
+    },
+
+    error: function(xhr) {
+
+        if (xhr.status === 422) {
+
+            let errors = xhr.responseJSON.errors;
+
+            // Remove old error messages
+            $('.text-danger').remove();
+
+            $.each(errors, function (key, value) {
+
+                let field = $('[name="' + key + '"]');
+
+                field.after(
+                    '<small class="text-danger d-block mt-1">' + value[0] + '</small>'
+                );
+            });
+
+        }
+    }
+});
     @endif
 });
 

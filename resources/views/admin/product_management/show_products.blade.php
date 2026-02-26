@@ -336,6 +336,9 @@ $(document).on('change', '.toggle-status', function () {
 //table rows
 
 $(document).ready(function() {
+   const STORAGE_KEY = "variant_matrix_data";
+    localStorage.removeItem('productForm');   
+  localStorage.removeItem(STORAGE_KEY);
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
