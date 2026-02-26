@@ -122,7 +122,7 @@ class OptionValueController extends Controller
 
         return redirect()
             ->route('admin.show_option_value')
-            ->with('success', 'Option Value registered successfully!');
+            ->with('success', 'Option Value created successfully!');
     }
 
 

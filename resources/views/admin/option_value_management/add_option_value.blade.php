@@ -36,6 +36,7 @@
             </h4>
 
             <form
+                id="optionValueForm"
                 action="{{ $option_value->id ? route('admin.updateoptionvalue', $option_value->id) : route('admin.addoptionvalue') }}"
                 method="POST">
 
@@ -112,7 +113,7 @@
 
                 {{-- Submit --}}
                 <div class="d-flex justify-content-end mt-3">
-                    <button class="btn btn-primary px-5">
+                    <button type="submit" id="submitBtn" class="btn btn-primary px-5">
                         {{ $option_value->id ? 'Update' : 'Submit' }}
                     </button>
                 </div>
@@ -142,6 +143,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
+// Prevent double submit (MAIN LOGIC)
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('optionValueForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function () {
+
+        // Disable button immediately
+        submitBtn.disabled = true;
+
+        // Show loading spinner
+        submitBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Processing...
+        `;
+    });
+
+});
 </script>
 
 @endsection

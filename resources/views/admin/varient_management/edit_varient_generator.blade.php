@@ -27,7 +27,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-12">
 
-                    <form  class="VarientForm" 
+                    <form  class="VarientForm" id="VarientForm" 
                         method="POST" 
                         action="{{ route('admin.varient_management.edit_varient', $product->id) }}"  
                         enctype="multipart/form-data">
@@ -463,12 +463,27 @@ $(document).ready(function () {
 });
 
 
+// Prevent double submit (MAIN LOGIC)
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('VarientForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function () {
+
+        // Disable button immediately
+        submitBtn.disabled = true;
+
+        // Show loading spinner
+        submitBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Processing...
+        `;
+    });
+
+});
 
 
-
-
-
-
-// </script>
+</script>
  @endsection
  @endsection

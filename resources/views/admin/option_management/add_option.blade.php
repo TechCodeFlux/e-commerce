@@ -30,7 +30,8 @@
                 {{ $option->id ? 'Edit' : 'Add' }} Options
             </h4>
 
-            <form
+            <form 
+                id="optionForm"
                 action="{{ $option->id ? route('admin.updateoption', $option->id) : route('admin.addoption') }}" 
                 method="POST">
                 @csrf
@@ -76,7 +77,7 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-3">
-                    <button class="btn btn-primary px-5">
+                    <button type="submit" id="submitBtn" class="btn btn-primary px-5">
                         {{ $option->id ? 'Update' : 'Submit' }}
                     </button>
                 </div>
@@ -99,6 +100,25 @@
     }
 });
 
+// Prevent double submit (MAIN LOGIC)
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('optionForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function () {
+
+        // Disable button immediately
+        submitBtn.disabled = true;
+
+        // Show loading spinner
+        submitBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Processing...
+        `;
+    });
+
+});
 </script>
 @endsection
 @endsection

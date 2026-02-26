@@ -548,7 +548,7 @@
                 </a>
             </li>
             <li>
-                <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs('admin.clubsindex','admin.club','admin.clubs.dashboard','admin.clubmember.viewmembers','admin.club.profile','admin.show_microsites','admin.clubmember.addmember','admin.add_microsites','admin.editmicrosite') ? 'active' : '' }}">
+                <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs('admin.clubsindex','admin.club','admin.editclub','admin.clubs.dashboard','admin.clubmember.viewmembers','admin.club.profile','admin.show_microsites','admin.clubmember.addmember','admin.add_microsites','admin.editmicrosite') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
@@ -574,15 +574,15 @@
                 </a>
                 <ul>
                     <li>
-                        <a class="{{ request()->routeIs('admin.show_option','admin.add_option')? 'active' : '' }}" href="{{ route('admin.show_option') }}">Option</a>
+                        <a class="{{ request()->routeIs('admin.show_option','admin.add_option','admin.editoption')? 'active' : '' }}" href="{{ route('admin.show_option') }}">Option</a>
                     </li>
                     <li>
-                        <a class="{{ request()->routeIs('admin.show_option_value','admin.add_option_value')? 'active' : '' }}" href="{{ route('admin.show_option_value') }}">Option Value</a>
+                        <a class="{{ request()->routeIs('admin.show_option_value','admin.add_option_value','admin.editoptionvalue')? 'active' : '' }}" href="{{ route('admin.show_option_value') }}">Option Value</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a class="{{ request()->routeIs('admin.product_management.show_products','admin.product_management.form_products_index','admin.varient_management.generate_varient')? 'active' : '' }}"
+                <a class="{{ request()->routeIs('admin.product_management.show_products','admin.product_management.form_products_index','admin.varient_management.generate_varient','admin.product_management.edit_products_index','admin.varient_management.edit_varient_generator')? 'active' : '' }}"
                      href="{{ route('admin.product_management.show_products') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-box-seam me-2"></i>

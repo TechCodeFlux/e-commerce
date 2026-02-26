@@ -21,7 +21,7 @@
 <div class="content">
 <div class="card">
 <div class="card-body">
-
+ 
 <div class="d-md-flex gap-4 align-items-center mb-3">
 
     <div class="d-none d-md-flex">All Club Members</div>
@@ -187,7 +187,18 @@ $(document).ready(function () {
 });
 
 </script>
-
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
 @endsection
 
 @endsection

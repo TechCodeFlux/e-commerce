@@ -116,7 +116,7 @@ return view('admin.option_management.show_option');
 
         return redirect()
             ->route('admin.show_option')
-            ->with('success', 'Options registered successfully!');
+            ->with('success', 'Options created successfully!');
     }
 
 
@@ -145,7 +145,7 @@ return view('admin.option_management.show_option');
     public function update(Request $request, $id)
     {
         $option = Option::findOrFail($id);
-        // dd($option);
+        // dd($option); 
         $validated = $request->validate([
             'name'   => 'required|string',
             'status' => 'nullable|boolean'

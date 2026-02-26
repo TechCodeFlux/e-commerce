@@ -183,7 +183,7 @@ $imagePath = $request->file('image')->store('products', 'public');
                                 title="Edit">
                                                              <i class="fas fa-pencil-alt"></i> 
                             </a>';
-
+ 
 
                 //delete button
                 $actions .= '<button 

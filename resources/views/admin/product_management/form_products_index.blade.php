@@ -1,7 +1,4 @@
 @extends('admin.components.app')
-@php
-    $hideSearch = true;
-@endphp
 @section('page-title', $product->id ? 'Edit Product form' : ' Product Form')
 @section('content')
 <div class="mb-4">
@@ -65,7 +62,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-12">
 
-            <form class="productForm"
+            <form class="productForm" id="productForm"
                    action="{{ isset($product->id) 
                           ? route('admin.product_management.edit_product', $product->id) 
                           : route('admin.product_management.add_products') }}"
@@ -181,7 +178,7 @@
                     </div>
                        
                         <div class="text-center mt-3 w-25 ms-sm-auto">
-                           <button type="submit" class="btn btn-primary px-5"> {{ $product->id ? 'Next' : 'Next' }}</button>
+                           <button type="submit" id="submitBtn" class="btn btn-primary px-5"> {{ $product->id ? 'Next' : 'Next' }}</button>
                         </div>
 
             </form>
@@ -219,26 +216,46 @@ $('.productForm').on('submit', function (e) {
         formData.append('_token', '{{ csrf_token() }}');
 
         $.ajax({
-            url: "{{ route('admin.product_management.add_products') }}",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
+    url: "{{ route('admin.product_management.add_products') }}",
+    type: "POST",
+    data: formData,
+    processData: false,
+    contentType: false,
 
-            success: function (response) {
+    success: function (response) {
 
-                let formObject = {};
-                formData.forEach((value, key) => {
-                    formObject[key] = value;
-                });
-              
-                localStorage.setItem('productForm', JSON.stringify(formObject));
-              
-
-                window.location.href =
-                    "{{ route('admin.varient_management.generate_varient') }}"
-            }
+        let formObject = {};
+        formData.forEach((value, key) => {
+            formObject[key] = value;
         });
+
+        localStorage.setItem('productForm', JSON.stringify(formObject));
+
+        window.location.href =
+            "{{ route('admin.varient_management.generate_varient') }}"
+    },
+
+    error: function(xhr) {
+
+        if (xhr.status === 422) {
+
+            let errors = xhr.responseJSON.errors;
+
+            // Remove old error messages
+            $('.text-danger').remove();
+
+            $.each(errors, function (key, value) {
+
+                let field = $('[name="' + key + '"]');
+
+                field.after(
+                    '<small class="text-danger d-block mt-1">' + value[0] + '</small>'
+                );
+            });
+
+        }
+    }
+});
     @endif
 });
 
@@ -367,6 +384,26 @@ document.getElementById('imageInput').addEventListener('change', function () {
     this.parentNode.appendChild(fileLabel);
 });
     }
+
+// Prevent double submit (MAIN LOGIC)
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('productForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function () {
+
+        // Disable button immediately
+        submitBtn.disabled = true;
+
+        // Show loading spinner
+        submitBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Processing...
+        `;
+    });
+
+});
 </script>
 @endsection
-@endsection 
+@endsection
