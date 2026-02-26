@@ -225,6 +225,20 @@ $('.productForm').on('submit', function (e) {
 });
 
 
+$(document).on('input change', '.productForm input, .productForm textarea, .productForm select', function () {
+
+    let error = $(this).next('.text-danger');
+    if (error.length) {
+        error.fadeOut(200, function() {
+            $(this).remove();
+        });
+    }
+
+});
+
+
+
+
 
 $(document).ready(function () {
 

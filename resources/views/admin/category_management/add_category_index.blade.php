@@ -151,25 +151,63 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+
+
+
 // Prevent double submit (MAIN LOGIC)
 document.addEventListener('DOMContentLoaded', function () {
 
     const form = document.getElementById('categoryForm');
     const submitBtn = document.getElementById('submitBtn');
 
-    form.addEventListener('submit', function () {
+    form.addEventListener('submit', function (e) {
 
-        // Disable button immediately
+        // 🚀 Add this line
+        e.preventDefault(); // Stop page reload first
+
+        // Remove old errors
+        document.querySelectorAll('.text-danger').forEach(el => el.remove());
+
+        let hasError = false;
+
+        let name = document.querySelector('[name="name"]');
+        let category = document.querySelector('[name="category"]');
+
+        // Validate Name
+        if (!name.value.trim()) {
+            showError(name, "The name field is required.");
+            hasError = true;
+        }
+
+        // Validate Category
+       
+        // ❌ If validation fails → stop here
+        if (hasError) {
+            return;
+        }
+
+        // ✅ If no errors → continue your old logic
         submitBtn.disabled = true;
 
-        // Show loading spinner 
         submitBtn.innerHTML = `
             <span class="spinner-border spinner-border-sm me-2"></span>
             Processing...
         `;
+
+        form.submit(); // submit normally
     });
 
+    function showError(field, message) {
+        let error = document.createElement('small');
+        error.classList.add('text-danger', 'd-block', 'mt-1');
+        error.innerText = message;
+        field.parentElement.appendChild(error);
+    }
+
 });
+
+
+
 
 // AJAX status toggle
 $(document).on('change', '.toggle-status', function () {
@@ -186,6 +224,27 @@ $(document).on('change', '.toggle-status', function () {
             status: status
         },
     });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Select all inputs & selects inside the form
+    const fields = document.querySelectorAll('#categoryForm input, #categoryForm select');
+
+    fields.forEach(function(field) {
+
+        field.addEventListener('input', removeError);
+        field.addEventListener('change', removeError);
+
+        function removeError() {
+            let errorElement = field.parentElement.querySelector('.text-danger');
+            if (errorElement) {
+                errorElement.remove();
+            }
+        }
+
+    });
+
 });
 </script>
 
