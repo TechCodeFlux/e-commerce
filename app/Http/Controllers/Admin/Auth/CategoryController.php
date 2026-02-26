@@ -31,7 +31,9 @@ class CategoryController extends Controller
              'parent_id' => $request->category ? $request->category : 0 ,
             'status'=> $request->status ? 1 : 0,    
           ]);
-        return redirect('admin/category_management/show_category');
+        return redirect()
+        ->route('admin.category_management.show_category')
+        ->with('success', 'New Category Created successfully!');
     }
 
 
@@ -169,7 +171,9 @@ class CategoryController extends Controller
              'name' => $request->name,
              'parent_id' => $request->category ? $request->category : 0 ,
 ]);
-          return redirect('admin/category_management/show_category'); 
+          return redirect()->
+          route("admin.category_management.show_category")
+          ->with('success', 'Category updated successfully!'); 
 
 
     }

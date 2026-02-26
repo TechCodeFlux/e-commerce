@@ -72,7 +72,7 @@ public function store(Request $request)
     }
 
     return redirect()
-        ->route('admin.product_management.form_products_index')
+        ->route('admin.product_management.show_products')
         ->with('success', 'Products saved successfully');
 }
 

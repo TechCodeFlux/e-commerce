@@ -340,20 +340,19 @@ $(document).ready(function () {
 
 
 
-// modal js
-
-
-
-
-
-
-
-
-
-
-
-
 </script>
 
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
 @endsection
 @endsection

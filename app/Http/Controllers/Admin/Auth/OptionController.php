@@ -35,7 +35,7 @@ class OptionController extends Controller
     ]);
 
     return redirect()
-        ->route('admin.option_management.form_option_index')
+        ->route('admin.option_management.show_option')
         ->with('success', 'Option created successfully!');
 }
 
