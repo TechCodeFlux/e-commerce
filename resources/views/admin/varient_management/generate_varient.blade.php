@@ -361,6 +361,24 @@ $(document).ready(function () {
 });
 
 
+// ✅ Prevent Double Submit (ONLY THIS ADDED)
+$('.VarientForm').on('submit', function () {
+
+    const submitBtn = $('#submitBtn');
+
+    // If button already disabled → stop
+    if (submitBtn.prop('disabled')) {
+        return false;
+    }
+
+    submitBtn.prop('disabled', true);
+
+    submitBtn.html(`
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Processing...
+    `);
+
+});
 
 
 

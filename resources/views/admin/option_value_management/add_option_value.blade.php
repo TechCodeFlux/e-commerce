@@ -35,7 +35,9 @@
 
             <form  
                 action="{{ $option_value->id ? route('admin.option_value_management.edit_optionvalue', $option_value->id) :  route('admin.option_value_management.addoptionvalue') }}"
-                method="POST">
+                method="POST"
+                id="optionValueForm"
+                >
 
                 @csrf
                 @if($option_value->id)
@@ -110,7 +112,7 @@
 
                 {{-- Submit --}}
                 <div class="d-flex justify-content-end mt-3">
-                    <button class="btn btn-primary px-5">
+                    <button type="submit" id="submitBtn" class="btn btn-primary px-5">
                         {{ $option_value->id ? 'Update' : 'Submit' }}
                     </button>
                 </div>
@@ -136,6 +138,64 @@ document.addEventListener('DOMContentLoaded', function () {
         statusSwitch.addEventListener('change', function () {
             statusLabel.innerText = this.checked ? 'Active' : 'Inactive';
         });
+    }
+
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('optionValueForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+
+        let hasError = false;
+
+        // Clear old errors
+        document.querySelectorAll('.client-error').forEach(el => el.remove());
+
+        const optionSelect = form.querySelector('[name="option_id"]');
+        const nameInput    = form.querySelector('[name="name"]');
+
+        // Validate Option
+        if (!optionSelect.value.trim()) {
+            showError(optionSelect, 'Please select an option.');
+            hasError = true;
+        }
+
+        // Validate Name
+        if (!nameInput.value.trim()) {
+            showError(nameInput, 'Name field is required.');
+            hasError = true;
+        }
+
+        if (hasError) {
+            e.preventDefault();
+            return false;
+        }
+
+        // ✅ Prevent Double Submit (ONLY added logic)
+        if (submitBtn.disabled) {
+            e.preventDefault();
+            return false;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Processing...
+        `;
+    });
+
+    function showError(element, message) {
+        const error = document.createElement('small');
+        error.classList.add('text-danger', 'client-error');
+        error.innerText = message;
+        element.parentNode.appendChild(error);
     }
 
 });
