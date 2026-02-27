@@ -35,7 +35,7 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            <h4 class="text-center mb-4">
+            <h4 class="text-left mb-4">
                 {{ $clubuser->id ? 'Edit' : 'Add' }} Club User
             </h4>
 

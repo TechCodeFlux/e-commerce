@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str; 
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Validation\Rule;
 //mail
 use App\Mail\ClubMail;
 use Illuminate\Support\Facades\Mail;
@@ -114,7 +115,7 @@ class ClubController extends Controller
         'image'      => $imagePath,
     ]);
 
-    Mail::to($request->email)->send(new ClubMail($randomPassword, $request->email));
+    Mail::to($request->email)->send(new ClubMail($request->email, $randomPassword, 'create'));
     
     if ($request->ajax()) {
         return response()->json([
@@ -159,7 +160,8 @@ class ClubController extends Controller
     'contact' => 'required|regex:/^\+?[1-9]\d{6,14}$/',
     'email'   => [
                     'required',
-                    'email',        
+                    'email', 
+                    Rule::unique('clubs', 'email')->ignore($club->id),     
                 ],
     'country'   => 'required|integer|exists:countries,id',
     'state'     => 'required|integer|exists:states,id',
@@ -188,6 +190,7 @@ class ClubController extends Controller
         'image'      => $imagePath,
     ]);
 
+    Mail::to($request->email)->send(new ClubMail($request->email, null, 'update'));
         return redirect()
             ->route('admin.clubsindex')
             ->with('success', 'Club updated successfully');
