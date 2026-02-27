@@ -19,9 +19,10 @@ class addressseeder extends Seeder
             [
                 'address1'       => 'angamaly p.o,angamaly',
                 'city'           => 'ernakulam',
-                'state'          => 'kerela',
+                'country_id'     => '12',
+                'state_id'       => '244',
                 'zip-code'       => 234565,
-                'club_member_id'  => 1,
+                
                 'status'         => 1,
             ]
         ];

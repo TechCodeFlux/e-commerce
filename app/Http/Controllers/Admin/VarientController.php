@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Varient;
 use App\models\Option;
 use App\Models\OptionValue;
 use Illuminate\Http\Request;
 
-class VariantController extends Controller
+
+class VarientController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    
     public function index()
     {
         // 

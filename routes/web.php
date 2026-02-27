@@ -22,6 +22,11 @@ use App\Http\Controllers\Admin\OptionValueController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\VariantController;
 
+use App\Http\Controllers\ClubMember\ProductController;
+use App\Http\Controllers\ClubMember\CartController;
+use App\Http\Controllers\ClubMember\OrderController;
+
+
 
 Route::get('/option', function () {return view('list');})->name('option');
 // admin (done by pauljo)
@@ -96,21 +101,21 @@ Route::get('/clubmember', function () {return view('clubmember.dashboard');});
 Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controllers\ClubMember')->group(function () {
     Auth::routes(['register' => false]); 
 
-    Route::get('viewproduct', [ClubmemberDashboardController::class, 'viewproduct'])->name('viewproduct');
+    Route::get('viewproduct', [ProductController::class, 'index'])->name('viewproduct');
 
-    Route::get('addcart/{id}', [ClubmemberDashboardController::class, 'addcart'])->name('addcart');
+    Route::get('addcart/{id}', [CartController::class, 'store'])->name('addcart');
 
-    Route::get('viewcart', [ClubmemberDashboardController::class, 'viewcart'])->name('viewcart');
+    Route::get('viewcart', [CartController::class, 'index'])->name('viewcart');
 
-    Route::get('delete/{id}',[ClubmemberDashboardController::class,'delete'])->name('delete');
+    Route::get('delete/{id}',[CartController::class,'destroy'])->name('delete');
 
     // booking the product
 
-    Route::get('booking/{id}',[ClubmemberDashboardController::class,'booking'])->name('booking');
+    Route::get('order/{id}',[OrderController::class,'cartorder'])->name('order');
 
     Route::post('placeorder',[ClubmemberDashboardController::class,'placeorder'])->name('placeorder');
 
-    Route::get('vieworder',[ClubmemberDashboardController::class,'vieworder'])->name('vieworder');
+    Route::get('vieworder',[OrderController::class,'index'])->name('vieworder');
     
 });
 

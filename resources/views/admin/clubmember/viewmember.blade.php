@@ -300,8 +300,19 @@ $(document).ready(function () {
         });
     });
 });
-            
-
+</script>        
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
 
 
    

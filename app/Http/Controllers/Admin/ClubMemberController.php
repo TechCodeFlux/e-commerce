@@ -124,25 +124,25 @@ public function storemember(Request $request, $id)
 }
 
 
-    public function editmember($id)
-{
-    $clubmember = ClubMember::findOrFail($id);
-    $club = Club::findOrFail($clubmember->club_id);
-    $countries = Country::orderBy('name')->get();
+        public function editmember($id)
+    {
+        $clubmember = ClubMember::findOrFail($id);
+        $club = Club::findOrFail($clubmember->club_id);
+        $countries = Country::orderBy('name')->get();
 
-    $address = Address::find($clubmember->address_id); // returns null if not found
+        $address = Address::find($clubmember->address_id); // returns null if not found
 
-    // preload states only if country exists
-    $states = [];
-    if ($address && $address->country_id) {
-        $states = State::where('country_id', $address->country_id)->orderBy('name')->get();
+        // preload states only if country exists
+        $states = [];
+        if ($address && $address->country_id) {
+            $states = State::where('country_id', $address->country_id)->orderBy('name')->get();
+        }
+
+        return view(
+            'admin.clubmember.addmember',
+            compact('clubmember', 'club', 'address', 'countries', 'states')
+        );
     }
-
-    return view(
-        'admin.clubmember.addmember',
-        compact('clubmember', 'club', 'address', 'countries', 'states')
-    );
-}
 
     public function updatemember(Request $request,$id)
     {

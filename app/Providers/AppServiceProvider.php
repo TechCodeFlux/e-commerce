@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
-        $cartItems = Cart::where('clubmember_id', 0)
+        $cartItems = Cart::where('clubmember_id', 1)  // clubmember_id is hardcoded for now, replace with auth()->id() when authentication is implemented
         ->get();
         $cartItemCount = $cartItems->count();
         $view->with('cartItems', $cartItems)

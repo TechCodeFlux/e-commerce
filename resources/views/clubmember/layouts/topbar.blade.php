@@ -75,7 +75,7 @@
                                 </a> 
                                 
                                 <!-- order-->
-                                 <a href={{ route('clubmember.booking' ,$item->id) }}
+                                 <a href={{ route('clubmember.order' ,$item->product_id) }}
                                 class="btn btn-sm me-2" title="Buy Now">
                                     <i class="fas fa-credit-card fa-l -center"></i>
 

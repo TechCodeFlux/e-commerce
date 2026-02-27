@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('club_id');
             $table->unsignedBigInteger('order_status_id');
             $table->unsignedBigInteger('microsite_id');
+            $table->unsignedBigInteger('varient_id');
             $table->softdeletes();
             $table->timestamps();
         });

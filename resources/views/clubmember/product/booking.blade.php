@@ -155,6 +155,20 @@
                             name="club_id"
                             value="{{ $clubmember->club_id }}">
                     </div>
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                    <div class="col-md-8 mb-3">
+                        <label>Variant</label>
+                        <select name="varient_id" class="form-select" required>
+                            <option value="">Select your variant</option>
+                            @foreach($varients as $varient)
+                                <option value="{{ $varient->id }}">
+                                   Colour-{{ $varient->color }} - Size {{ $varient->size }} - Stock {{ $varient->stock }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
 
                     {{-- Country 
                     <div class="col-md-4 mb-3">

@@ -9,4 +9,9 @@ class Varient extends Model
 {
     use SoftDeletes;
     protected $fillable =['size','color','stock','product_id','status'];
+
+    public function product()
+        {
+            return $this->belongsTo(Product::class, 'product_id', 'id');
+        }
 }
