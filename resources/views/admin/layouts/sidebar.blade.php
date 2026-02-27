@@ -498,7 +498,7 @@
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown">
                 <div class="avatar me-3">
-                    <img src="{{url('assets/images/user/man_avatar3.jpg')}}"
+                    <img src="{{url('assets/images/grabit/admin-logo.webp')}}"
                          class="rounded-circle" alt="image">
                 </div>
                 <div>
@@ -546,28 +546,20 @@
                     <span> Dashboard</span>
                 </a>
             </li>
-            
-            
-            
             <li>
-                <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs('admin.clubsindex','admin.club','admin.clubs.dashboard','admin.clubmember.viewmembers','admin.club.profile') ? 'active' : '' }}">
+                <a  href="{{ route('admin.clubsindex') }}" class="{{ request()->routeIs
+                ('admin.clubsindex','admin.club','admin.editclub','admin.clubs.dashboard',
+                'admin.clubmember.viewmembers','admin.club.profile','admin.show_microsites',
+                'admin.clubmember.addmember','admin.add_microsites','admin.editmicrosite',
+                'admin.clubmember.profile','admin.clubmember.editmember') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
                     <span>Club</span>
                 </a>
             </li>
-
             <li>
-                <a  href="">
-                    <span class="nav-link-icon">
-                        <i class="bi bi-box-seam me-2"></i>
-                    </span>
-                    <span>Products</span>
-                </a>
-            </li>
-            <li>
-                <a class="{{ request()->routeIs('admin.category_management.show_category')? 'active' : '' }}"  
+                <a class="{{ request()->routeIs('admin.category_management.show_category','admin.category_management.add_category_index')? 'active' : '' }}"  
                     href="{{ route('admin.category_management.show_category') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-tags me-2"></i>
@@ -575,23 +567,41 @@
                     <span>Categoies</span>
                 </a>
             </li>
+            
              <li>
-                <a  href="">
+                <a class="{{ request()->routeIs()? 'active' : '' }}"  href="">
                     <span class="nav-link-icon">
                         <i class="bi bi-sliders me-2"></i>
                     </span>
                     <span>Option</span>
                 </a>
+                <ul>
+                    <li>
+                        <a class="{{ request()->routeIs('admin.show_option','admin.add_option','admin.editoption')? 'active' : '' }}" href="{{ route('admin.show_option') }}">Option</a>
+                    </li>
+                    <li>
+                        <a class="{{ request()->routeIs('admin.show_option_value','admin.add_option_value','admin.editoptionvalue')? 'active' : '' }}" href="{{ route('admin.show_option_value') }}">Option Value</a>
+                    </li>
+                </ul>
             </li>
-                <li>
-                <a  href="">
+            <li>
+                <a class="{{ request()->routeIs('admin.product_management.show_products','admin.product_management.form_products_index','admin.varient_management.generate_varient','admin.product_management.edit_products_index','admin.varient_management.edit_varient_generator')? 'active' : '' }}"
+                     href="{{ route('admin.product_management.show_products') }}">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-box-seam me-2"></i>
+                    </span>
+                    <span>Products</span>
+                </a>
+            </li>
+             {{-- <li>
+                <a class="{{ request()->routeIs('admin.varient_management.show_varient','admin.varient_management.form_varient_index')? 'active' : '' }}"
+                href="{{ route('admin.varient_management.show_varient') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-diagram-3 me-2"></i>
                     </span>
                     <span>Varient</span>
                 </a>
-            </li>
-             
+            </li> --}}
             
            
 

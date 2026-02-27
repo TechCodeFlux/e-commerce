@@ -20,9 +20,6 @@ class ClubMember extends Authenticatable
         'image',
     ];
 
-    protected $hidden = [
-        'password',
-    ];
 
     // ================= RELATIONSHIPS =================
 

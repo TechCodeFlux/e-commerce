@@ -1,6 +1,5 @@
-
 @extends('admin.components.app')
-@section('page-title', 'Categories')
+
 @section('content')
     <div class="mb-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -10,7 +9,7 @@
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Categories</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Varient</li>
             </ol>
         </nav>
     </div>
@@ -19,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-md-flex gap-4 align-items-center">
-                        <div class="d-none d-md-flex">All Categories</div>
+                        <div class="d-none d-md-flex">All Varients</div>
                         <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
@@ -44,9 +43,9 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="{{ route('admin.category_management.add_category_index') }}">
+                            <a href="{{ route('admin.varient_management.form_varient_index') }}">
                                 <button class="btn btn-primary btn-icon">
-                                        <i class="bi bi-plus-circle"></i> Add Category
+                                        <i class="bi bi-plus-circle"></i> Add Varient
                                 </button>
                             </a>
                         </div>
@@ -58,8 +57,9 @@
                     <table id="club" class="table table-custom table-lg mb-0" >
                     <thead>
                       <tr>
-                         <th >Category Name</th>  
-                          <th>Status</th>
+                         <th >Size</th>  
+                         <th >Color</th> 
+                         <th >Stock</th> 
                         <th  class=" ps-5" >Action</th>
                      </tr>
                     </thead>
@@ -67,7 +67,29 @@
                 </div>
             </div>
         </div>
-       
+        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete Option</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form>
+            <div class="modal-body">
+                    <!-- <input type="hidden" name="_method" value="DELETE"> -->
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" id="deleteId" name="deleteId">
+                        <p>Are you sure you want to delete this varient</p>
+                        <div class="modal-footer">
+                        
+                            <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-sm btn-danger btn_delete_club_member" data-loading-text="">Delete</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>   
+</div> 
 
 
 
@@ -80,7 +102,7 @@
                 
                 <!-- Modal Header with Close Button -->
                 <div class="modal-header bg-light">
-                    <h5 class="modal-title" id="productListModalLabel">Available Products</h5>
+                    <h5 class="modal-title" id="productListModalLabel">Available varient</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -90,15 +112,15 @@
                         
                         <!-- Product Item 1 -->
                         <a href="#" class="list-group-item list-group-item-action d-flex align-items-center p-3">
-                          <div class="flex-grow-1">
+                                                      <div class="flex-grow-1">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1 fw-bold" id="modalCategoryName"   ></h6>
-                                  
+                                       <h6 class="mb-1 fw-bold" id="modalVarientSize"   ></h6>    
+                                    <h6 class="mb-1 fw-bold" id="modalVarientColor"   ></h6>
+                                    <small class="text-primary fw-bold mb-0" id="modalVarientStock"></small>
                                 </div>
-                              
+                                {{-- <p class="mb-0 text-muted fs-6" id="modalVarientStock"></p> --}}
                             </div>
                         </a>
-
                     
                     </div>
                 </div>
@@ -109,60 +131,26 @@
             </div>
         </div>
     </div>
-
-
-
-    {{-- modal --}}
-
-        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Category</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-                <input type="hidden" id="deleteId">
-                <p>Are you sure you want to delete this category?</p>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-
-                <!-- ✅ class used in JS -->
-                <button type="button" class="btn btn-sm btn-danger btn_delete_club_member">
-                    Delete
-                </button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
-    {{-- end modal --}}
 @section('script')
 <script src="{{ url('libs/dataTable/datatables.min.js') }}"></script>
 <script src="{{ url('libs/range-slider/js/ion.rangeSlider.min.js') }}"></script>
 <script>
 
 //view single row
-$(document).on('click', '.view-category', function () {
+$(document).on('click', '.view-varient', function () {
 
-    let categoryId = $(this).data('id');
+    let varientId = $(this).data('id');
 
     $.ajax({
-        url: "{{ route('admin.category_management.show_single', ':id') }}".replace(':id', categoryId),
-        type: "GET",
+        url: "{{ route('admin.varient_management.show_single', ':id') }}".replace(':id', varientId),
+        type: "GET",       
         success: function (res) {
-            $('#modalCategoryName').text(res.name);
+            $('#modalVarientSize').text(res.size);
+            $('#modalVarientColor').text(res.color);
+            $('#modalVarientStock').text(res.stock);
         },
         error: function () {
-            alert('Failed to load category');
+            alert('Failed to load Option');
         }
     });
 });
@@ -174,16 +162,16 @@ $(document).on('click', '.view-category', function () {
 
 $(document).on('change', '.toggle-status', function () {
 
-    let categoryId = $(this).data('id');
+    let varientId = $(this).data('id');
     let status = $(this).is(':checked') ? 1 : 0;
-    let label = $('#status-label-' + categoryId);
+    let label = $('#status-label-' + varientId);
 
     $.ajax({
-        url: "{{ route('admin.category_management.change-status') }}",
+        url: "{{ route('admin.varient_management.change-status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
-            id: categoryId,
+            id: varientId,
             status: status
         },
         success: function (res) {
@@ -211,19 +199,21 @@ $(document).ready(function() {
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
-    $categoryTable= $('#club').DataTable({
+    $optionTable= $('#club').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-           url: "{{ route('admin.category_management.show_category') }}",
+           url: "{{ route('admin.varient_management.show_varient') }}",
             data: function(d) {
                 
             }
         },
 
         columns: [
-            { data: 'name', name: 'name', orderable: false,searchable: false },
-            { data: 'status', name: 'status', orderable: false, searchable: false },
+            { data: 'size', size: 'size' },
+            { data: 'color', size: 'color' },
+            { data: 'stock', size: 'stock' },
+            // { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ],
 
@@ -234,7 +224,7 @@ $(document).ready(function() {
     });
     
     $(document).on("keyup", ".searchInput", function(e) {
-        $categoryTable.search($(this).val()).draw();
+        $optionTable.search($(this).val()).draw();
     });
     $("#club_filter").css({
         "display": "none"
@@ -245,70 +235,73 @@ $(document).ready(function() {
     $('#sort').on('change', function() {
         $column = $(this).find(':selected').data('column');
         $sort = $(this).find(':selected').data('sort');
-        $categoryTable.order([$column, $sort]).draw();
+        $optionTable.order([$column, $sort]).draw();
     })
     $('#pageLength').on('change',function(){
-        $categoryTable.page.len($(this).val()).draw();
+        $optionTable.page.len($(this).val()).draw();
     })
-    $('#pageLength').val($categoryTable.page.len());
+    $('#pageLength').val($optionTable.page.len());
 })
 
 
 
-function deleteCategory(id) {
-    $('#deleteId').val(id);
-    const modal = new bootstrap.Modal(document.getElementById('delete-modal'));
-    modal.show();
+
+
+
+function deleteVarient(id) {
+
+    if (!confirm("Are you sure you want to delete this option?")) {
+        return;
+    }
+
+    $.ajax({
+       url: "{{ url('admin/varient_management/destroy_varient') }}/" + id,
+        type: "DELETE",
+       data: {
+            _token: "{{ csrf_token() }}",
+            _method: "DELETE"
+        },
+        success: function (response) {
+            alert(response.message);
+
+            // Reload DataTable
+            $('#club').DataTable().ajax.reload(null, false);
+        },
+        error: function (xhr) {
+            alert("Something went wrong. Try again.");
+        }
+    });
 }
 
-$(document).ready(function () {
-
-    $(document).on('click', '.btn_delete_club_member', function () {
-
-        let id = $('#deleteId').val();
-        let $btn = $(this);
-
-        if (!id) {
-            Swal.fire('Error', 'Invalid category ID', 'error');
-            return;
-        }
-
-        $btn.prop('disabled', true).text('Deleting...');
-
-        $.ajax({
-            url: "{{ url('admin/category_management/destroy_category') }}/" + id,
-            type: "POST",
-            data: {
-                _token: "{{ csrf_token() }}",
-                _method: "DELETE"
-            },
-           success: function () {
-
-                const modalEl = document.getElementById('delete-modal');
-                const modalInstance = bootstrap.Modal.getInstance(modalEl);
-                if (modalInstance) modalInstance.hide();
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Deleted!',
-                    text: 'Category deleted successfully',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    location.reload(); 
-                });
-            },
-            error: function (xhr) {
-                Swal.fire('Error', 'Delete failed', 'error');
-                console.log(xhr.responseText);
-            },
-            complete: function () {
-                $btn.prop('disabled', false).text('Delete');
-            }
-        });
-    });
-});
 
 
+
+
+
+
+
+//delete club member
+// $('table').off('click').on('click','.delete-club-member',function(){
+//     var href=$(this).data('href');
+//     $('.btn_delete_club_member').click(function(){
+//         $.ajax({
+//             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
+//             type: 'DELETE',
+//             dataType : 'JSON',
+//             url : href,
+//             success:function(response){
+//                 $('#delete-modal').modal('hide');
+//                 $('#club').DataTable().ajax.reload();
+//                 Swal.fire({
+//                     icon: 'success',
+//                     title: 'Member deleted successfully',
+//                     footer: ''
+//                 })
+//             }  
+//         })
+//     })
+
+// })
 </script>
 
 @endsection

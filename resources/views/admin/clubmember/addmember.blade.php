@@ -1,7 +1,8 @@
-
 @extends('admin.components.app')
 @section('page-title', $club->name)
-
+@php
+    $hideSearch = true;
+@endphp
 @section('head')
 @endsection
 
@@ -44,11 +45,12 @@
         <div class="card shadow-sm">
                 <div class="card-body">
 
-                <h4 class="text-center mb-4">
+                <h4 class="text-left mb-4">
                         {{ $clubmember->id ? 'Edit' : 'Add' }} Club member
                     </h4>
 
                   <form
+                    id="memberForm"
                     action="{{ $clubmember->id ? route('admin.clubmember.updatemember', $clubmember->id) : route('admin.clubmember.storemember',$club->id) }}"
                      method="POST"
                         enctype="multipart/form-data">
@@ -100,12 +102,35 @@
                                 @enderror
                             </div>
 
+                            {{-- Profile Image --}}
+                            <div class="col-md-4 mb-3">
+                            <label>Profile Image</label>
+                            <input type="file" name="image"
+                                class="form-control @error('profile_image') is-invalid @enderror">
+
+                            @error('image')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                            {{-- Show existing image in edit --}}
+                            @if(!empty($clubmember->image))
+                                <div class="mt-2">
+                                    <img src="{{ asset('storage/'.$clubmember->image) }}"
+                                        width="80" height="80"
+                                        class="rounded-circle"
+                                        style="object-fit: cover;">
+                                </div>
+                            @endif
+                        </div>
+
                             {{-- Address --}}
                             <div class="col-md-12 mb-3">
                                 <label>Address</label>
                                 <textarea name="address"
-class="form-control @error('address') is-invalid @enderror"
->{{ old('address', $address->address1 ?? '') }}</textarea>
+                                        class="form-control @error('address') is-invalid @enderror"
+                                        >{{ old('address', $address->address1 ?? '') }}</textarea>
 
 
 
@@ -186,8 +211,8 @@ class="form-control @error('address') is-invalid @enderror"
 
                            
 
-                        <div class="text-center mt-3">
-                            <button class="btn btn-primary px-5">
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="submit" id="submitBtn" class="btn btn-primary px-5">
                                 {{ $clubmember->id ? 'Update' : 'Submit' }}
                             </button>
                         </div>
@@ -242,7 +267,41 @@ document.addEventListener('DOMContentLoaded', function () {
         loadStates(selectedCountry, selectedState);
     }
 });
+
+
+// Prevent double submit (MAIN LOGIC)
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('memberForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function () {
+
+        // Disable button immediately
+        submitBtn.disabled = true;
+
+        // Show loading spinner
+        submitBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Processing...
+        `;
+    });
+
+});
 </script>
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
+
 @endsection
 
         

@@ -1,7 +1,9 @@
 
 @extends('admin.components.app')
 @section('content')
-
+@php
+    $hideSearch = true;
+@endphp
 <div class="content ">
         
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -336,7 +338,7 @@
                     </div>
                     <div class="text-center">
                         <button class="btn btn-outline-primary btn-icon">
-                            <i class="bi bi-download"></i> Download Report
+                            <i class="bi bi-download"></i> Download Report 
                         </button>
                     </div>
                 </div>
@@ -640,5 +642,6 @@
 
     </div>
     <!-- ./ content -->
+  
 
 @endsection

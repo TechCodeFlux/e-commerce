@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('zip_code');
             $table->string('password');
+            $table->string('image');
             $table->boolean('status')->default('0');
             $table->softdeletes();
             $table->timestamps();

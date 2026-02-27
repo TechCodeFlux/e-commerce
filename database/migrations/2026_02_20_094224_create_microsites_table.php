@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('image');
             $table->unsignedBigInteger('club_id');
+            $table->string('password');
             $table->boolean('status')->default('0');
             $table->softdeletes();
             $table->timestamps();

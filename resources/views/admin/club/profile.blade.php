@@ -1,6 +1,8 @@
 @extends('admin.components.app')
 @section('page-title', $club->name)
-
+@php
+    $hideSearch = true;
+@endphp
 @section('content')
 <div class="mb-4">
     <nav style="--bs-breadcrumb-divider: '>';">

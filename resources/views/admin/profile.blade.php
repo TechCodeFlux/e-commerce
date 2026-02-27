@@ -10,14 +10,10 @@
                 <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <div class="mb-4">
                         <div class="d-flex flex-column flex-md-row text-center text-md-start mb-3">
-                               <h3 class="mb-6">{{ $member->name }}</h3>
-                                <figure class="me-4 flex-shrink-0">
-                                    <img width="100" class="rounded-pill"
-                                        src="{{ $member->image 
-                                            ? asset('uploads/members/'.$member->image) 
-                                                : asset('assets/images/user/man_avatar3.jpg') }}"
-                                                    alt="Member Profile">
-                                </figure>
+                            <figure class="me-4 flex-shrink-0">
+                                <img width="100" class="rounded-pill"
+                                     src="{{url('assets/images/grabit/admin-logo.webp')}}" alt="...">
+                            </figure>
                             <div class="flex-fill">
                                 <h3 class="mb-6">{{$user->name}}</h3>
                                 {{-- <button class="btn btn-primary me-2">Change Avatar</button>

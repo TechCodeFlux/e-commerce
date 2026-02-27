@@ -1,16 +1,17 @@
 
+
 @extends('admin.components.app')
-@section('page-title', 'Categories')
+@section('page-title', 'Options')
 @section('content')
     <div class="mb-4">
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb"> 
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="{{ url('/') }}">
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Categories</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-sliders me-2"></i>Options</li>
             </ol>
         </nav>
     </div>
@@ -19,7 +20,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-md-flex gap-4 align-items-center">
-                        <div class="d-none d-md-flex">All Categories</div>
+                        <div class="d-none d-md-flex">All Options</div>
                         <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
@@ -44,9 +45,9 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="{{ route('admin.category_management.add_category_index') }}">
+                            <a href="{{ route('admin.add_option') }}">
                                 <button class="btn btn-primary btn-icon">
-                                        <i class="bi bi-plus-circle"></i> Add Category
+                                        <i class="bi bi-plus-circle"></i> Add Options
                                 </button>
                             </a>
                         </div>
@@ -55,10 +56,10 @@
                     </div>
                 </div>
                 <div class="" >
-                    <table id="club" class="table table-custom table-lg mb-0" >
+                    <table id="options" class="table table-custom table-lg mb-0" >
                     <thead>
                       <tr>
-                         <th >Category Name</th>  
+                         <th >Option Name</th>  
                           <th>Status</th>
                         <th  class=" ps-5" >Action</th>
                      </tr>
@@ -71,77 +72,31 @@
 
 
 
-{{-- View once row --}}
-
-
-    <div class="modal fade" id="productListModal" tabindex="-1" aria-labelledby="productListModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                
-                <!-- Modal Header with Close Button -->
-                <div class="modal-header bg-light">
-                    <h5 class="modal-title" id="productListModalLabel">Available Products</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <!-- Modal Body: The Product List -->
-                <div class="modal-body p-0">
-                    <div class="list-group list-group-flush">
-                        
-                        <!-- Product Item 1 -->
-                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center p-3">
-                          <div class="flex-grow-1">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1 fw-bold" id="modalCategoryName"   ></h6>
-                                  
-                                </div>
-                              
-                            </div>
-                        </a>
-
-                    
-                    </div>
-                </div>
-
-                <!-- Modal Footer -->
-               
-                
-            </div>
-        </div>
-    </div>
-
-
-
     {{-- modal --}}
 
-        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Category</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-                <input type="hidden" id="deleteId">
-                <p>Are you sure you want to delete this category?</p>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-
-                <!-- ✅ class used in JS -->
-                <button type="button" class="btn btn-sm btn-danger btn_delete_club_member">
-                    Delete
-                </button>
-            </div>
-
+        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Delete Option</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form>
+                    <div class="modal-body">
+                        <!-- <input type="hidden" name="_method" value="DELETE"> -->
+                        {{-- <input type="hidden" name="_token" > --}}
+                        <input type="hidden" id="deleteId" name="deleteId">
+                        <p>Are you sure you want to delete this option?</p>
+                        <div class="modal-footer">
+                        
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-sm btn-danger btn_delete_option" data-loading-text="">Delete</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>   
         </div>
-    </div>
-</div>
 
 
     {{-- end modal --}}
@@ -150,36 +105,31 @@
 <script src="{{ url('libs/range-slider/js/ion.rangeSlider.min.js') }}"></script>
 <script>
 
-//view single row
-$(document).on('click', '.view-category', function () {
 
-    let categoryId = $(this).data('id');
-
-    $.ajax({
-        url: "{{ route('admin.category_management.show_single', ':id') }}".replace(':id', categoryId),
-        type: "GET",
-        success: function (res) {
-            $('#modalCategoryName').text(res.name);
-        },
-        error: function () {
-            alert('Failed to load category');
-        }
-    });
-});
 
 
 
 //status toggle
-    
+
+
+let categoryId;
+let status;
+let label;
 
 $(document).on('change', '.toggle-status', function () {
 
-    let categoryId = $(this).data('id');
-    let status = $(this).is(':checked') ? 1 : 0;
-    let label = $('#status-label-' + categoryId);
+    categoryId = $(this).data('id');
+    status = $(this).is(':checked') ? 1 : 0;
+    label = $('#status-label-' + categoryId);
+
+//     let statusModal = new bootstrap.Modal(document.getElementById('status-modal'));
+//     statusModal.show();
+// });
+
+// $(document).on('click', '#confirmStatusChange', function () {
 
     $.ajax({
-        url: "{{ route('admin.category_management.change-status') }}",
+        url: "{{ route('admin.option_change_status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
@@ -187,7 +137,14 @@ $(document).on('change', '.toggle-status', function () {
             status: status
         },
         success: function (res) {
-           alert('Status Changed!');
+            // alert('Status Changed!');
+            // bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
+             Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "Status changed successfully!",
+                    confirmButtonText: 'OK'
+                });
            if (status === 1) {
                     label.text('Active')
                          .removeClass('bg-secondary-subtle text-secondary')
@@ -205,17 +162,19 @@ $(document).on('change', '.toggle-status', function () {
 
 });
 
+
 //table rows
 
 $(document).ready(function() {
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
-    $categoryTable= $('#club').DataTable({
+    $OptionsTable= $('#options').DataTable({
         processing: true,
         serverSide: true,
+         dom: 'rtip',
         ajax: {
-           url: "{{ route('admin.category_management.show_category') }}",
+           url: "{{ route('admin.show_option') }}",
             data: function(d) {
                 
             }
@@ -234,7 +193,7 @@ $(document).ready(function() {
     });
     
     $(document).on("keyup", ".searchInput", function(e) {
-        $categoryTable.search($(this).val()).draw();
+        $OptionsTable.search($(this).val()).draw();
     });
     $("#club_filter").css({
         "display": "none"
@@ -245,17 +204,19 @@ $(document).ready(function() {
     $('#sort').on('change', function() {
         $column = $(this).find(':selected').data('column');
         $sort = $(this).find(':selected').data('sort');
-        $categoryTable.order([$column, $sort]).draw();
+        $OptionsTable.order([$column, $sort]).draw();
     })
     $('#pageLength').on('change',function(){
-        $categoryTable.page.len($(this).val()).draw();
+        $OptionsTable.page.len($(this).val()).draw();
     })
-    $('#pageLength').val($categoryTable.page.len());
+    $('#pageLength').val($OptionsTable.page.len());
 })
 
 
+//delete option
+// delete modal
 
-function deleteCategory(id) {
+    function delete_option(id) {
     $('#deleteId').val(id);
     const modal = new bootstrap.Modal(document.getElementById('delete-modal'));
     modal.show();
@@ -263,20 +224,25 @@ function deleteCategory(id) {
 
 $(document).ready(function () {
 
-    $(document).on('click', '.btn_delete_club_member', function () {
+            $(document).on('click', '.delete-option', function () {
+            let id = $(this).data('id');
+            $('#deleteId').val(id);
+        });
+
+    $(document).on('click', '.btn_delete_option', function () {
 
         let id = $('#deleteId').val();
         let $btn = $(this);
 
         if (!id) {
-            Swal.fire('Error', 'Invalid category ID', 'error');
+            Swal.fire('Error', 'Invalid Option ID', 'error');
             return;
         }
 
         $btn.prop('disabled', true).text('Deleting...');
 
         $.ajax({
-            url: "{{ url('admin/category_management/destroy_category') }}/" + id,
+            url: "{{ url('admin/delete_option') }}/" + id,
             type: "POST",
             data: {
                 _token: "{{ csrf_token() }}",
@@ -291,7 +257,7 @@ $(document).ready(function () {
                 Swal.fire({
                     icon: 'success',
                     title: 'Deleted!',
-                    text: 'Category deleted successfully',
+                    text: 'Option deleted successfully',
                     confirmButtonText: 'OK'
                 }).then(() => {
                     location.reload(); 
@@ -308,6 +274,21 @@ $(document).ready(function () {
     });
 });
 
+
+</script>
+
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
 
 </script>
 

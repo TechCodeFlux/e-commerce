@@ -1,7 +1,18 @@
 @extends('admin.components.app')
-
+@php
+    $hideSearch = true;
+@endphp
 @section('content')
 @section('page-title', 'Add Clubs')
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <div class="mb-4">
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -28,7 +39,9 @@
                 {{ $clubuser->id ? 'Edit' : 'Add' }} Club User
             </h4>
 
-            <form enctype="multipart/form-data"
+            <form 
+                id="clubForm"
+                enctype="multipart/form-data"
                 action="{{ $clubuser->id ? route('admin.update', $clubuser->id) : route('admin.addclub') }}"
                 method="POST">
                 @csrf
@@ -100,9 +113,9 @@
                             value="{{ old('city', $clubuser->city ?? '') }}">
                     </div>
                     {{-- Image --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label>Profile Picture</label>
-                        <input type="file" name="image" class="form-control"
+                        <input type="file" name="image" class="form-control" 
                             value="">
                     </div>
                     {{-- ZIP --}}
@@ -138,7 +151,7 @@
 
                 </div>
                 <div class="col-12 d-flex justify-content-end mt-4">
-                    <button class="btn btn-primary px-5">
+                    <button type="submit" id="submitBtn" class="btn btn-primary px-5">
                         {{ $clubuser->id ? 'Update' : 'Submit' }}
                     </button>
                 </div>
@@ -198,6 +211,26 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             stateSelect.innerHTML = '<option value="">Select State</option>';
         }
+    });
+
+});
+
+// Prevent double submit (MAIN LOGIC)
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('clubForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function () {
+
+        // Disable button immediately
+        submitBtn.disabled = true;
+
+        // Show loading spinner
+        submitBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Processing...
+        `;
     });
 
 });

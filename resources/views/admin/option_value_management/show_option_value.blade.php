@@ -1,6 +1,7 @@
 
+
 @extends('admin.components.app')
-@section('page-title', 'Categories')
+@section('page-title', 'Option Value')
 @section('content')
     <div class="mb-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -10,7 +11,7 @@
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Categories</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-sliders me-2"></i>Option Value</li>
             </ol>
         </nav>
     </div>
@@ -19,7 +20,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-md-flex gap-4 align-items-center">
-                        <div class="d-none d-md-flex">All Categories</div>
+                        <div class="d-none d-md-flex">All Option Values</div>
                         <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
@@ -44,9 +45,9 @@
                             </form>
                         </div> 
                         <div class="dropdown ms-auto">
-                            <a href="{{ route('admin.category_management.add_category_index') }}">
+                            <a href="{{ route('admin.add_option_value') }}">
                                 <button class="btn btn-primary btn-icon">
-                                        <i class="bi bi-plus-circle"></i> Add Category
+                                        <i class="bi bi-plus-circle"></i> Add Options Values
                                 </button>
                             </a>
                         </div>
@@ -55,10 +56,11 @@
                     </div>
                 </div>
                 <div class="" >
-                    <table id="club" class="table table-custom table-lg mb-0" >
+                    <table id="optionvalue" class="table table-custom table-lg mb-0 " >
                     <thead>
                       <tr>
-                         <th >Category Name</th>  
+                         <th >Option Value</th>
+                         <th >Option Name</th>  
                           <th>Status</th>
                         <th  class=" ps-5" >Action</th>
                      </tr>
@@ -114,18 +116,18 @@
 
     {{-- modal --}}
 
-        <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">Delete Category</h5>
+                <h5 class="modal-title">Delete Option Value</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
                 <input type="hidden" id="deleteId">
-                <p>Are you sure you want to delete this category?</p>
+                <p>Are you sure you want to delete this option value?</p>
             </div>
 
             <div class="modal-footer">
@@ -134,7 +136,7 @@
                 </button>
 
                 <!-- ✅ class used in JS -->
-                <button type="button" class="btn btn-sm btn-danger btn_delete_club_member">
+                <button type="button" class="btn btn-sm btn-danger btn_delete_option_value">
                     Delete
                 </button>
             </div>
@@ -143,43 +145,65 @@
     </div>
 </div>
 
+{{-- change/update status model --}}
 
-    {{-- end modal --}}
+<!-- Status Change Modal -->
+<div class="modal fade" id="status-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Change Status</h5>
+            </div>
+
+            <div class="modal-body">
+                Are you sure you want to change the status?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="confirmStatusChange">
+                    Yes, Change
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+{{-- end modal --}}
 @section('script')
 <script src="{{ url('libs/dataTable/datatables.min.js') }}"></script>
 <script src="{{ url('libs/range-slider/js/ion.rangeSlider.min.js') }}"></script>
 <script>
 
-//view single row
-$(document).on('click', '.view-category', function () {
 
-    let categoryId = $(this).data('id');
-
-    $.ajax({
-        url: "{{ route('admin.category_management.show_single', ':id') }}".replace(':id', categoryId),
-        type: "GET",
-        success: function (res) {
-            $('#modalCategoryName').text(res.name);
-        },
-        error: function () {
-            alert('Failed to load category');
-        }
-    });
-});
 
 
 
 //status toggle
     
 
+
+let categoryId;
+let status;
+let label;
+
 $(document).on('change', '.toggle-status', function () {
 
-    let categoryId = $(this).data('id');
-    let status = $(this).is(':checked') ? 1 : 0;
-    let label = $('#status-label-' + categoryId);
+    categoryId = $(this).data('id');
+    status = $(this).is(':checked') ? 1 : 0;
+    label = $('#status-label-' + categoryId);
+
+//     let statusModal = new bootstrap.Modal(document.getElementById('status-modal'));
+//     statusModal.show();
+// });
+
+// $(document).on('click', '#confirmStatusChange', function () {
 
     $.ajax({
-        url: "{{ route('admin.category_management.change-status') }}",
+        url: "{{ route('admin.option_value_change_status') }}",
         type: "POST",
         data: {
             _token: "{{ csrf_token() }}",
@@ -187,7 +211,14 @@ $(document).on('change', '.toggle-status', function () {
             status: status
         },
         success: function (res) {
-           alert('Status Changed!');
+            // alert('Status Changed!');
+            // bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
+            Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "Status changed successfully!",
+                    confirmButtonText: 'OK'
+                });
            if (status === 1) {
                     label.text('Active')
                          .removeClass('bg-secondary-subtle text-secondary')
@@ -197,6 +228,7 @@ $(document).on('change', '.toggle-status', function () {
                          .removeClass('bg-success-subtle text-success')
                          .addClass('bg-secondary-subtle text-secondary');
                 }
+                
         },
         error: function () {
             alert('Status update failed');
@@ -205,27 +237,43 @@ $(document).on('change', '.toggle-status', function () {
 
 });
 
+
+ 
+
+
+
+
+
+
+
+
+
+
+
 //table rows
 
 $(document).ready(function() {
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
-    $categoryTable= $('#club').DataTable({
+    $categoryTable= $('#optionvalue').DataTable({
         processing: true,
         serverSide: true,
+        dom: 'rtip',
         ajax: {
-           url: "{{ route('admin.category_management.show_category') }}",
+           url: "{{ route('admin.show_option_value') }}",
             data: function(d) {
                 
             }
         },
 
         columns: [
-            { data: 'name', name: 'name', orderable: false,searchable: false },
-            { data: 'status', name: 'status', orderable: false, searchable: false },
-            { data: 'action', name: 'action', orderable: false, searchable: false }
-        ],
+    { data: 'name', name: 'option_values.name' },
+    { data: 'option_name', name: 'options.name' },
+    { data: 'status', name: 'option_values.status', orderable:false, searchable:false },
+    { data: 'action', orderable:false, searchable:false }
+]
+,
 
         columnDefs: [{
             'defaultContent': '--',
@@ -253,61 +301,64 @@ $(document).ready(function() {
     $('#pageLength').val($categoryTable.page.len());
 })
 
+//delete option value
 
+$(document).on('click', '.delete-btn', function () {
+    let id = $(this).data('id');
 
-function deleteCategory(id) {
-    $('#deleteId').val(id);
-    const modal = new bootstrap.Modal(document.getElementById('delete-modal'));
-    modal.show();
-}
-
-$(document).ready(function () {
-
-    $(document).on('click', '.btn_delete_club_member', function () {
-
-        let id = $('#deleteId').val();
-        let $btn = $(this);
-
-        if (!id) {
-            Swal.fire('Error', 'Invalid category ID', 'error');
-            return;
-        }
-
-        $btn.prop('disabled', true).text('Deleting...');
-
-        $.ajax({
-            url: "{{ url('admin/category_management/destroy_category') }}/" + id,
-            type: "POST",
-            data: {
-                _token: "{{ csrf_token() }}",
-                _method: "DELETE"
-            },
-           success: function () {
-
-                const modalEl = document.getElementById('delete-modal');
-                const modalInstance = bootstrap.Modal.getInstance(modalEl);
-                if (modalInstance) modalInstance.hide();
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Deleted!',
-                    text: 'Category deleted successfully',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    location.reload(); 
-                });
-            },
-            error: function (xhr) {
-                Swal.fire('Error', 'Delete failed', 'error');
-                console.log(xhr.responseText);
-            },
-            complete: function () {
-                $btn.prop('disabled', false).text('Delete');
-            }
-        });
-    });
+    $('#deleteId').val(id);   // store id in hidden input
+    $('#delete-modal').modal('show');
 });
 
+$(document).on('click', '.btn_delete_option_value', function () {
+
+    let id = $('#deleteId').val();
+
+    $.ajax({
+        url: '/admin/delete_option_value/' + id,
+        type: 'DELETE',
+        data: {
+            _token: '{{ csrf_token() }}'
+        },
+        success: function (response) {
+
+            $('#delete-modal').modal('hide');
+
+            // SweetAlert Success Popup
+            Swal.fire({
+                icon: 'success',
+                title: 'Deleted!',
+                text: 'Option value deleted successfully',
+                confirmButtonColor: '#ff6b3d'
+            }).then(() => {
+                    location.reload(); 
+                });
+            
+
+            // If using DataTable
+            $('#your-table-id').DataTable().ajax.reload(null, false);
+        },
+        error: function () {
+            alert('Something went wrong.');
+        }
+    });
+
+});
+
+</script>
+
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
 
 </script>
 
