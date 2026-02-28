@@ -13,11 +13,14 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-         $clubid=0;
+        $clubid=0; // club_id is hardcoded for now, replace with auth()->user()->club_id when authentication is implemented
          if($request->ajax()){
             $product = Product::with('varients')
                 ->where('status',1)
-                ->where('club_id',$clubid);
+                ->where('club_id',$clubid)
+                ->whereHas('varients', function ($query) {
+                    $query->where('stock', '>', 0);
+                });
             // return DataTables::eloquent($club)
             return datatables()
         ->eloquent($product)

@@ -76,9 +76,13 @@
                     <div class="col-md-4 mb-3"></div>
                     
                     <div class="col-md-8 mb-3">
-                        <label>quantity</label>
-                        <input type="number" name="quantity" class="form-control"
-                                    value="{{ old('quantity', $quantity ?? '') }}" min="1" max="{{ $product->stock }}">
+                        <label>Quantity</label>
+                        <input type="number" 
+                            name="quantity" 
+                            id="quantityInput"
+                            class="form-control"
+                            value="{{ old('quantity', $quantity ?? 1) }}" 
+                            min="1">
                     </div>
 
                     <div class=' mb-3'> 
@@ -126,7 +130,7 @@
 
                     <div class="col-md-8 mb-3">
                         <label>Address</label>
-                        <select name="address" id="address" class="form-select">
+                        <select name="selected_address"id="address" class="form-select">
                              <option value="">select you address</option>
                             @foreach($address as $address)
                                 <option value="{{ $address->address1 }}">
@@ -140,10 +144,10 @@
                     <div class="col-md-8 mb-3">
                         <label>Address to add as new</label>
                          
-                         <textarea name="address" class="form-control">{{ old('address') }}</textarea> 
+                         <textarea name="new_address" class="form-control">{{ old('new_address') }}</textarea> 
                     </div>
 
-                    @error('address')
+                    @error('new_address')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
@@ -155,92 +159,42 @@
                             name="club_id"
                             value="{{ $clubmember->club_id }}">
                     </div>
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-
-                    <div class="col-md-8 mb-3">
-                        <label>Variant</label>
-                        <select name="varient_id" class="form-select" required>
-                            <option value="">Select your variant</option>
-                            @foreach($varients as $varient)
-                                <option value="{{ $varient->id }}">
-                                   Colour-{{ $varient->color }} - Size {{ $varient->size }} - Stock {{ $varient->stock }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
                     
 
-                    {{-- Country 
-                    <div class="col-md-4 mb-3">
-                        <label>Country</label>
-                        <select name="country" id="country" class="form-select">
-                            <option value="">Select Country</option>
-                            {{-- @foreach($countries as $country)
-                                <option value="{{ $country->id }}"
-                                    {{ old('country', $clubuser->country_id ?? '') == $country->id ? 'selected' : '' }}>
-                                    {{ $country->name }}
-                                </option>
-                            @endforeach 
-                        </select>
-                    </div>--}}
+                        <div class="col-md-8 mb-3">
+                            <label>Variant</label>
+                            <select name="varient_id" id="variantSelect" class="form-select" required>
+                                <option value="">Select your variant</option>
+                                @foreach($varients as $varient)
+                                    <option value="{{ $varient->id }}" 
+                                            data-stock="{{ $varient->stock }}">
+                                        Colour: {{ $varient->color }} 
+                                        - Size: {{ $varient->size }} 
+                                        - Available Stock: {{ $varient->stock }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    
 
-                    {{-- State
-                    <div class="col-md-4 mb-3">
-                        <label>State</label>
-                        <select name="state" id="state" class="form-select">
-                            <option value="">Select State</option>
-                        </select>
-                    </div>
 
-                    {{-- City 
-                    <div class="col-md-4 mb-3">
-                        <label>City</label>
-                        <input type="text" name="city" class="form-control"
-                        value='#'>
-                            {{-- value="{{ old('city', $clubuser->city ?? '') }}"> 
-                    </div>--}}
-
-                    {{-- ZIP 
-                    <div class="col-md-4 mb-3">
-                        <label>ZIP Code</label>
-                        <input type="text" name="zip_code" class="form-control"
-                        value='#'>
-                            {{-- value="{{ old('zip_code', $clubuser->zip_code ?? '') }}"> 
-                    </div> --}}
-
-                    {{-- Status --}}
-                     {{-- <div class="col-md-4 mb-4">
-                                <label class="form-label d-block">Status</label>
-
-                                <input type="hidden" name="status" value="0">
-
-                                <div class="form-check form-switch">
-                                    <input
-                                        class="form-check-input"
-                                        type="checkbox"
-                                        name="status"
-                                        id="statusSwitch"
-                                        value="1"
-                                        {{ old('status', $clubmember->status ?? 1) ? 'checked' : '' }}
-                                    >
-                                    <label class="form-check-label" for="statusSwitch" id="statusLabel">
-                                        {{ old('status', $clubmember->status ?? 1) ? 'Active' : 'Inactive' }}
-                                    </label>
-                                </div> --}}
                             </div>
                             <div class="text-center mt-9">
                                 <button class="btn btn-primary px-5">submit
-                        {{-- {{ $clubuser->id ? 'Update' : 'Submit' }} --}}
+                        
                                 </button>
                             </div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    @foreach ($errors->all() as $error)
+                                        <div>{{ $error }}</div>
+                                    @endforeach
+                                </div>
+                            @endif
 
                 </div>
 
-                {{-- <div class="text-center mt-9">
-                    <button class="btn btn-primary px-5">submit
-                      
-                    </button>
-                </div> --}}
+
 
             </form>
         </div>
@@ -253,11 +207,6 @@
     const statusSwitch = document.getElementById('statusSwitch');
     const statusLabel = document.getElementById('statusLabel');
 
-    /*if (statusSwitch) {
-        statusSwitch.addEventListener('change', function () {
-            statusLabel.innerText = this.checked ? 'Active' : 'Inactive';
-        });
-    }*/
 });
 
 
@@ -303,7 +252,19 @@ document.addEventListener('DOMContentLoaded', function () {
     if (countrySelect.value) {
         loadStates(countrySelect.value);
     }
+    document.getElementById('variantSelect').addEventListener('change', function() {
+    let selectedOption = this.options[this.selectedIndex];
+    let stock = selectedOption.getAttribute('data-stock');
+    let quantityInput = document.getElementById('quantityInput');
+
+    if (stock) {
+        quantityInput.setAttribute('max', stock);
+        quantityInput.value = 1; // reset quantity
+    }
+    });
+
 });
+
 </script>
 @endsection
 @endsection

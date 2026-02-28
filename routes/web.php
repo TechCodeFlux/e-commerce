@@ -113,7 +113,7 @@ Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controller
 
     Route::get('order/{id}',[OrderController::class,'cartorder'])->name('order');
 
-    Route::post('placeorder',[ClubmemberDashboardController::class,'placeorder'])->name('placeorder');
+    Route::post('placeorder',[OrderController::class,'placeorder'])->name('placeorder');
 
     Route::get('vieworder',[OrderController::class,'index'])->name('vieworder');
     

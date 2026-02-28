@@ -21,14 +21,14 @@ class OrderController extends Controller
     public function index(Request $request)
     {
     $clubid = 1;
-    $memberId = 1; 
+    $clubmemberId = 1; // club_member_id is hardcoded for now, replace with auth()->id() when authentication is implemented
 
     if ($request->ajax()) {
-
+        
         $orders = Order::with('product')
             // ->where('order_status_id', 1)
             ->where('club_id', $clubid)
-            ->where('club_member_id', $memberId); // club_member_id is hardcoded for now, replace with auth()->id() when authentication is implemented
+            ->where('club_member_id', $clubmemberId); 
 
         return datatables()
             ->eloquent($orders)
@@ -37,7 +37,7 @@ class OrderController extends Controller
 
             ->addColumn('description', fn ($row) => $row->product->description ?? '--')
 
-            ->addColumn('stock', fn ($row) => $row->product->stock ?? 0)
+            ->addColumn('stock', fn ($row) => $row->varient->stock ?? 0)
 
             //->addColumn('quantity', fn ($row) => $row->order->quantity )
 
@@ -53,7 +53,12 @@ class OrderController extends Controller
             ->addColumn('email', fn ($row) => $row->clubmember->email ?? '--')
             ->addColumn('phone', fn ($row) => $row->clubmember->contact ?? '--')
 
-            ->addColumn('address', fn ($row) => $row->address->address1 ?? '--')
+            ->addColumn('address', function ($row) {
+                  return optional($row->clubmember->address)->address1 ?? '--';
+            })
+
+            ->addColumn('size', fn ($row) => $row->varient->size ?? '--')
+            ->addColumn('color', fn ($row) => $row->varient->color ?? '--')
 
             //->addColumn('username', fn ($row) => $row->clubmember->name ?? '--')
 
@@ -88,6 +93,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        
         $request->validate([
                 'quantity' => 'required',
                 'email'    => 'required|email',
@@ -95,23 +101,23 @@ class OrderController extends Controller
             ]);
 
             // Insert into orders table
-            $order = new Order();
-            $order->quantity        = $request->quantity;
-            $order->product_id      = $request->product_id;
-            $order->club_member_id  = $request->clubmember_id; // club_member_id is expected to be passed in the request, replace with auth()->id() when authentication is implemented
-            $order->club_id         = $request->club_id;
-            $order->order_status_id = 1;
-            $order->microsite_id    = 1;
-            $order->save();
+            $order = Order::create([
+                    'quantity'        => $request->quantity,
+                    'product_id'      => $variant->product_id,
+                    'club_member_id'  => $request->clubmember_id,
+                    'club_id'         => $request->club_id,
+                    'varient_id'      => $variant->id,
+                    'order_status_id' => 1,
+                    'microsite_id'    => 1,
+                ]);
 
-            // Insert into order_items table
-            $order_item = new OrderItem();
-            $order_item->quantity      = $request->quantity;
-            $order_item->order_id      = $order->id;   // ✅ THIS IS THE FIX
-            $order_item->microsite_id  = $order->microsite_id;
-            $order_item->product_id    = $request->product_id;
-            $order_item->status        = $order->order_status_id;
-            $order_item->save();
+            OrderItem::create([
+                'quantity'     => $request->quantity,
+                'order_id'     => $order->id,
+                'microsite_id' => $order->microsite_id,
+                'product_id'   => $request->product_id,
+                'status'       => $order->order_status_id,
+            ]);
 
             return redirect()
                 ->route('clubmember.viewproduct')
@@ -153,21 +159,18 @@ class OrderController extends Controller
 
     public function cartorder($id)
    {
-       
+        $clubmemberId = 1; // club_member_id is hardcoded for now, replace with auth()->id() when authentication is implemented 
         $product = Product::findOrFail($id);       
         $cart = Cart::where('product_id', $product->id)
-                    ->where('clubmember_id', 1)
+                    ->where('clubmember_id', $clubmemberId)
                     ->first();
         $varients=Varient::where('product_id', $product->id)->get();
 
         $quantity = $cart ? $cart->quantity : 1;
 
-            $clubmember = ClubMember::findOrFail(1);  // clubmember_id is hardcoded for now, replace with auth()->id() when authentication is implemented
+        $clubmember = ClubMember::findOrFail($clubmemberId); 
 
         $address = Address::where('id', $clubmember->address_id)->get();
-        
-        
-
             
             // dd($address);
         return view('clubmember.product.booking', [
@@ -179,6 +182,44 @@ class OrderController extends Controller
             ]);
         }
 
+   public function placeorder(Request $request)
+        {
+            $request->validate([
+                'varient_id' => 'required|exists:varients,id',
+                'quantity'   => 'required|integer|min:1',
+                'email'      => 'required|email',
+                'phone'      => 'required|digits:10',
+                'product_id' => 'required|exists:products,id',
+                'clubmember_id' => 'required|exists:club_members,id',
+                'club_id' => 'required|exists:clubs,id',
+            ]);
 
+                $variant = Varient::findOrFail($request->varient_id);
 
+                $order = Order::updateOrCreate([
+                    'quantity'        => $request->quantity,
+                    'product_id'      => $variant->product_id,
+                    'club_member_id'  => $request->clubmember_id,
+                    'club_id'         => $request->club_id,
+                    'varient_id'      => $variant->id,
+                    'order_status_id' => 1,
+                    'microsite_id'    => 1,
+                ]);
+
+                $varient=Varient::where('id', $variant->id)->update([
+                    'stock' => $variant->stock - $request->quantity,
+                ]);
+
+            OrderItem::updateOrCreate([             
+                'quantity'     => $request->quantity,
+                'order_id'     => $order->id,
+                'microsite_id' => $order->microsite_id,
+                'product_id'   => $request->product_id,
+                'status'       => $order->order_status_id,
+            ]);
+
+            return redirect()
+                ->route('clubmember.viewproduct')
+                ->with('success', 'Order added successfully!');
+        }
 }

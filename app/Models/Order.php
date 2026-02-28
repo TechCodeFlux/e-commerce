@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use SoftDeletes;
+        protected $fillable = [
+            'quantity',
+            'product_id',
+            'club_member_id',
+            'club_id',
+            'varient_id',
+            'order_status_id',
+            'microsite_id',
+        ];
  
     public function product()
     {
@@ -21,7 +30,7 @@ class Order extends Model
 
     public function address()
     {
-        return $this->hasOne(Address::class, 'club_member_id', 'club_member_id');
+        return $this->hasOne(Address::class,);
     }
 
     public function microsite()

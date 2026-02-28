@@ -15,9 +15,8 @@ class CartController extends Controller
      */
     public function index()
     {
-         
-         $cartItems = Cart::where('clubmember_id', 1)->get();        // clubmember_id is hardcoded for now, replace with auth()->id() when authentication is implemented
-        
+        $clubmemberId = 1; // clubmember_id is hardcoded for now, replace with auth()->id() when authentication is implemented 
+         $cartItems = Cart::where('clubmember_id', $clubmemberId)->get();      
          return view('clubmember.layouts.topbar', compact('cartItems'));
     }
 
@@ -35,8 +34,8 @@ class CartController extends Controller
     public function store(Request $request,$id)
     {
         $product = Product::findOrFail($id);
-
-        $cart = Cart::where('clubmember_id', 1)  // clubmember_id is hardcoded for now, replace with auth()->id() when authentication is implemented
+        $clubmemberId = 1; // clubmember_id is hardcoded for now, replace with auth()->id() when authentication is implemented
+        $cart = Cart::where('clubmember_id', $clubmemberId)
             ->where('product_id', $product->id)
             ->first();
 
@@ -56,7 +55,7 @@ class CartController extends Controller
             'image' => $product->image,
             'description' => $product->description,
             'quantity' => 1,
-            'clubmember_id' => 1,
+            'clubmember_id' => $clubmemberId,
             'microsite_id' => $product->microsite_id,
             'product_id' => $product->id,
             'club_id' => $product->club_id,

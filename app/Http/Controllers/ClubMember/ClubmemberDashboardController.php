@@ -16,8 +16,9 @@ class ClubmemberDashboardController extends Controller
 {
     public function index()
     {
-        
-        return view('clubmember.dashboard',);
+        $clubmemberId = 1; // clubmember_id is hardcoded for now, replace with auth()->id() when authentication is implemented 
+         $clubmember = ClubMember::where('id', $clubmemberId)->first();
+        return view('clubmember.dashboard', compact('clubmember'));
     }   
 
 
@@ -59,9 +60,9 @@ class ClubmemberDashboardController extends Controller
    public function booking($id)
    {
     $product = Product::findOrFail($id);
-
+    $clubmemberId = 1; // clubmember_id is hardcoded for now, replace with auth()->id() when authentication is implemented
    $cart = Cart::where('product_id', $product->id)
-            ->where('clubmember_id','1')
+            ->where('clubmember_id',$clubmemberId)
             ->first();
 
     if ($cart === null) {

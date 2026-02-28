@@ -62,6 +62,8 @@
                             <th>Description</th>
                             <th>quantity</th>
                             <th>stock</th>
+                            <th>size</th>
+                            <th>color</th>
                             <th>user name</th>
                             <th>address</th>
                             <th>email</th>
@@ -134,6 +136,8 @@ $(document).ready(function() {
                             
                     }
                 },
+                { data: 'size', className: 'text-center' },
+                {data:'color', classname:'text-center' },
                 {data:'name', classname:'text-center' },
                 { data :'address',classname:'text-center'},
                 { data :'email',classname:'text-center'},
@@ -170,28 +174,7 @@ $(document).ready(function() {
     })
     $('#pageLength').val($orderTable.page.len());
 })
-//delete club member
-// $('table').off('click').on('click','.delete-club-member',function(){
-//     var href=$(this).data('href');
-//     $('.btn_delete_club_member').click(function(){
-//         $.ajax({
-//             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}, 
-//             type: 'DELETE',
-//             dataType : 'JSON',
-//             url : href,
-//             success:function(response){
-//                 $('#delete-modal').modal('hide');
-//                 $('#club').DataTable().ajax.reload();
-//                 Swal.fire({
-//                     icon: 'success',
-//                     title: 'Member deleted successfully',
-//                     footer: ''
-//                 })
-//             }  
-//         })
-//     })
 
-// })
 </script>
 @if (session('success'))
     <div class="alert alert-success" id="successAlert">
