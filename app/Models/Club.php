@@ -28,4 +28,9 @@ class Club extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function members()
+    {
+        return $this->hasMany(ClubMember::class);
+    }
 }

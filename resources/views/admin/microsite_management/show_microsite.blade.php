@@ -229,6 +229,7 @@ $(document).ready(function() {
     table = $('#micrositeTable').DataTable({
         processing: true,
         serverSide: true,
+        scrollX: true,
         dom: 'rtip',
         ajax: { 
             url: "{{ route('admin.show_microsites', $club->id) }}",

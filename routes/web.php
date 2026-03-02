@@ -102,6 +102,8 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('edit_microsite/{id}',[MicrositeController::class,'edit'])->name('editmicrosite');//edit microsite form
     Route::put('microsite_update/{microsite}', [MicrositeController::class, 'update'])->name('microsite_update');//update microsite data
     Route::get('microsite_show/{microsite}', [MicrositeController::class, 'show'])->name('microsite_show');//show microsite details modal
+    //microsite link
+    Route::get('/microsite-access/{microsite}',[MicrositeController::class, 'access'])->name('microsite.access');
     //PRODUCT-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     Route::get('product_management/form_products_index', [ProductController::class, 'form_products_index'])->name('product_management.form_products_index');
     Route::post('product_management/add_products', [ProductController::class, 'store'])->name('product_management.add_products');

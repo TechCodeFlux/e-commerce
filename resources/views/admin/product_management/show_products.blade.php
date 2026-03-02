@@ -345,6 +345,7 @@ $(document).ready(function() {
     $productTable= $('#admin').DataTable({
         processing: true,
         serverSide: true,
+        scrollX: true,
         ajax: {
            url: "{{ route('admin.product_management.show_products') }}",
             data: function(d) {

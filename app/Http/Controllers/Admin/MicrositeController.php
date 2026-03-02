@@ -7,9 +7,12 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Microsite;
 use App\Models\Club;
+use App\Models\ClubMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 // use Illuminate\Support\Facades\Hash;
+use App\Mail\MicrositeMail;
+use Illuminate\Support\Facades\Mail;
 
 class MicrositeController extends Controller
 {
@@ -131,7 +134,7 @@ class MicrositeController extends Controller
 
         $password = Str::random(6);
 
-        Microsite::create([
+        $microsite = Microsite::create([
             'name'   => $validated['name'],
             'description'   => $validated['description'],
             'start_date'   => $validated['start_date'],
@@ -142,10 +145,39 @@ class MicrositeController extends Controller
             // 'password'    => Hash::make($password),
             'status' => $validated['status'] ?? 0,
         ]);
+        //Generate URL
+        $accessUrl = route('admin.microsite.access', $microsite->id);
+
+        // $members = ClubMember::where('club_id', $validated['club_id'])->get();
+
+        $emails = ClubMember::where('club_id', $validated['club_id'])
+            ->whereNotNull('email')
+            ->distinct()
+            ->pluck('email');
+
+            // dd($emails);
+
+        foreach ($emails as $email)
+        {
+            $isSaleStarted = now()->greaterThanOrEqualTo($microsite->start_date);
+
+            Mail::to($email)->send(
+                new MicrositeMail(
+                    $email,
+                    $accessUrl,
+                    $password,
+                    'create', // or 'update' / 'url'
+                    $microsite->name,
+                    $isSaleStarted,
+                    $microsite->start_date
+                )
+            );
+        }
 
         return redirect()
             ->route('admin.show_microsites', $validated['club_id'])
-            ->with('success', 'Microsite registered successfully! ');
+            ->with('success', 'Microsite created! Access URL: ' . $accessUrl);
+            // ->with('success', 'Microsite registered successfully! ');
             // ->with('success', 'Microsite registered successfully! Password: ' . $password);
     }
 
