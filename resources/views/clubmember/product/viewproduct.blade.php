@@ -69,41 +69,43 @@
         </nav>
     </div>
 
-    <div class="content">
-        <!-- Toolbar Section -->
-        <div class="card border-0 shadow-sm mb-4 rounded-3">
-            <div class="card-body">
-                <div class="row align-items-center g-3">
-                    <div class="col-md-3">
-                        <h5 class="mb-0 fw-bold">All Products</h5>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="row g-2">
-                            <div class="col-7">
-                                <select class="form-select border-light shadow-none bg-light" id="sort">
-                                    <option value="" selected disabled>Sort by</option>
-                                    <option data-sort="asc" data-column="0" value="">Name A-Z</option>
-                                    <option data-sort="desc" data-column="0" value="">Name Z-A</option>
-                                </select>
-                            </div>
-                            <div class="col-5">
-                                <select class="form-select border-light shadow-none bg-light" id="pageLength">
-                                    <option value="12">12 Items</option>
-                                    <option value="24">24 Items</option>
-                                    <option value="48">48 Items</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="input-group border rounded-pill overflow-hidden bg-light border-light shadow-none">
-                            <span class="input-group-text bg-transparent border-0 pe-0">
-                                <i class="bi bi-search text-muted small"></i>
-                            </span>
-                            <input type="text" class="form-control border-0 bg-transparent searchInput shadow-none" placeholder="Search products...">
-                        </div>
-                    </div>
-                </div>
+    <div class="col-md-12">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                    <div class="d-md-flex gap-4 align-items-center">                                
+                                    <div class="d-none d-md-flex">My Orders</div>
+                                        <div class="d-md-flex gap-4 align-items-center">
+                                            <form class="mb-3 mb-md-0">
+                                                <div class="row g-3">
+                                                    <div class="col-md-7">
+                                                        <select class="form-select" id="sort">
+                                                            <option>Sort by</option>
+                                                            <option data-sort="asc" data-column="0" value="">Name A-z</option>
+                                                            <option data-sort="desc" data-column="0" value=""> Name Z-a
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <select class="form-select" id="pageLength">
+                                                        <option value="10">10</option>
+                                                        <option value="20">20</option>
+                                                        <option value="30">30</option>
+                                                        <option value="40">40</option>
+                                                        <option value="50">50</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div> 
+                                        {{-- <div class="position-relative mt-3" style="min-width: 250px;">
+                                            <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                                            <input type="text" class="form-control ps-5 rounded-pill border-light-subtle shadow-none searchInput" placeholder="Search orders...">
+                                        </div> --}}
+                                    </div>
+                                </div>
             </div>
         </div>
 
@@ -265,7 +267,7 @@ $(document).ready(function() {
 });
 </script>
 
-@if (session('success'))
+{{-- @if (session('success'))
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
         <div id="successAlert" class="alert alert-success shadow-lg border-0 d-flex align-items-center mb-0" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>
@@ -282,6 +284,18 @@ $(document).ready(function() {
             }
         }, 4000);
     </script>
+@endif --}}
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
 @endif
 
 @endsection

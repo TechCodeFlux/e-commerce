@@ -38,7 +38,7 @@ class Order extends Model
         return $this->belongsTo(Microsite::class);
     }
 
-    public function status()
+    public function order_status()
     {
         return $this->belongsTo(OrderStatus::class, 'order_status_id');
     }

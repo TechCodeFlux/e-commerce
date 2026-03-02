@@ -45,7 +45,7 @@
                                                 
                                             <h2 class="fw-bold mb-0">Profile</h2>
 
-                                                <button onclick="#" id="btn-settings"
+                                                <button onclick="window.location.href='{{ route('admin.clubmember.vieworder', $clubmember->id) }}'" id="btn-settings"
                                                     class="btn border-black m-2 bg-primary text-bg-secondary"
                                                     type="button">
                                                     <i class="bi bi-receipt me-2 "></i> Order History

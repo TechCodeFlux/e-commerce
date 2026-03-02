@@ -21,10 +21,12 @@ use App\Http\Controllers\Admin\OptionController;
 use App\Http\Controllers\Admin\OptionValueController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\VariantController;
+use App\Http\Controllers\admin\ClubOrderController;
 
-use App\Http\Controllers\ClubMember\ProductController;
+use App\Http\Controllers\clubmember\ClubmemberProductController;
 use App\Http\Controllers\ClubMember\CartController;
-use App\Http\Controllers\ClubMember\OrderController;
+use App\Http\Controllers\ClubMember\ClubmemberOrderController;
+
 
 
 
@@ -83,6 +85,13 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('edit_option_values/{id}',[OptionValueController::class,'edit'])->name('editoptionvalue');
     Route::put('update_option_value/{id}', [OptionValueController::class, 'update'])->name('updateoptionvalue'); //update option value data to table (submit form)
     Route::delete('delete_option_value/{id}', [OptionValueController::class, 'destroy'])->name('deleteoptionvalue'); //delete option value
+ 
+    // club order
+    Route::get('vieworder/{id}',[ClubOrderController::class,'show'])->name('club.vieworder');
+    Route::post('change_status/{id}', [ClubOrderController::class, 'changeStatus'])->name('clubs.changestatus');
+
+    // clubmember order
+    // Route::get('vieworder/{id}',[ClubmemberOrderController::class,'index'])->name('clubmember.vieworder');
 
 
     // vaients
@@ -101,7 +110,7 @@ Route::get('/clubmember', function () {return view('clubmember.dashboard');});
 Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controllers\ClubMember')->group(function () {
     Auth::routes(['register' => false]); 
 
-    Route::get('viewproduct', [ProductController::class, 'index'])->name('viewproduct');
+    Route::get('viewproduct', [ClubmemberProductController::class, 'index'])->name('viewproduct');
 
     Route::get('addcart/{id}', [CartController::class, 'store'])->name('addcart');
 
@@ -111,11 +120,11 @@ Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controller
 
     // booking the product
 
-    Route::get('order/{id}',[OrderController::class,'cartorder'])->name('order');
+    Route::get('order/{id}',[ClubmemberOrderController::class,'cartorder'])->name('order');
 
-    Route::post('placeorder',[OrderController::class,'placeorder'])->name('placeorder');
+    Route::post('placeorder',[ClubmemberOrderController::class,'placeorder'])->name('placeorder');
 
-    Route::get('vieworder',[OrderController::class,'index'])->name('vieworder');
+    Route::get('vieworder',[ClubmemberOrderController::class,'index'])->name('vieworder');
     
 });
 
@@ -131,9 +140,9 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
 
      Route::get('/', [ClubDashboardController::class, 'index'])->name('dashboard');
 
-     Route::get('vieworder',[ClubDashboardController::class,'vieworder'])->name('vieworder');
+    //  Route::get('vieworder',[ClubOrderController::class,'show'])->name('vieworder');
 
-     Route::post('change-status', [ClubDashboardController::class, 'changeStatus'])->name('change-status');
+     Route::post('change-status', [ClubOrderController::class, 'changeStatus'])->name('change-status');
      
  });
 // Auth::routes();

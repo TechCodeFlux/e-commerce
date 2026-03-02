@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\ClubMember;
+namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
-
+use App\Models\OrderStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -13,7 +13,7 @@ use App\Models\Varient;
 use Illuminate\Http\Request;
 
 
-class OrderController extends Controller
+class ClubmemberOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,7 +25,7 @@ class OrderController extends Controller
 
     if ($request->ajax()) {
         
-        $orders = Order::with('product')
+        $orders = Order::with('product', 'varient', 'clubmember', 'order_status')
             // ->where('order_status_id', 1)
             ->where('club_id', $clubid)
             ->where('club_member_id', $clubmemberId); 
@@ -38,13 +38,13 @@ class OrderController extends Controller
             ->addColumn('description', fn ($row) => $row->product->description ?? '--')
 
             ->addColumn('stock', fn ($row) => $row->varient->stock ?? 0)
+            ->editColumn('created_at', fn($m) => $m->created_at->format('d M Y'))
 
             //->addColumn('quantity', fn ($row) => $row->order->quantity )
 
             ->addColumn('image', function ($row) {
                 if ($row->product && $row->product->image) {
-                    return '<img src="'.asset('storage/'.$row->product->image).'"
-                             width="60" height="60" class="rounded">';
+                    return asset('storage/' . $row->product->image);
                 }
                 return '<span class="text-muted">No Image</span>';
                 })
@@ -60,20 +60,8 @@ class OrderController extends Controller
             ->addColumn('size', fn ($row) => $row->varient->size ?? '--')
             ->addColumn('color', fn ($row) => $row->varient->color ?? '--')
 
-            //->addColumn('username', fn ($row) => $row->clubmember->name ?? '--')
-
-            // ->addColumn('action', function ($row) {
-            //     return '
-            //     <a href="'.route('clubmember.addcart', $row->product_id).'" class="btn btn-sm">
-            //         <i class="fas fa-shopping-cart text-success"></i>
-            //     </a>
-
-            //     <a href="'.route('clubmember.booking', $row->product_id).'" class="btn btn-sm">
-            //         <i class="fas fa-credit-card"></i>
-            //     </a>';
-            // })
-
-            ->rawColumns(['image','action'])
+            ->addColumn('order_status', fn ($row) => optional($row->order_status)->status ?? '--')
+            ->rawColumns(['image','action','order_status'])
             ->make(true);
     }
 
@@ -184,6 +172,7 @@ class OrderController extends Controller
 
    public function placeorder(Request $request)
         {
+            $micrositeId = 1; // Assuming microsite_id is 1 for now, replace with actual value as needed
             $request->validate([
                 'varient_id' => 'required|exists:varients,id',
                 'quantity'   => 'required|integer|min:1',
@@ -203,7 +192,7 @@ class OrderController extends Controller
                     'club_id'         => $request->club_id,
                     'varient_id'      => $variant->id,
                     'order_status_id' => 1,
-                    'microsite_id'    => 1,
+                    'microsite_id'    => $micrositeId,
                 ]);
 
                 $varient=Varient::where('id', $variant->id)->update([

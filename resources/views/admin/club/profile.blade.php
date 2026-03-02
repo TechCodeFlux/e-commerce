@@ -255,7 +255,7 @@
                 @endif
              {{--end of success modal in javascript  --}}
 
-
+@endsection
 
 
         </div>
