@@ -27,4 +27,5 @@ public function club()
 {
     return $this->belongsTo(\App\Models\Club::class);
 }
+
 }

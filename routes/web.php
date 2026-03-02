@@ -90,6 +90,8 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
     // orders
     Route::get('club/orders/{club}', [OrderController::class, 'index'])
     ->name('clubs.orders');
+    Route::delete('orders/{order}', [OrderController::class, 'destroy'])
+        ->name('orders.destroy');
 });
 
 
