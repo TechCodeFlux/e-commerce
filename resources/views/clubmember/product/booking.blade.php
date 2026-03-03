@@ -61,6 +61,7 @@
                     
                     <div class="col-md-4 mb-3 text-center">
                     <img src="{{ asset('storage/' . $product->image) }}"
+                    id="productImage"
                         width="100" height="100"
                         class="rounded">
                     </div>
@@ -163,17 +164,16 @@
 
                         <div class="col-md-8 mb-3">
                             <label>Variant</label>
-                            <select name="varient_id" id="variantSelect" class="form-select" required>
-                                <option value="">Select your variant</option>
-                                @foreach($varients as $varient)
-                                    <option value="{{ $varient->id }}" 
-                                            data-stock="{{ $varient->stock }}">
-                                        Colour: {{ $varient->color }} 
-                                        - Size: {{ $varient->size }} 
-                                        - Available Stock: {{ $varient->stock }}
-                                    </option>
-                                @endforeach
-                            </select>
+<select name="varient_id" id="variantSelect" class="form-select" required>
+    <option value="">Select your variant</option>
+    @foreach($varients as $varient)
+        <option value="{{ $varient->id }}" 
+                data-stock="{{ $varient->stock }}"
+                data-image="{{ asset('storage/' . $varient->image) }}">
+            Colour: {{ $varient->color }} - Size: {{ $varient->size }} - Available Stock: {{ $varient->stock }}
+        </option>
+    @endforeach
+</select>
                         </div>
                     
 
@@ -268,3 +268,6 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 @endsection
 @endsection
+
+
+<!-- working on it not work -->

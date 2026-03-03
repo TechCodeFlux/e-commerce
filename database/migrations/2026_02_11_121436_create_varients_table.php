@@ -16,11 +16,13 @@ return new class extends Migration
             $table->string('size');
             $table->string('color');
             $table->integer('stock');
+            $table->string('image')->nullable();
             $table->unsignedBigInteger('product_id');
             $table->boolean('status')->default('0');
             $table->softdeletes();
             $table->timestamps();
-        });
+           
+         });
     }
 
     /**

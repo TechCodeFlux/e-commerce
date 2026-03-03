@@ -13,14 +13,13 @@ class ClubmemberProductController extends Controller
      */
     public function index(Request $request)
     {
-        $clubid=0; // club_id is hardcoded for now, replace with auth()->user()->club_id when authentication is implemented
+         $microsite = 1; // change this to dynamic microsite ID as needed 
          if($request->ajax()){
             $product = Product::with('varients')
-                ->where('status',1)
-                ->where('club_id',$clubid)
+                ->where('microsite_id',$microsite)
                 ->whereHas('varients', function ($query) {
-                    $query->where('stock', '>', 0);
-                });
+            $query->where('stock', '>', 0);
+        });
             // return DataTables::eloquent($club)
             return datatables()
         ->eloquent($product)

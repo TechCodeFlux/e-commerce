@@ -45,11 +45,12 @@
                                                 
                                             <h2 class="fw-bold mb-0">Profile</h2>
 
-                                                <button onclick="window.location.href='{{ route('admin.clubmember.vieworder', $clubmember->id) }}'" id="btn-settings"
+                                              <a href="{{ route('admin.clubmember.vieworder', $clubmember->id) }}" id="btn-settings"
                                                     class="btn border-black m-2 bg-primary text-bg-secondary"
                                                     type="button">
                                                     <i class="bi bi-receipt me-2 "></i> Order History
-                                                </button>
+                                                </a>
+
                                         </div>
                                         {{-- <button onclick="switchTab('settings')" id="btn-settings" class="nav-link text-secondary rounded-4 fw-bold py-2" type="button">
                                             <i class="fa-solid fa-gears me-2"></i>Settings

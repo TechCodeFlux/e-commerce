@@ -24,9 +24,9 @@ class Order extends Model
     }
 
     public function clubMember()
-    {
-        return $this->belongsTo(ClubMember::class);
-    }
+{
+    return $this->belongsTo(ClubMember::class, 'club_member_id');
+}
 
     public function address()
     {

@@ -13,7 +13,7 @@ use App\Models\Varient;
 use Illuminate\Http\Request;
 
 
-class ClubmemberOrderController extends Controller
+class ClubmemberOrderControllers extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -59,6 +59,12 @@ class ClubmemberOrderController extends Controller
 
             ->addColumn('size', fn ($row) => $row->varient->size ?? '--')
             ->addColumn('color', fn ($row) => $row->varient->color ?? '--')
+             ->addColumn('image', function ($row) {
+                if ($row->varient && $row->varient->image) {
+                    return asset('storage/' . $row->varient->image);
+                }
+                return '<span class="text-muted">No Image</span>';
+                })
 
             ->addColumn('order_status', fn ($row) => optional($row->order_status)->status ?? '--')
             ->rawColumns(['image','action','order_status'])
