@@ -43,9 +43,14 @@ public function store(Request $request)
 {
     $request->validate([
         'variants' => 'required|array|min:1',
-        'variants.*.color' => 'required',
-        'variants.*.size'  => 'required',
-        'variants.*.stock'    => 'required|integer|min:0',
+
+    'variants.*.color' => 'required|string',
+    'variants.*.size'  => 'required|string',
+    'variants.*.stock' => 'required|integer|min:0',
+   'variants' => 'required|array|min:1',
+    'variants.*.image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+], [
+    'variants.*.image.required' => 'Variant image is required.',
     ]);
 
    $productData = session('product');
@@ -61,15 +66,23 @@ public function store(Request $request)
     session()->forget('product');
 
 
-    foreach ($request->variants as $variant) {
+   foreach ($request->variants as $index => $variant) {
 
-        Varient::create([
-            'color' => $variant['color'],   // store ID
-            'size'  => $variant['size'],    // store ID
-            'stock' => $variant['stock'],   
-            'product_id' => $product->id,
-        ]);
+    $imagePath = null;
+
+    if ($request->hasFile("variants.$index.image")) {
+        $imagePath = $request->file("variants.$index.image")
+                             ->store('varients', 'public');
     }
+
+    Varient::create([
+        'color' => $variant['color'],
+        'size'  => $variant['size'],
+        'stock' => $variant['stock'],
+        'image' => $imagePath,   // ← added
+        'product_id' => $product->id,
+    ]);
+}
 
     return redirect()
         ->route('admin.product_management.show_products')
@@ -108,6 +121,7 @@ public function update(Request $request, $id)
         'variants.*.color' => 'required',
         'variants.*.size'  => 'required',
         'variants.*.stock' => 'required|integer|min:0',
+        
     ]);
 
     // ✅ Get existing product directly from DB
@@ -132,13 +146,20 @@ public function update(Request $request, $id)
     Varient::where('product_id', $id)->delete();
 
     // ✅ Insert new variants
-    foreach ($request->variants as $variant) {
+  foreach ($request->variants as $index => $variant) {
+
+        $imagePath = null;
+
+        if ($request->hasFile("variants.$index.image")) {
+            $image = $request->file("variants.$index.image");
+            $imagePath = $image->store('variant_images', 'public');
+        }
 
         Varient::create([
-            'color'      => $variant['color'],
-            'size'       => $variant['size'],
-            'stock'      => $variant['stock'],
-            'product_id' => $id,
+            'color'  => $variant['color'],
+            'size'   => $variant['size'],
+            'stock'  => $variant['stock'],
+            'image'  => $imagePath,
         ]);
     }
 
