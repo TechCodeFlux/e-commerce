@@ -141,7 +141,7 @@ $(document).ready(function() {
                         Color: ${row.color || 'N/A'}
                     </span>
                     <span class="${stockClass} fw-semibold">
-                        ${stockText}
+                         
                     </span>
                 </div>
             </div>
@@ -235,5 +235,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+@endif
 @endsection
 @endsection

@@ -90,6 +90,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
 
     // clubmember order
     Route::get('club/member/vieworder/{id}',[ClubMemberOrderController::class,'show'])->name('clubmember.vieworder');
+    Route::get('club/member/conformedorder/{id}',[ClubMemberOrderController::class,'update'])->name('clubmember.orderstatus');
 
     // vaients
     // Route::get('show_variant', [VariantController::class, 'index'])->name('show_variant');//view variants

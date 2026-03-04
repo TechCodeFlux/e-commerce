@@ -100,8 +100,9 @@ class ClubOrderController extends Controller
         return '<span class="badge bg-success">Completed</span>';
     }
 
-    return '
-        <form action="' . route('admin.clubs.changestatus', $row->id) . '" 
+    return optional($row->order_status)->id < 6
+       ?
+       ' <form action="' . route('admin.clubs.changestatus', $row->id) . '" 
               method="POST" 
               class="d-inline">
               
@@ -111,7 +112,8 @@ class ClubOrderController extends Controller
                 ' . $nextstatus->status . '
             </button>
         </form>
-    ';
+    ':'' ;
+    
 })
             ->rawColumns(['image','action','order_status'])
             ->make(true);
