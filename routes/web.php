@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\OptionValueController;
 use App\Http\Controllers\Admin\MicrositeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VarientController;
+
 //arjun
 Route::get('/', function () {return view('club.auth.login');})->name('club.login');
 // Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
@@ -126,9 +127,29 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('varient_management/show_single/{id}', [VarientController::class, 'single_show'])->name('varient_management.show_single');
     Route::post('varient_management/change-status', [VarientController::class, 'changeStatus'])->name('varient_management.change-status');
     Route::post('varient/get-option-values',[VarientController::class, 'getOptionValues'])->name('varient_management.get_option_values');
+    //microsite link
+    Route::get('/microsite-access/{microsite}',[MicrositeController::class, 'access'])->name('microsite.access');
+
 });
 
+/*
+|--------------------------------------------------------------------------
+| PUBLIC MICROSITE ROUTES
+|--------------------------------------------------------------------------
+*/
 
+// Microsite login page
+Route::get('/microsite/{slug}/login', [MicrositeController::class, 'showLogin'])
+    ->name('microsite.login');
+
+// Microsite login submit
+Route::post('/microsite/{slug}/login', [ClubMemberController::class, 'login'])
+    ->name('microsite.login.submit');
+
+// After login → microsite home
+Route::get('/microsite/{microsite}/home', function () {
+    return view('clubmember.microsite_home');
+})->middleware('auth:clubmember')->name('microsite.home');
 
 //clubmember
 
@@ -155,7 +176,5 @@ Route::prefix('clubmember')->name('clubmember.')->group(function () {
         })->name('dashboard');
 
     });
-
 });
-
 

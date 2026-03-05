@@ -309,4 +309,36 @@ class ClubMemberController extends Controller
                 'image_url' => asset('storage/' . $member->image)
             ]);
         }
+// ================= CLUB MEMBER AUTH =================
+
+public function showLogin()
+{
+    return view('clubmember.auth.login'); 
+}
+
+public function login(Request $request, $slug)
+{
+    $credentials = $request->only('email', 'password');
+
+    if (auth('clubmember')->attempt($credentials)) {
+
+        // Redirect to microsite after login
+        $microsite = Microsite::where('slug', $slug)->firstOrFail();
+
+        return redirect()->route('microsite.home', $microsite->id);
+    }
+
+    return back()->withErrors(['email' => 'Invalid credentials']);
+}
+
+public function logout(Request $request)
+{
+    auth('clubmember')->logout();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('clubmember.login');
+}
+
 }

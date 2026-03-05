@@ -107,47 +107,45 @@ class MicrositeController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|regex:/^[A-Za-z\s]+$/', 
-            'description' => 'required|string|regex:/^[A-Za-z\s]+$/', 
-            'start_date' => 'required|date|after_or_equal:today',
-            'end_date'   => 'required|date|after:start_date',
-            'club_id'     => 'required|exists:clubs,id',
-            'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'status' => 'nullable|boolean'
-        ], [
-            'name.required' => 'Microsite name is required',
-            'name.regex' => 'Only letters and spaces allowed',
-            'description.required' => 'Microsite description is required',
-            'description.regex' => 'Only letters and spaces allowed',
-            'start_date.required' => 'Microsite start date is required',
-            'end_date.required' => 'Microsite end date is required',
-            'club_id.required'     => 'Club ID is required',
-        ]);
+{
+    $validated = $request->validate([
+        'name' => 'required|string|regex:/^[A-Za-z\s]+$/',
+        'description' => 'required|string|regex:/^[A-Za-z\s]+$/',
+        'start_date' => 'required|date|after_or_equal:today',
+        'end_date'   => 'required|date|after:start_date',
+        'club_id'    => 'required|exists:clubs,id',
+        'image'      => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        'status'     => 'nullable|boolean'
+    ]);
 
-        $imagePath = $request->file('image')
-                         ->store('microsite_banner_images', 'public');
+    $imagePath = $request->file('image')
+        ->store('microsite_banner_images', 'public');
 
-        $password = Str::random(6);
+    $password = Str::random(6);
 
-        Microsite::create([
-            'name'   => $validated['name'],
-            'description'   => $validated['description'],
-            'start_date'   => $validated['start_date'],
-            'end_date'   => $validated['end_date'],
-            'club_id'   => $validated['club_id'],
-            'image'       => $imagePath,
-            'password'    => $password,
-            // 'password'    => Hash::make($password),
-            'status' => $validated['status'] ?? 0,
-        ]);
+    // ⭐ GENERATE SLUG
+    $slug = Str::slug($validated['name']);
 
-        return redirect()
-            ->route('admin.show_microsites', $validated['club_id'])
-            ->with('success', 'Microsite registered successfully! ');
-            // ->with('success', 'Microsite registered successfully! Password: ' . $password);
-    }
+    // ⭐ CREATE ONLY ONCE (WITH SLUG)
+    $microsite = Microsite::create([
+        'name'        => $validated['name'],
+        'slug'        => $slug, // REQUIRED
+        'description' => $validated['description'],
+        'start_date'  => $validated['start_date'],
+        'end_date'    => $validated['end_date'],
+        'club_id'     => $validated['club_id'],
+        'image'       => $imagePath,
+        'password'    => $password,
+        'status'      => $validated['status'] ?? 0,
+    ]);
+
+    $accessUrl = route('microsite.login', ['slug' => $microsite->slug
+]);
+
+    return redirect()
+        ->route('admin.show_microsites', $validated['club_id'])
+        ->with('success', 'Microsite created! Access URL: ' . $accessUrl);
+}
 
     /**
      * Display the specified resource.
@@ -235,4 +233,27 @@ class MicrositeController extends Controller
         Microsite::findOrFail($request->id)->delete();
         return response()->json(['success' => true]);
     }
+
+public function access($micrositeId)
+{
+    $microsite = Microsite::findOrFail($micrositeId);
+
+    // If not logged in → go to microsite login
+    if (!auth('clubmember')->check()) {
+
+        session(['microsite_redirect' => $micrositeId]);
+
+        return redirect()->route('microsite.login', ['slug' => $microsite->slug]);
+    }
+
+    // If logged in → go to microsite home
+    return redirect()->route('microsite.home', $micrositeId);
+    dd("$microsite");
+}
+public function showLogin($slug)
+{
+    $microsite = Microsite::where('slug', $slug)->firstOrFail();
+
+    return view('clubmember.auth.login', compact('microsite'));
+}
 }
