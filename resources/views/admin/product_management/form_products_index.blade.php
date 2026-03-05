@@ -44,7 +44,7 @@
                           ? route('admin.product_management.edit_product', $product->id) 
                           : route('admin.product_management.add_products') }}"
                     method="POST"
-                    enctype="multipart/form-data"   
+                    {{-- enctype="multipart/form-data"    --}}
                     autocomplete="off">
                     @csrf
                        @if(isset($product->id))
@@ -104,16 +104,20 @@
                      <div class="row ">
                             {{---image---}}
                             
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <label class="form-label">Image</label>
-                                {{-- Pre-View image --}}
+                                Pre-View image
                                         <div class="mt-3">
+                                            @php  $firstVariant = isset($product) ? $product->varients->first() : null;  @endphp
+
                                             <img id="imagePreview"
-                                                src="{{ isset($product) && $product->image ? asset('storage/' . $product->image) : '' }}"
-                                                alt="Image Preview"
-                                                class="img-fluid w-25 {{ isset($product) && $product->image ? '' : 'd-none' }}">
+                                            src="{{ $firstVariant && $firstVariant->image 
+                                                    ? asset('storage/' . $firstVariant->image) 
+                                                    : (isset($product) && $product->image ? asset('storage/' . $product->image) : '') }}"
+                                            alt="Image Preview"
+                                            class="img-fluid w-25 {{ ($firstVariant && $firstVariant->image) || (isset($product) && $product->image) ? '' : 'd-none' }}">
                                         </div>
-                                {{-- end-pre -View image --}}
+                                end-pre -View image
                                                 <input type="file"
                                                 name="image" 
                                                 class="form-control swal2-radio"
@@ -124,13 +128,13 @@
                                                 @error('image')
                                                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                                                 @enderror
-                            </div>
+                            </div> --}}
                            
                        
                         
                             {{-- ----status---- --}}
                          <!-- Increased width to col-md-6 -->
-                            <div class="col-md-6 mb-3 mt-5 w-25 m-auto mt-lg-3">
+                            <div class="col-md-6 mb-3 mt-5 w-25 m-auto m-lg-1">
                                 <label class="form-label d-block">Status</label>
 
                                 <input type="hidden" name="status" value="0">
@@ -314,55 +318,55 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function previewImage(event) {
-        var input = event.target;
-        var imagePreview = document.getElementById('imagePreview');
-         const file = event.target.files[0];
+// function previewImage(event) {
+//         var input = event.target;
+//         var imagePreview = document.getElementById('imagePreview');
+//          const file = event.target.files[0];
 
-        if (file) {
-        imagePreview.src = URL.createObjectURL(file);
-        imagePreview.classList.remove('d-none'); // show image
-        }
+//         if (file) {
+//         imagePreview.src = URL.createObjectURL(file);
+//         imagePreview.classList.remove('d-none'); // show image
+//         }
 
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+//         if (input.files && input.files[0]) {
+//             var reader = new FileReader();
 
-            reader.onload = function(e) {
-                // Set the src of the image to the file data
-                imagePreview.src = e.target.result;
-                // Make the image visible
-                imagePreview.style.display = 'block';
-            }
+//             reader.onload = function(e) {
+//                 // Set the src of the image to the file data
+//                 imagePreview.src = e.target.result;
+//                 // Make the image visible
+//                 imagePreview.style.display = 'block';
+//             }
 
-            // Read the file as a data URL
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            // If the user cancels selection, hide the preview
-            imagePreview.src = '#';
-            imagePreview.style.display = 'none';
-        }
+//             // Read the file as a data URL
+//             reader.readAsDataURL(input.files[0]);
+//         } else {
+//             // If the user cancels selection, hide the preview
+//             imagePreview.src = '#';
+//             imagePreview.style.display = 'none';
+//         }
 
 
 
-    // Show selected file name
-document.getElementById('imageInput').addEventListener('change', function () {
-    const fileName = this.files.length > 0 ? this.files[0].name : 'No file chosen';
+//     // Show selected file name
+// document.getElementById('imageInput').addEventListener('change', function () {
+//     const fileName = this.files.length > 0 ? this.files[0].name : 'No file chosen';
 
-    // Remove existing filename if already added
-    let existingLabel = document.getElementById('fileNameDisplay');
-    if (existingLabel) {
-        existingLabel.remove();
-    }
+//     // Remove existing filename if already added
+//     let existingLabel = document.getElementById('fileNameDisplay');
+//     if (existingLabel) {
+//         existingLabel.remove();
+//     }
 
-    // Create new filename display
-    let fileLabel = document.createElement('small');
-    fileLabel.id = 'fileNameDisplay';
-    fileLabel.className = 'd-block mt-2 text-primary fw-semibold';
-    fileLabel.innerText = fileName;
+//     // Create new filename display
+//     let fileLabel = document.createElement('small');
+//     fileLabel.id = 'fileNameDisplay';
+//     fileLabel.className = 'd-block mt-2 text-primary fw-semibold';
+//     fileLabel.innerText = fileName;
 
-    this.parentNode.appendChild(fileLabel);
-});
-    }
+//     this.parentNode.appendChild(fileLabel);
+// });
+//     }
 </script>
 @endsection
 @endsection

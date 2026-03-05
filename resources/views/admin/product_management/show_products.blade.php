@@ -229,8 +229,11 @@ $(document).on('click', '.view-product', function () {
 
             $('#ms_name').text(res.name);
             $('#ms_description').text(res.description);
-            $('#ms_image').attr('src', res.image);
-             $('#ms_category').text(res.categories.name);
+
+            let imageUrl = res.varients.length > 0 && res.varients[0].image  ? res.varients[0].image : res.image;
+            $('#ms_image').attr('src', imageUrl);
+            
+            $('#ms_category').text(res.categories.name);
              if(res.categories.status == 1){
                   $('#ms_category_status')
                   .text("Active")
