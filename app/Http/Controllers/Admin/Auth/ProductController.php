@@ -187,9 +187,21 @@ $imagePath = $request->file('image')->store('products', 'public');
     }
 
 
-    public function single_show($id)
+   public function single_show($id)
 {
-   $product = Product::with('varients','categories')->findOrFail($id);
+    $product = Product::with('varients','categories')->findOrFail($id);
+
+    $varients = $product->varients->map(function($v){
+        return [
+            'id'    => $v->id,
+            'color' => $v->color,
+            'size'  => $v->size,
+            'stock' => $v->stock,
+            'image' => $v->image 
+                        ? asset('storage/' . $v->image) 
+                        : null
+        ];
+    });
 
     return response()->json([
         'id' => $product->id,
@@ -197,7 +209,7 @@ $imagePath = $request->file('image')->store('products', 'public');
         'image' => asset('storage/' . $product->image),
         'description' => $product->description,
         'status' => $product->status,
-        'varients' => $product->varients,
+        'varients' => $varients,
         'categories' => $product->categories
     ]);
 }

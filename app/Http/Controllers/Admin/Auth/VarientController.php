@@ -121,13 +121,12 @@ public function update(Request $request, $id)
         'variants.*.color' => 'required',
         'variants.*.size'  => 'required',
         'variants.*.stock' => 'required|integer|min:0',
-        
+        'variants.*.image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
-    // ✅ Get existing product directly from DB
-    $product = Product::findOrFail($id);
+    // ✅ Load product WITH variants
+    $product = Product::with('varients')->findOrFail($id);
 
-    // ✅ If session exists (coming from step 1), update product
     $productData = session('product');
 
     if ($productData) {
@@ -142,24 +141,33 @@ public function update(Request $request, $id)
         session()->forget('product');
     }
 
-    // ✅ Delete old variants of this product
+    // ✅ Store old variants before delete
+    $oldVariants = $product->varients->keyBy(function ($item) {
+        return $item->color . '-' . $item->size;
+    });
+
+    // ✅ Delete old variants
     Varient::where('product_id', $id)->delete();
 
-    // ✅ Insert new variants
-  foreach ($request->variants as $index => $variant) {
+    foreach ($request->variants as $index => $variant) {
 
-        $imagePath = null;
+        $key = $variant['color'] . '-' . $variant['size'];
 
+        // 🔥 Get old image if exists
+        $imagePath = $oldVariants[$key]->image ?? null;
+
+        // 🔥 If new image uploaded → overwrite
         if ($request->hasFile("variants.$index.image")) {
             $image = $request->file("variants.$index.image");
             $imagePath = $image->store('variant_images', 'public');
         }
 
         Varient::create([
-            'color'  => $variant['color'],
-            'size'   => $variant['size'],
-            'stock'  => $variant['stock'],
-            'image'  => $imagePath,
+            'product_id' => $product->id,
+            'color'      => $variant['color'],
+            'size'       => $variant['size'],
+            'stock'      => $variant['stock'],
+            'image'      => $imagePath,
         ]);
     }
 
@@ -167,7 +175,6 @@ public function update(Request $request, $id)
         ->route('admin.product_management.show_products')
         ->with('success', 'Products updated successfully');
 }
-
 
 
     public function show(Request $request)

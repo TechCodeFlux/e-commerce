@@ -128,6 +128,7 @@ $(document).ready(function () {
                             <th>Color</th>
                             <th>Size</th>
                             <th>Stock</th>
+                            <th>Image</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -161,6 +162,17 @@ $(document).ready(function () {
                         class="form-control text-center"
                         min="0"
                         required>
+                </td>
+
+                <td>
+                    ${item.image 
+                        ? `<img src="/storage/${item.image}" width="50" class="mb-2 d-block">`
+                        : `<span class="text-muted d-block mb-2">No Image</span>`
+                    }
+
+                    <input type="file"
+                        name="variants[${index}][image]"
+                        class="form-control form-control-sm">
                 </td>
 
                 <td>
@@ -221,8 +233,8 @@ function saveVariantData() {
 
     // ✅ CLEAR STORAGE AFTER FINAL SUBMIT
     $('.VarientForm').on('submit', function () {
-        localStorage.removeItem(STORAGE_KEY);
-         localStorage.removeItem('productForm');
+        // localStorage.removeItem(STORAGE_KEY);
+        //  localStorage.removeItem('productForm');
     });
 
 
@@ -329,6 +341,12 @@ colors.each(function () {
                         min="0"
                         required>
                 </td>
+                <td>
+                    <input type="file"
+                        name="variants[${existingRowCount}][image]"
+                        class="form-control form-control-sm"
+                        required>
+                </td>
 
                 <td>
                     <button type="button"
@@ -356,6 +374,7 @@ colors.each(function () {
                                 <th>Color</th>
                                 <th>Size</th>
                                 <th>Stock</th>
+                                <th>Image</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -408,6 +427,12 @@ colors.each(function () {
         // Update stock input
         $(this).find('input[name*="[stock]"]')
             .attr('name', `variants[${index}][stock]`);
+
+        // Update image input
+         $(this).find('input[name*="[image]"]')
+            .attr('name', `variants[${index}][image]`);
+
+        
     });
 }
 
@@ -463,7 +488,35 @@ $(document).ready(function () {
 });
 
 
+// ✅ IMAGE PREVIEW FOR VARIANT IMAGE INPUT
+$(document).on('change','input[name*="[image]"]', function(){
 
+    let input = this;
+
+    if (input.files && input.files[0]) {
+
+        let reader = new FileReader();
+
+        reader.onload = function(e){
+
+            let td = $(input).closest('td');
+
+            // remove old preview image or "No Image" text
+            td.find('img').remove();
+            td.find('span').remove();
+
+            // add new preview above input
+            $(input).before(`
+                <img src="${e.target.result}" 
+                     width="50" 
+                     class="mb-2 d-block preview-image">
+            `);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+
+});
 
 
 

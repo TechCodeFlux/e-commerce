@@ -148,6 +148,7 @@
                                 <table class="table table-bordered table-hover text-center align-middle">
                                     <thead class="table-light">
                                         <tr class="small text-uppercase">
+                                            <th>Image</th>
                                             <th>Color</th>
                                             <th>Size</th>
                                             <th>Stock</th>
@@ -260,9 +261,17 @@ $(document).on('click', '.view-product', function () {
 
             if(res.varients.length > 0){
 
-                res.varients.forEach(function(v){
+               res.varients.forEach(function(v){
+
                     rows += `
                         <tr>
+                            <td>
+                                ${
+                                    v.image 
+                                    ? `<img src="${v.image}" width="60" class="rounded">`
+                                    : '<span class="text-muted">No Image</span>'
+                                }
+                            </td>
                             <td>${v.color ?? '-'}</td>
                             <td>${v.size ?? '-'}</td>
                             <td>${v.stock ?? 0}</td>
