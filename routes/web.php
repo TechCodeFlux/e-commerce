@@ -25,6 +25,8 @@ use App\Http\Controllers\clubmember\ClubmemberProductController;
 use App\Http\Controllers\ClubMember\CartController;
 use App\Http\Controllers\ClubMember\ClubmemberOrderControllers ;
 
+use App\Http\Controllers\club\ClubOrderControllers;
+
 
 
 
@@ -122,7 +124,7 @@ Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controller
 
     Route::post('placeorder',[ClubmemberOrderControllers::class,'placeorder'])->name('placeorder');
 
-     Route::get('vieworder',[ClubmemberOrderControllers::class,'index'])->name('vieworder');
+    Route::get('vieworder',[ClubmemberOrderControllers::class,'index'])->name('vieworder');
     
 });
 
@@ -138,8 +140,9 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
 
      Route::get('/', [ClubDashboardController::class, 'index'])->name('dashboard');
 
-    //  Route::get('vieworder',[ClubOrderController::class,'show'])->name('vieworder');
+    Route::get('vieworder',[ClubOrderControllers::class,'show'])->name('vieworder');
 
-     Route::post('change-status', [ClubOrderController::class, 'changeStatus'])->name('change-status');
+     Route::post('change-status', [ClubOrderControllers
+     ::class, 'changeStatus'])->name('change-status');
      
  });

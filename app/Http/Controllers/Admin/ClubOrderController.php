@@ -50,12 +50,13 @@ class ClubOrderController extends Controller
      $club=Club::where('id',$id)->first();
     if ($request->ajax()) {
         
-        $orders = Order::with('product', 'varient', 'clubmember', 'order_status')        
-            ->where('club_id', $id);
+        $orders = Order::with('product', 'varient', 'clubmember', 'order_status','address')        
+            ->where('club_id', $id)
+            ->orderBy('varient_id','asc');
             // ->where('club_member_id', $clubmemberId); 
 
         return datatables()
-            ->eloquent($orders)
+                ->eloquent($orders)
 
             ->addColumn('name', fn ($row) => $row->product->name ?? '--')
 
@@ -78,46 +79,53 @@ class ClubOrderController extends Controller
             ->addColumn('phone', fn ($row) => $row->clubmember->contact ?? '--')
 
             ->addColumn('address', function ($row) {
-                  return optional($row->clubmember->address)->address1 ?? '--';
+                  return optional($row->address)->address1 ?? '--';
             })
 
             ->addColumn('size', fn ($row) => $row->varient->size ?? '--')
             ->addColumn('color', fn ($row) => $row->varient->color ?? '--')
 
-            ->addColumn('order_status', fn ($row) => optional($row->order_status)->status ?? '--')
-
+            ->addColumn('order_status', function ($row) {
+                    if(optional($row->order_status)->status == 'Confirmed'){
+                        $row->order_status_id=$row->order_status_id + 1;
+                        $row->save();
+                        return optional($row->order_status)->status ?? '--';
+                    }
+                    return optional($row->order_status)->status ?? '--';
+                })
+     
             
 
 
 
-->addColumn('action', function ($row) {
+            ->addColumn('action', function ($row) {
 
-    $nextstatus = OrderStatus::where('id', '>', $row->order_status_id)
-                    ->orderBy('id', 'asc')
-                    ->first();
+                $nextstatus = OrderStatus::where('id', '>', $row->order_status_id)
+                                ->orderBy('id', 'asc')
+                                ->first();
 
-    if (!$nextstatus) {
-        return '<span class="badge bg-success">Completed</span>';
-    }
-
-    return optional($row->order_status)->id < 6
-       ?
-       ' <form action="' . route('admin.clubs.changestatus', $row->id) . '" 
-              method="POST" 
-              class="d-inline">
-              
-            ' . csrf_field() . '
-            
-            <button type="submit" class="btn btn-sm btn-warning">
-                ' . $nextstatus->status . '
-            </button>
-        </form>
-    ':'' ;
-    
-})
+                if (!$nextstatus) {
+                    return '<span class="badge bg-success">Completed</span>';
+                }
+                return optional($row->order_status)->id < 6 
+                ?
+                
+                ' <form action="' . route('admin.clubs.changestatus', $row->id) . '" 
+                        method="POST" 
+                        class="d-inline">
+                        
+                        ' . csrf_field() . '
+                        
+                        <button type="submit" class="btn btn-sm btn-warning">
+                            ' . $nextstatus->status . '
+                        </button>
+                    </form>
+                ':'' ;
+                
+            })
             ->rawColumns(['image','action','order_status'])
             ->make(true);
-    }
+           }
 
     return view('admin.club.order_management.vieworder', compact('club'));
     }

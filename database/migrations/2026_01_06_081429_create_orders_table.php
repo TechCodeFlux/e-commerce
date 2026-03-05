@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('order_status_id');
             $table->unsignedBigInteger('microsite_id');
             $table->unsignedBigInteger('varient_id');
+            $table->unsignedBigInteger('address_id');
             $table->softdeletes();
             $table->timestamps();
         });

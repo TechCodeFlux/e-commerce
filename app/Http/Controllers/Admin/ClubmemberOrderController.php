@@ -39,6 +39,7 @@ class ClubMemberOrderController extends Controller
                     'username' => optional($order->clubMember)->name ?? 'User',
                     'email' => optional($order->clubMember)->email ?? 'N/A',
                     'phone' => optional($order->clubMember)->contact ?? 'N/A',
+                    'address'=>optional($order->address)->address1 ?? 'N/A',
 
                     'order_status' => optional($order->order_status)->status ?? 'Pending',
 

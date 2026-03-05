@@ -161,7 +161,11 @@ $(document).ready(function() {
                         <i class="bi bi-telephone me-1"></i>
                         ${row.phone || 'N/A'}
                     </div>
-                </div>
+                        <div class="text-muted">
+                            <i class="bi bi-geo-alt me-1""></i>
+                            ${row.address || 'N/A'}
+                        </div>
+                    </div>
             </div>
 
             <!-- Status -->
@@ -176,6 +180,9 @@ $(document).ready(function() {
                     </div>
                     <div class="small">
                         Qty: <strong>${row.quantity}</strong>
+                    </div>
+                    <div class="medium">
+                        <div class="mt-2">${row.action}</div>
                     </div>
                 </div>
             </div>

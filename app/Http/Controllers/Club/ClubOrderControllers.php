@@ -13,7 +13,7 @@ use App\Models\ClubMember;
 use App\Models\Varient;
 use Illuminate\Http\Request;
 
-class ClubOrderController extends Controller
+class ClubOrderControllers extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -84,6 +84,31 @@ class ClubOrderController extends Controller
             ->addColumn('color', fn ($row) => $row->varient->color ?? '--')
 
             ->addColumn('order_status', fn ($row) => optional($row->order_status)->status ?? '--')
+            ->addColumn('action', function ($row) {
+
+                $nextstatus = OrderStatus::where('id', '>', $row->order_status_id)
+                                ->orderBy('id', 'asc')
+                                ->first();
+
+                if (!$nextstatus) {
+                    return '<span class="badge bg-success">Completed</span>';
+                }
+                return optional($row->order_status)->id < 6 
+                ?
+                
+                ' <form action="' . route('admin.clubs.changestatus', $row->id) . '" 
+                        method="POST" 
+                        class="d-inline">
+                        
+                        ' . csrf_field() . '
+                        
+                        <button type="submit" class="btn btn-sm btn-warning">
+                            ' . $nextstatus->status . '
+                        </button>
+                    </form>
+                ':'' ;
+                
+            })
             ->rawColumns(['image','action','order_status'])
             ->make(true);
     }

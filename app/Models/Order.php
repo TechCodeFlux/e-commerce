@@ -16,6 +16,7 @@ class Order extends Model
             'varient_id',
             'order_status_id',
             'microsite_id',
+            'address_id',
         ];
  
     public function product()
@@ -24,13 +25,13 @@ class Order extends Model
     }
 
     public function clubMember()
-{
-    return $this->belongsTo(ClubMember::class, 'club_member_id');
-}
+    {
+        return $this->belongsTo(ClubMember::class, 'club_member_id');
+    }
 
     public function address()
     {
-        return $this->hasOne(Address::class,);
+        return $this->belongsTo(Address::class, 'address_id');
     }
 
     public function microsite()
@@ -45,5 +46,9 @@ class Order extends Model
      public function varient()
     {
         return $this->belongsTo(Varient::class, 'varient_id');
+    }
+    public function country()
+    {
+        return $this->belongsto(varients::class);
     }
 }

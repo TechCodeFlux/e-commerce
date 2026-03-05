@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('microsite_id');
             $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('address_id');
             $table->boolean('status')->default('0');
             $table->softdeletes();
             $table->timestamps();

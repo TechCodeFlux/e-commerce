@@ -189,6 +189,13 @@
                                                                 <i class="bi bi-telephone me-1"></i>
                                                                 ${row.phone || 'N/A'}
                                                             </div>
+                                                            
+                                                            
+                                                            <div class="text-muted">
+                                                                <i class="bi bi-geo-alt me-1""></i>
+                                                                ${row.address || 'N/A'}
+                                                            </div>
+                                                        
                                                         </div>
                                                     </div>
 

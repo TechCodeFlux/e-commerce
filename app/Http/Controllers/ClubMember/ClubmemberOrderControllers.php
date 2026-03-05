@@ -10,6 +10,7 @@ use App\Models\Cart;
 use App\Models\Address;
 use App\Models\ClubMember;
 use App\Models\Varient;
+use App\Models\Country;
 use Illuminate\Http\Request;
 
 
@@ -25,7 +26,7 @@ class ClubmemberOrderControllers extends Controller
 
     if ($request->ajax()) {
         
-        $orders = Order::with('product', 'varient', 'clubmember', 'order_status')
+        $orders = Order::with('product', 'varient', 'clubmember', 'order_status','address')
             // ->where('order_status_id', 1)
             ->where('club_id', $clubid)
             ->where('club_member_id', $clubmemberId); 
@@ -40,8 +41,6 @@ class ClubmemberOrderControllers extends Controller
             ->addColumn('stock', fn ($row) => $row->varient->stock ?? 0)
             ->editColumn('created_at', fn($m) => $m->created_at->format('d M Y'))
 
-            //->addColumn('quantity', fn ($row) => $row->order->quantity )
-
             ->addColumn('image', function ($row) {
                 if ($row->product && $row->product->image) {
                     return asset('storage/' . $row->product->image);
@@ -54,8 +53,8 @@ class ClubmemberOrderControllers extends Controller
             ->addColumn('phone', fn ($row) => $row->clubmember->contact ?? '--')
 
             ->addColumn('address', function ($row) {
-                  return optional($row->clubmember->address)->address1 ?? '--';
-            })
+                    return optional($row->address)->address1 ?? '--';
+                })
 
             ->addColumn('size', fn ($row) => $row->varient->size ?? '--')
             ->addColumn('color', fn ($row) => $row->varient->color ?? '--')
@@ -67,6 +66,20 @@ class ClubmemberOrderControllers extends Controller
                 })
 
             ->addColumn('order_status', fn ($row) => optional($row->order_status)->status ?? '--')
+            ->addColumn('action', function ($row) {
+
+                    return optional($row->order_status)->status == "Out for delivery"
+                        ? '<div>
+                                <a href="'. route('admin.clubmember.orderstatus', $row->id) .'" 
+                                class="btn btn-sm btn-clean btn-icon" 
+                                title="delivered">
+                                
+                                <i class="btn btn-sm btn-danger">Confirm delivery</i>
+                                </a>
+                        </div>'
+                        : '';
+
+                })       
             ->rawColumns(['image','action','order_status'])
             ->make(true);
     }
@@ -88,30 +101,30 @@ class ClubmemberOrderControllers extends Controller
     public function store(Request $request)   //add to cart
     {
         
-        $request->validate([
-                'quantity' => 'required',
-                'email'    => 'required|email',
-                'phone'    => 'required|digits:10',
-            ]);
+        // $request->validate([
+        //         'quantity' => 'required',
+        //         'email'    => 'required|email',
+        //         'phone'    => 'required|digits:10',
+        //     ]);
 
-            // Insert into orders table
-            $order = Order::create([
-                    'quantity'        => $request->quantity,
-                    'product_id'      => $variant->product_id,
-                    'club_member_id'  => $request->clubmember_id,
-                    'club_id'         => $request->club_id,
-                    'varient_id'      => $variant->id,
-                    'order_status_id' => 1,
-                    'microsite_id'    => 1,
-                ]);
+        //     // Insert into orders table
+        //     $order = Order::create([
+        //             'quantity'        => $request->quantity,
+        //             'product_id'      => $variant->product_id,
+        //             'club_member_id'  => $request->clubmember_id,
+        //             'club_id'         => $request->club_id,
+        //             'varient_id'      => $variant->id,
+        //             'order_status_id' => 1,
+        //             'microsite_id'    => 1,
+        //         ]);
 
-            OrderItem::create([
-                'quantity'     => $request->quantity,
-                'order_id'     => $order->id,
-                'microsite_id' => $order->microsite_id,
-                'product_id'   => $request->product_id,
-                'status'       => $order->order_status_id,
-            ]);
+        //     OrderItem::create([
+        //         'quantity'     => $request->quantity,
+        //         'order_id'     => $order->id,
+        //         'microsite_id' => $order->microsite_id,
+        //         'product_id'   => $request->product_id,
+        //         'status'       => $order->order_status_id,
+        //     ]);
 
             return redirect()
                 ->route('clubmember.viewproduct')
@@ -154,7 +167,8 @@ class ClubmemberOrderControllers extends Controller
     public function cartorder($id)
    {
         $clubmemberId = 1; // club_member_id is hardcoded for now, replace with auth()->id() when authentication is implemented 
-        $product = Product::findOrFail($id);       
+        $product = Product::findOrFail($id);  
+        $countries = Country::orderBy('name')->get();    
         $cart = Cart::where('product_id', $product->id)
                     ->where('clubmember_id', $clubmemberId)
                     ->first();
@@ -173,6 +187,7 @@ class ClubmemberOrderControllers extends Controller
             'clubmember'  => $clubmember,
             'address'     => $address,
             'varients'    => $varients,
+            'countries'   => $countries,
             ]);
         }
 
@@ -180,18 +195,45 @@ class ClubmemberOrderControllers extends Controller
         {
             $micrositeId = 1; // Assuming microsite_id is 1 for now, replace with actual value as needed
             $request->validate([
-                'varient_id' => 'required|exists:varients,id',
-                'quantity'   => 'required|integer|min:1',
-                'email'      => 'required|email',
-                'phone'      => 'required|digits:10',
-                'product_id' => 'required|exists:products,id',
-                'clubmember_id' => 'required|exists:club_members,id',
-                'club_id' => 'required|exists:clubs,id',
-            ]);
+                'varient_id'     => 'required|exists:varients,id',
+                'quantity'       => 'required|integer|min:1',
+                'email'          => 'required|email',
+                'phone'          => 'required|digits:10',
+
+                'product_id'     => 'required|exists:products,id',
+                'clubmember_id'  => 'required|exists:club_members,id',
+                'club_id'        => 'required|exists:clubs,id',
+
+                // existing address
+                'address'        => 'required_without:new_address|nullable',
+
+                // new address fields
+                'new_address'    => 'required_without:address|nullable|string|max:255',
+                'country'        => 'required_without:address|nullable|string|max:100',
+                'state'          => 'required_without:address|nullable|string|max:100',
+                'city'           => 'required_without:address|nullable|string|max:80',
+                'zip_code'       => 'required_without:address|nullable|digits:6',
+                ]);
 
                 $variant = Varient::findOrFail($request->varient_id);
 
-                $order = Order::updateOrCreate([
+                if($request->address == null)
+                    {
+                        $address = Address::create([
+                            'address1'  => $request->new_address,
+                            'country_id'=> $request->country,
+                            'state_id'  => $request->state,
+                            'city'      => $request->city,
+                            'zip_code'  => $request->zip_code,
+                            'status'    => 1,
+                        ]);
+                        $addressid=$address->id;
+                    }
+                    else{
+                       $addressid=$request->address; 
+                    }
+
+                $order = Order::Create([
                     'quantity'        => $request->quantity,
                     'product_id'      => $variant->product_id,
                     'club_member_id'  => $request->clubmember_id,
@@ -199,18 +241,20 @@ class ClubmemberOrderControllers extends Controller
                     'varient_id'      => $variant->id,
                     'order_status_id' => 1,
                     'microsite_id'    => $micrositeId,
+                    'address_id'      => $addressid,
                 ]);
 
                 $varient=Varient::where('id', $variant->id)->update([
                     'stock' => $variant->stock - $request->quantity,
                 ]);
 
-            OrderItem::updateOrCreate([             
+            OrderItem::Create([             
                 'quantity'     => $request->quantity,
                 'order_id'     => $order->id,
                 'microsite_id' => $order->microsite_id,
                 'product_id'   => $request->product_id,
                 'status'       => $order->order_status_id,
+                'address_id'   => $addressid,
             ]);
 
             return redirect()

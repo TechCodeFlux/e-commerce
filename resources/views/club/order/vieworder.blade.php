@@ -177,6 +177,9 @@ $(document).ready(function() {
                     <div class="small">
                         Qty: <strong>${row.quantity}</strong>
                     </div>
+                    <div class="medium">
+                        <div class="mt-2">${row.action}</div>
+                    </div>
                 </div>
             </div>
 

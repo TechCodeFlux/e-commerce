@@ -13,6 +13,7 @@ class OrderItem extends Model
             'order_id',
             'microsite_id',
             'product_id',
+            'address_id',
             'status',
         ];
         

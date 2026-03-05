@@ -90,12 +90,12 @@
                     </div>
 
                     {{-- Address --}}
-                    <div class="col-md-8 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label>Address</label>
-                        <select name="selected_address" id="address" class="form-select">
+                        <select name="address" id="address" class="form-select">
                             <option value="">Select your address</option>
                             @foreach($address as $addr)
-                                <option value="{{ $addr->address1 }}">{{ $addr->address1 }}</option>
+                                <option value="{{ $addr->id }}">{{ $addr->address1 }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -107,11 +107,65 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    {{-- Country --}}
+                            <div class="col-md-4 mb-3">
+                                <label>Country</label>
+                                <select name="country" id="country" class="form-select">
+                                    <option value="">Select Country</option>
+                                    @foreach($countries as $country)
+                                        <option value="{{ $country->id }}"
+                                           {{ old( 'country' ) }}>
+                                            {{ $country->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                           
+                            {{-- State --}}
+                           <div class="col-md-4 mb-3">
+                            <label>State</label>
+                            <select name="state" id="state" class="form-select">
+                                <option value="">Select State</option>
+                                    @isset($states)
+                                    @foreach($states as $state)
+                                        <option value="{{ $state->id }}"
+                                       {{ old( 'state' ) }}>
+                                        {{ $state->name }}
+                                        </option>
+                                    @endforeach
+                                 @endisset
+                                </select>
+                            </div>
+
+                            {{-- City --}}
+                            <div class="col-md-4 mb-3">
+                                <label>City</label>
+                                <input type="text" name="city" class="form-control @error('city') is-invalid @enderror"
+                                    value="{{ old('city') }}">
+                                    @error('city')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            {{-- zip code--}}
+                            <div class="col-md-4 mb-3">
+                                <label>Zip code</label>
+                                <input type="text" name="zip_code" class="form-control @error('zip_code') is-invalid @enderror"
+                                    value="{{ old('zip_code') }}">
+                                    @error('zip_code')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
 
                     <input type="hidden" name="club_id" value="{{ $clubmember->club_id }}">
 
                     {{-- Variant --}}
-                    <div class="col-md-8 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label>Variant</label>
                         <select name="varient_id" id="variantSelect" class="form-select" required>
                             <option value="">Select your variant</option>
@@ -125,7 +179,7 @@
                         </select>
                     </div>
 
-                    <div class="text-center mt-3">
+                    <div class="text-sm-end mt-3">
                         <button class="btn btn-primary px-5">Submit</button>
                     </div>
 
@@ -171,6 +225,50 @@ document.addEventListener('DOMContentLoaded', function () {
             productImage.src = "{{ asset('storage/' . $product->image) }}";
         }
     });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const countrySelect = document.getElementById('country');
+    const stateSelect   = document.getElementById('state');
+
+    // EDIT MODE VALUES
+    const selectedCountry = "{{ old('country', $clubmember->country_id ?? '') }}";
+    const selectedState   = "{{ old('state', $clubmember->state_id ?? '') }}";
+
+    function loadStates(countryId, selectedStateId = null) {
+        stateSelect.innerHTML = '<option value="">Loading...</option>';
+
+        fetch(`/admin/get-states/${countryId}`)
+            .then(response => response.json())
+            .then(states => {
+                stateSelect.innerHTML = '<option value="">Select State</option>';
+
+                states.forEach(state => {
+                    const selected = selectedStateId == state.id ? 'selected' : '';
+                    stateSelect.innerHTML +=
+                        `<option value="${state.id}" ${selected}>${state.name}</option>`;
+                });
+            })
+            .catch(() => {
+                stateSelect.innerHTML = '<option value="">Failed to load states</option>';
+            });
+    }
+
+    // ON COUNTRY CHANGE
+    countrySelect.addEventListener('change', function () {
+        if (this.value) {
+            loadStates(this.value);
+        } else {
+            stateSelect.innerHTML = '<option value="">Select State</option>';
+        }
+    });
+
+    // ✅ AUTO LOAD ON EDIT
+    if (selectedCountry) {
+        countrySelect.value = selectedCountry;
+        loadStates(selectedCountry, selectedState);
+    }
 });
 </script>
 @endsection
