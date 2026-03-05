@@ -44,7 +44,7 @@ class ClubMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'admin.club.account',
+            view: 'admin.emails.clubaccount',
             with: [
                 'email' => $this->email,
                 'password' => $this->password,

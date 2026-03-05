@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('microsite', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+             $table->string('slug',191)->unique();
             $table->date('start_date');
             $table->date('end_date');
             $table->text('description');

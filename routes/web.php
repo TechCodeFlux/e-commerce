@@ -73,6 +73,9 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::delete('club/deletemember/{id}',[ClubMemberController::class,'deletemember'])->name('clubmember.deletemember');
     Route::get('club/profile/{id}',[ClubController::class,'profile'])->name('club.profile');
     Route::post('club/editprofile/{id}',[ClubController::class,'editprofile'])->name('club.editprofile');
+    Route::get('club/member/profile/{id}',[ClubMemberController::class,'profile'])->name('clubmember.profile');
+    Route::post('club/member/updateprofile/{id}',[ClubMemberController::class,'update'])->name('clubmember.updateprofile');
+    Route::post('club/member/editimage/{id}',[ClubMemberController::class,'editImage'])->name('clubmember.editimage');
 
     Route::get('club/member/profile/{id}',[ClubMemberController::class,'profile'])->name('clubmember.profile');
     Route::post('club/member/updateprofile/{id}',[ClubMemberController::class,'update'])->name('clubmember.updateprofile');

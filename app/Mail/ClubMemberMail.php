@@ -42,7 +42,7 @@ class ClubMemberMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'admin.clubmember.account',
+            view: 'admin.emails.clubmemberaccount',
             with: [
                 'memberData' => $this->memberData,
                 'type' => $this->type,

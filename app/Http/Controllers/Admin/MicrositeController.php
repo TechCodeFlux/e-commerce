@@ -133,9 +133,11 @@ class MicrositeController extends Controller
                          ->store('microsite_banner_images', 'public');
 
         $password = Str::random(6);
+    $slug = Str::slug($validated['name']);
 
         $microsite = Microsite::create([
             'name'   => $validated['name'],
+            'slug'   => $slug,
             'description'   => $validated['description'],
             'start_date'   => $validated['start_date'],
             'end_date'   => $validated['end_date'],
