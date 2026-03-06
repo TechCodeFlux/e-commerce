@@ -164,6 +164,9 @@ Route::prefix('clubmember')->name('clubmember.')->group(function () {
     Route::post('login', [ClubMemberController::class, 'login'])
         ->name('login.submit');
 
+    Route::get('/microsite/{slug}/home', [MicrositeController::class, 'home'])
+    ->name('microsite.home');
+
     // Logout
     Route::post('logout', [ClubMemberController::class, 'logout'])
         ->name('logout');
@@ -175,6 +178,9 @@ Route::prefix('clubmember')->name('clubmember.')->group(function () {
             return view('clubmember.dashboard');
         })->name('dashboard');
 
+Route::get('/microsite/{slug}/home', function ($slug) {
+    return view('clubmember.home');
+})->name('microsite.home');
     });
 });
 

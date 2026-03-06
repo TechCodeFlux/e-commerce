@@ -15,6 +15,7 @@ use App\Models\ClubMember;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\Address;
+use App\Models\Microsite;
  
 class ClubMemberController extends Controller
 {
@@ -322,13 +323,12 @@ public function login(Request $request, $slug)
 
     if (auth('clubmember')->attempt($credentials)) {
 
-        // Redirect to microsite after login
-        $microsite = Microsite::where('slug', $slug)->firstOrFail();
-
-        return redirect()->route('microsite.home', $microsite->id);
+        return redirect()->route('microsite.home', $slug);
     }
 
-    return back()->withErrors(['email' => 'Invalid credentials']);
+    return back()->withErrors([
+        'email' => 'Invalid credentials'
+    ]);
 }
 
 public function logout(Request $request)

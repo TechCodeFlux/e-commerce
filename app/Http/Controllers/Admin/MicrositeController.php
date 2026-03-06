@@ -123,10 +123,10 @@ class MicrositeController extends Controller
 
     $password = Str::random(6);
 
-    // ⭐ GENERATE SLUG
+    //  GENERATE SLUG
     $slug = Str::slug($validated['name']);
 
-    // ⭐ CREATE ONLY ONCE (WITH SLUG)
+    //  CREATE ONLY ONCE (WITH SLUG)
     $microsite = Microsite::create([
         'name'        => $validated['name'],
         'slug'        => $slug, // REQUIRED
