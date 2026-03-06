@@ -17,8 +17,9 @@ class ClubmemberProductController extends Controller
          if($request->ajax()){
             $product = Product::with('varients')
                 ->where('microsite_id',$microsite)
+                ->where('status',1)
                 ->whereHas('varients', function ($query) {
-            $query->where('stock', '>', 0);
+                     $query->where('stock', '>', 0);
         });
             // return DataTables::eloquent($club)
             return datatables()
