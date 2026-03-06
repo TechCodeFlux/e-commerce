@@ -104,7 +104,7 @@
                     </div>
 
                     <div class="col-md-8 mb-3">
-                        <label>Address to add as new</label>
+                        <label>Address ,add as new</label>
                         <textarea name="new_address" class="form-control">{{ old('new_address') }}</textarea>
                         @error('new_address')
                             <div class="invalid-feedback">{{ $message }}</div>

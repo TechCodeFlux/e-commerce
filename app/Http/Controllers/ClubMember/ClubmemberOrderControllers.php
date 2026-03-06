@@ -99,33 +99,7 @@ class ClubmemberOrderControllers extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)   //add to cart
-    {
-        
-        // $request->validate([
-        //         'quantity' => 'required',
-        //         'email'    => 'required|email',
-        //         'phone'    => 'required|digits:10',
-        //     ]);
-
-        //     // Insert into orders table
-        //     $order = Order::create([
-        //             'quantity'        => $request->quantity,
-        //             'product_id'      => $variant->product_id,
-        //             'club_member_id'  => $request->clubmember_id,
-        //             'club_id'         => $request->club_id,
-        //             'varient_id'      => $variant->id,
-        //             'order_status_id' => 1,
-        //             'microsite_id'    => 1,
-        //         ]);
-
-        //     OrderItem::create([
-        //         'quantity'     => $request->quantity,
-        //         'order_id'     => $order->id,
-        //         'microsite_id' => $order->microsite_id,
-        //         'product_id'   => $request->product_id,
-        //         'status'       => $order->order_status_id,
-        //     ]);
-
+    {        
             return redirect()
                 ->route('clubmember.viewproduct')
                 ->with('success', 'Order added to cart successfully!');
@@ -178,9 +152,23 @@ class ClubmemberOrderControllers extends Controller
 
         $clubmember = ClubMember::findOrFail($clubmemberId); 
 
-        $address = Address::where('id', $clubmember->address_id)->get();
-            
-            // dd($address);
+        // Get all orders of this club member
+    $orders = Order::where('club_member_id', $clubmemberId)->get();
+
+    // Collect all address ids
+    $addressIds = [$clubmember->address_id];
+
+    foreach ($orders as $order) {
+        $addressIds[] = $order->address_id;
+    }
+
+    // Remove duplicates
+    $addressIds = array_unique($addressIds);
+    
+
+    // Get all addresses
+    $address = Address::whereIn('id', $addressIds)->get();
+    // dd($address);
         return view('clubmember.product.booking', [
             'product'     => $product,
             'quantity'    => $quantity,
@@ -188,6 +176,7 @@ class ClubmemberOrderControllers extends Controller
             'address'     => $address,
             'varients'    => $varients,
             'countries'   => $countries,
+          
             ]);
         }
 
