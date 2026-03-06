@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -12,13 +11,17 @@ use Illuminate\Queue\SerializesModels;
 class ClubMemberMail extends Mailable
 {
     use Queueable, SerializesModels;
+
     public $memberData;
+    public $type; // create | update
+
     /**
      * Create a new message instance.
      */
-    public function __construct($memberData)
+    public function __construct($memberData, $type = 'create')
     {
         $this->memberData = $memberData;
+        $this->type = $type;
     }
 
     /**
@@ -27,7 +30,9 @@ class ClubMemberMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Club Member Account Creation',
+            subject: $this->type === 'create'
+                ? 'Club Member Account Created'
+                : 'Club Member Account Updated',
         );
     }
 
@@ -37,17 +42,16 @@ class ClubMemberMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'admin.clubmember.account',
+            view: 'admin.emails.clubmemberaccount',
             with: [
-            'memberData' => $this->memberData
+                'memberData' => $this->memberData,
+                'type' => $this->type,
             ],
         );
     }
 
     /**
      * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
     public function attachments(): array
     {

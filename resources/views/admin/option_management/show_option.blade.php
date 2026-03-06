@@ -172,6 +172,7 @@ $(document).ready(function() {
     $OptionsTable= $('#options').DataTable({
         processing: true,
         serverSide: true,
+        scrollX: true,
          dom: 'rtip',
         ajax: {
            url: "{{ route('admin.show_option') }}",

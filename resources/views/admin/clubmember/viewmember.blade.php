@@ -135,7 +135,7 @@
                         serverSide: true,
                         dom:'rtip',
                         scrollY: '400px', 
-                        scrollX: true,  // height of table
+                        scrollX: true,  
                         scrollCollapse: true,
                         ajax: {
                             url: "{{ route('admin.clubmember.viewmembers',compact('club')) }}",

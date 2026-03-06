@@ -133,7 +133,8 @@ class ClubMemberController extends Controller
         'country'    => $address->country_id,
         'zip_code'   => $address->zip_code,
     ];
-    Mail::to($request->email)->send(new ClubMemberMail($memberData));
+
+    Mail::to($memberData['email'])->send(new ClubMemberMail($memberData, 'create'));
 
     return redirect()
         ->route('admin.clubmember.viewmembers', $id)
@@ -206,7 +207,20 @@ class ClubMemberController extends Controller
             'zip_code'       => $request->zip_code,
             
         ]);
-    
+
+        $memberData = [
+                'name'      => $clubmember->name,
+                'email'     => $clubmember->email,
+                'contact'   => $clubmember->contact,
+                'address'   => $address->address1,
+                'city'      => $address->city,
+                'state'     => $address->state_id,
+                'zip_code'  => $address->zip_code,
+            ];
+
+
+
+        Mail::to($memberData['email'])->send(new ClubMemberMail($memberData, 'update'));
         // return view('admin.clubmember.viewmember', compact('club'));
         return redirect()
                 ->route('admin.clubmember.viewmembers', $club->id)

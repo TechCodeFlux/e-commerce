@@ -7,9 +7,12 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Microsite;
 use App\Models\Club;
+use App\Models\ClubMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 // use Illuminate\Support\Facades\Hash;
+use App\Mail\MicrositeMail;
+use Illuminate\Support\Facades\Mail;
 
 class MicrositeController extends Controller
 {
@@ -121,31 +124,56 @@ class MicrositeController extends Controller
     $imagePath = $request->file('image')
         ->store('microsite_banner_images', 'public');
 
-    $password = Str::random(6);
-
-    //  GENERATE SLUG
+        $password = Str::random(6);
     $slug = Str::slug($validated['name']);
 
-    //  CREATE ONLY ONCE (WITH SLUG)
-    $microsite = Microsite::create([
-        'name'        => $validated['name'],
-        'slug'        => $slug, // REQUIRED
-        'description' => $validated['description'],
-        'start_date'  => $validated['start_date'],
-        'end_date'    => $validated['end_date'],
-        'club_id'     => $validated['club_id'],
-        'image'       => $imagePath,
-        'password'    => $password,
-        'status'      => $validated['status'] ?? 0,
-    ]);
+        $microsite = Microsite::create([
+            'name'   => $validated['name'],
+            'slug'   => $slug,
+            'description'   => $validated['description'],
+            'start_date'   => $validated['start_date'],
+            'end_date'   => $validated['end_date'],
+            'club_id'   => $validated['club_id'],
+            'image'       => $imagePath,
+            'password'    => $password,
+            // 'password'    => Hash::make($password),
+            'status' => $validated['status'] ?? 0,
+        ]);
+        //Generate URL
+        $accessUrl = route('admin.microsite.access', $microsite->id);
 
-    $accessUrl = route('microsite.login', ['slug' => $microsite->slug
-]);
+        // $members = ClubMember::where('club_id', $validated['club_id'])->get();
 
-    return redirect()
-        ->route('admin.show_microsites', $validated['club_id'])
-        ->with('success', 'Microsite created! Access URL: ' . $accessUrl);
-}
+        $emails = ClubMember::where('club_id', $validated['club_id'])
+            ->whereNotNull('email')
+            ->distinct()
+            ->pluck('email');
+
+            // dd($emails);
+
+        foreach ($emails as $email)
+        {
+            $isSaleStarted = now()->greaterThanOrEqualTo($microsite->start_date);
+
+            Mail::to($email)->send(
+                new MicrositeMail(
+                    $email,
+                    $accessUrl,
+                    $password,
+                    'create', // or 'update' / 'url'
+                    $microsite->name,
+                    $isSaleStarted,
+                    $microsite->start_date
+                )
+            );
+        }
+
+        return redirect()
+            ->route('admin.show_microsites', $validated['club_id'])
+            ->with('success', 'Microsite created! Access URL: ' . $accessUrl);
+            // ->with('success', 'Microsite registered successfully! ');
+            // ->with('success', 'Microsite registered successfully! Password: ' . $password);
+    }
 
     /**
      * Display the specified resource.

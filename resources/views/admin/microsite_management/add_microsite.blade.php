@@ -1,12 +1,13 @@
 @extends('admin.components.app')
+
 @section('page-title', 'Club ' . $club->name)
+
 @php
     $hideSearch = true;
 @endphp
-@section('head')
-@endsection 
 
 @section('content')
+
 <div class="mb-4">
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -22,18 +23,18 @@
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('admin.clubsindex') }}">
-                    <i class="bi bi-people-fill small me-2"></i>{{$club->name}}
+                    <i class="bi bi-people-fill small me-2"></i> {{ $club->name }}
                 </a>
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('admin.show_microsites', $club->id) }}">
-                <i class="bi bi-building small me-2"></i> Microsites 
+                    <i class="bi bi-building small me-2"></i> Microsites 
                 </a>
             </li>
             <li class="breadcrumb-item active">
-                <i class="bi bi-building small me-2"></i>Add  Microsites 
+                <i class="bi bi-building small me-2"></i>
+                {{ isset($microsite) && $microsite->exists ? 'Edit Microsite' : 'Add Microsite' }}
             </li>
-            
         </ol>
     </nav>
 </div>
@@ -47,11 +48,10 @@
         {{-- Main Content --}}
         <div class="col-md-9">
             <div class="card">
-                
-                    <h5 class="card-header border-0">
-    {{ $microsite->exists ? 'Edit Microsite' : 'Create Microsite' }}
-</h5>
-                
+
+                <h5 class="card-header border-0">
+                    {{ isset($microsite) && $microsite->exists ? 'Edit Microsite' : 'Create Microsite' }}
+                </h5>
 
                 <div class="card-body">
 
@@ -59,33 +59,41 @@
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                  <form 
-    action="{{ isset($microsite->id) 
-        ? route('admin.microsite_update', $microsite->id) 
-        : route('admin.microsite_store') }}" 
-    method="POST" 
-    enctype="multipart/form-data">
-
-    @csrf
-
-    @if(isset($microsite->id))
-        @method('PUT')
-    @endif
+                    <form 
+                        id="MicrositeForm"
+                        action="{{ isset($microsite->id) 
+                            ? route('admin.microsite_update', $microsite->id) 
+                            : route('admin.microsite_store') }}" 
+                        method="POST" 
+                        enctype="multipart/form-data"
+                    >
 
                         @csrf
 
+                        @if(isset($microsite->id))
+                            @method('PUT')
+                        @endif
+
+                        {{-- Name --}}
                         <div class="mb-3">
                             <label class="form-label">Name</label>
-                            <input type="text" name="name" class="form-control" value="{{ old('name', $microsite->name ?? '') }}">
-                            @error('name') <small class="text-danger">{{ $message }}</small> @enderror
+                            <input type="text" name="name" class="form-control"
+                                value="{{ old('name', $microsite->name ?? '') }}">
+                            @error('name') 
+                                <small class="text-danger">{{ $message }}</small> 
+                            @enderror
                         </div>
 
+                        {{-- Description --}}
                         <div class="mb-3">
                             <label class="form-label">Description</label>
                             <textarea name="description" rows="3" class="form-control">{{ old('description', $microsite->description ?? '') }}</textarea>
-                            @error('description') <small class="text-danger">{{ $message }}</small> @enderror
+                            @error('description') 
+                                <small class="text-danger">{{ $message }}</small> 
+                            @enderror
                         </div>
 
+                        {{-- Image Upload --}}
                         <div class="mb-3">
                             <label class="form-label">Event Banner</label>
 
@@ -99,75 +107,79 @@
                                 <small class="text-danger">{{ $message }}</small> 
                             @enderror
 
-                            {{-- Keep old image (for edit) --}}
                             <input type="hidden" name="old_image" value="{{ $microsite->image ?? '' }}">
 
-                            <!-- Image Preview -->
+                            {{-- Preview --}}
                             <div class="mt-3">
                                 <img id="bannerPreview"
                                     src="{{ !empty($microsite->image) ? asset('storage/' . $microsite->image) : '#' }}"
-                                    alt="Banner Preview"
                                     class="img-fluid rounded {{ empty($microsite->image) ? 'd-none' : '' }}"
                                     style="max-height: 200px;">
                             </div>
                         </div>
 
-
+                        {{-- Dates --}}
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Start Date</label>
                                 <input type="date" name="start_date" class="form-control"
-                                    value="{{ old('start_date', isset($microsite->start_date) ? 
-                                    \Carbon\Carbon::parse($microsite->start_date)->format('Y-m-d') : '') }}">                                @error('start_date') <small class="text-danger">{{ $message }}</small> @enderror
+                                    value="{{ old('start_date', isset($microsite->start_date) ? \Carbon\Carbon::parse($microsite->start_date)->format('Y-m-d') : '') }}">
+                                @error('start_date') 
+                                    <small class="text-danger">{{ $message }}</small> 
+                                @enderror
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">End Date</label>
                                 <input type="date" name="end_date" class="form-control"
-                                    value="{{ old('end_date', isset($microsite->end_date) ? 
-                                    \Carbon\Carbon::parse($microsite->end_date)->format('Y-m-d') : '') }}">                                @error('end_date') <small class="text-danger">{{ $message }}</small> @enderror
+                                    value="{{ old('end_date', isset($microsite->end_date) ? \Carbon\Carbon::parse($microsite->end_date)->format('Y-m-d') : '') }}">
+                                @error('end_date') 
+                                    <small class="text-danger">{{ $message }}</small> 
+                                @enderror
                             </div>
                         </div>
 
                         {{-- Hidden Club ID --}}
-                        <input type="hidden" name="club_id" value="{{ old('club_id', $club->id) }}" readonly>
+                        <input type="hidden" name="club_id" value="{{ $club->id }}">
 
+                        {{-- Status + Submit --}}
                         <div class="d-flex justify-content-between align-items-center mt-4">
 
-                        <!-- Status Toggle -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input"
-                            type="checkbox"
-                            name="status"
-                            id="statusToggle"
-                            value="1"
-                            {{ old('status', $microsite->status ?? 1) ? 'checked' : '' }}>
-                            <label class="form-check-label ms-2" for="statusToggle">
-                                Active
-                            </label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input"
+                                    type="checkbox"
+                                    name="status"
+                                    value="1"
+                                    {{ old('status', $microsite->status ?? 1) ? 'checked' : '' }}>
+                                <label class="form-check-label ms-2">
+                                    Active
+                                </label>
+                            </div>
+
+                            <button type="submit" id="submitBtn" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-1"></i> 
+                                {{ isset($microsite) && $microsite->exists ? 'Update Microsite' : 'Create Microsite' }}
+                            </button>
+
                         </div>
-
-                        <!-- Submit Button -->
-                        <button type="submit" class="btn btn-primary">
-    <i class="bi bi-check-circle me-1"></i> 
-    {{ $microsite->exists ? 'Update Microsite' : 'Create Microsite' }}
-</button>
-
-                </div> 
 
                     </form>
 
                 </div>
-                
             </div>
         </div>
 
     </div>
 </div>
-@section('scripts')
-<script>document.addEventListener('DOMContentLoaded', function () {
 
-    // IMAGE PREVIEW
+@endsection
+
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Image Preview
     const bannerInput = document.getElementById('bannerInput');
     const preview = document.getElementById('bannerPreview');
 
@@ -177,23 +189,29 @@
 
             if (file) {
                 const reader = new FileReader();
-
                 reader.onload = function (e) {
                     preview.src = e.target.result;
                     preview.classList.remove('d-none');
                 };
-
                 reader.readAsDataURL(file);
-            } else {
-                preview.src = "#";
-                preview.classList.add('d-none');
             }
         });
     }
 
-    
+    // Submit Loader
+    const form = document.getElementById('MicrositeForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (form && submitBtn) {
+        form.addEventListener('submit', function () {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Processing...
+            `;
+        });
+    }
 
 });
 </script>
-@endsection
 @endsection

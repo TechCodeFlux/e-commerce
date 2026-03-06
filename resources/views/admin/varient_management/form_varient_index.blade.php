@@ -64,15 +64,6 @@
                                     @enderror
                                 </div>
 
-                            {{-- <div class="col-md-4 mb-3">
-                                <label class="form-label">Size</label>
-                                <input type="text" name="size" class="form-control" placeholder="Size"  
-                                    >
-                                @error('size')
-                                    <small class="text-danger d-block mt-1">{{ $message }}</small>
-                                @enderror
-                            </div>      --}}
-
                              <div class="col-md-4 mb-3">
                                 <label class="form-label">Size</label>
                                 <select name="size[]" id="size"  class="js-example-basic-multiple" multiple="multiple">
