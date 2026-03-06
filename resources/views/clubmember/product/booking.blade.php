@@ -98,6 +98,9 @@
                                 <option value="{{ $addr->id }}">{{ $addr->address1 }}</option>
                             @endforeach
                         </select>
+                        @error('address')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="col-md-8 mb-3">
@@ -119,6 +122,11 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                @error('country')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
 
                            
@@ -136,6 +144,11 @@
                                     @endforeach
                                  @endisset
                                 </select>
+                                @error('state')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
 
                             {{-- City --}}
@@ -183,13 +196,13 @@
                         <button class="btn btn-primary px-5">Submit</button>
                     </div>
 
-                    @if ($errors->any())
+                    <!-- @if ($errors->any())
                         <div class="alert alert-danger mt-3">
                             @foreach ($errors->all() as $error)
                                 <div>{{ $error }}</div>
                             @endforeach
                         </div>
-                    @endif
+                    @endif -->
 
                 </div>
             </form>
