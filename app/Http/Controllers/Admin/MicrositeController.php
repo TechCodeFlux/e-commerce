@@ -69,7 +69,7 @@ class MicrositeController extends Controller
                 ->addColumn('action', function ($microsite) {
 
                     $actions = '<div class="d-flex gap-1">';
-                    $actions .= '<button class="btn btn-sm btn-clean btn-outline-warning showMicrosite" data-id="'.$microsite->id.'" title="Show">
+                    $actions .= '<button class="btn btn-sm btn-clean btn-outline-warning showMicrositeProducts" data-id="'.$microsite->id.'" title="Show">
                         <i class="fas fa-box-open" ></i></button>';
                     $actions .= '<button class="btn btn-sm btn-clean btn-outline-warning showMicrosite" data-id="'.$microsite->id.'" title="Show">
                         <i class="fas fa-eye" ></i></button>';
@@ -245,7 +245,7 @@ class MicrositeController extends Controller
             if (!empty($microsite->image) && Storage::disk('public')->exists($microsite->image)) {
                 Storage::disk('public')->delete($microsite->image);
             }
-            $imagePath = $request->file('image')->store('microsite_images', 'public');
+            $imagePath = $request->file('image')->store('microsite_banner_images', 'public');
 
         } else {
         $imagePath = $microsite->image;
@@ -273,7 +273,7 @@ class MicrositeController extends Controller
     return view('clubmember.auth.login',compact('microsite'));
 
     }
-   public function login(Request $request, $slug)
+    public function login(Request $request, $slug)
     {
         $microsite = Microsite::where('slug', $slug)->firstOrFail();
 
@@ -282,11 +282,7 @@ class MicrositeController extends Controller
             'password' => 'required'
         ]);
 
-        $email = $request->email;
-        $password = $request->password;
-
-        // 1️⃣ Check member belongs to this club
-        $member = ClubMember::where('email', $email)
+        $member = ClubMember::where('email', $request->email)
                     ->where('club_id', $microsite->club_id)
                     ->first();
 
@@ -294,36 +290,49 @@ class MicrositeController extends Controller
             return back()->withErrors(['email' => 'You are not a member of this club']);
         }
 
-        // 2️⃣ Check microsite password
-        if ($password !== $microsite->password) {
+        if ($request->password !== $microsite->password) {
             return back()->withErrors(['password' => 'Invalid microsite password']);
         }
 
-        // 3️⃣ Check microsite date validity
         $today = now()->toDateString();
-
         if ($today < $microsite->start_date) {
             return back()->withErrors(['email' => 'Microsite sale has not started yet']);
         }
-
         if ($today > $microsite->end_date) {
             return back()->withErrors(['email' => 'Microsite sale has expired']);
         }
 
-        // 4️⃣ Store session for login
+        // Store session
         session([
             'clubmember_id' => $member->id,
-            'microsite_id' => $microsite->id
+            'microsite_id' => $microsite->id,
+            'club_id' => $microsite->club_id,
         ]);
 
-        return redirect()->route('microsite.home', ['microsite' => $microsite->id]);
-    }
-    public function logout(Request $request, $slug)
-{
-    auth('clubmember')->logout();
+        // Fetch club object
+        $club = $microsite->club; // make sure Microsite has belongsTo(Club::class)
 
-    return redirect()->route('microsite.login', $slug);
-}
+        // Redirect to microsite home with both objects
+        return redirect()->route('microsite.home', ['microsite' => $microsite->id, 'club' => $club->id]);
+    }
+
+    //add products into microsite blade page
+    public function products($micrositeId)
+    {
+        $microsite = Microsite::with('products')->findOrFail($micrositeId);
+        $club = Club::findOrFail($microsite->club_id);
+        $products = $microsite->products; // assuming Microsite hasMany Products
+
+        return view('admin.microsite_management.list_products', compact('microsite', 'products', 'club'));
+    }
+
+    //
+    public function logout(Request $request, $slug)
+    {
+        auth('clubmember')->logout();
+
+        return redirect()->route('microsite.login', $slug);
+    }
     //End Public club member login for microsite access
     /**
      * Remove the specified resource from storage.

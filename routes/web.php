@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\ClubMemberController;
 use App\Http\Controllers\Admin\ClubController;
 //for dashboard
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Club\ClubDashboardController;
+// use App\Http\Controllers\Club\ClubDashboardController;
 //category controller
 use App\Http\Controllers\Admin\CategoryController;
 //for option
@@ -107,6 +107,9 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('edit_microsite/{id}',[MicrositeController::class,'edit'])->name('editmicrosite');//edit microsite form
     Route::put('microsite_update/{microsite}', [MicrositeController::class, 'update'])->name('microsite_update');//update microsite data
     Route::get('microsite_show/{microsite}', [MicrositeController::class, 'show'])->name('microsite_show');//show microsite details modal
+
+    Route::get('/admin/microsite/{microsite}/products', [MicrositeController::class, 'products'])->name('microsite.list_products');//to add products into microsite blade page
+
     //microsite link
     Route::get('/microsite-access/{microsite}',[MicrositeController::class, 'access'])->name('microsite.access');
     //PRODUCT-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -139,13 +142,8 @@ Route::get('/microsite/{slug}/login', [MicrositeController::class, 'showLogin'])
 Route::post('/microsite/{slug}/login', [MicrositeController::class, 'login'])->name('microsite.login.submit');
 // After login → microsite home
 // Route::get('/microsite/{microsite}/home', function () {return view('clubmember.microsite.home');})->name('microsite.home');
-Route::get('/microsite/{microsite}/home', function ($microsite) {
-
-    $microsite = Microsite::findOrFail($microsite);
-
-    return view('clubmember.microsite.home', compact('microsite'));
-
-})->name('microsite.home');
+Route::get('/microsite/{microsite}/home', function ($micrositeId){$microsite = Microsite::findOrFail($micrositeId);
+$club = $microsite->club;return view('clubmember.microsite.home', compact('microsite','club'));})->name('microsite.home');
 // Logout
 Route::post('/microsite/{slug}/logout', [MicrositeController::class, 'logout'])->name('microsite.logout');
 Route::get('/clubmember', function () {return view('clubmember.auth.login');})->name('clubmember.login');

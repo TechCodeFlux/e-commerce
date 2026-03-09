@@ -36,4 +36,8 @@ class Microsite extends Model
     {
         return $this->belongsTo(Club::class);
     }
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
