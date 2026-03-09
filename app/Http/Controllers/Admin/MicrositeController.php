@@ -70,9 +70,11 @@ class MicrositeController extends Controller
 
                     $actions = '<div class="d-flex gap-1">';
                     $actions .= '<button class="btn btn-sm btn-clean btn-outline-warning showMicrosite" data-id="'.$microsite->id.'" title="Show">
-                        <i class="fas fa-eye" style="color: #ffc107;"></i></button>';
-                    $actions .= '<a href="' . route('admin.editmicrosite', $microsite->id) . '" class="btn btn-sm btn-outline-secondary 
-                        me-2" title="Edit"><i class="fas fa-pencil-alt"></i></a>';
+                        <i class="fas fa-box-open" ></i></button>';
+                    $actions .= '<button class="btn btn-sm btn-clean btn-outline-warning showMicrosite" data-id="'.$microsite->id.'" title="Show">
+                        <i class="fas fa-eye" ></i></button>';
+                    $actions .= '<a href="' . route('admin.editmicrosite', $microsite->id) . '" class="btn btn-sm btn-outline-secondary" 
+                    title="Edit"><i class="fas fa-pencil-alt"></i></a>';
                     $actions .= '<button type="button" class="btn btn-sm btn-outline-danger delete-microsite" data-id="' . $microsite->id . 
                         '"data-bs-toggle="modal" data-bs-target="#delete-modal" title="Delete"><i class="fas fa-trash-alt"></i></button>';
                     $actions .= '</div>';

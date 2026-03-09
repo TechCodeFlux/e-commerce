@@ -1,6 +1,5 @@
-
 @extends('admin.components.app')
-@section('page-title', 'Categories')
+@section('page-title','Categories')
 @section('content')
     <div class="mb-4">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -10,7 +9,7 @@
                         <i class="bi bi-globe2 small me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people-fill small me-2"></i>Categories</li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-tags  small me-2"></i>Categories</li>
             </ol>
         </nav>
     </div>
@@ -186,8 +185,15 @@ $(document).on('change', '.toggle-status', function () {
             id: categoryId,
             status: status
         },
-        success: function (res) {
-           alert('Status Changed!');
+       success: function (res) {
+            // alert('Status Changed!');
+            // bootstrap.Modal.getInstance(document.getElementById('status-modal')).hide();
+            Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "Status changed successfully!",
+                    confirmButtonText: 'OK'
+                });
            if (status === 1) {
                     label.text('Active')
                          .removeClass('bg-secondary-subtle text-secondary')
@@ -197,6 +203,7 @@ $(document).on('change', '.toggle-status', function () {
                          .removeClass('bg-success-subtle text-success')
                          .addClass('bg-secondary-subtle text-secondary');
                 }
+                
         },
         error: function () {
             alert('Status update failed');
@@ -308,6 +315,19 @@ $(document).ready(function () {
     });
 });
 
+</script>
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
 
 </script>
 
