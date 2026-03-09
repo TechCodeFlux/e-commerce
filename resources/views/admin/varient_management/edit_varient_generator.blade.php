@@ -1,9 +1,7 @@
 @extends('admin.components.app')
-@section('page-title','Variant Form')
+@section('page-title',' Edit Variant Form')
 @section('content')
-@php
-    $hideSearch = true;
-@endphp
+
 <div class="container mt-4">
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
@@ -12,7 +10,7 @@
                     <ol class="breadcrumb d-flex gap-3">
                         <li class="list-group-item-dark px-sm-4 border p-2 d-inline-block bg-teal">Product Details</li>
                         <li class="breadcrumb-item">
-                            <a class="list-group-item-primary px-sm-4 border p-2 d-inline-block" href="{{ route('admin.varient_management.form_varient_index') }}">
+                            <a class="list-group-item-primary px-sm-4 border p-2 d-inline-block" href="{{  route('admin.varient_management.edit_varient_generator', $product->id)  }}">
                                 Varient Details
                             </a>
                         </li>
@@ -29,7 +27,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-12">
 
-                    <form  class="VarientForm" id="VarientForm" 
+                    <form  class="VarientForm" 
                         method="POST" 
                         action="{{ route('admin.varient_management.edit_varient', $product->id) }}"  
                         enctype="multipart/form-data">
@@ -45,7 +43,7 @@
                                <label class="form-label">Color</label>
                                   <select name="color[]" id="color"  class="js-example-basic-multiple" multiple="multiple">
                                             
-                                            {{-- <option value="">Select Color</option> --}}
+                                            <option value="">Select Color</option>
                                         
                                             @foreach($optioncolorvalues as $optionvalue)
                                                 <option value="{{ $optionvalue->id }}">
@@ -62,7 +60,7 @@
                                     <label class="form-label">Size </label>
                                          <select name="size[]" id="size"  class="js-example-basic-multiple " multiple="multiple">
                                             
-                                            {{-- <option value="">Select Size</option> --}}
+                                            <option value="">Select Size</option>
                                         
                                             @foreach($optionsizevalues as $optionvalue)
                                                 <option  value="{{ $optionvalue->id }}">
@@ -75,11 +73,11 @@
                                         </select>
                             </div>
 
-                            <div class="col-md-2 mb-3">
-                                <button type="button" id="btn-generate-matrix" class="btn btn-secondary w-100">
-                                    Generate
-                                </button>
-                            </div>
+                               <div class="col-md-2 mb-3">
+                                   <button type="button" id="btn-generate-matrix" class="btn btn-secondary w-100">
+                                      Generate
+                                   </button>
+                              </div>
                         </div>
 
                         <div id="variant-matrix-container" class="mt-4"></div>
@@ -92,15 +90,15 @@
 
                         {{-- Footer Buttons --}}
                         <div class="d-flex justify-content-end gap-3 mt-4">
-                            <button type="submit" form="previous-form" class="btn btn-secondary px-5 p-md-2">
-                                Previous
-                            </button> 
+                                <button type="submit" form="previous-form" class="btn btn-secondary px-5 p-md-2">
+                                    Previous
+                                </button> 
 
-                           <button type="submit"
-                                id="submitBtn"
-                                class="btn btn-primary px-5 p-md-2 d-none">
-                            {{$varient->id ?? '' ? 'Update' : 'Submit' }}
-                        </button>
+                            <button type="submit"
+                                    id="submitBtn"
+                                    class="btn btn-primary px-5 p-md-2 d-none">
+                                {{$varient->id ?? '' ? 'Update' : 'Submit' }}
+                            </button>
                         </div>        
                     </form>
                     
@@ -130,6 +128,7 @@ $(document).ready(function () {
                             <th>Color</th>
                             <th>Size</th>
                             <th>Stock</th>
+                            <th>Image</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -163,6 +162,17 @@ $(document).ready(function () {
                         class="form-control text-center"
                         min="0"
                         required>
+                </td>
+
+                <td>
+                    ${item.image 
+                        ? `<img src="/storage/${item.image}" width="50" class="mb-2 d-block">`
+                        : `<span class="text-muted d-block mb-2">No Image</span>`
+                    }
+
+                    <input type="file"
+                        name="variants[${index}][image]"
+                        class="form-control form-control-sm">
                 </td>
 
                 <td>
@@ -223,8 +233,8 @@ function saveVariantData() {
 
     // ✅ CLEAR STORAGE AFTER FINAL SUBMIT
     $('.VarientForm').on('submit', function () {
-        localStorage.removeItem(STORAGE_KEY);
-         localStorage.removeItem('productForm');
+        // localStorage.removeItem(STORAGE_KEY);
+        //  localStorage.removeItem('productForm');
     });
 
 
@@ -331,6 +341,12 @@ colors.each(function () {
                         min="0"
                         required>
                 </td>
+                <td>
+                    <input type="file"
+                        name="variants[${existingRowCount}][image]"
+                        class="form-control form-control-sm"
+                        required>
+                </td>
 
                 <td>
                     <button type="button"
@@ -358,6 +374,7 @@ colors.each(function () {
                                 <th>Color</th>
                                 <th>Size</th>
                                 <th>Stock</th>
+                                <th>Image</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -410,6 +427,12 @@ colors.each(function () {
         // Update stock input
         $(this).find('input[name*="[stock]"]')
             .attr('name', `variants[${index}][stock]`);
+
+        // Update image input
+         $(this).find('input[name*="[image]"]')
+            .attr('name', `variants[${index}][image]`);
+
+        
     });
 }
 
@@ -465,26 +488,35 @@ $(document).ready(function () {
 });
 
 
-// Prevent double submit (MAIN LOGIC)
-document.addEventListener('DOMContentLoaded', function () {
+// ✅ IMAGE PREVIEW FOR VARIANT IMAGE INPUT
+$(document).on('change','input[name*="[image]"]', function(){
 
-    const form = document.getElementById('VarientForm');
-    const submitBtn = document.getElementById('submitBtn');
+    let input = this;
 
-    form.addEventListener('submit', function () {
+    if (input.files && input.files[0]) {
 
-        // Disable button immediately
-        submitBtn.disabled = true;
+        let reader = new FileReader();
 
-        // Show loading spinner
-        submitBtn.innerHTML = `
-            <span class="spinner-border spinner-border-sm me-2"></span>
-            Processing...
-        `;
-    });
+        reader.onload = function(e){
+
+            let td = $(input).closest('td');
+
+            // remove old preview image or "No Image" text
+            td.find('img').remove();
+            td.find('span').remove();
+
+            // add new preview above input
+            $(input).before(`
+                <img src="${e.target.result}" 
+                     width="50" 
+                     class="mb-2 d-block preview-image">
+            `);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
 
 });
-
 
 </script>
  @endsection
