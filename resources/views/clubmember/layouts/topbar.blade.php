@@ -1,126 +1,68 @@
-<!-- layout-wrapper -->
-<div class="layout-wrapper">
-
-    <!-- header -->
-    <div class="header">
-    <div class="menu-toggle-btn"> <!-- Menu close button for mobile devices -->
-        <a href="#">
-            <i class="bi bi-list"></i>
-        </a>
-    </div>
-    <!-- Logo -->
-    <a href="index.html" class="logo">
-        <img width="100" src="{{url('assets/images/logo.svg')}}" alt="logo">
-    </a>
-    <!-- ./ Logo -->
-    <div class="page-title">Overview</div>
-    <form class="search-form">
-        <div class="input-group">
-            <button class="btn btn-outline-light" type="button" id="button-addon1">
-                <i class="bi bi-search"></i>
-            </button>
-            <input type="text" class="form-control" placeholder="Search..."
-                   aria-label="Example text with button addon" aria-describedby="button-addon1">
-            <a href="#" class="btn btn-outline-light close-header-search-bar">
-                <i class="bi bi-x"></i>
-            </a>
-        </div>
-    </form>
-    <div class="header-bar ms-auto">
-        <ul class="navbar-nav justify-content-end">
-            <li class="nav-item">
-                <a href="#" class="nav-link nav-link-notify" data-count="2" data-sidebar-target="#notifications">
-                    <i class="bi bi-bell icon-lg"></i>
-                </a>
-            </li>
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link nav-link-notify" data-count="3" data-bs-toggle="dropdown">
-                    <i class="bi bi-cart2 icon-lg"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
-                    <h6 class="m-0 px-4 py-3 border-bottom">Shopping Cart</h6>
-                    <div class="dropdown-menu-body">
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item d-flex align-items-center">
-                                <a href="#" class="text-danger me-3" title="Remove">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                                <a href="#" class="me-3 flex-shrink-0 ">
-                                    <img src="{{url('assets/images/products/3.jpg')}}" class="rounded" width="60"
-                                         alt="...">
-                                </a>
-                                <div>
-                                    <h6>Digital clock</h6>
-                                    <div>1 x $1.190,90</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item d-flex align-items-center">
-                                <a href="#" class="text-danger me-3" title="Remove">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                                <a href="#" class="me-3 flex-shrink-0 ">
-                                    <img src="{{url('assets/images/products/4.jpg')}}" class="rounded" width="60"
-                                         alt="...">
-                                </a>
-                                <div>
-                                    <h6>Toy Car</h6>
-                                    <div>1 x $139.58</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item d-flex align-items-center">
-                                <a href="#" class="text-danger me-3" title="Remove">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                                <a href="#" class="me-3 flex-shrink-0 ">
-                                    <img src="{{url('assets/images/products/5.jpg')}}" class="rounded" width="60"
-                                         alt="...">
-                                </a>
-                                <div>
-                                    <h6>Sunglasses</h6>
-                                    <div>2 x $50,90</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item d-flex align-items-center">
-                                <a href="#" class="text-danger me-3" title="Remove">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                                <a href="#" class="me-3 flex-shrink-0 ">
-                                    <img src="{{url('assets/images/products/6.jpg')}}" class="rounded" width="60"
-                                         alt="...">
-                                </a>
-                                <div>
-                                    <h6>Cake</h6>
-                                    <div>1 x $10,50</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <h6 class="m-0 px-4 py-3 border-top small">Sub Total : <strong
-                            class="text-primary">$1.442,78</strong></h6>
-                </div>
-            </li>
-            <li class="nav-item ms-3">
-                    <button class="btn btn-primary btn-icon">
-        <i class="bi bi-plus-circle"></i> Add Product
-    </button>
-            </li>
-        </ul>
-    </div>
-    <!-- Header mobile buttons -->
-    <div class="header-mobile-buttons">
-        <a href="#" class="search-bar-btn">
-            <i class="bi bi-search"></i>
-        </a>
-        <a href="#" class="actions-btn">
-            <i class="bi bi-three-dots"></i>
-        </a>
-    </div>
-    <!-- ./ Header mobile buttons -->
-</div>
-    <!-- ./ header -->
+	<!-- Start Header Area -->
+	<header class="header_area sticky-header">
+		<div class="main_menu">
+			<nav class="navbar navbar-expand-lg navbar-light main_box">
+				<div class="container">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<a class="navbar-brand logo_h" href="index.html"><img src="img/logo.png" alt=""></a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+						<ul class="nav navbar-nav menu_nav ml-auto">
+							<li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
+							<li class="nav-item submenu dropdown">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">Shop</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link" href="category.html">Shop Category</a></li>
+									<li class="nav-item"><a class="nav-link" href="single-product.html">Product Details</a></li>
+									<li class="nav-item"><a class="nav-link" href="checkout.html">Product Checkout</a></li>
+									<li class="nav-item"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
+									<li class="nav-item"><a class="nav-link" href="confirmation.html">Confirmation</a></li>
+								</ul>
+							</li>
+							<li class="nav-item submenu dropdown">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">Blog</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+									<li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
+								</ul>
+							</li>
+							<li class="nav-item submenu dropdown">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">Pages</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+									<li class="nav-item"><a class="nav-link" href="tracking.html">Tracking</a></li>
+									<li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
+								</ul>
+							</li>
+							<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
+							<li class="nav-item">
+								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+		<div class="search_input" id="search_input_box">
+			<div class="container">
+				<form class="d-flex justify-content-between">
+					<input type="text" class="form-control" id="search_input" placeholder="Search Here">
+					<button type="submit" class="btn"></button>
+					<span class="lnr lnr-cross" id="close_search" title="Close Search"></span>
+				</form>
+			</div>
+		</div>
+	</header>
+	<!-- End Header Area -->

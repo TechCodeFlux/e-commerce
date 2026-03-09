@@ -148,7 +148,7 @@ class MicrositeController extends Controller
             'status' => $validated['status'] ?? 0,
         ]);
         //Generate URL
-        $accessUrl = route('admin.microsite.access', $microsite->id);
+        $accessUrl = route('microsite.login', ['slug' => $microsite->slug]);
 
         // $members = ClubMember::where('club_id', $validated['club_id'])->get();
 
@@ -261,6 +261,68 @@ class MicrositeController extends Controller
             ->with('success', 'Microsite updated successfully');
     }
 
+
+    //Public club member login for microsite access
+    public function showLogin($slug)
+    {
+
+    $microsite = Microsite::where('slug',$slug)->firstOrFail();
+
+    return view('clubmember.auth.login',compact('microsite'));
+
+    }
+   public function login(Request $request, $slug)
+    {
+        $microsite = Microsite::where('slug', $slug)->firstOrFail();
+
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        $email = $request->email;
+        $password = $request->password;
+
+        // 1️⃣ Check member belongs to this club
+        $member = ClubMember::where('email', $email)
+                    ->where('club_id', $microsite->club_id)
+                    ->first();
+
+        if (!$member) {
+            return back()->withErrors(['email' => 'You are not a member of this club']);
+        }
+
+        // 2️⃣ Check microsite password
+        if ($password !== $microsite->password) {
+            return back()->withErrors(['password' => 'Invalid microsite password']);
+        }
+
+        // 3️⃣ Check microsite date validity
+        $today = now()->toDateString();
+
+        if ($today < $microsite->start_date) {
+            return back()->withErrors(['email' => 'Microsite sale has not started yet']);
+        }
+
+        if ($today > $microsite->end_date) {
+            return back()->withErrors(['email' => 'Microsite sale has expired']);
+        }
+
+        // 4️⃣ Store session for login
+        session([
+            'clubmember_id' => $member->id,
+            'microsite_id' => $microsite->id
+        ]);
+
+        return redirect()->route('microsite.home', ['microsite' => $microsite->id]);
+    }
+    public function logout(Request $request, $slug)
+{
+    auth('clubmember')->logout();
+
+    return redirect()->route('microsite.login', $slug);
+}
+    //End Public club member login for microsite access
     /**
      * Remove the specified resource from storage.
      */

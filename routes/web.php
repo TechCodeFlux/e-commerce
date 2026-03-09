@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\OptionValueController;
 use App\Http\Controllers\Admin\MicrositeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VarientController;
+//model
+use App\Models\Microsite;
 //arjun
 Route::get('/', function () {return view('club.auth.login');})->name('club.login');
 // Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
@@ -130,17 +132,33 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::post('varient/get-option-values',[VarientController::class, 'getOptionValues'])->name('varient_management.get_option_values');
 });
 
+//| PUBLIC MICROSITE ROUTES
+// Microsite login page
+Route::get('/microsite/{slug}/login', [MicrositeController::class, 'showLogin'])->name('microsite.login');
+// Microsite login submit
+Route::post('/microsite/{slug}/login', [MicrositeController::class, 'login'])->name('microsite.login.submit');
+// After login → microsite home
+// Route::get('/microsite/{microsite}/home', function () {return view('clubmember.microsite.home');})->name('microsite.home');
+Route::get('/microsite/{microsite}/home', function ($microsite) {
 
+    $microsite = Microsite::findOrFail($microsite);
 
-//aishwarya
+    return view('clubmember.microsite.home', compact('microsite'));
+
+})->name('microsite.home');
+// Logout
+Route::post('/microsite/{slug}/logout', [MicrositeController::class, 'logout'])->name('microsite.logout');
 Route::get('/clubmember', function () {return view('clubmember.auth.login');})->name('clubmember.login');
+
+// Route::get('login', [MicrositeController::class, 'showLogin'])->name('login');
 // Route::post('/clubmember', [ClubMemberLoginController::class, 'login'])->name('clubmember.login.submit');
+// Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controllers\ClubMember')->group(function () {
+//     Auth::routes(['register' => false]); 
+//     //dashboard controller
+//     Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
 
+//     // Login submit
+//     // Route::post('login', [MicrositeController::class, 'login'])->name('login.submit');
 
-Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controllers\ClubMember')->group(function () {
-    Auth::routes(['register' => false]); 
-    //dashboard controller
-    Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
-
-});
+// });
 
