@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Admin;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Controller;
-use Illuminate\Container\Attributes\Storage;
+// use Illuminate\Container\Attributes\Storage;
 //use Illuminate\Container\Attributes\Auth;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+// use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; 
+// use Illuminate\Support\Str; 
 
 use App\Models\Category;
-use App\Models\Option;
+// use App\Models\Option;
 use App\Models\Product;
-use App\Models\Varient;
+// use App\Models\Varient;
 
 class ProductController extends Controller
 {
@@ -29,17 +29,17 @@ public function store(Request $request)
     $validated = $request->validate([
         'name'        => 'required|string|max:255',
         'description' => 'required|string|max:500',
-        'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        // 'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
         'category'    => 'required|integer|exists:categories,id',
     ]);
 
     // store image temporarily
-$imagePath = $request->file('image')->store('products', 'public');
+// $imagePath = $request->file('image')->store('products', 'public');
     // ✅ write to session
     session()->put('product', [
         'name'        => $request->name,
         'description' => $request->description,
-        'image'       => $imagePath,
+        // 'image'       => $imagePath,
         'status'      => $request->status ? 1 : 0,
         'category_id' => $request->category,
     ]);
@@ -75,22 +75,22 @@ $imagePath = $request->file('image')->store('products', 'public');
         'name'        => 'required|string|max:255',
         'description' => 'required|string|max:500',
         // ✅ image not required while editing
-        'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        // 'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         'category'    => 'required|integer|exists:categories,id',
     ]);
 
     // ✅ Use old image if new image not uploaded
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('products', 'public');
-    } else {
-        $imagePath = $product->image; // keep old image
-    }
+    // if ($request->hasFile('image')) {
+    //     $imagePath = $request->file('image')->store('products', 'public');
+    // } else {
+    //     $imagePath = $product->image; // keep old image
+    // }
 
     // ✅ Save to session (like your existing logic)
     session()->put('product', [
         'name'        => $request->name,
         'description' => $request->description,
-        'image'       => $imagePath,
+        // 'image'       => $imagePath,
         'status'      => $request->status ? 1 : 0,
         'category_id' => $request->category,
     ]);
@@ -112,35 +112,18 @@ $imagePath = $request->file('image')->store('products', 'public');
     ->eloquent($product)
 
 
-//varient connection
-
-//     ->addColumn('varients', function (Product $product) {
-
-//     if ($product->varients->count() > 0) {
-//         $output = '';
-
-//         foreach ($product->varients as $varient) {
-//             $output .= '<span class="badge bg-info me-1 bg-purple">'
-//             . $varient->color . ' - ' . $varient->size .
-//            '</span><br>';
-//         }
-
-//         return $output;
-//     }
-
-//     return '--';
-// })
       
 //add product-image for image scale
-              ->addColumn('image', function (Product $product) {
-                if ($product->image) {
-                    return '<img src="'.asset('storage/'.$product->image).'"
-                                width="100" class="mx-md-5 product-image"
-                                
-                                style="object-fit:cover;border-radius:6px;">';
-                }
-                return '--';
-            })
+        ->addColumn('image', function ($row) {
+
+    $firstVariant = $row->varients->first();
+
+    if ($firstVariant && $firstVariant->image) {
+        return '<img src="' . asset('storage/' . $firstVariant->image) . '" width="150" class="rounded ">';
+    }
+
+    return '<span class="text-muted">No Image</span>';
+})
 
             
 //toggle button
@@ -183,7 +166,7 @@ $imagePath = $request->file('image')->store('products', 'public');
                                 title="Edit">
                                                              <i class="fas fa-pencil-alt"></i> 
                             </a>';
- 
+
 
                 //delete button
                 $actions .= '<button 
@@ -205,9 +188,16 @@ $imagePath = $request->file('image')->store('products', 'public');
     }
 
 
-    public function single_show($id)
+  public function single_show($id)
 {
-   $product = Product::with('varients','categories')->findOrFail($id);
+    $product = Product::with('varients','categories')->findOrFail($id);
+
+    $product->varients->transform(function ($variant) {
+        if ($variant->image) {
+            $variant->image = asset('storage/' . $variant->image);
+        }
+        return $variant;
+    });
 
     return response()->json([
         'id' => $product->id,
