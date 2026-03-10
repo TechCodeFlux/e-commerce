@@ -284,4 +284,36 @@ public function showLogin($slug)
 
     return view('clubmember.auth.login', compact('microsite'));
 }
+// ================= CLUB MEMBER AUTH =================
+
+public function showLogin()
+{
+    return view('clubmember.auth.login'); 
+}
+
+public function login(Request $request, $slug)
+{
+    $credentials = $request->only('email', 'password');
+
+    if (auth('clubmember')->attempt($credentials)) {
+
+        return redirect()->route('microsite.home', $slug);
+    }
+
+    return back()->withErrors([
+        'email' => 'Invalid credentials'
+    ]);
+}
+
+public function logout(Request $request)
+{
+    auth('clubmember')->logout();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('clubmember.login');
+}
+
+
 }

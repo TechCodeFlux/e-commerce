@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\ClubMemberController;
 use App\Http\Controllers\Admin\ClubController;
 //for dashboard
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Club\ClubDashboardController;
 //category controller
 use App\Http\Controllers\Admin\CategoryController;
 //for option
