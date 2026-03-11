@@ -30,7 +30,8 @@
     {{-- Main content: products list --}}
     <div class="col-md-9">
         <div class="row g-3">
-            @forelse($products as $product)
+            <h3>Add Products</h3>
+            @forelse($micrositeProducts  as $product)
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm">
                         <img src="{{ Storage::url($product->image) }}" 
@@ -44,7 +45,7 @@
                                 <span class="fw-bold">₹{{ $product->price }}</span>
                                 <a href="{{ route('admin.product_management.edit_products_index', $product->id) }}" 
                                    class="btn btn-sm btn-outline-secondary">
-                                   <i class="fas fa-edit"></i> Edit
+                                   <i class="fas fa-trash"></i> Remove
                                 </a>
                             </div>
                         </div>
@@ -59,8 +60,10 @@
             @endforelse
         </div>
 
+
         {{-- Products List --}}
 <div class="row g-3 mt-3">
+    <h3>Available Products</h3>
     @forelse($products as $product)
         <div class="col-md-4">
             <div class="card h-100 shadow-sm">
@@ -75,7 +78,7 @@
                         <span class="fw-bold">₹{{ $product->price }}</span>
                         <a href="{{ route('admin.product_management.edit_products_index', $product->id) }}" 
                            class="btn btn-sm btn-outline-secondary">
-                           <i class="fas fa-edit"></i> Edit
+                           <i class="fas fa-plus"></i> Add
                         </a>
                     </div>
                 </div>

@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Microsite;
 use App\Models\Club;
 use App\Models\ClubMember;
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 // use Illuminate\Support\Facades\Hash;
@@ -319,11 +321,23 @@ class MicrositeController extends Controller
     //add products into microsite blade page
     public function products($micrositeId)
     {
-        $microsite = Microsite::with('products')->findOrFail($micrositeId);
+        $microsite = Microsite::findOrFail($micrositeId);
         $club = Club::findOrFail($microsite->club_id);
-        $products = $microsite->products; // assuming Microsite hasMany Products
 
-        return view('admin.microsite_management.list_products', compact('microsite', 'products', 'club'));
+        // Products already added to this microsite
+        $micrositeProducts = DB::table('microsite_products')
+            ->join('products', 'microsite_products.product_id', '=', 'products.id')
+            ->where('microsite_products.microsite_id', $micrositeId)
+            ->select('products.*', 'microsite_products.id as microsite_product_id')
+            ->get();
+
+        // All products from products table
+        $products = Product::all();
+
+        return view(
+            'admin.microsite_management.list_products',
+            compact('microsite','club','micrositeProducts','products')
+        );
     }
 
     //
