@@ -8,7 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Microsite;
 use App\Models\Club;
 use App\Models\ClubMember;
-use App\Models\Product;
+use App\Models\Category;
+// use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -310,35 +311,105 @@ class MicrositeController extends Controller
             'microsite_id' => $microsite->id,
             'club_id' => $microsite->club_id,
         ]);
-
         // Fetch club object
         $club = $microsite->club; // make sure Microsite has belongsTo(Club::class)
 
-        // Redirect to microsite home with both objects
-        return redirect()->route('microsite.home', ['microsite' => $microsite->id, 'club' => $club->id]);
+        // Fetch microsite products
+    $micrositeProducts = DB::table('microsite_products')
+        ->join('products', 'products.id', '=', 'microsite_products.product_id')
+        ->where('microsite_products.microsite_id', $microsite->id)
+        ->select(
+            'products.id',
+            'products.name',
+            'products.description',
+            'products.variant_image',
+            'products.category_id'
+        )
+        ->get();
+
+    // Fetch categories used by these products
+    $categories = Category::whereIn(
+        'id',
+        $micrositeProducts->pluck('category_id')->unique()
+    )->get();
+
+    return view('clubmember.microsite.home', compact(
+        'microsite',
+        'club',
+        'micrositeProducts',
+        'categories'
+    ));
     }
 
     //add products into microsite blade page
     public function products($micrositeId)
-    {
-        $microsite = Microsite::findOrFail($micrositeId);
-        $club = Club::findOrFail($microsite->club_id);
+{
+    $microsite = Microsite::findOrFail($micrositeId);
+    $club = Club::findOrFail($microsite->club_id);
 
-        // Products already added to this microsite
-        $micrositeProducts = DB::table('microsite_products')
-            ->join('products', 'microsite_products.product_id', '=', 'products.id')
-            ->where('microsite_products.microsite_id', $micrositeId)
-            ->select('products.*', 'microsite_products.id as microsite_product_id')
-            ->get();
+    $micrositeProducts = DB::table('microsite_products')
+    ->join('products', 'microsite_products.product_id', '=', 'products.id')
+    ->leftJoin('varients', function ($join) {
+        $join->on('varients.product_id', '=', 'products.id')
+             ->where('varients.status', 1);
+    })
+    ->where('microsite_products.microsite_id', $micrositeId)
+    ->select(
+        'products.id',
+        'products.name',
+        'products.description',
+        'products.category_id', // IMPORTANT
+        DB::raw('(select image from varients where varients.product_id = products.id limit 1) as variant_image'),
+        'microsite_products.id as microsite_product_id'
+    )
+    ->get();
 
-        // All products from products table
-        $products = Product::all();
+    $products = DB::table('products')
+    ->leftJoin('varients', function($join){
+        $join->on('varients.product_id','=','products.id')
+             ->whereRaw('varients.id = (select id from varients where varients.product_id = products.id limit 1)');
+    })
+    ->select(
+        'products.*',
+        'varients.image as variant_image'
+    )
+    ->get();
+    $categories = Category::all();
 
-        return view(
-            'admin.microsite_management.list_products',
-            compact('microsite','club','micrositeProducts','products')
-        );
-    }
+    return view(
+        'admin.microsite_management.list_products',
+        compact('microsite','club','micrositeProducts','products','categories')
+    );
+}
+//add products into microsite
+public function addProductToMicrosite(Request $request)
+{
+    $exists = DB::table('microsite_products')
+    ->where('microsite_id',$request->microsite_id)
+    ->where('product_id',$request->product_id)
+    ->exists();
+
+if(!$exists){
+    DB::table('microsite_products')->insert([
+        'microsite_id'=>$request->microsite_id,
+        'product_id'=>$request->product_id,
+        'club_id'=>$request->club_id,
+        'varient_id'=>0,
+        'status'=>1
+    ]);
+}
+
+    return back()->with('success','Product added to microsite');
+}
+//remove products from microsite
+public function removeProductFromMicrosite(Request $request)
+{
+    DB::table('microsite_products')
+        ->where('id', $request->microsite_product_id)
+        ->delete();
+
+    return back()->with('success', 'Product removed successfully');
+}
 
     //
     public function logout(Request $request, $slug)

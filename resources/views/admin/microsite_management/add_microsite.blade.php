@@ -175,7 +175,7 @@
 @endsection
 
 
-@section('scripts')
+@section('script')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 

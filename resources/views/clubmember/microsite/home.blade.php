@@ -30,6 +30,7 @@
 	<link rel="stylesheet" href="{{url('assets/micro/css/ion.rangeSlider.skinFlat.css')}}" />
 	<link rel="stylesheet" href="{{url('assets/micro/css/magnific-popup.css')}}">
 	<link rel="stylesheet" href="{{url('assets/micro/css/main.css')}}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
@@ -78,6 +79,83 @@
     </div>
 </section>
 	<!-- End banner Area -->
+
+	<!-- Start Products Area -->
+<section class="product-area section_gap">
+	<div class="container">
+
+		<div class="row mb-4 align-items-center">
+
+    <div class="col-md-6">
+        <h3 class="mb-0">Products</h3>
+    </div>
+
+    <div class="col-md-6 d-flex justify-content-end">
+        <select id="categoryFilter" class="form-control w-auto">
+            <option value="all">All Categories</option>
+
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}">
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+</div>
+
+		<div class="row" id="productContainer">
+
+			@forelse($micrositeProducts as $product)
+
+			<div class="col-lg-3 col-md-4 col-sm-6 mb-4 product-card" data-category="{{ $product->category_id }}">
+
+				<div class="single-product">
+
+					<img class="img-fluid"
+						 src="{{ $product->variant_image ? Storage::url($product->variant_image) : asset('img/product/p1.jpg') }}"
+						 alt="{{ $product->name }}"
+						 style="height:220px; object-fit:cover; width:100%;">
+
+					<div class="product-details">
+						<h6>{{ $product->name }}</h6>
+
+						<p style="font-size:13px;">
+							{{ \Illuminate\Support\Str::limit($product->description, 60) }}
+						</p>
+
+						<div class="prd-bottom">
+							<a href="#" class="social-info">
+								<span class="fas fa-shopping-bag"></span>
+								<p class="hover-text">Add to cart</p>
+							</a>
+
+							<a href="#" class="social-info">
+								<span class="fas fa-eye"></span>
+								<p class="hover-text">view more</p>
+							</a>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			@empty
+
+			<div class="col-12 text-center">
+				<p>No products available</p>
+			</div>
+
+			@endforelse
+
+		</div>
+
+	</div>
+</section>
+<!-- End Products Area -->
+
 
 	<!-- start footer Area -->
 	<footer class="footer-area section_gap">
@@ -160,7 +238,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	 crossorigin="anonymous"></script>
 	<script src="{{url('assets/micro/js/vendor/bootstrap.min.js')}}"></script>
 	<script src="{{url('assets/micro/js/jquery.ajaxchimp.min.js')}}"></script>
-	<script src="{{url('assets/micro/js/jquery.nice-select.min.js')}}"></script>
+	{{-- <script src="{{url('assets/micro/js/jquery.nice-select.min.js')}}"></script> --}}
 	<script src="{{url('assets/micro/js/jquery.sticky.js')}}"></script>
 	<script src="{{url('assets/micro/js/nouislider.min.js')}}"></script>
 	<script src="{{url('assets/micro/js/countdown.js')}}"></script>
@@ -170,6 +248,36 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
 	<script src="{{url('assets/micro/js/gmaps.min.js')}}"></script>
 	<script src="{{url('assets/micro/js/main.js')}}"></script>
+	<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+	const filter = document.getElementById("categoryFilter");
+
+	filter.addEventListener("change", function(){
+
+		const selected = this.value;
+		const products = document.querySelectorAll(".product-card");
+
+		products.forEach(function(product){
+
+			const category = product.getAttribute("data-category");
+
+			if(selected === "all" || selected === category){
+				product.style.display = "block";
+			}else{
+				product.style.display = "none";
+			}
+
+		});
+
+	});
+
+});
+
+$(document).ready(function(){
+	$('#categoryFilter').niceSelect();
+});
+</script>
 </body>
 
 </html>

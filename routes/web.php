@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VarientController;
 //model
 use App\Models\Microsite;
+use Illuminate\Support\Facades\DB;
+use App\Models\Category;
 //arjun
 Route::get('/', function () {return view('club.auth.login');})->name('club.login');
 // Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
@@ -109,7 +111,8 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('microsite_show/{microsite}', [MicrositeController::class, 'show'])->name('microsite_show');//show microsite details modal
 
     Route::get('/admin/microsite/{microsite}/products', [MicrositeController::class, 'products'])->name('microsite.list_products');//to add products into microsite blade page
-
+    Route::post('/admin/microsite/add-product', [MicrositeController::class, 'addProductToMicrosite'])->name('microsite.add_product');//add products into microsite
+    Route::delete('/admin/microsite/remove-product', [MicrositeController::class, 'removeProductFromMicrosite'])->name('microsite.remove_product');//remove products from microsite
     //microsite link
     Route::get('/microsite-access/{microsite}',[MicrositeController::class, 'access'])->name('microsite.access');
     //PRODUCT-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -142,8 +145,41 @@ Route::get('/microsite/{slug}/login', [MicrositeController::class, 'showLogin'])
 Route::post('/microsite/{slug}/login', [MicrositeController::class, 'login'])->name('microsite.login.submit');
 // After login → microsite home
 // Route::get('/microsite/{microsite}/home', function () {return view('clubmember.microsite.home');})->name('microsite.home');
-Route::get('/microsite/{microsite}/home', function ($micrositeId){$microsite = Microsite::findOrFail($micrositeId);
-$club = $microsite->club;return view('clubmember.microsite.home', compact('microsite','club'));})->name('microsite.home');
+
+
+Route::get('/microsite/{microsite}/home', function ($micrositeId) {
+
+    $microsite = Microsite::findOrFail($micrositeId);
+    $club = $microsite->club;
+
+    // Get microsite products
+    $micrositeProducts = DB::table('microsite_products')
+        ->join('products', 'products.id', '=', 'microsite_products.product_id')
+        ->leftJoin('varients', function ($join) {
+            $join->on('varients.product_id', '=', 'products.id')
+                 ->where('varients.status', 1);
+        })
+        ->where('microsite_products.microsite_id', $microsite->id)
+        ->select(
+            'products.*',
+            DB::raw('(select image from varients where varients.product_id = products.id limit 1) as variant_image')
+        )
+        ->get();
+
+    // Get categories of those products
+    $categories = Category::whereIn(
+        'id',
+        $micrositeProducts->pluck('category_id')->unique()
+    )->get();
+
+    return view('clubmember.microsite.home', compact(
+        'microsite',
+        'club',
+        'micrositeProducts',
+        'categories'
+    ));
+
+})->name('microsite.home');
 // Logout
 Route::post('/microsite/{slug}/logout', [MicrositeController::class, 'logout'])->name('microsite.logout');
 Route::get('/clubmember', function () {return view('clubmember.auth.login');})->name('clubmember.login');
