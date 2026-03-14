@@ -13,6 +13,22 @@
             <div class="col-lg-5 col-md-7">
 
                 <div class="login-card">
+    @if ($errors->any())
+<div class="login-error-box" id="loginErrorBox">
+    
+    <div class="login-error-header">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>Login Error</span>
+    </div>
+
+    <ul class="login-error-list">
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+
+</div>
+@endif
 
                     <!-- Logo -->
                     @if(!empty($microsite->logo))
@@ -145,7 +161,57 @@
 .login-btn:hover{
     background:#ffe4c7;
 }
+/**/
+/* Error Box */
+.login-error-box{
+    background:rgba(255,255,255,0.65);
+    border:1px solid #ff9a9a;
+    border-radius:12px;
+    padding:16px 18px;
+    margin-bottom:20px;
+    backdrop-filter:blur(10px);
+    animation:fadeSlide 0.5s ease;
+}
 
+/* Header */
+.login-error-header{
+    font-weight:600;
+    color:#b30000;
+    display:flex;
+    align-items:center;
+    margin-bottom:8px;
+}
+
+.login-error-header i{
+    margin-right:8px;
+    font-size:16px;
+}
+
+/* List */
+.login-error-list{
+    margin:0;
+    padding-left:20px;
+    color:#5a0000;
+    font-size:14px;
+}
+
+.login-error-list li{
+    margin-bottom:4px;
+}
+
+/* Entry animation */
+@keyframes fadeSlide{
+    from{
+        opacity:0;
+        transform:translateY(-10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/**/
 
 /* ================= RESPONSIVE FIX ================= */
 
@@ -192,4 +258,26 @@
 }
 
 </style>
+@endpush
+@push('styles')
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    const errorBox = document.getElementById("loginErrorBox");
+
+    if(errorBox){
+        setTimeout(function(){
+            errorBox.style.transition = "opacity 0.6s ease";
+            errorBox.style.opacity = "0";
+
+            setTimeout(function(){
+                errorBox.remove();
+            },600);
+
+        },4000); // disappears after 4 seconds
+    }
+
+});
+</script>
+
 @endpush

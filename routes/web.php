@@ -145,6 +145,8 @@ Route::get('/microsite/{slug}/login', [MicrositeController::class, 'showLogin'])
 Route::post('/microsite/{slug}/login', [MicrositeController::class, 'login'])->name('microsite.login.submit');
 // After login → microsite home
 // Route::get('/microsite/{microsite}/home', function () {return view('clubmember.microsite.home');})->name('microsite.home');
+Route::get('/product-variants/{id}', [MicrositeController::class,'variants']);//to get product variants in microsite home page
+
 
 
 Route::get('/microsite/{microsite}/home', function ($micrositeId) {

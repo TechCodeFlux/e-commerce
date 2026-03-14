@@ -106,16 +106,24 @@
 
 		<div class="row" id="productContainer">
 
+			
+
 			@forelse($micrositeProducts as $product)
+			{{-- // --}}
+			@php
+			$variant = DB::table('varients')->where('product_id',$product->id)->first();
+			@endphp
+
+			{{-- // --}}
 
 			<div class="col-lg-3 col-md-4 col-sm-6 mb-4 product-card" data-category="{{ $product->category_id }}">
 
 				<div class="single-product">
 
 					<img class="img-fluid"
-						 src="{{ $product->variant_image ? Storage::url($product->variant_image) : asset('img/product/p1.jpg') }}"
-						 alt="{{ $product->name }}"
-						 style="height:220px; object-fit:cover; width:100%;">
+						src="{{ $variant ? Storage::url($variant->image) : asset('img/product/p1.jpg') }}"
+						style="height:220px;object-fit:cover;width:100%;">
+
 
 					<div class="product-details">
 						<h6>{{ $product->name }}</h6>
@@ -130,7 +138,7 @@
 								<p class="hover-text">Add to cart</p>
 							</a>
 
-							<a href="#" class="social-info">
+							<a href="#" class="social-info viewProductBtn" data-product="{{ $product->id }}">
 								<span class="fas fa-eye"></span>
 								<p class="hover-text">view more</p>
 							</a>
@@ -155,6 +163,38 @@
 	</div>
 </section>
 <!-- End Products Area -->
+<div class="modal fade" id="variantModal" tabindex="-1">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5 class="modal-title">Product Variants</h5>
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<div class="modal-body">
+
+<table class="table">
+<thead>
+<tr>
+<th>Image</th>
+<th>Size</th>
+<th>Color</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="variantTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+</div>
+</div>
 
 
 	<!-- start footer Area -->
@@ -277,6 +317,45 @@ document.addEventListener("DOMContentLoaded", function(){
 $(document).ready(function(){
 	$('#categoryFilter').niceSelect();
 });
+
+$(document).on('click','.viewProductBtn',function(e){
+
+    e.preventDefault();
+
+    let productId = $(this).data('product');
+
+    $.get('/product-variants/'+productId,function(data){
+
+        let html = '';
+
+        data.forEach(function(v){
+			let btn = v.stock > 0 
+? `<button class="btn btn-sm btn-primary addToCartBtn" data-variant="${v.id}">Add to Cart</button>`
+: `<button class="btn btn-sm btn-secondary" disabled>Out of Stock</button>`;
+
+            html += `
+            <tr>
+            <td><img src="/storage/${v.image}" style="height:60px"></td>
+            <td>${v.size}</td>
+            <td>${v.color}</td>
+            <td>
+				<button class="btn btn-sm btn-warning addToCartBtn rounded-pill" data-variant="${v.id}">
+    <i class="fas fa-shopping-bag me-1"></i> Add to Cart
+</button>
+			</td>
+			</tr>
+            `;
+
+        });
+
+        $('#variantTable').html(html);
+
+        $('#variantModal').modal('show');
+
+    });
+
+});
+
 </script>
 </body>
 

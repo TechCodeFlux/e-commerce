@@ -317,12 +317,13 @@ class MicrositeController extends Controller
         // Fetch microsite products
     $micrositeProducts = DB::table('microsite_products')
         ->join('products', 'products.id', '=', 'microsite_products.product_id')
+        // ->join('varients', 'varients.product_id', '=', 'products.id')
         ->where('microsite_products.microsite_id', $microsite->id)
         ->select(
             'products.id',
             'products.name',
             'products.description',
-            'products.variant_image',
+            // 'varients.image as variant_image',
             'products.category_id'
         )
         ->get();
@@ -340,6 +341,16 @@ class MicrositeController extends Controller
         'categories'
     ));
     }
+
+    public function variants($id)
+{
+    $variants = DB::table('varients')
+        ->where('product_id',$id)
+        ->get();
+
+    return response()->json($variants);
+}
+
 
     //add products into microsite blade page
     public function products($micrositeId)
