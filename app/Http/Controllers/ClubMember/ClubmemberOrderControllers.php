@@ -246,6 +246,9 @@ class ClubmemberOrderControllers extends Controller
                 'address_id'   => $addressid,
             ]);
 
+            $cart = Cart::where('product_id',$request->product_id);
+            $cart->delete(); 
+
             return redirect()
                 ->route('clubmember.viewproduct')
                 ->with('success', 'Order added successfully!');
