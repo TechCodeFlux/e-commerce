@@ -52,8 +52,10 @@ class ClubOrderController extends Controller
         
         $orders = Order::with('product', 'varient', 'clubmember', 'order_status','address')        
             ->where('club_id', $id)
-            ->orderBy('varient_id','asc');
-            // ->where('club_member_id', $clubmemberId); 
+            ->orderBy('order_status_id','asc');
+
+            
+            
 
         return datatables()
                 ->eloquent($orders)
@@ -126,6 +128,8 @@ class ClubOrderController extends Controller
             ->rawColumns(['image','action','order_status'])
             ->make(true);
            }
+        // dd("hyktc",'order_status_id');
+        // dd("yguiui",'order_status');
 
     return view('admin.club.order_management.vieworder', compact('club'));
     }

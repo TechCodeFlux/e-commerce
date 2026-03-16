@@ -101,8 +101,9 @@ $(document).ready(function() {
         serverSide: false,
         autoWidth: false,
         dom: 'rtip',
+        ordering: false, 
         ajax: {
-            url: "{{ route('clubmember.vieworder') }}",
+            url: "{{ route('club.vieworder') }}",
             data: function(d) {}
         },
         columns: [

@@ -129,6 +129,7 @@
                                 serverSide: false,
                                 autoWidth: false,
                                 dom: 'rtip',
+                                ordering: false, 
                                 ajax: {
                                     url:"{{ route('admin.clubmember.vieworder', $clubmember->id) }}",
                                     data: function(d) {}

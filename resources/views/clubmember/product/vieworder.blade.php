@@ -101,6 +101,7 @@ $(document).ready(function() {
         serverSide: false,
         autoWidth: false,
         dom: 'rtip',
+        ordering: false, 
         ajax: {
             url: "{{ route('clubmember.vieworder') }}",
             data: function(d) {}

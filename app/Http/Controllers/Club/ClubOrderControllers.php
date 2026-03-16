@@ -50,7 +50,8 @@ class ClubOrderControllers extends Controller
     if ($request->ajax()) {
         
         $orders = Order::with('product', 'varient', 'clubmember', 'order_status')        
-            ->where('club_id', $clubid);
+            ->where('club_id', $clubid)
+            ->orderBy('order_status_id','asc');
             // ->where('club_member_id', $clubmemberId); 
 
         return datatables()
@@ -84,7 +85,7 @@ class ClubOrderControllers extends Controller
             ->addColumn('color', fn ($row) => $row->varient->color ?? '--')
 
             ->addColumn('order_status', fn ($row) => optional($row->order_status)->status ?? '--')
-            ->addColumn('action', function ($row) {
+                        ->addColumn('action', function ($row) {
 
                 $nextstatus = OrderStatus::where('id', '>', $row->order_status_id)
                                 ->orderBy('id', 'asc')
@@ -107,6 +108,8 @@ class ClubOrderControllers extends Controller
                         </button>
                     </form>
                 ':'' ;
+                
+           
                 
             })
             ->rawColumns(['image','action','order_status'])
@@ -140,4 +143,28 @@ class ClubOrderControllers extends Controller
     {
         //
     }
+    public function changestatus(Request $request, $id)
+        {
+            $Order = Order::findOrFail($id);
+
+            $currentStatus = $Order->order_status_id;
+
+            // Allow update only if current status < 6
+            if ($currentStatus < 6) {
+
+                $newStatus = $currentStatus + 1;
+
+                $Order->order_status_id = $newStatus;
+                $Order->save();
+
+                return redirect()->back()
+                    ->with('success', 'Order status updated successfully.');
+
+            } else {
+
+                return redirect()->back()
+                    ->with('error', 'Order is already in the final status.');
+            }
+        }
+
 }

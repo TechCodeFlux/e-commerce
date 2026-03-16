@@ -29,7 +29,8 @@ class ClubmemberOrderControllers extends Controller
         $orders = Order::with('product', 'varient', 'clubmember', 'order_status','address')
             // ->where('order_status_id', 1)
             ->where('club_id', $clubid)
-            ->where('club_member_id', $clubmemberId); 
+            ->where('club_member_id', $clubmemberId)
+            ->orderBy('order_status_id', 'desc'); 
 
         return datatables()
             ->eloquent($orders)
