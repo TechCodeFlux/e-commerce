@@ -116,6 +116,30 @@
 
 let existingVariants = @json($product->varients ?? []);
 
+const IMAGE_STORE_KEY = "variant_image_store";
+
+
+function saveImageToStore(index, file) {
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+        let store = JSON.parse(localStorage.getItem(IMAGE_STORE_KEY) || '{}');
+
+        store[index] = {
+            dataUrl : e.target.result,
+            name    : file.name,
+            type    : file.type
+        };
+
+        localStorage.setItem(IMAGE_STORE_KEY, JSON.stringify(store));
+    };
+
+    reader.readAsDataURL(file);
+}
+
+
 $(document).ready(function () {
     if (existingVariants.length > 0) {
 
@@ -128,6 +152,7 @@ $(document).ready(function () {
                             <th>Color</th>
                             <th>Size</th>
                             <th>Stock</th>
+                            <th>Price</th>
                             <th>Image</th>
                             <th>Action</th>
                         </tr>
@@ -164,15 +189,39 @@ $(document).ready(function () {
                         required>
                 </td>
 
-                <td>
+                 <td>
+                    <input type="number"
+                        name="variants[${index}][price]"
+                        value="${item.price}"
+                        class="form-control text-center"
+                        min="0"
+                        required>
+                </td>
+
+
+               <td class="text-center align-middle">
+
                     ${item.image 
-                        ? `<img src="/storage/${item.image}" width="50" class="mb-2 d-block">`
+                        ? `<img src="/storage/${item.image}" width="90" class="mb-2 d-block mx-auto">`
                         : `<span class="text-muted d-block mb-2">No Image</span>`
                     }
 
-                    <input type="file"
+                    <!-- Hidden File Input -->
+                    <input 
+                        type="file"
                         name="variants[${index}][image]"
-                        class="form-control form-control-sm">
+                        id="image-${index}"
+                        class="d-none"
+                        accept="image/*"
+                    >
+
+                    <!-- Styled Upload Button -->
+                    <label for="image-${index}" 
+                        class="btn btn-outline-primary btn-sm w-100 d-flex align-items-center justify-content-center gap-2">
+                        <i class="fas fa-upload"></i>
+                        Upload
+                    </label>
+
                 </td>
 
                 <td>
@@ -341,12 +390,32 @@ colors.each(function () {
                         min="0"
                         required>
                 </td>
+
+                 <td>
+                    <input type="number" 
+                        name="variants[${existingRowCount}][price]" 
+                        class="form-control text-center" 
+                        min="0"
+                        required>
+                </td>
+
+
                 <td>
                     <input type="file"
                         name="variants[${existingRowCount}][image]"
-                        class="form-control form-control-sm"
+                        class="form-control form-control-sm d-none"
+                        id="image-${existingRowCount}"
                         required>
+
+                     <!-- Styled Upload Button -->  
+                    <label for="image-${existingRowCount}" 
+                        class="btn btn-outline-primary btn-sm w-100 d-flex align-items-center justify-content-center gap-2">
+                        <i class="fas fa-upload"></i>
+                        Upload
+                    </label>
+                        
                 </td>
+                
 
                 <td>
                     <button type="button"
@@ -374,6 +443,7 @@ colors.each(function () {
                                 <th>Color</th>
                                 <th>Size</th>
                                 <th>Stock</th>
+                                <th>price</th>
                                 <th>Image</th>
                                 <th>Action</th>
                             </tr>
@@ -411,30 +481,34 @@ colors.each(function () {
 });
 
 
-   function reIndexVariants() {
+//    function reIndexVariants() {
 
     
-    $('#variant-matrix-container tbody tr').each(function (index) {
+//     $('#variant-matrix-container tbody tr').each(function (index) {
 
-        // Update color input
-        $(this).find('input[name*="[color]"]')
-            .attr('name', `variants[${index}][color]`);
+//         // Update color input
+//         $(this).find('input[name*="[color]"]')
+//             .attr('name', `variants[${index}][color]`);
 
-        // Update size input
-        $(this).find('input[name*="[size]"]')
-            .attr('name', `variants[${index}][size]`);
+//         // Update size input
+//         $(this).find('input[name*="[size]"]')
+//             .attr('name', `variants[${index}][size]`);
 
-        // Update stock input
-        $(this).find('input[name*="[stock]"]')
-            .attr('name', `variants[${index}][stock]`);
+//         // Update stock input
+//         $(this).find('input[name*="[stock]"]')
+//             .attr('name', `variants[${index}][stock]`);
 
-        // Update image input
-         $(this).find('input[name*="[image]"]')
-            .attr('name', `variants[${index}][image]`);
+//          // Update price input
+//         $(this).find('input[name*="[price]"]')
+//             .attr('name', `variants[${index}][price]`);
+
+//         // Update image input
+//          $(this).find('input[name*="[image]"]')
+//             .attr('name', `variants[${index}][image]`);
 
         
-    });
-}
+//     });
+// }
 
     });
 
@@ -462,6 +536,27 @@ $(document).ready(function () {
         // Restore table
         if (data.tableHtml) {
             $('#variant-matrix-container').html(data.tableHtml);
+            // Restore image files
+let imageStore = JSON.parse(localStorage.getItem(IMAGE_STORE_KEY) || '{}');
+
+Object.keys(imageStore).forEach(async function(index){
+
+    let imgData = imageStore[index];
+
+    const response = await fetch(imgData.dataUrl);
+    const blob = await response.blob();
+    const file = new File([blob], imgData.name, {type: imgData.type});
+
+    const dt = new DataTransfer();
+    dt.items.add(file);
+
+    let input = document.getElementById(`image-${index}`);
+
+    if(input){
+        input.files = dt.files;
+    }
+
+});
              if ($('#variant-matrix-container tbody tr').length > 0) {
               $('#submitBtn').removeClass('d-none');
     }
@@ -478,9 +573,9 @@ $(document).ready(function () {
     });
 
     // ✅ SAVE WHEN STOCK VALUE CHANGES
-    $(document).on('input', 'input[name*="[stock]"]', function () {
-        saveVariantData();
-    });
+    // $(document).on('input', 'input[name*="[stock]"]', function () {
+    //     saveVariantData();
+    // });
 
     // ✅ FUNCTION TO SAVE
     
@@ -491,9 +586,15 @@ $(document).ready(function () {
 // ✅ IMAGE PREVIEW FOR VARIANT IMAGE INPUT
 $(document).on('change','input[name*="[image]"]', function(){
 
-    let input = this;
+   let input = this;
+    let index = $(input).attr('id').replace('image-', '');
 
     if (input.files && input.files[0]) {
+
+        let file = input.files[0];
+
+        // ⭐ Save image like Program 1
+        saveImageToStore(index, file);
 
         let reader = new FileReader();
 
@@ -508,7 +609,7 @@ $(document).on('change','input[name*="[image]"]', function(){
             // add new preview above input
             $(input).before(`
                 <img src="${e.target.result}" 
-                     width="50" 
+                     width="90" 
                      class="mb-2 d-block preview-image">
             `);
         };
@@ -519,7 +620,35 @@ $(document).on('change','input[name*="[image]"]', function(){
 });
 
 
+$(document).on('click', 'button[form="previous-form"]', function () {
 
+    if ($('#variant-matrix-container tbody tr').length > 0) {
+
+        // update input values before saving HTML
+        $('#variant-matrix-container tbody tr').each(function () {
+
+            let stock = $(this).find('input[name*="[stock]"]').val();
+            let price = $(this).find('input[name*="[price]"]').val();
+
+            $(this).find('input[name*="[stock]"]').attr('value', stock);
+            $(this).find('input[name*="[price]"]').attr('value', price);
+
+        });
+
+        const colors = $('#color').val();
+        const sizes  = $('#size').val();
+        const tableHtml = $('#variant-matrix-container').html();
+
+        const data = {
+            colors: colors,
+            sizes: sizes,
+            tableHtml: tableHtml
+        };
+
+        localStorage.setItem("variant_matrix_data", JSON.stringify(data));
+    }
+
+});
 
 
 // </script>

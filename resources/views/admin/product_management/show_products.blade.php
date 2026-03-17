@@ -152,6 +152,7 @@
                                             <th>Color</th>
                                             <th>Size</th>
                                             <th>Stock</th>
+                                            <th>Price</th>
                                         </tr>
                                     </thead>
                                     <tbody id="ms_varients_table">
@@ -278,6 +279,7 @@ $(document).on('click', '.view-product', function () {
                             <td>${v.color ?? '-'}</td>
                             <td>${v.size ?? '-'}</td>
                             <td>${v.stock ?? 0}</td>
+                             <td>${v.price ?? 0}</td>
                         </tr>
                     `;
                 });

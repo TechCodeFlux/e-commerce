@@ -74,11 +74,13 @@
                                        <select name="category" id="category" class="form-select">
                                             <option value="">Select Category</option>
 
-                                            @foreach($categories as $category)
-                                                <option value="{{ $category->id }}"
-                                                    {{ old('category', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
-                                                    {{ $category->name }}
-                                                </option>
+                                           @foreach($categories as $category)
+                                                @if($category->status == 1)
+                                                    <option value="{{ $category->id }}"
+                                                        {{ old('category', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                                                        {{ $category->name }}
+                                                    </option>
+                                                @endif
                                             @endforeach
                                         </select>
                                         @error('category')
@@ -178,21 +180,28 @@
 
 $('.productForm').on('submit', function (e) {
 
+    e.preventDefault(); // prevent page reload
+
+    let formData = new FormData(this);
+    formData.append('_token', '{{ csrf_token() }}');
+
+    @if(isset($product->id))
+        var url = "{{ route('admin.product_management.edit_product', $product->id) }}";
+        formData.append('_method', 'PUT');
+    @else
+        var url = "{{ route('admin.product_management.add_products') }}";
+    @endif
+
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success: function (response) {
+
     @if(!isset($product->id))
-        e.preventDefault();
-
-        let formData = new FormData(this);
-        formData.append('_token', '{{ csrf_token() }}');
-
-        $.ajax({
-    url: "{{ route('admin.product_management.add_products') }}",
-    type: "POST",
-    data: formData,
-    processData: false,
-    contentType: false,
-
-    success: function (response) {
-
         let formObject = {};
         formData.forEach((value, key) => {
             formObject[key] = value;
@@ -201,31 +210,35 @@ $('.productForm').on('submit', function (e) {
         localStorage.setItem('productForm', JSON.stringify(formObject));
 
         window.location.href =
-            "{{ route('admin.varient_management.generate_varient') }}"
-    },
+            "{{ route('admin.varient_management.generate_varient') }}";
 
-    error: function(xhr) {
-
-        if (xhr.status === 422) {
-
-            let errors = xhr.responseJSON.errors;
-
-            // Remove old error messages
-            $('.text-danger').remove();
-
-            $.each(errors, function (key, value) {
-
-                let field = $('[name="' + key + '"]');
-
-                field.after(
-                    '<small class="text-danger d-block mt-1">' + value[0] + '</small>'
-                );
-            });
-
-        }
-    }
-});
+    @else
+       window.location.href ="{{ route('admin.varient_management.edit_varient_generator', $product->id ?? ':id') }}".replace(':id', response.id);
     @endif
+},
+
+        error: function(xhr) {
+
+            if (xhr.status === 422) {
+
+                let errors = xhr.responseJSON.errors;
+
+                // remove old errors
+                $('.text-danger').remove();
+
+                $.each(errors, function (key, value) {
+
+                    let field = $('[name="' + key + '"]');
+
+                    field.after(
+                        '<small class="text-danger d-block mt-1">' + value[0] + '</small>'
+                    );
+                });
+
+            }
+        }
+    });
+
 });
 
 
