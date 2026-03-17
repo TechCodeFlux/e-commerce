@@ -123,6 +123,7 @@ Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controller
     Route::get('order/{id}',[ClubmemberOrderControllers::class,'cartorder'])->name('order');
 
     Route::post('placeorder',[ClubmemberOrderControllers::class,'placeorder'])->name('placeorder');
+    Route::post('addaddress',[ClubmemberOrderControllers::class,'addaddress'])->name('addaddress');
 
     Route::get('vieworder',[ClubmemberOrderControllers::class,'index'])->name('vieworder');
     

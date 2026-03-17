@@ -153,23 +153,11 @@ class ClubmemberOrderControllers extends Controller
 
         $clubmember = ClubMember::findOrFail($clubmemberId); 
 
-        // Get all orders of this club member
-    $orders = Order::where('club_member_id', $clubmemberId)->get();
 
-    // Collect all address ids
-    $addressIds = [$clubmember->address_id];
-
-    foreach ($orders as $order) {
-        $addressIds[] = $order->address_id;
-    }
-
-    // Remove duplicates
-    $addressIds = array_unique($addressIds);
-    
-
-    // Get all addresses
-    $address = Address::whereIn('id', $addressIds)->get();
-    // dd($address);
+        // Get all addresses
+   
+        $address= Address:: where('clubmember_id',$clubmemberId)->get();
+        // dd($address);
         return view('clubmember.product.booking', [
             'product'     => $product,
             'quantity'    => $quantity,
@@ -180,78 +168,84 @@ class ClubmemberOrderControllers extends Controller
           
             ]);
         }
-
-   public function placeorder(Request $request)
+        public function addaddress(Request $request)
         {
-            $micrositeId = 1; // Assuming microsite_id is 1 for now, replace with actual value as needed
             $request->validate([
-                'varient_id'     => 'required|exists:varients,id',
-                'quantity'       => 'required|integer|min:1',
-                'email'          => 'required|email',
-                'phone'          => 'required|digits:10',
-
-                'product_id'     => 'required|exists:products,id',
-                'clubmember_id'  => 'required|exists:club_members,id',
-                'club_id'        => 'required|exists:clubs,id',
-
-                // existing address
-                'address'        => 'required_without:new_address|nullable',
-
-                // new address fields
                 'new_address'    => 'required_without:address|nullable|string|max:255',
                 'country'        => 'required_without:address|nullable|string|max:100',
                 'state'          => 'required_without:address|nullable|string|max:100',
                 'city'           => 'required_without:address|nullable|string|max:80',
                 'zip_code'       => 'required_without:address|nullable|digits:6',
-                ]);
-
-                $variant = Varient::findOrFail($request->varient_id);
-
-                if($request->address == null)
-                    {
-                        $address = Address::create([
-                            'address1'  => $request->new_address,
-                            'country_id'=> $request->country,
-                            'state_id'  => $request->state,
-                            'city'      => $request->city,
-                            'zip_code'  => $request->zip_code,
-                            'status'    => 1,
-                        ]);
-                        $addressid=$address->id;
-                    }
-                    else{
-                       $addressid=$request->address; 
-                    }
-
-                $order = Order::Create([
-                    'quantity'        => $request->quantity,
-                    'product_id'      => $variant->product_id,
-                    'club_member_id'  => $request->clubmember_id,
-                    'club_id'         => $request->club_id,
-                    'varient_id'      => $variant->id,
-                    'order_status_id' => 1,
-                    'microsite_id'    => $micrositeId,
-                    'address_id'      => $addressid,
-                ]);
-
-                $varient=Varient::where('id', $variant->id)->update([
-                    'stock' => $variant->stock - $request->quantity,
-                ]);
-
-            OrderItem::Create([             
-                'quantity'     => $request->quantity,
-                'order_id'     => $order->id,
-                'microsite_id' => $order->microsite_id,
-                'product_id'   => $request->product_id,
-                'status'       => $order->order_status_id,
-                'address_id'   => $addressid,
+                'clubmember_id'  => 'required|exists:club_members,id',
             ]);
-
-            $cart = Cart::where('product_id',$request->product_id);
-            $cart->delete(); 
+             $address = Address::create([
+                                        'address1'  => $request->new_address,
+                                        'country_id'=> $request->country,
+                                        'state_id'  => $request->state,
+                                        'clubmember_id'=>$request->clubmember_id,
+                                        'city'      => $request->city,
+                                        'zip_code'  => $request->zip_code,
+                                        'status'    => 1,
+                                    ]);
 
             return redirect()
-                ->route('clubmember.viewproduct')
-                ->with('success', 'Order added successfully!');
+                ->back()
+                ->with('success', 'address added successfully!');                      
+        }
+
+
+        public function placeorder(Request $request)
+        {
+            $micrositeId = 1; // Assuming microsite_id is 1 for now, replace with actual value as needed
+            $request->validate([
+                
+                                'quantity'        => 'required|min:1',
+                                'product_id'      => 'required|exists:products,id',
+                                'price'           => 'required',
+                                'clubmember_id'  => 'required|exists:club_members,id',
+                                
+                                'varient_id'      => 'required|exists:varients,id',
+                                'address_id' => 'required|exists:addresses,id',
+            ]);
+                $variant = Varient::findOrFail($request->varient_id);
+                if($variant->stock<=0)
+                    {
+                        return redirect()
+                            ->route('clubmember.viewproduct')
+                            ->with('success', 'currently varients is out of stock!');
+                    }
+                    else{                           
+                                $order = Order::Create([
+                                    'quantity'        => $request->quantity,
+                                    'product_id'      => $variant->product_id,
+                                    'price'           => $request->price,
+                                    'club_member_id'  => $request->clubmember_id,
+                                    'club_id'         => $request->club_id,
+                                    'varient_id'      => $variant->id,
+                                    'order_status_id' => 1,
+                                    'microsite_id'    => $micrositeId,
+                                    'address_id'      => $request->address_id,
+                                ]);
+
+                            $varient=Varient::where('id', $variant->id)->update([
+                                'stock' => $variant->stock - $request->quantity,
+                            ]);
+
+                        OrderItem::Create([             
+                            'quantity'     => $request->quantity,
+                            'order_id'     => $order->id,
+                            'microsite_id' => $order->microsite_id,
+                            'product_id'   => $request->product_id,
+                            'status'       => $order->order_status_id,
+                            'address_id'   => $order->address_id,
+                        ]);
+
+                        $cart = Cart::where('product_id',$request->product_id);
+                        $cart->delete(); 
+
+                        return redirect()
+                            ->route('clubmember.viewproduct')
+                            ->with('success', 'Order added successfully!');
+                    }
         }
 }

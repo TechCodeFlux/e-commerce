@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('address2')->nullable();
             $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('state_id');
+            $table->integer('clubmember_id')->default('0');
             $table->string('city');
             $table->string('zip_code');
             $table->boolean('status')->default('0');
