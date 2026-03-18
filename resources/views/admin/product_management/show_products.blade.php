@@ -57,9 +57,9 @@
                     <table class="table table-custom table-lg mb-0"  id="admin" >
                     <thead>
                       <tr>
-                        <th class="tooltip-inner link-dark">Image</th>  
+                        <th class="tooltip-inner link-dark pe-xl-5">Image</th>  
                          <th >Name</th>  
-                         <th>Description</th>
+                         <th class="px-sm-5 w-25">Description</th>
                           <th>Status</th>
                         <th  class=" ps-5" >Action</th>
                      </tr>
@@ -99,11 +99,13 @@
                                 <td id="ms_name" class="text-dark"></td>
                             </tr>
 
-                            <tr>
-                                <th class="text-muted fw-bold">Description</th>
-                                <td id="ms_description" class="text-dark"></td>
-                            </tr>
-
+                          <tr>
+    <th class="text-muted fw-bold">Description</th>
+    <td>
+        <div id="ms_description" class="my-md-2 text-dark text-wrap text-break overflow-auto" style="max-height:60px; width:40vh;">
+        </div>
+    </td>
+</tr>
                             <tr>
                                 <th class="text-muted fw-bold">Category</th>
                                 <td id="ms_category" class="text-dark"></td>
@@ -152,6 +154,7 @@
                                             <th>Color</th>
                                             <th>Size</th>
                                             <th>Stock</th>
+                                            <th>Price</th>
                                         </tr>
                                     </thead>
                                     <tbody id="ms_varients_table">
@@ -278,6 +281,7 @@ $(document).on('click', '.view-product', function () {
                             <td>${v.color ?? '-'}</td>
                             <td>${v.size ?? '-'}</td>
                             <td>${v.stock ?? 0}</td>
+                             <td>${v.price ?? 0}</td>
                         </tr>
                     `;
                 });
@@ -367,7 +371,15 @@ $(document).ready(function() {
         columns: [
             { data: 'image', name: 'image' },
             { data: 'name', name: 'name', orderable: false,searchable: false },
-            { data: 'description', name: 'description' },
+            
+           {      
+                data: 'description',name: 'description',   render: function(data) {
+                                                                if (!data) return '';
+                                                                return '<div class="m-4 text-wrap text-break overflow-auto" style="max-height:100px; width:60vh">'
+                                                                        + data +
+                                                                        '</div>';
+                                                               }
+            },
             { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ],

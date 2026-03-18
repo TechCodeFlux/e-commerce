@@ -70,15 +70,17 @@
                             {{-- category --}}
                             <!-- Increased width to col-md-6 -->
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Categories</label>
+                                        <label class="form-label">Category</label>
                                        <select name="category" id="category" class="form-select">
                                             <option value="">Select Category</option>
 
-                                            @foreach($categories as $category)
-                                                <option value="{{ $category->id }}"
-                                                    {{ old('category', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
-                                                    {{ $category->name }}
-                                                </option>
+                                           @foreach($categories as $category)
+                                                @if($category->status == 1)
+                                                    <option value="{{ $category->id }}"
+                                                        {{ old('category', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                                                        {{ $category->name }}
+                                                    </option>
+                                                @endif
                                             @endforeach
                                         </select>
                                         @error('category')
@@ -102,37 +104,7 @@
 
                         {{-- Row 2: Image & Status --}}
                      <div class="row ">
-                            {{---image---}}
                             
-                            {{-- <div class="col-md-6 mb-3">
-                                <label class="form-label">Image</label>
-                                Pre-View image
-                                        <div class="mt-3">
-                                            @php  $firstVariant = isset($product) ? $product->varients->first() : null;  @endphp
-
-                                            <img id="imagePreview"
-                                            src="{{ $firstVariant && $firstVariant->image 
-                                                    ? asset('storage/' . $firstVariant->image) 
-                                                    : (isset($product) && $product->image ? asset('storage/' . $product->image) : '') }}"
-                                            alt="Image Preview"
-                                            class="img-fluid w-25 {{ ($firstVariant && $firstVariant->image) || (isset($product) && $product->image) ? '' : 'd-none' }}">
-                                        </div>
-                                end-pre -View image
-                                                <input type="file"
-                                                name="image" 
-                                                class="form-control swal2-radio"
-                                                id="imageInput" 
-                                                accept="image/*"
-                                                onchange="previewImage(event)">
-                                                        
-                                                @error('image')
-                                                    <small class="text-danger d-block mt-1">{{ $message }}</small>
-                                                @enderror
-                            </div> --}}
-                           
-                       
-                        
-                            {{-- ----status---- --}}
                          <!-- Increased width to col-md-6 -->
                             <div class="col-md-6 mb-3 mt-5 w-25 m-auto m-lg-1">
                                 <label class="form-label d-block">Status</label>
@@ -178,21 +150,28 @@
 
 $('.productForm').on('submit', function (e) {
 
+    e.preventDefault(); // prevent page reload
+
+    let formData = new FormData(this);
+    formData.append('_token', '{{ csrf_token() }}');
+
+    @if(isset($product->id))
+        var url = "{{ route('admin.product_management.edit_product', $product->id) }}";
+        formData.append('_method', 'PUT');
+    @else
+        var url = "{{ route('admin.product_management.add_products') }}";
+    @endif
+
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success: function (response) {
+
     @if(!isset($product->id))
-        e.preventDefault();
-
-        let formData = new FormData(this);
-        formData.append('_token', '{{ csrf_token() }}');
-
-        $.ajax({
-    url: "{{ route('admin.product_management.add_products') }}",
-    type: "POST",
-    data: formData,
-    processData: false,
-    contentType: false,
-
-    success: function (response) {
-
         let formObject = {};
         formData.forEach((value, key) => {
             formObject[key] = value;
@@ -201,31 +180,35 @@ $('.productForm').on('submit', function (e) {
         localStorage.setItem('productForm', JSON.stringify(formObject));
 
         window.location.href =
-            "{{ route('admin.varient_management.generate_varient') }}"
-    },
+            "{{ route('admin.varient_management.generate_varient') }}";
 
-    error: function(xhr) {
-
-        if (xhr.status === 422) {
-
-            let errors = xhr.responseJSON.errors;
-
-            // Remove old error messages
-            $('.text-danger').remove();
-
-            $.each(errors, function (key, value) {
-
-                let field = $('[name="' + key + '"]');
-
-                field.after(
-                    '<small class="text-danger d-block mt-1">' + value[0] + '</small>'
-                );
-            });
-
-        }
-    }
-});
+    @else
+       window.location.href ="{{ route('admin.varient_management.edit_varient_generator', $product->id ?? ':id') }}".replace(':id', response.id);
     @endif
+},
+
+        error: function(xhr) {
+
+            if (xhr.status === 422) {
+
+                let errors = xhr.responseJSON.errors;
+
+                // remove old errors
+                $('.text-danger').remove();
+
+                $.each(errors, function (key, value) {
+
+                    let field = $('[name="' + key + '"]');
+
+                    field.after(
+                        '<small class="text-danger d-block mt-1">' + value[0] + '</small>'
+                    );
+                });
+
+            }
+        }
+    });
+
 });
 
 
@@ -317,56 +300,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-
-// function previewImage(event) {
-//         var input = event.target;
-//         var imagePreview = document.getElementById('imagePreview');
-//          const file = event.target.files[0];
-
-//         if (file) {
-//         imagePreview.src = URL.createObjectURL(file);
-//         imagePreview.classList.remove('d-none'); // show image
-//         }
-
-//         if (input.files && input.files[0]) {
-//             var reader = new FileReader();
-
-//             reader.onload = function(e) {
-//                 // Set the src of the image to the file data
-//                 imagePreview.src = e.target.result;
-//                 // Make the image visible
-//                 imagePreview.style.display = 'block';
-//             }
-
-//             // Read the file as a data URL
-//             reader.readAsDataURL(input.files[0]);
-//         } else {
-//             // If the user cancels selection, hide the preview
-//             imagePreview.src = '#';
-//             imagePreview.style.display = 'none';
-//         }
-
-
-
-//     // Show selected file name
-// document.getElementById('imageInput').addEventListener('change', function () {
-//     const fileName = this.files.length > 0 ? this.files[0].name : 'No file chosen';
-
-//     // Remove existing filename if already added
-//     let existingLabel = document.getElementById('fileNameDisplay');
-//     if (existingLabel) {
-//         existingLabel.remove();
-//     }
-
-//     // Create new filename display
-//     let fileLabel = document.createElement('small');
-//     fileLabel.id = 'fileNameDisplay';
-//     fileLabel.className = 'd-block mt-2 text-primary fw-semibold';
-//     fileLabel.innerText = fileName;
-
-//     this.parentNode.appendChild(fileLabel);
-// });
-//     }
 </script>
 @endsection
 @endsection
