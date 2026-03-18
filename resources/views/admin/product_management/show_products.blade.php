@@ -74,7 +74,7 @@
 
 
 <div class="modal fade" id="productListModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content shadow-lg border-0">
 
             <!-- Header -->
@@ -86,7 +86,7 @@
             </div>
 
             <!-- Body -->
-            <div class="modal-body p-4 ">
+            <div class="modal-body p-4 overflow-auto">
 
                 <!-- TOP SECTION: Details and Image -->
                 <div class="row align-items-start">
@@ -99,11 +99,10 @@
                                 <td id="ms_name" class="text-dark"></td>
                             </tr>
 
-                          <tr>
-    <th class="text-muted fw-bold">Description</th>
-    <td>
-        <div id="ms_description" class="my-md-2 text-dark text-wrap text-break overflow-auto" style="max-height:60px; width:40vh;">
-        </div>
+                         <tr>
+    <th class="text-muted fw-bold py-2">Description</th>
+    <td class="py-2">
+        <div id="ms_description" class="text-dark text-wrap text-break overflow-auto" ></div>
     </td>
 </tr>
                             <tr>
