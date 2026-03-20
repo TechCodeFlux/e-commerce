@@ -352,8 +352,12 @@ $(document).on('change', '.toggle-status', function () {
 
 $(document).ready(function() {
    const STORAGE_KEY = "variant_matrix_data";
+    const PRODUCT_IMAGE_KEY = 'productFormImage';
     localStorage.removeItem('productForm');   
   localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(PRODUCT_IMAGE_KEY);
+  
+  
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');

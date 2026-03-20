@@ -531,7 +531,7 @@
                 </a>
             </li>
             <li>
-                <a class="{{ request()->routeIs('admin.product_management.show_products','admin.product_management.form_products_index','admin.varient_management.generate_varient')? 'active' : '' }}"
+                <a class="{{ request()->routeIs('admin.product_management.show_products','admin.product_management.form_products_index','admin.varient_management.generate_varient','admin.product_management.edit_products_index','admin.varient_management.edit_varient_generator')? 'active' : '' }}"
                      href="{{ route('admin.product_management.show_products') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-box-seam me-2 col-4"></i>
@@ -540,7 +540,7 @@
                 </a>
             </li>
               <li>
-                <a class="{{ request()->routeIs('admin.category_management.show_category','admin.category_management.add_category_index')? 'active' : '' }}"
+                <a class="{{ request()->routeIs('admin.category_management.show_category','admin.category_management.add_category_index','admin.category_management.edit_category_index')? 'active' : '' }}"
                 href="{{ route('admin.category_management.show_category') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-tags me-2 col-lg-3"></i>
@@ -549,8 +549,8 @@
                 </a>
             </li>
              <li>
-                <a  class="{{ request()->routeIs('admin.option_management.show_option')? 'active' : '' }}"
-                href="{{ route('admin.option_management.show_option') }}">
+                <a  class="{{ request()->routeIs('admin.option_management.show_option','admin.option_management.edit_option_index','admin.option_management.form_option_index')? 'active' : '' }}"
+                href="{{ route('admin.option_management.show_option','admin.option_management.edit_option_index','admin.option_management.form_option_index') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-sliders me-2 col-4"></i>
                     </span>
@@ -558,7 +558,7 @@
                 </a>
             </li>
              <li>
-                <a  class="{{ request()->routeIs('admin.option_value_management.show_option_value')? 'active' : '' }}"
+                <a  class="{{ request()->routeIs('admin.option_value_management.show_option_value','admin.option_value_management.add_option_value','admin.option_value_management.edit_option_value')? 'active' : '' }}"
                 href="{{ route('admin.option_value_management.show_option_value') }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-receipt"></i>
