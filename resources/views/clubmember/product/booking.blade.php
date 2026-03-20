@@ -6,165 +6,130 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            <h4 class="mb-4">Booking</h4>
+            <h4 class="mb-4">Checkout</h4>
 
             <form action="{{ route('clubmember.placeorder') }}" method="POST">
                 @csrf
 
                 <div class="row">
 
-                    {{-- Product Name --}}
-                    <div class="col-md-8 mb-3">
-                        <label>Product Name :</label><br>
-                        <h4>{{ $product->name }}</h4>
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                @foreach($cart as $index => $carts)
+                <div class="product-block border rounded p-3 mb-4">
+
+                    {{-- Product Info --}}
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5 class="fw-bold">{{ $carts->name }}</h5>
+                            <p class="text-muted">{{ $carts->description }}</p>
+
+                            <input type="hidden" name="product_id[]" value="{{ $carts->id }}">
+                            <input type="hidden" name="varient_id[]" value="{{ $carts->varient_id }}">
+                            <input type="hidden" name="cart_id[]" value="{{ $carts->id }}">
+                        </div>
+
+                        <div class="col-md-4 text-center">
+                            <img src="{{ asset('storage/' . $carts->image) }}"
+                                 id="productImage{{ $index }}"
+                                 width="120" height="120">
+                        </div>
                     </div>
 
-                    {{-- Description --}}
-                    <div class="col-md-8 mb-3">
-                        <label>Description:</label><br>
-                       <h5> {{ $product->description }}</h5>
-                       
+                    {{-- Variant Info --}}
+                    @php
+                        $varient = $varients[$carts->varient_id] ?? null;
+                    @endphp
+
+                    <div class="mt-2">
+                        @if($varient)
+                            <div>Color: {{ $varient->color }}</div>
+                            <div>Size: {{ $varient->size }}</div>
+                            <div>Stock: {{ $varient->stock }}</div>
+                        @else
+                            <div class="text-danger">Variant not available</div>
+                        @endif
                     </div>
 
-                    {{-- Product Image --}}
-                    <div class="col-md-4 mb-3 text-center">
-                        <img src="{{ asset('storage/' . $product->image) }}"
-                             id="productImage"
-                             width="150"
-                             height="150"
-                             class="rounded">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="mb-2">Variant</label>
+                    {{-- Hidden Base Price + Stock --}}
+                    <input type="hidden" id="basePrice{{ $index }}" 
+                        value="{{ $carts->varient ? $carts->varient->price : $carts->price }}">
 
-                        <div class="row">
-
-                            @foreach($varients as $varient)
-
-                                <div class="col-md-3 mb-3">
-
-                                    <label class="card p-3" style="cursor:pointer">
-
-                                    <input type="radio"
-                                        name="varient_id"
-                                        class="variantRadio"
-                                        value="{{ $varient->id }}"
-                                        data-stock="{{ $varient->stock }}"
-                                        data-price="{{ $varient->price }}"
-                                        data-image="{{ $varient->image ? asset('storage/' . $varient->image) : '' }}">
-
-                                    Colour : {{ $varient->color }} <br>
-                                    Size : {{ $varient->size }} <br>
-                                    Stock : {{ $varient->stock }}
-
-                                    </label>
-
-                                </div>
-
-                            @endforeach
-
-                         </div>
-                    </div>
+                     <input type="hidden" id="stock{{ $index }}" 
+                        value="{{ $varient->stock }}">
 
                     {{-- Price --}}
-                    <div class="col-md-4 mb-3">
+                    <div class="mt-3">
                         <label>Price:</label>
-                        <h3 id="priceDisplay">₹0</h3>
-                        <input type="hidden" name="price" id="priceInput" >
-                        
+                        <h5 id="priceDisplay{{ $index }}">
+                            ₹{{ ($carts->varient ? $carts->varient->price : $carts->price) * ($carts->quantity ?? 1) }}
+                        </h5>
+
+                        <input type="hidden" name="price[]" 
+                            id="priceInput{{ $index }}" 
+                            value="{{ ($carts->varient ? $carts->varient->price : $carts->price) * ($carts->quantity ?? 1) }}">
                     </div>
 
                     {{-- Quantity --}}
-                    <div class="col-md-4 mb-3">
+                    <div class="mt-2">
                         <label>Quantity:</label>
-
                         <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-danger minusBtn" data-index="{{ $index }}">-</button>
 
-                            <button type="button" class="btn fs-3" id="minusBtn">-</button>
+                            <span id="quantityDisplay{{ $index }}">
+                                {{ $carts->quantity ?? 1 }}
+                            </span>
 
-                            <span id="quantityDisplay" class="fw-bold fs-2">1</span>
-
-                            <button type="button" class="btn fs-3" id="plusBtn">+</button>
-
+                            <button type="button" class="btn btn-success plusBtn" data-index="{{ $index }}">+</button>
                         </div>
-                       <input type="hidden" name="quantity" id="quantityInput" >
-                    </div>
-                    
-                    @error('quantity')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
 
-
-                    <h3>Your Details</h3>
-                    {{-- Club Member Name --}}
-                    <div class="col-md-4 mb-1">
-                        <label >Name:</label><br>
-                        <p class=" fs-5 fw-semibold ">{{ $clubmember->name }}</p>
-                        <input type="hidden" name="clubmember_id" value="{{ $clubmember->id }}">
-                    </div>
-                    @error('clubmember_id')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-
-                    {{-- Phone --}}
-                    <div class="col-md-4 mb-3">
-                        <label>Phone:</label><br>
-                        {{ $clubmember->contact }}
-                        <input type="hidden" name="phone" >
+                        <input type="hidden" name="quantity[]" 
+                            id="quantityInput{{ $index }}" 
+                            value="{{ $carts->quantity ?? 1 }}">
                     </div>
 
-                    {{-- Email --}}
-                    <div class="col-md-4 mb-3">
-                        <label>Email:</label><br>
-                        {{ $clubmember->email }}
-                        <input type="hidden" name="email" >
-                    </div>
-
-                    {{-- Address --}}
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h3 class="fw-bold h4">Delivery Address</h3>
-                        <button type='button' class="btn btn-link text-decoration-none fw-bold p-0 d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#addressModal">
-                            <i data-lucide="plus" style="width: 16px;"></i> Add New
-                        </button>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label>Address:</label><br>
-                       @if(!empty($address) && count($address) > 0)
-                                @foreach($address as $addr)
-                                    <input type="radio" name="address_id" value="{{ $addr->id }}">
-                                    <label>
-                                        {{ $addr->address1 }},
-                                        {{ $addr->country->name }},
-                                        {{ $addr->state->name }},
-                                        {{ $addr->city }},
-                                        Pin no:- {{ $addr->zip_code }}
-                                    </label><br>
-                                @endforeach
-                            @else
-                                <p>No address found</p>
-                            @endif
-                        @error('address_id')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-                    <input type="hidden" name="club_id" value="{{$product->club_id}}">
-
-                    <div class="text-sm-end mt-3">
-                        <button type="submit" class="btn btn-primary px-5">Submit</button>
-                    </div>
                 </div>
-         </form>    
-                     
-                    
-                      {{--modal address--}}
+                @endforeach
+
+                {{-- USER DETAILS --}}
+                <h4 class="mt-4">Your Details</h4>
+
+                <div><strong>Name:</strong> {{ $clubmember->name }}</div>
+                <div><strong>Phone:</strong> {{ $clubmember->contact }}</div>
+                <div><strong>Email:</strong> {{ $clubmember->email }}</div>
+
+                <input type="hidden" name="clubmember_id" value="{{ $clubmember->id }}">
+                <input type="hidden" name="club_id" value="{{ $clubmember->club_id }}">
+
+                {{-- ADDRESS --}}
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="fw-bold h4">Delivery Address</h3>
+                
+                 <button type='button' class="btn btn-link text-decoration-none fw-bold p-0 d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#addressModal">
+                            <i data-lucide="plus" style="width: 16px;"></i> Add New
+                 </button>
+                </div>
+
+                @foreach($address as $addr)
+                    <div>
+                        <input type="radio" name="address_id" value="{{ $addr->id }}">
+                        {{ $addr->address1 }},
+                        {{ $addr->country->name }},
+                        {{ $addr->state->name }},
+                        {{ $addr->city }},
+                        {{ $addr->zip_code }}
+                    </div>
+                @endforeach
+
+                {{-- SUBMIT --}}
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-primary px-5">
+                        Place Order
+                    </button>
+                </div>
+
+                </div>
+            </form>
+
+                                              {{--modal address--}}
                         <div class="modal fade" id="addressModal" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content border-0 rounded-4">
@@ -259,114 +224,79 @@
                             </div>
                         </div>
 
-                    
-
-
-                </div>
-            </form>
-
         </div>
     </div>
 </div>
 
 @endsection
 
-
 @section('script')
 
-
-
-
-
 <script>
-
-
 document.addEventListener('DOMContentLoaded', function () {
 
-    const variantRadios = document.querySelectorAll('.variantRadio');
-    const priceDisplay = document.getElementById('priceDisplay');
-    const priceInput = document.getElementById('priceInput');
+    // PLUS
+    document.querySelectorAll('.plusBtn').forEach(btn => {
+        btn.addEventListener('click', function () {
 
-    const quantityDisplay = document.getElementById('quantityDisplay');
-    const quantityInput = document.getElementById('quantityInput');
+            let i = this.dataset.index;
 
-    const plusBtn = document.getElementById('plusBtn');
-    const minusBtn = document.getElementById('minusBtn');
+            let qty = document.getElementById('quantityInput' + i);
+            let displayQty = document.getElementById('quantityDisplay' + i);
+            let priceDisplay = document.getElementById('priceDisplay' + i);
+            let priceInput = document.getElementById('priceInput' + i);
 
-    const productImage = document.getElementById('productImage');
+            let basePrice = parseFloat(document.getElementById('basePrice' + i).value);
+            let stock = parseInt(document.getElementById('stock' + i).value);
 
-    let variantPrice = 0;
-    let quantity = 1;
-    let stock = 0;
+            let quantity = parseInt(qty.value);
 
-    function updateUI() {
-        const total = variantPrice * quantity;
+            if (quantity < stock) {
+                quantity++;
 
-        priceDisplay.innerText = "₹" + total;
-        priceInput.value = total;
+                let total = basePrice * quantity;
 
-        quantityDisplay.innerText = quantity;
-        quantityInput.value = quantity;
-    }
+                qty.value = quantity;
+                displayQty.innerText = quantity;
 
-    // VARIANT CHANGE
-    variantRadios.forEach(radio => {
-
-        radio.addEventListener('change', function () {
-
-            variantPrice = parseFloat(this.dataset.price) || 0;
-            stock = parseInt(this.dataset.stock) || 0;
-
-            const imageUrl = this.dataset.image;
-
-            quantity = 1;
-
-            updateUI();
-
-            if (imageUrl) {
-                productImage.src = imageUrl;
+                priceDisplay.innerText = "₹" + total.toFixed(2);
+                priceInput.value = total;
+            } else {
+                alert("Stock limit reached");
             }
-
         });
-
     });
 
-    // PLUS BUTTON
-    plusBtn.addEventListener('click', function () {
+    // MINUS
+    document.querySelectorAll('.minusBtn').forEach(btn => {
+        btn.addEventListener('click', function () {
 
-        if (!variantPrice) {
-            // alert("Please select a variant first");
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Variant Required',
-                    text: 'Please select a variant first',
-                    confirmButtonText: 'OK'
-                });
-            return;
-        }
+            let i = this.dataset.index;
 
-        if (quantity < stock) {
-            quantity++;
-            updateUI();
-        }
+            let qty = document.getElementById('quantityInput' + i);
+            let displayQty = document.getElementById('quantityDisplay' + i);
+            let priceDisplay = document.getElementById('priceDisplay' + i);
+            let priceInput = document.getElementById('priceInput' + i);
 
-    });
+            let basePrice = parseFloat(document.getElementById('basePrice' + i).value);
 
-    // MINUS BUTTON
-    minusBtn.addEventListener('click', function () {
+            let quantity = parseInt(qty.value);
 
-        if (quantity > 1) {
-            quantity--;
-            updateUI();
-        }
+            if (quantity > 1) {
+                quantity--;
 
+                let total = basePrice * quantity;
+
+                qty.value = quantity;
+                displayQty.innerText = quantity;
+
+                priceDisplay.innerText = "₹" + total.toFixed(2);
+                priceInput.value = total;
+            }
+        });
     });
 
 });
-
-
-
-// country and state
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -423,8 +353,9 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmButtonText: 'OK'
     });
 });
-
+@endif
 
 </script>
-@endif
+
+
 @endsection

@@ -27,7 +27,7 @@
                         <i class="bi bi-people-fill small me-2"></i>club members
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-building small me-2"></i>Profile</li>  
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-building small me-2"></i>{{$clubmember->name}}</li>  
             </ol>
         </nav>
     </div>

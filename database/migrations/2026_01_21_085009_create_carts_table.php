@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('stock');
-            $table->string('image')->nullable();
-            $table->string('description');
+            $table->integer('varient_id');
+            $table->string('image',300)->nullable();
+            $table->string('description',500);
             $table->integer('quantity');
+            $table->integer('price');
             $table->unsignedBigInteger('clubmember_id');
             $table->unsignedBigInteger('microsite_id');
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('club_id');
+            
             
             $table->softdeletes();
             $table->timestamps();

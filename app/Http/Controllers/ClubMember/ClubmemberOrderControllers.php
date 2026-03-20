@@ -12,6 +12,9 @@ use App\Models\ClubMember;
 use App\Models\Varient;
 use App\Models\Country;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB; 
+
+
 
 
 class ClubmemberOrderControllers extends Controller
@@ -139,35 +142,38 @@ class ClubmemberOrderControllers extends Controller
         //
     }
 
-    public function cartorder($id)
-   {
-        $clubmemberId = 1; // club_member_id is hardcoded for now, replace with auth()->id() when authentication is implemented 
-        $product = Product::findOrFail($id);  
-        $countries = Country::orderBy('name')->get();    
-        $cart = Cart::where('product_id', $product->id)
-                    ->where('clubmember_id', $clubmemberId)
-                    ->first();
-        $varients=Varient::where('product_id', $product->id)->get();
+    public function cartorder($ids)
+    {
+        $clubmemberId = 1; // Replace with auth()->id() in production
+        $idsArray = explode(',', $ids);
 
-        $quantity = $cart ? $cart->quantity : 1;
+        // Load countries
+        $countries = Country::orderBy('name')->get();
 
-        $clubmember = ClubMember::findOrFail($clubmemberId); 
+        // Eager load varients to prevent null property errors
+        $cart = Cart::with('varient')
+            ->whereIn('id', $idsArray)
+            ->where('clubmember_id', $clubmemberId)
+            ->get();
+
+        $varientIds = $cart->pluck('varient_id')->filter(); // filter removes nulls
+
+        // Get the varients from DB
+        $varients = Varient::whereIn('id', $varientIds)
+                        ->where('stock', '>', 0)
+                        ->get()
+                        ->keyBy('id');
+
+        $clubmember = ClubMember::findOrFail($clubmemberId);
+
+        $address = Address::with(['country', 'state'])
+            ->where('clubmember_id', $clubmemberId)
+            ->get();
+
+        return view('clubmember.product.booking', compact('cart','countries','clubmember','address','varients'));
+    }
 
 
-        // Get all addresses
-   
-        $address= Address:: where('clubmember_id',$clubmemberId)->get();
-        // dd($address);
-        return view('clubmember.product.booking', [
-            'product'     => $product,
-            'quantity'    => $quantity,
-            'clubmember'  => $clubmember,
-            'address'     => $address,
-            'varients'    => $varients,
-            'countries'   => $countries,
-          
-            ]);
-        }
         public function addaddress(Request $request)
         {
             $request->validate([
@@ -194,58 +200,85 @@ class ClubmemberOrderControllers extends Controller
         }
 
 
-        public function placeorder(Request $request)
-        {
-            $micrositeId = 1; // Assuming microsite_id is 1 for now, replace with actual value as needed
-            $request->validate([
-                
-                                'quantity'        => 'required|min:1',
-                                'product_id'      => 'required|exists:products,id',
-                                'price'           => 'required',
-                                'clubmember_id'  => 'required|exists:club_members,id',
-                                
-                                'varient_id'      => 'required|exists:varients,id',
-                                'address_id' => 'required|exists:addresses,id',
+      
+
+public function placeorder(Request $request)
+{
+    $micrositeId = 1;
+
+    $request->validate([
+        'product_id'     => 'required|array',
+        'quantity'       => 'required|array',
+        'price'          => 'required|array',
+        'varient_id'     => 'required|array',
+        'clubmember_id'  => 'required|exists:club_members,id',
+        'address_id'     => 'required|exists:addresses,id',
+        'club_id'        => 'required',
+    ]);
+
+    DB::beginTransaction();
+
+    try {
+
+        foreach ($request->product_id as $index => $productId) {
+
+            $variantId = $request->varient_id[$index] ?? null;
+            $qty       = $request->quantity[$index] ?? 1;
+            $price     = $request->price[$index] ?? 0;
+
+            if (!$variantId) continue;
+
+            $variant = Varient::lockForUpdate()->find($variantId);
+
+            // ✅ Stock check
+            if (!$variant || $variant->stock < $qty) {
+                throw new \Exception('Stock not available');
+            }
+
+            // ✅ Create Order
+            $order = Order::create([
+                'quantity'        => $qty,
+                'product_id'      => $productId,
+                'price'           => $price,
+                'club_member_id'  => $request->clubmember_id,
+                'club_id'         => $request->club_id,
+                'varient_id'      => $variantId,
+                'order_status_id' => 1,
+                'microsite_id'    => $micrositeId,
+                'address_id'      => $request->address_id,
             ]);
-                $variant = Varient::findOrFail($request->varient_id);
-                if($variant->stock<=0)
-                    {
-                        return redirect()
-                            ->route('clubmember.viewproduct')
-                            ->with('success', 'currently varients is out of stock!');
-                    }
-                    else{                           
-                                $order = Order::Create([
-                                    'quantity'        => $request->quantity,
-                                    'product_id'      => $variant->product_id,
-                                    'price'           => $request->price,
-                                    'club_member_id'  => $request->clubmember_id,
-                                    'club_id'         => $request->club_id,
-                                    'varient_id'      => $variant->id,
-                                    'order_status_id' => 1,
-                                    'microsite_id'    => $micrositeId,
-                                    'address_id'      => $request->address_id,
-                                ]);
 
-                            $varient=Varient::where('id', $variant->id)->update([
-                                'stock' => $variant->stock - $request->quantity,
-                            ]);
+            // ✅ Reduce stock
+            $variant->decrement('stock', $qty);
 
-                        OrderItem::Create([             
-                            'quantity'     => $request->quantity,
-                            'order_id'     => $order->id,
-                            'microsite_id' => $order->microsite_id,
-                            'product_id'   => $request->product_id,
-                            'status'       => $order->order_status_id,
-                            'address_id'   => $order->address_id,
-                        ]);
+            // ✅ Create Order Item
+            OrderItem::create([
+                'quantity'     => $qty,
+                'order_id'     => $order->id,
+                'microsite_id' => $micrositeId,
+                'product_id'   => $productId,
+                'status'       => 1,
+                'address_id'   => $request->address_id,
+            ]);
 
-                        $cart = Cart::where('product_id',$request->product_id);
-                        $cart->delete(); 
-
-                        return redirect()
-                            ->route('clubmember.viewproduct')
-                            ->with('success', 'Order added successfully!');
-                    }
+            // ✅ Delete ONLY that cart item (IMPORTANT FIX)
+            $cartId = $request->cart_id[$index] ?? null;
+            if ($cartId) {
+                Cart::where('id', $cartId)->delete();
+            }
         }
+
+        DB::commit();
+
+        return redirect()
+            ->route('clubmember.viewproduct')
+            ->with('success', 'Order placed successfully!');
+
+    } catch (\Exception $e) {
+
+        DB::rollback();
+
+        return back()->with('error', $e->getMessage());
+    }
+}
 }

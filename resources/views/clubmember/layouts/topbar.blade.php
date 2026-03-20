@@ -40,57 +40,86 @@
                 <a href="#" class="nav-link nav-link-notify" data-count="{{ $cartItemCount }}" data-bs-toggle="dropdown">
                     <i class="bi bi-cart2 icon-lg"></i>
                 </a> 
-
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
-                    {{-- @include('clubmember.product.cart') --}}
-                    <h6 class="m-0 px-4 py-3 border-bottom">My Cart</h6>  
-                    
-                    <div class="dropdown-menu-body"></h6>
                    
-                        
-                    @forelse($cartItems as $item)
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item d-flex align-items-center">
+                <!-- cart view dropdrown -->
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 shadow-lg rounded-3" style="width: 350px;">
 
-                                
-
-                                <!-- Image --> 
-                                <a href="#" class="me-3 flex-shrink-0">
-                                    <img src="{{ url('storage/' . $item->image) }}"
-                                        class="rounded" width="60" alt="">
-                                </a>
-
-                                <!-- Details -->
-                                <div>
-                                    <h6 class="mb-1">{{ $item->name }}</h6>
-                                    <div>
-                                    Description: {{ $item->description }}    
-                                    </div>
-                                    <div>
-                                    Quantity: {{ $item->quantity }}    
-                                    </div>
-                                </div>
-
-                                <!-- Remove -->
-                                <a href={{ route('clubmember.delete' ,$item->id) }}
-                                class="text-danger me-2 " title="Remove">
-                                    <i class=" bi bi-trash m-1  -center"></i>
-                                </a> 
-                                
-                                <!-- order-->
-                                 <a href={{ route('clubmember.order' ,$item->product_id) }}
-                                class="btn btn-sm me-2" title="Buy Now">
-                                    <i class="fas fa-credit-card fa-l -center"></i>
-
-                            </div>
+                        <!-- Header -->
+                        <div class="px-4 py-3 border-bottom ">
+                            <h6 class="m-0 fw-bold">🛒 My Cart</h6>
                         </div>
-                    @empty
-                        <p class="text-center text-muted py-3">
-                            Cart is empty
-                        </p>
-                    @endforelse
 
-                                    </div> 
+                        <!-- Cart Items -->
+                        <div style="max-height: 300px; overflow-y: auto;">
+                            
+                            @forelse($cartItems as $item)
+                                <div class="d-flex align-items-center px-3 py-3 border-bottom">
+                                     
+                                    <!-- Image -->
+                                    <img src="{{ url('storage/' . $item->image) }}"
+                                        class="rounded shadow-sm me-3"
+                                        width="60" height="60" style="object-fit: cover;">
+
+                                    <!-- Details -->
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 fw-bold">{{ $item->name }}</h6>
+
+                                        <small class="text-muted d-block">
+                                            Qty: {{ $item->quantity }}
+                                        </small>
+
+                                        <span class="text-danger fw-bold fs-6">
+                                            ₹{{ $item->price }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Actions -->
+                                    <div class="text-end">
+                                        <!-- Delete -->
+                                        <a href="{{ route('clubmember.delete' ,$item->id) }}" 
+                                        class="text-danger d-block mb-2"
+                                        title="Remove">
+                                            <i class="bi bi-trash fs-5"></i>
+                                        </a>
+
+                                        <!-- Buy -->
+                                       <!-- <a href="{{ route('clubmember.order', $item->product_id ?? 0) }}"
+                                        class="btn btn-sm btn-success">
+                                            Buy
+                                        </a> -->
+                                    </div>
+
+                                </div>
+                            @empty
+                                <div class="text-center py-4 text-muted">
+                                    🛒 Cart is empty
+                                </div>
+                            @endforelse
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="px-3 py-3 border-top ">
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold">Total:</span>
+                                <span class="text-danger fw-bold fs-5">
+                                    ₹{{ $total_price ?? 0 }}
+                                </span>
+                            </div>
+
+                            @if(!empty($multipleproductids))
+                                <a href="{{ route('clubmember.order', $multipleproductids) }}" 
+                                class="btn btn-primary w-100 fw-bold">
+                                    Checkout
+                                </a>
+                            @else
+                                <button class="btn btn-secondary w-100" disabled>
+                                    Checkout
+                                </button>
+                            @endif
+                        </div>
+
+                    </div> 
                     
                     
                     

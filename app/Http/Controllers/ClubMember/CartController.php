@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\Varient;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -13,11 +14,27 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   public function index()
     {
-        $clubmemberId = 1; // clubmember_id is hardcoded for now, replace with auth()->id() when authentication is implemented 
-         $cartItems = Cart::where('clubmember_id', $clubmemberId)->get();      
-         return view('clubmember.layouts.topbar', compact('cartItems'));
+        $clubmemberId = 1;
+        $micrositeid = 1;
+
+        $cartItems = Cart::where('clubmember_id', $clubmemberId)
+            ->where('microsite_id', $micrositeid)
+            ->get();
+                        
+            $total_price = 0;
+          $multipleproductids=[];
+            foreach ($cartItems as $item) {
+                $multipleproductids[]=$item;
+                if ($item->price) {
+                    $total_price += $item->price; // ✅ correct addition
+                }
+            }
+
+        $cartItemCount = $cartItems->count();
+
+        return view('clubmember.layouts.topbar', compact('cartItems','cartItemCount','total_price','multipleproductids'));
     }
 
     /**
@@ -31,40 +48,64 @@ class CartController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request,$id)
-    {
-        $product = Product::findOrFail($id);
-        $clubmemberId = 1; // clubmember_id is hardcoded for now, replace with auth()->id() when authentication is implemented
-        $cart = Cart::where('clubmember_id', $clubmemberId)
-            ->where('product_id', $product->id)
-            ->first();
+    public function store(Request $request, $id)
+        {
+            $varient = Varient::findOrFail($id);
+            $clubmemberId = 1;
+            // $varient_id=$request->varient_id;
+            // dd($varient_id);
+            $product = Product::where('id', $varient->product_id)->first();  // not working 
 
-        if ($cart) {
+            if (!$varient) {
+                return back()->with('error', 'Variant not found');
+            }
+
+            $cart = Cart::where('clubmember_id', $clubmemberId)
+                ->where('product_id', $product->id)
+                ->first();
+
+            // ✅ If already in cart
+            if ($cart) {
+                if($cart->quanitity > $varient->stock)
+                    {
+                       return redirect()
+                        ->route('clubmember.viewproduct')
+                        ->with('success', ' that must quanitity is not avaliable!'); 
+                    }
+                    else{
+
+                    
             // product already in cart → increment
-            $cart->increment('quantity');
+             $cart->increment('quantity');
+
+            // reload updated value from DB
+            $cart->refresh();
+
+            $cart->price = $cart->quantity * $varient->price;
+            $cart->save(); //not working based on quantity increses
 
             return redirect()
                 ->route('clubmember.viewproduct')
                 ->with('success', 'Product quantity updated in cart!');
+                }
+             }
+
+            // ✅ New item
+            Cart::create([
+                'name' => $product->name,
+                'image' => $product->image,
+                'description' => $product->description,
+                'quantity' => 1,
+                'price' => $varient->price, // ✅ store price
+                'clubmember_id' => $clubmemberId,
+                'microsite_id' => $product->microsite_id,
+                'product_id' => $product->id,
+                'varient_id' => $id,
+                'stock'=>0,
+            ]);
+
+            return back()->with('success', 'Added to cart!');
         }
-
-        // product not in cart → create new
-        Cart::create([
-            'name' => $product->name,
-            'stock' => $product->stock,
-            'image' => $product->image,
-            'description' => $product->description,
-            'quantity' => 1,
-            'clubmember_id' => $clubmemberId,
-            'microsite_id' => $product->microsite_id,
-            'product_id' => $product->id,
-            'club_id' => $product->club_id,
-        ]);
-
-        return redirect()
-            ->route('clubmember.viewproduct')
-            ->with('success', 'Product added to cart successfully!');
-    }
     
 
     /**

@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Cart;
+use App\Models\Varient;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,14 +20,25 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot()
     {
         View::composer('*', function ($view) {
-        $cartItems = Cart::where('clubmember_id', 1)  // clubmember_id is hardcoded for now, replace with auth()->id() when authentication is implemented
-        ->get();
-        $cartItemCount = $cartItems->count();
-        $view->with('cartItems', $cartItems)
-             ->with('cartItemCount', $cartItemCount);
-    });
+
+            $clubmemberId = 1;
+            $micrositeid = 1;
+
+            $cartItems = Cart::where('clubmember_id', $clubmemberId)
+                ->where('microsite_id', $micrositeid)
+                ->get();
+            $multipleproductids = $cartItems->pluck('id')->implode(',');
+            $total_price = $cartItems->sum('price');
+            $cartItemCount = $cartItems->count();
+
+           $varientIds = $cartItems->pluck('varient_id');
+           $cartvarient = Varient::whereIn('id', $varientIds)->get();
+            
+
+            $view->with(compact('cartItems', 'total_price', 'cartItemCount','multipleproductids','cartvarient'));
+        });
     }
 }

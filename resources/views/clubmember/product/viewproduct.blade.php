@@ -212,7 +212,7 @@ $(document).ready(function() {
                 className: 'order-4',
                 render: function(data, type, row) {
                     let stockClass = Number(row.stock) > 0 ? 'bg-success text-success' : 'bg-danger text-danger';
-                    let stockText = Number(row.stock) > 0 ? 'In Stock' : 'Out of Stock';
+                    let stockText = Number(row.stock) > 0 ? 'In Stocks' : 'Out of Stock';
                     return `
                         <div class="px-3 pb-2">
                             <div class="d-flex flex-wrap gap-1 mb-2">

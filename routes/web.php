@@ -120,10 +120,12 @@ Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controller
 
     // booking the product
 
-    Route::get('order/{id}',[ClubmemberOrderControllers::class,'cartorder'])->name('order');
+    Route::get('order/{ids}',[ClubmemberOrderControllers::class,'cartorder'])->name('order');
 
     Route::post('placeorder',[ClubmemberOrderControllers::class,'placeorder'])->name('placeorder');
     Route::post('addaddress',[ClubmemberOrderControllers::class,'addaddress'])->name('addaddress');
+
+
 
     Route::get('vieworder',[ClubmemberOrderControllers::class,'index'])->name('vieworder');
     
