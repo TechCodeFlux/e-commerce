@@ -114,16 +114,15 @@ $imagePath = $request->file('image')->store('products', 'public');
 
       
 //add product-image for image scale
-        ->addColumn('image', function ($row) {
-
-    $firstVariant = $row->varients->first();
-
-    if ($firstVariant && $firstVariant->image) {
-        return '<img src="' . asset('storage/' . $firstVariant->image) . '" width="150" class="rounded ">';
-    }
-
-    return '<span class="text-muted">No Image</span>';
-})
+           ->addColumn('image', function (Product $product) {
+                if ($product->image) {
+                    return '<img src="'.asset('storage/'.$product->image).'"
+                                width="150" class="rounded "
+                                
+                                style="object-fit:cover;border-radius:6px;">';
+                }
+                return '--';
+            }) 
 
             
 //toggle button

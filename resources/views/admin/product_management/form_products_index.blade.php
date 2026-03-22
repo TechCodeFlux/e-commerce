@@ -111,14 +111,10 @@
                                 <label class="form-label">Image</label>
                                 {{-- Pre-View image --}}
                                         <div class="mt-3">
-                                            @php  $firstVariant = isset($product) ? $product->varients->first() : null;  @endphp
-
                                             <img id="imagePreview"
-                                            src="{{ $firstVariant && $firstVariant->image 
-                                                    ? asset('storage/' . $firstVariant->image) 
-                                                    : (isset($product) && $product->image ? asset('storage/' . $product->image) : '') }}"
-                                            alt="Image Preview"
-                                            class="img-fluid w-25 {{ ($firstVariant && $firstVariant->image) || (isset($product) && $product->image) ? '' : 'd-none' }}">
+                                                src="{{ isset($product) && $product->image ? asset('storage/' . $product->image) : '' }}"
+                                                alt="Image Preview"
+                                                class="img-fluid w-25 {{ isset($product) && $product->image ? '' : 'd-none' }}">
                                         </div>
                                 {{-- end-pre -View image --}}
                                                 <input type="file"
