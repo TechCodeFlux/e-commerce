@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('image');
             $table->integer('price');
             $table->unsignedBigInteger('product_id')->default('0');
-            $table->boolean('status')->default('0');
             $table->softdeletes();
             $table->timestamps();
         });

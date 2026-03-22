@@ -50,6 +50,8 @@
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">{{ $product->name }}</h5>
                                 <p class="card-text">{{ Str::limit($product->description,60) }}</p>
+                                <p class="card-text">Size: {{ $product->size }}</p>
+                                <p class="card-text">Color: {{ $product->color }}</p>
                                 <div class="mt-auto d-flex justify-content-end">
                                     <form action="{{ route('admin.microsite.remove_product') }}" method="POST">
                                         @csrf
@@ -93,15 +95,22 @@
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">{{ $product->name }}</h5>
                                 <p class="card-text">{{ Str::limit($product->description,60) }}</p>
+                                <p class="card-text">Size: {{ $product->size }}</p>
+                                <p class="card-text">Color: {{ $product->color }}</p>
                                 <div class="mt-auto d-flex justify-content-end">
                                     <form action="{{ route('admin.microsite.add_product') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="microsite_id" value="{{ $microsite->id }}">
                                         <input type="hidden" name="club_id" value="{{ $club->id }}">
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button type="submit" class="btn btn-outline-success btn-sm rounded-pill px-4">
-                                            <i class="fas fa-plus me-1"></i> Add
-                                        </button>
+                                        <input type="hidden" name="varient_id" value="{{ $product->variant_id }}">
+                                        @if(($product->stock ?? 0) == 0)
+                                            <span class="badge bg-danger px-3 py-2">Out of Stock</span>
+                                        @else
+                                            <button type="submit" class="btn btn-outline-success btn-sm rounded-pill px-4">
+                                                <i class="fas fa-plus me-1"></i> Add
+                                            </button>
+                                        @endif
                                     </form>
                                 </div>
                             </div>

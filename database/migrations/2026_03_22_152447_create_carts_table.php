@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('image')->nullable();
-            $table->string('description');
-            $table->unsignedBigInteger('category_id')->default('0');
-            $table->boolean('status')->default('0');
+            $table->integer('varient_id');
+            $table->integer('quantity');
+            $table->integer('price');
+            $table->unsignedBigInteger('clubmember_id');
+            $table->unsignedBigInteger('microsite_id');
+            $table->unsignedBigInteger('product_id');
             $table->softdeletes();
             $table->timestamps();
         });
@@ -28,8 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-       Schema::table('products', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-    }); 
-}
+        Schema::dropIfExists('carts');
+    }
 };

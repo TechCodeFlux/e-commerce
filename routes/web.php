@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\OptionValueController;
 use App\Http\Controllers\Admin\MicrositeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VarientController;
+use App\Http\Controllers\Admin\CartController;
 //model
 use App\Models\Microsite;
 use Illuminate\Support\Facades\DB;
@@ -146,7 +147,12 @@ Route::post('/microsite/{slug}/login', [MicrositeController::class, 'login'])->n
 // After login → microsite home
 // Route::get('/microsite/{microsite}/home', function () {return view('clubmember.microsite.home');})->name('microsite.home');
 Route::get('/product-variants/{id}', [MicrositeController::class,'variants']);//to get product variants in microsite home page
-
+Route::get('/microsite-product-variants/{productId}', [MicrositeController::class, 'getMicrositeProductVariants']);//get varients of product in microsite home page
+Route::post('/add-to-cart', [CartController::class, 'add']);//add to cart route
+Route::get('/cart', [CartController::class, 'index'])
+    ->name('clubmember.microsite.carts');
+Route::post('/cart-update', [CartController::class, 'update']);//update cart item quantity
+Route::post('/cart-remove', [CartController::class, 'remove']);//remove cart item
 
 
 Route::get('/microsite/{microsite}/home', function ($micrositeId) {

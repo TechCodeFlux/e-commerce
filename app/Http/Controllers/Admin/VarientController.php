@@ -59,7 +59,7 @@ public function store(Request $request)
     $product = Product::create([
             'name'        => $productData['name'],
             'description' => $productData['description'],
-            // 'image'       => $productData['image'],
+            'image'       => $productData['image'],
             'status'      => $productData['status'],
             'category_id' => $productData['category_id'],
      ]);
@@ -136,7 +136,7 @@ public function update(Request $request, $id)
         $product->update([
             'name'        => $productData['name'],
             'description' => $productData['description'],
-            // 'image'       => $productData['image'],
+            'image'       => $productData['image'],
             'status'      => $productData['status'],
             'category_id' => $productData['category_id'],
         ]);

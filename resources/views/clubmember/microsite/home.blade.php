@@ -2,35 +2,43 @@
 <html lang="zxx" class="no-js">
 
 <head>
-	<!-- Mobile Specific Meta -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<!-- Favicon-->
-	<link rel="shortcut icon" href="img/fav.png">
-	<!-- Author Meta -->
-	<meta name="author" content="CodePixar">
-	<!-- Meta Description -->
-	<meta name="description" content="">
-	<!-- Meta Keyword -->
-	<meta name="keywords" content="">
-	<!-- meta character set -->
 	<meta charset="UTF-8">
-	<!-- Site Title -->
+
 	<title>{{ $microsite->name }}</title>
-	<!--
-		CSS
-		============================================= -->
-	<link rel="stylesheet" href="{{url('assets/micro/css/linearicons.css')}}">
-	<link rel="stylesheet" href="{{url('assets/micro/css/font-awesome.min.css')}}">
-	<link rel="stylesheet" href="{{url('assets/micro/css/themify-icons.css')}}">
+
 	<link rel="stylesheet" href="{{url('assets/micro/css/bootstrap.css')}}">
-	<link rel="stylesheet" href="{{url('assets/micro/css/owl.carousel.css')}}">
-	<link rel="stylesheet" href="{{url('assets/micro/css/nice-select.css')}}">
-	<link rel="stylesheet" href="{{url('assets/micro/css/nouislider.min.css')}}">
-	<link rel="stylesheet" href="{{url('assets/micro/css/ion.rangeSlider.css')}}" />
-	<link rel="stylesheet" href="{{url('assets/micro/css/ion.rangeSlider.skinFlat.css')}}" />
-	<link rel="stylesheet" href="{{url('assets/micro/css/magnific-popup.css')}}">
+	<link rel="stylesheet" href="{{url('assets/micro/css/font-awesome.min.css')}}">
 	<link rel="stylesheet" href="{{url('assets/micro/css/main.css')}}">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+	<style>
+.size-box {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    margin: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+    min-width: 45px;
+    text-align: center;
+}
+.size-box:hover { border-color: black; }
+.size-box.active { background: black; color: white; border-color: black; }
+.size-box.disabled { background: #eee; color: #999; cursor: not-allowed; }
+
+/* FIXED MODAL IMAGE */
+.modal-img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+@keyframes pop {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+</style>
 </head>
 
 <body>
@@ -57,8 +65,8 @@
 					</button>
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav ml-auto">
-							<li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>						
-							<li class="nav-item"><a class="nav-link" href="#">Cart</a></li>
+							<li class="nav-item active"><a class="nav-link" href="#">Home</a></li>						
+							<li class="nav-item"><a class="nav-link" href="{{ route('clubmember.microsite.carts') }}">Cart</a></li>
 						</ul>
 					</div>
 				</div>
@@ -138,7 +146,7 @@
 								<p class="hover-text">Add to cart</p>
 							</a>
 
-							<a href="#" class="social-info viewProductBtn" data-product="{{ $product->id }}">
+							<a href="javascript:void(0)" class="social-info viewProductBtn" data-product="{{ $product->id }}">
 								<span class="fas fa-eye"></span>
 								<p class="hover-text">view more</p>
 							</a>
@@ -163,40 +171,104 @@
 	</div>
 </section>
 <!-- End Products Area -->
-<div class="modal fade" id="variantModal" tabindex="-1">
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
 
-<div class="modal-header">
-<h5 class="modal-title">Product Variants</h5>
-<button type="button" class="close" data-dismiss="modal">&times;</button>
+ <!-- ================= MODAL FIXED ================= -->
+<div class="modal fade" id="variantModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- HEADER ADDED -->
+            <div class="modal-header">
+                <h5 class="modal-title">Product Details</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+
+                    <!-- IMAGE -->
+                    <div class="col-md-6">
+                        <img id="modalImage" class="modal-img">
+                    </div>
+
+                    <!-- DETAILS -->
+                    <div class="col-md-6 d-flex flex-column justify-content-center">
+
+                        <h4 id="modalName" class="mb-2"></h4>
+
+                        <p class="text-muted" id="modalDesc"></p>
+
+                        <h6 class="mt-3">Select Varient</h6>
+                        <div id="sizeContainer"></div>
+
+                        <!-- STOCK TEXT ADDED -->
+                        <p id="stockText" class="mt-2"></p>
+
+                        <div class="mt-3">
+                            <button id="addToCartBtn"
+                                class="btn btn-dark w-100"
+                                disabled>
+                                SELECT VARIENT
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
+<!-- ================= END MODAL ================= -->
 
-<div class="modal-body">
+{{-- start message modal --}}
+<div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
 
-<table class="table">
-<thead>
-<tr>
-<th>Image</th>
-<th>Size</th>
-<th>Color</th>
-<th>Action</th>
-</tr>
-</thead>
+            <div class="modal-body text-center p-5">
 
-<tbody id="variantTable">
+                <!-- ICON -->
+                <div class="mb-3">
+                    <div style="
+                        width:70px;
+                        height:70px;
+                        margin:auto;
+                        border-radius:50%;
+                        background:#28a745;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        animation: pop 0.3s ease;
+                    ">
+                        <i class="fa fa-check text-white" style="font-size:28px;"></i>
+                    </div>
+                </div>
 
-</tbody>
+                <!-- TEXT -->
+                <h4 class="mb-2 font-weight-bold">Added to Cart</h4>
+                <p class="text-muted mb-4">
+                    Your item has been successfully added.
+                </p>
 
-</table>
+                <!-- ACTION BUTTONS -->
+                <div class="d-flex justify-content-center gap-2">
+                    {{-- <button class="btn btn-outline-dark btn-sm mr-2" data-dismiss="modal">
+                        Continue Shopping
+                    </button> --}}
+					<h4>Continue Shopping</h4>
+                    {{-- <a href="{{ url('cart') }}" class="btn btn-dark btn-sm">
+                        View Cart
+                    </a> --}}
+                </div>
 
+            </div>
+
+        </div>
+    </div>
 </div>
-
-</div>
-</div>
-</div>
-
-
+{{-- end message modal --}}
 	<!-- start footer Area -->
 	<footer class="footer-area section_gap">
 		<div class="container">
@@ -265,7 +337,7 @@
 			</div>
 			<div class="footer-bottom d-flex justify-content-center align-items-center flex-wrap">
 				<p class="footer-text m-0"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">AARJAY</a>
 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 </p>
 			</div>
@@ -276,7 +348,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="{{url('assets/micro/js/vendor/jquery-2.2.4.min.js')}}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
 	 crossorigin="anonymous"></script>
-	<script src="{{url('assets/micro/js/vendor/bootstrap.min.js')}}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="{{url('assets/micro/js/jquery.ajaxchimp.min.js')}}"></script>
 	{{-- <script src="{{url('assets/micro/js/jquery.nice-select.min.js')}}"></script> --}}
 	<script src="{{url('assets/micro/js/jquery.sticky.js')}}"></script>
@@ -317,45 +389,150 @@ document.addEventListener("DOMContentLoaded", function(){
 $(document).ready(function(){
 	$('#categoryFilter').niceSelect();
 });
-
-$(document).on('click','.viewProductBtn',function(e){
+/// VIEW PRODUCT AND VARIANTS IN MODAL
+$(document).on('click', '.viewProductBtn', function (e) {
 
     e.preventDefault();
 
     let productId = $(this).data('product');
 
-    $.get('/product-variants/'+productId,function(data){
+    $.ajax({
+        url: "{{ url('microsite-product-variants') }}/" + productId,
+        type: 'GET',
 
-        let html = '';
+        success: function (data) {
 
-        data.forEach(function(v){
-			let btn = v.stock > 0 
-? `<button class="btn btn-sm btn-primary addToCartBtn" data-variant="${v.id}">Add to Cart</button>`
-: `<button class="btn btn-sm btn-secondary" disabled>Out of Stock</button>`;
+            if (!data || data.length === 0) {
+                alert("No variants found");
+                return;
+            }
 
-            html += `
-            <tr>
-            <td><img src="/storage/${v.image}" style="height:60px"></td>
-            <td>${v.size}</td>
-            <td>${v.color}</td>
-            <td>
-				<button class="btn btn-sm btn-warning addToCartBtn rounded-pill" data-variant="${v.id}">
-    <i class="fas fa-shopping-bag me-1"></i> Add to Cart
-</button>
-			</td>
-			</tr>
-            `;
+            let selectedVariant = null;
 
-        });
+            // SET BASIC DATA
+            $('#modalName').text(data[0].product_name || 'Product');
+            $('#modalDesc').text(data[0].description || '');
 
-        $('#variantTable').html(html);
+            let defaultImage = data[0].image 
+                ? '/storage/' + data[0].image 
+                : '/img/product/p1.jpg';
 
-        $('#variantModal').modal('show');
+            $('#modalImage').attr('src', defaultImage);
 
+            let variantsHtml = '';
+
+            data.forEach(v => {
+
+                let disabledClass = v.stock <= 0 ? 'disabled' : '';
+
+                let label = `${v.size ?? '-'} - ${v.color ?? '-'}`;
+
+                variantsHtml += `
+                    <div class="size-box ${disabledClass}" 
+                        data-id="${v.id}" 
+                        data-stock="${v.stock}"
+                        data-image="${v.image}">
+                        ${label}
+                    </div>
+                `;
+            });
+
+            $('#sizeContainer').html(variantsHtml);
+
+            // RESET STATE
+            $('#stockText').text('');
+            $('#addToCartBtn')
+                .prop('disabled', true)
+                .text('SELECT VARIANT');
+
+            // CLICK VARIANT
+            $('.size-box').click(function () {
+
+                if ($(this).hasClass('disabled')) return;
+
+                $('.size-box').removeClass('active');
+                $(this).addClass('active');
+
+                let stock = $(this).data('stock');
+                selectedVariant = $(this).data('id');
+                let image = $(this).data('image');
+
+                // ✅ CHANGE IMAGE ON SELECT
+                if (image) {
+                    $('#modalImage').attr('src', '/storage/' + image);
+                }
+
+                if (stock > 0) {
+                    $('#stockText').html('<span class="text-success">In Stock</span>');
+                    $('#addToCartBtn')
+                        .prop('disabled', false)
+                        .text('ADD TO CART')
+                        .data('variant', selectedVariant);
+                } else {
+                    $('#stockText').html('<span class="text-danger">Out of Stock</span>');
+                    $('#addToCartBtn')
+                        .prop('disabled', true)
+                        .text('OUT OF STOCK');
+                }
+            });
+
+            // ✅ Bootstrap 4 modal open
+            $('#variantModal').modal('show');
+        },
+
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            alert("Something went wrong while fetching variants");
+        }
     });
 
 });
 
+///add to cart table
+$('#addToCartBtn').click(function () {
+
+    let variantId = $(this).data('variant');
+
+    if (!variantId) {
+        alert("Please select a variant");
+        return;
+    }
+
+    $.ajax({
+        url: "{{ url('add-to-cart') }}",
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            variant_id: variantId,
+            quantity: 1
+        },
+
+        success: function (res) {
+
+    // Close product modal
+    $('#variantModal').modal('hide');
+
+    // Show success modal
+    $('#successModal').modal('show');
+
+    // Wait → hide → reload
+    setTimeout(function () {
+        $('#successModal').modal('hide');
+
+        // Reload page
+        location.reload();
+
+    }, 2000);
+},
+    
+
+        error: function (err) {
+            console.error(err.responseText);
+            alert("Error adding to cart");
+        }
+    });
+
+});
 </script>
 </body>
 
