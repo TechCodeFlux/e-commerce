@@ -7,7 +7,7 @@ use App\Models\Category;
 // use Illuminate\Container\Attributes\Storage;
 //use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Facades\Validator; 
+// use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 // use Illuminate\Support\Str; 
 
@@ -31,8 +31,9 @@ class CategoryController extends Controller
              'parent_id' => $request->category ? $request->category : 0 ,
             'status'=> $request->status ? 1 : 0,    
           ]);
-        return redirect('admin/category_management/show_category');
-    
+        return redirect()
+        ->route('admin.category_management.show_category')
+        ->with('success', 'New Category Created successfully!');
     }
 
 
@@ -54,11 +55,13 @@ class CategoryController extends Controller
              ->addColumn('status', function (Category $category) {
 
                 return '
-                
                        
                         <div class="form-check form-switch">
-                                    <input class="form-check-input toggle-status" type="checkbox" name="status" 
-                                    data-id="'.$category->id.'"  '.($category->status ? 'checked' : '').'>
+                                     <input 
+                                          class="form-check-input toggle-status"
+                                          type="checkbox"
+                                          name="status"
+                                          data-id="'.$category->id.'"  '.($category->status ? 'checked' : '').'>
                          </div>';
             })
 
@@ -66,7 +69,7 @@ class CategoryController extends Controller
 
 //toggle button
             ->addColumn('action', function (Category $category) use ($request) {
-                $actions= '<div class="d-flex gap-1"><div class="dropdown">';
+                $actions= '<div class="d-flex gap-1"><div class="container-xxl dropdown">';
 
 
                 //view button
@@ -76,7 +79,7 @@ class CategoryController extends Controller
                 //edit button
                 $actions .= '<a
                                 href="' . route('admin.category_management.edit_category_index', $category->id) . '"
-                                 class="btn btn-sm btn-outline-secondary me-2"
+                                 class=" btn btn-sm btn-outline-secondary me-2 "
                                 title="Edit">
                                     <i class="fas fa-pencil-alt"></i> 
                             </a>';
@@ -85,7 +88,7 @@ class CategoryController extends Controller
                 //delete button
                 $actions .= '<button 
                                  type="button"
-                                 class="btn btn-sm btn-outline-danger delete-club-member"
+                                 class=" btn btn-sm btn-outline-danger delete-club-member"
                                  onclick="deleteCategory(' . $category->id . ')"
                                  title="Delete">
                                                               <i class="fas fa-trash-alt"></i>
@@ -168,7 +171,9 @@ class CategoryController extends Controller
              'name' => $request->name,
              'parent_id' => $request->category ? $request->category : 0 ,
 ]);
-          return redirect('admin/category_management/show_category'); 
+          return redirect()->
+          route("admin.category_management.show_category")
+          ->with('success', 'Category updated successfully!'); 
 
 
     }

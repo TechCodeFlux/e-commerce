@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('size');
             $table->string('color');
             $table->integer('stock');
+            $table->string('image');
             $table->unsignedBigInteger('product_id')->default('0');
             $table->boolean('status')->default('0');
             $table->softdeletes();

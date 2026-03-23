@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ClubMemberController;
 use App\Http\Controllers\Admin\ClubController;
 //for dashboard
 use App\Http\Controllers\Admin\DashboardController;
+// use App\Http\Controllers\Club\ClubDashboardController;
 //category controller
 use App\Http\Controllers\Admin\CategoryController;
 //for option
@@ -14,7 +15,10 @@ use App\Http\Controllers\Admin\OptionValueController;
 use App\Http\Controllers\Admin\MicrositeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VarientController;
-
+//model
+use App\Models\Microsite;
+use Illuminate\Support\Facades\DB;
+use App\Models\Category;
 //arjun
 Route::get('/', function () {return view('club.auth.login');})->name('club.login');
 // Route::post('/', [ClubLoginController::class, 'login'])->name('club.login.submit');
@@ -51,9 +55,6 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::post('clubsadd', [ClubController::class, 'store'])->name('addclub'); //add club data to table (submit form)
     Route::put('clubsupdate/{club}', [ClubController::class, 'update'])->name('update'); //add club data (update form)
     Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
-
-    Route::get('/clubs/{club}/dashboard', [ClubController::class, 'dashboard'])->name('clubs.dashboard');//dashboard for each club
-    Route::delete('clubs/{club}', [ClubController::class, 'destroy'])->name('clubs.destroy');//delete club
     //Club dashboard
     Route::get('/clubs/{club}/dashboard', [ClubController::class, 'dashboard'])->name('clubs.dashboard');//dashboard for each club
     Route::delete('clubs/{club}', [ClubController::class, 'destroy'])->name('clubs.destroy');//delete club
@@ -108,6 +109,10 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('edit_microsite/{id}',[MicrositeController::class,'edit'])->name('editmicrosite');//edit microsite form
     Route::put('microsite_update/{microsite}', [MicrositeController::class, 'update'])->name('microsite_update');//update microsite data
     Route::get('microsite_show/{microsite}', [MicrositeController::class, 'show'])->name('microsite_show');//show microsite details modal
+
+    Route::get('/admin/microsite/{microsite}/products', [MicrositeController::class, 'products'])->name('microsite.list_products');//to add products into microsite blade page
+    Route::post('/admin/microsite/add-product', [MicrositeController::class, 'addProductToMicrosite'])->name('microsite.add_product');//add products into microsite
+    Route::delete('/admin/microsite/remove-product', [MicrositeController::class, 'removeProductFromMicrosite'])->name('microsite.remove_product');//remove products from microsite
     //microsite link
     Route::get('/microsite-access/{microsite}',[MicrositeController::class, 'access'])->name('microsite.access');
     //PRODUCT-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -131,60 +136,65 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('varient_management/show_single/{id}', [VarientController::class, 'single_show'])->name('varient_management.show_single');
     Route::post('varient_management/change-status', [VarientController::class, 'changeStatus'])->name('varient_management.change-status');
     Route::post('varient/get-option-values',[VarientController::class, 'getOptionValues'])->name('varient_management.get_option_values');
-    //microsite link
-    Route::get('/microsite-access/{microsite}',[MicrositeController::class, 'access'])->name('microsite.access');
-
 });
 
-/*
-|--------------------------------------------------------------------------
-| PUBLIC MICROSITE ROUTES
-|--------------------------------------------------------------------------
-*/
-
+//| PUBLIC MICROSITE ROUTES
 // Microsite login page
-Route::get('/microsite/{slug}/login', [MicrositeController::class, 'showLogin'])
-    ->name('microsite.login');
-
+Route::get('/microsite/{slug}/login', [MicrositeController::class, 'showLogin'])->name('microsite.login');
 // Microsite login submit
-Route::post('/microsite/{slug}/login', [ClubMemberController::class, 'login'])
-    ->name('microsite.login.submit');
-
+Route::post('/microsite/{slug}/login', [MicrositeController::class, 'login'])->name('microsite.login.submit');
 // After login → microsite home
-Route::get('/microsite/{microsite}/home', function () {
-    return view('clubmember.microsite_home');
-})->middleware('auth:clubmember')->name('microsite.home');
-
-//clubmember
+// Route::get('/microsite/{microsite}/home', function () {return view('clubmember.microsite.home');})->name('microsite.home');
+Route::get('/product-variants/{id}', [MicrositeController::class,'variants']);//to get product variants in microsite home page
 
 
-Route::prefix('clubmember')->name('clubmember.')->group(function () {
 
-    // Login page
-    Route::get('login', [ClubMemberController::class, 'showLogin'])
-        ->name('login');
+Route::get('/microsite/{microsite}/home', function ($micrositeId) {
 
-    // Login submit
-    Route::post('login', [ClubMemberController::class, 'login'])
-        ->name('login.submit');
+    $microsite = Microsite::findOrFail($micrositeId);
+    $club = $microsite->club;
 
-    Route::get('/microsite/{slug}/home', [MicrositeController::class, 'home'])
-    ->name('microsite.home');
+    // Get microsite products
+    $micrositeProducts = DB::table('microsite_products')
+        ->join('products', 'products.id', '=', 'microsite_products.product_id')
+        ->leftJoin('varients', function ($join) {
+            $join->on('varients.product_id', '=', 'products.id')
+                 ->where('varients.status', 1);
+        })
+        ->where('microsite_products.microsite_id', $microsite->id)
+        ->select(
+            'products.*',
+            DB::raw('(select image from varients where varients.product_id = products.id limit 1) as variant_image')
+        )
+        ->get();
 
-    // Logout
-    Route::post('logout', [ClubMemberController::class, 'logout'])
-        ->name('logout');
+    // Get categories of those products
+    $categories = Category::whereIn(
+        'id',
+        $micrositeProducts->pluck('category_id')->unique()
+    )->get();
 
-    // Protected routes
-    Route::middleware('auth:clubmember')->group(function () {
+    return view('clubmember.microsite.home', compact(
+        'microsite',
+        'club',
+        'micrositeProducts',
+        'categories'
+    ));
 
-        Route::get('dashboard', function () {
-            return view('clubmember.dashboard');
-        })->name('dashboard');
-
-Route::get('/microsite/{slug}/home', function ($slug) {
-    return view('clubmember.home');
 })->name('microsite.home');
-    });
-});
+// Logout
+Route::post('/microsite/{slug}/logout', [MicrositeController::class, 'logout'])->name('microsite.logout');
+Route::get('/clubmember', function () {return view('clubmember.auth.login');})->name('clubmember.login');
+
+// Route::get('login', [MicrositeController::class, 'showLogin'])->name('login');
+// Route::post('/clubmember', [ClubMemberLoginController::class, 'login'])->name('clubmember.login.submit');
+// Route::prefix('clubmember')->name('clubmember.')->namespace('App\Http\Controllers\ClubMember')->group(function () {
+//     Auth::routes(['register' => false]); 
+//     //dashboard controller
+//     Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
+
+//     // Login submit
+//     // Route::post('login', [MicrositeController::class, 'login'])->name('login.submit');
+
+// });
 

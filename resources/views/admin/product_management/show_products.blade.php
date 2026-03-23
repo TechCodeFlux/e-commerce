@@ -148,6 +148,7 @@
                                 <table class="table table-bordered table-hover text-center align-middle">
                                     <thead class="table-light">
                                         <tr class="small text-uppercase">
+                                            <th>Image</th>
                                             <th>Color</th>
                                             <th>Size</th>
                                             <th>Stock</th>
@@ -228,8 +229,11 @@ $(document).on('click', '.view-product', function () {
 
             $('#ms_name').text(res.name);
             $('#ms_description').text(res.description);
-            $('#ms_image').attr('src', res.image);
-             $('#ms_category').text(res.categories.name);
+
+            let imageUrl = res.varients.length > 0 && res.varients[0].image  ? res.varients[0].image : res.image;
+            $('#ms_image').attr('src', imageUrl);
+            
+            $('#ms_category').text(res.categories.name);
              if(res.categories.status == 1){
                   $('#ms_category_status')
                   .text("Active")
@@ -260,9 +264,17 @@ $(document).on('click', '.view-product', function () {
 
             if(res.varients.length > 0){
 
-                res.varients.forEach(function(v){
+               res.varients.forEach(function(v){
+
                     rows += `
                         <tr>
+                            <td>
+                                ${
+                                    v.image 
+                                    ? `<img src="${v.image}" width="60" class="rounded">`
+                                    : '<span class="text-muted">No Image</span>'
+                                }
+                            </td>
                             <td>${v.color ?? '-'}</td>
                             <td>${v.size ?? '-'}</td>
                             <td>${v.stock ?? 0}</td>
@@ -345,7 +357,6 @@ $(document).ready(function() {
     $productTable= $('#admin').DataTable({
         processing: true,
         serverSide: true,
-        scrollX: true,
         ajax: {
            url: "{{ route('admin.product_management.show_products') }}",
             data: function(d) {
@@ -496,6 +507,20 @@ document.addEventListener('mouseout', function (e) {
     }
 });
 </script>
+
+
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
 
 @endsection
 @endsection

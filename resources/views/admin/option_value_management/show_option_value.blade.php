@@ -237,19 +237,6 @@ $(document).on('change', '.toggle-status', function () {
 
 });
 
-
- 
-
-
-
-
-
-
-
-
-
-
-
 //table rows
 
 $(document).ready(function() {

@@ -33,4 +33,8 @@ class Club extends Authenticatable
     {
         return $this->hasMany(ClubMember::class);
     }
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('storage/club_images/' . $this->image) : asset('img/default-club.png');
+    }
 }

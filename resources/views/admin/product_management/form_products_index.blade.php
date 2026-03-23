@@ -1,7 +1,4 @@
 @extends('admin.components.app')
-@php
-    $hideSearch = true;
-@endphp
 @section('page-title', $product->id ? 'Edit Product form' : ' Product Form')
 @section('content')
 <div class="mb-4">
@@ -38,39 +35,16 @@
     </div>
             
 
-           @if(session('success'))
-                    <div class="modal fade" id="successModal" tabindex="-1">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content shadow-lg border-0">
-                                <div class="modal-header bg-success text-white">
-                                    <h5 class="modal-title">Success</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body text-center py-4">
-                                    <i class="bi bi-check-circle-fill text-success" style="font-size: 50px;"></i>
-                                    <p class="mt-3 mb-0 fw-semibold">
-                                        {{ session('success') }}
-                                    </p>
-                                </div>
-                                <div class="modal-footer justify-content-center border-0">
-                                    <button type="button" class="btn btn-success px-4" data-bs-dismiss="modal">
-                                        OK  
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            @endif
-
+          
             <div class="row justify-content-center">
                 <div class="col-lg-12">
 
-            <form class="productForm" id="productForm"
+            <form class="productForm"
                    action="{{ isset($product->id) 
                           ? route('admin.product_management.edit_product', $product->id) 
                           : route('admin.product_management.add_products') }}"
                     method="POST"
-                    enctype="multipart/form-data"   
+                    {{-- enctype="multipart/form-data"    --}}
                     autocomplete="off">
                     @csrf
                        @if(isset($product->id))
@@ -130,16 +104,20 @@
                      <div class="row ">
                             {{---image---}}
                             
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <label class="form-label">Image</label>
-                                {{-- Pre-View image --}}
+                                Pre-View image
                                         <div class="mt-3">
+                                            @php  $firstVariant = isset($product) ? $product->varients->first() : null;  @endphp
+
                                             <img id="imagePreview"
-                                                src="{{ isset($product) && $product->image ? asset('storage/' . $product->image) : '' }}"
-                                                alt="Image Preview"
-                                                class="img-fluid w-25 {{ isset($product) && $product->image ? '' : 'd-none' }}">
+                                            src="{{ $firstVariant && $firstVariant->image 
+                                                    ? asset('storage/' . $firstVariant->image) 
+                                                    : (isset($product) && $product->image ? asset('storage/' . $product->image) : '') }}"
+                                            alt="Image Preview"
+                                            class="img-fluid w-25 {{ ($firstVariant && $firstVariant->image) || (isset($product) && $product->image) ? '' : 'd-none' }}">
                                         </div>
-                                {{-- end-pre -View image --}}
+                                end-pre -View image
                                                 <input type="file"
                                                 name="image" 
                                                 class="form-control swal2-radio"
@@ -150,13 +128,13 @@
                                                 @error('image')
                                                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                                                 @enderror
-                            </div>
+                            </div> --}}
                            
                        
                         
                             {{-- ----status---- --}}
                          <!-- Increased width to col-md-6 -->
-                            <div class="col-md-6 mb-3 mt-5 w-25 m-auto mt-lg-3">
+                            <div class="col-md-6 mb-3 mt-5 w-25 m-auto m-lg-1">
                                 <label class="form-label d-block">Status</label>
 
                                 <input type="hidden" name="status" value="0">
@@ -181,7 +159,7 @@
                     </div>
                        
                         <div class="text-center mt-3 w-25 ms-sm-auto">
-                           <button type="submit" id="submitBtn" class="btn btn-primary px-5"> {{ $product->id ? 'Next' : 'Next' }}</button>
+                           <button type="submit" class="btn btn-primary px-5"> {{ $product->id ? 'Next' : 'Next' }}</button>
                         </div>
 
             </form>
@@ -197,18 +175,6 @@
 
 @section('script')
 <script>
-
-$(document).ready(function () {
-
-    @if(session('success'))
-        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-        successModal.show();
-    @endif
-
-});
-
-
-
 
 $('.productForm').on('submit', function (e) {
 
@@ -261,6 +227,20 @@ $('.productForm').on('submit', function (e) {
 });
     @endif
 });
+
+
+$(document).on('input change', '.productForm input, .productForm textarea, .productForm select', function () {
+
+    let error = $(this).next('.text-danger');
+    if (error.length) {
+        error.fadeOut(200, function() {
+            $(this).remove();
+        });
+    }
+
+});
+
+
 
 
 
@@ -338,75 +318,55 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function previewImage(event) {
-        var input = event.target;
-        var imagePreview = document.getElementById('imagePreview');
-         const file = event.target.files[0];
+// function previewImage(event) {
+//         var input = event.target;
+//         var imagePreview = document.getElementById('imagePreview');
+//          const file = event.target.files[0];
 
-        if (file) {
-        imagePreview.src = URL.createObjectURL(file);
-        imagePreview.classList.remove('d-none'); // show image
-        }
+//         if (file) {
+//         imagePreview.src = URL.createObjectURL(file);
+//         imagePreview.classList.remove('d-none'); // show image
+//         }
 
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+//         if (input.files && input.files[0]) {
+//             var reader = new FileReader();
 
-            reader.onload = function(e) {
-                // Set the src of the image to the file data
-                imagePreview.src = e.target.result;
-                // Make the image visible
-                imagePreview.style.display = 'block';
-            }
+//             reader.onload = function(e) {
+//                 // Set the src of the image to the file data
+//                 imagePreview.src = e.target.result;
+//                 // Make the image visible
+//                 imagePreview.style.display = 'block';
+//             }
 
-            // Read the file as a data URL
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            // If the user cancels selection, hide the preview
-            imagePreview.src = '#';
-            imagePreview.style.display = 'none';
-        }
+//             // Read the file as a data URL
+//             reader.readAsDataURL(input.files[0]);
+//         } else {
+//             // If the user cancels selection, hide the preview
+//             imagePreview.src = '#';
+//             imagePreview.style.display = 'none';
+//         }
 
 
 
-    // Show selected file name
-document.getElementById('imageInput').addEventListener('change', function () {
-    const fileName = this.files.length > 0 ? this.files[0].name : 'No file chosen';
+//     // Show selected file name
+// document.getElementById('imageInput').addEventListener('change', function () {
+//     const fileName = this.files.length > 0 ? this.files[0].name : 'No file chosen';
 
-    // Remove existing filename if already added
-    let existingLabel = document.getElementById('fileNameDisplay');
-    if (existingLabel) {
-        existingLabel.remove();
-    }
+//     // Remove existing filename if already added
+//     let existingLabel = document.getElementById('fileNameDisplay');
+//     if (existingLabel) {
+//         existingLabel.remove();
+//     }
 
-    // Create new filename display
-    let fileLabel = document.createElement('small');
-    fileLabel.id = 'fileNameDisplay';
-    fileLabel.className = 'd-block mt-2 text-primary fw-semibold';
-    fileLabel.innerText = fileName;
+//     // Create new filename display
+//     let fileLabel = document.createElement('small');
+//     fileLabel.id = 'fileNameDisplay';
+//     fileLabel.className = 'd-block mt-2 text-primary fw-semibold';
+//     fileLabel.innerText = fileName;
 
-    this.parentNode.appendChild(fileLabel);
-});
-    }
-
-// Prevent double submit (MAIN LOGIC)
-document.addEventListener('DOMContentLoaded', function () {
-
-    const form = document.getElementById('productForm');
-    const submitBtn = document.getElementById('submitBtn');
-
-    form.addEventListener('submit', function () {
-
-        // Disable button immediately
-        submitBtn.disabled = true;
-
-        // Show loading spinner
-        submitBtn.innerHTML = `
-            <span class="spinner-border spinner-border-sm me-2"></span>
-            Processing...
-        `;
-    });
-
-});
+//     this.parentNode.appendChild(fileLabel);
+// });
+//     }
 </script>
 @endsection
 @endsection

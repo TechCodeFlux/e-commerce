@@ -95,7 +95,6 @@ return view('admin.option_management.show_option');
         $option = new Option(); // empty model
         return view('admin.option_management.add_option', compact('option'));
     }
-
     /**
      * Store a newly created resource in storage.
      */

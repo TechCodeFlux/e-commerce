@@ -1,9 +1,7 @@
 @extends('admin.components.app')
 @section('page-title','Variant Form')
 @section('content')
-@php
-    $hideSearch = true;
-@endphp
+
 <div class="container mt-4">
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
@@ -12,7 +10,7 @@
                     <ol class="breadcrumb d-flex gap-3">
                         <li class="list-group-item-dark px-sm-4 border p-2 d-inline-block bg-teal">Product Details</li>
                         <li class="breadcrumb-item">
-                            <a class="list-group-item-primary px-sm-4 border p-2 d-inline-block" href="{{ route('admin.varient_management.form_varient_index') }}">
+                            <a class="list-group-item-primary px-sm-4 border p-2 d-inline-block" href="{{ route('admin.varient_management.generate_varient') }}">
                                 Varient Details
                             </a>
                         </li>
@@ -29,7 +27,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-12">
 
-                    <form  class="VarientForm" id="VarientForm" 
+                    <form  class="VarientForm" 
                         method="POST" 
                         action="{{ route('admin.varient_management.add_varient') }}" 
                         enctype="multipart/form-data">
@@ -42,7 +40,7 @@
                                <label class="form-label">Color</label>
                                   <select name="color[]" id="color"  class="js-example-basic-multiple" multiple="multiple">
                                             
-                                            {{-- <option value="">Select Color</option> --}}
+                                            
                                         
                                             @foreach($optioncolorvalues as $optionvalue)
                                                 <option value="{{ $optionvalue->id }}">
@@ -59,7 +57,7 @@
                                     <label class="form-label">Size </label>
                                          <select name="size[]" id="size"  class="js-example-basic-multiple " multiple="multiple">
                                             
-                                            {{-- <option value="">Select Size</option> --}}
+                                            
                                         
                                             @foreach($optionsizevalues as $optionvalue)
                                                 <option  value="{{ $optionvalue->id }}">
@@ -143,8 +141,8 @@ function saveVariantData() {
 
     // ✅ CLEAR STORAGE AFTER FINAL SUBMIT
     $('.VarientForm').on('submit', function () {
-        localStorage.removeItem(STORAGE_KEY);
-         localStorage.removeItem('productForm');
+        // localStorage.removeItem(STORAGE_KEY);
+        //  localStorage.removeItem('productForm');
     });
 
 
@@ -153,8 +151,28 @@ function saveVariantData() {
 
         $('.js-example-basic-multiple').select2();
 
-        $('#btn-generate-matrix').on('click', function () {
+ function getExistingVariants() {
 
+    let existingData = {};
+
+    $('#variant-matrix-container tbody tr').each(function () {
+
+        let color = $(this).find('input[name*="[color]"]').val();
+        let size  = $(this).find('input[name*="[size]"]').val();
+        let stock = $(this).find('input[name*="[stock]"]').val();
+
+        let key = color + '_' + size;
+
+        existingData[key] = {
+            stock: stock
+        };
+    });
+
+    return existingData;
+}
+
+        $('#btn-generate-matrix').on('click', function () {
+           const existingVariants = getExistingVariants();
             const colors = $('#color option:selected');
             const sizes  = $('#size option:selected');
 
@@ -209,7 +227,8 @@ if (hasError) {
                                     <th>Color</th>
                                     <th>Size</th>
                                     <th>Stock</th>
-                                     <th>Action</th>
+                                    <th>Image</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -225,6 +244,9 @@ if (hasError) {
                     const sizeId   = $(this).val();
                     const sizeName = $(this).text().trim();
 
+                    let key = colorName.toUpperCase() + '_' + sizeName.toUpperCase();
+                    let oldStock = existingVariants[key] ? existingVariants[key].stock : '';
+
                     table += `
                         <tr>
                             <td class="col-2">
@@ -238,15 +260,50 @@ if (hasError) {
                             </td>
 
                             <td class="col-2">
-                                <input 
+                               <input 
                                     type="number" 
                                     name="variants[${index}][stock]" 
+                                    value="${oldStock}"  
                                     class="form-control text-center" 
                                     min="0"
                                     required
                                 >
                             </td>
-                             <td class="col-2">
+                            <td class="col-2 text-center align-middle">
+
+                                <div class="mb-2">
+                                    <img 
+                                        id="preview-${index}" 
+                                        class="img-thumbnail d-none"
+                                        style="max-height: 80px;"
+                                    >
+                                </div>
+
+                                <!-- Hidden File Input -->
+                                <input 
+                                    type="file"
+                                    name="variants[${index}][image]" 
+                                    id="image-${index}"
+                                    class="d-none"
+                                    accept="image/*"
+                                    onchange="previewVariantImage(event, ${index})"
+                               
+                                >
+
+                                <!-- Styled Upload Button -->
+                                <label for="image-${index}" 
+                                    class="btn btn-outline-primary btn-sm w-100 d-flex align-items-center justify-content-center gap-2">
+                                    <i class="fas fa-upload"></i>
+                                    Upload
+                                </label>
+
+                                <small 
+                                    id="fileName-${index}" 
+                                    class="d-block mt-1 text-muted small">
+                                </small>
+
+                            </td>
+                            <td class="col-2">
                                <button 
                                  type="button"
                                  class=" btn btn-sm btn-outline-danger delete-club-member"
@@ -283,7 +340,7 @@ if (hasError) {
 
     // If no rows left → clear storage
     if ($('#variant-matrix-container tbody tr').length === 0) {
-        localStorage.removeItem(STORAGE_KEY);
+        // localStorage.removeItem(STORAGE_KEY);
          $('#submitBtn').addClass('d-none');
         
     } else {
@@ -308,7 +365,12 @@ if (hasError) {
         // Update stock input
         $(this).find('input[name*="[stock]"]')
             .attr('name', `variants[${index}][stock]`);
+
+        // Update Image input
+        $(this).find('input[name*="[image]"]')
+    .attr('name', `variants[${index}][image]`);
     });
+    
 }
 
     });
@@ -362,25 +424,72 @@ $(document).ready(function () {
 
 });
 
-// Prevent double submit (MAIN LOGIC)
-document.addEventListener('DOMContentLoaded', function () {
 
-    const form = document.getElementById('VarientForm');
-    const submitBtn = document.getElementById('submitBtn');
+// ✅ Prevent Double Submit (ONLY THIS ADDED)
+$('.VarientForm').on('submit', function (e) {
 
-    form.addEventListener('submit', function () {
+    let hasError = false;
 
-        // Disable button immediately
-        submitBtn.disabled = true;
+    $('.image-error').remove();
 
-        // Show loading spinner
-        submitBtn.innerHTML = `
-            <span class="spinner-border spinner-border-sm me-2"></span>
-            Processing...
-        `;
+    // 🔍 Check all image inputs
+    $('input[type="file"][name*="[image]"]').each(function () {
+
+        if (!this.files || this.files.length === 0) {
+
+            $(this).closest('td').append(
+                '<div class="text-danger mt-1 image-error">Please upload image</div>'
+            );
+
+            hasError = true;
+        }
+
     });
 
+    // ❌ If image missing → stop submit
+    if (hasError) {
+        e.preventDefault();
+        return false;
+    }
+
+    // ✅ If everything valid → show spinner
+    const submitBtn = $('#submitBtn');
+
+    if (submitBtn.prop('disabled')) {
+        return false;
+    }
+
+    submitBtn.prop('disabled', true);
+
+    submitBtn.html(`
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Processing...
+    `);
+
 });
+
+function previewVariantImage(event, index) {
+
+    const file = event.target.files[0];
+    const preview = document.getElementById(`preview-${index}`);
+    const fileNameLabel = document.getElementById(`fileName-${index}`);
+
+    if (file) {
+
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove('d-none');
+        preview.style.display = "block";
+
+        fileNameLabel.innerText = file.name;
+
+    } else {
+
+        preview.src = '';
+        preview.classList.add('d-none');
+        fileNameLabel.innerText = '';
+
+    }
+}
 </script>
  @endsection
  @endsection

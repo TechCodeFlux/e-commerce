@@ -383,6 +383,17 @@ $('#confirmDelete').on('click', function () {
         }
 
     });
+
+
+   $(document).on('click', '.showMicrositeProducts', function(){
+    let micrositeId = $(this).data('id');
+
+    // Use a dynamic route URL
+    let url = "{{ route('admin.microsite.list_products', ['microsite' => ':id']) }}";
+    url = url.replace(':id', micrositeId);
+
+    window.location.href = url;
+});
 </script>
 
 @endsection

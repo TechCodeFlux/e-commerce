@@ -11,24 +11,6 @@ use Illuminate\Http\Request;
 
 class VarientController extends Controller
 {
-//     public function form_varient_index()
-// {
-//     $varient = new Varient();
-//     $optionColorId  =  Option::where('name', 'Color')->value('id');
-//     $optioncolorvalues  = OptionValue::where('option_value_id', $optionColorId)->get();
-
-//     $optionSizeId  =  Option::where('name', 'Size')->value('id');
-//     $optionsizevalues  = OptionValue::where('option_value_id', $optionSizeId)->get();
-   
-
-
-//     return view(
-//         'admin.varient_management.form_varient_index',
-//         compact('varient','optioncolorvalues','optionsizevalues')
-//     );
-// }
-
-
 public function generate_varient($productId = null)
 {
     $varient = new Varient();
@@ -61,9 +43,14 @@ public function store(Request $request)
 {
     $request->validate([
         'variants' => 'required|array|min:1',
-        'variants.*.color' => 'required',
-        'variants.*.size'  => 'required',
-        'variants.*.stock'    => 'required|integer|min:0',
+
+    'variants.*.color' => 'required|string',
+    'variants.*.size'  => 'required|string',
+    'variants.*.stock' => 'required|integer|min:0',
+   'variants' => 'required|array|min:1',
+    'variants.*.image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+], [
+    'variants.*.image.required' => 'Variant image is required.',
     ]);
 
    $productData = session('product');
@@ -71,7 +58,7 @@ public function store(Request $request)
     $product = Product::create([
             'name'        => $productData['name'],
             'description' => $productData['description'],
-            'image'       => $productData['image'],
+            // 'image'       => $productData['image'],
             'status'      => $productData['status'],
             'category_id' => $productData['category_id'],
      ]);
@@ -79,15 +66,23 @@ public function store(Request $request)
     session()->forget('product');
 
 
-    foreach ($request->variants as $variant) {
+   foreach ($request->variants as $index => $variant) {
 
-        Varient::create([
-            'color' => $variant['color'],   // store ID
-            'size'  => $variant['size'],    // store ID
-            'stock' => $variant['stock'],   
-            'product_id' => $product->id,
-        ]);
+    $imagePath = null;
+
+    if ($request->hasFile("variants.$index.image")) {
+        $imagePath = $request->file("variants.$index.image")
+                             ->store('varients', 'public');
     }
+
+    Varient::create([
+        'color' => $variant['color'],
+        'size'  => $variant['size'],
+        'stock' => $variant['stock'],
+        'image' => $imagePath,   // ← added
+        'product_id' => $product->id,
+    ]);
+}
 
     return redirect()
         ->route('admin.product_management.show_products')
@@ -126,19 +121,19 @@ public function update(Request $request, $id)
         'variants.*.color' => 'required',
         'variants.*.size'  => 'required',
         'variants.*.stock' => 'required|integer|min:0',
+        'variants.*.image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
-    // ✅ Get existing product directly from DB
-    $product = Product::findOrFail($id);
+    // ✅ Load product WITH variants
+    $product = Product::with('varients')->findOrFail($id);
 
-    // ✅ If session exists (coming from step 1), update product
     $productData = session('product');
 
     if ($productData) {
         $product->update([
             'name'        => $productData['name'],
             'description' => $productData['description'],
-            'image'       => $productData['image'],
+            // 'image'       => $productData['image'],
             'status'      => $productData['status'],
             'category_id' => $productData['category_id'],
         ]);
@@ -146,17 +141,33 @@ public function update(Request $request, $id)
         session()->forget('product');
     }
 
-    // ✅ Delete old variants of this product
+    // ✅ Store old variants before delete
+    $oldVariants = $product->varients->keyBy(function ($item) {
+        return $item->color . '-' . $item->size;
+    });
+
+    // ✅ Delete old variants
     Varient::where('product_id', $id)->delete();
 
-    // ✅ Insert new variants
-    foreach ($request->variants as $variant) {
+    foreach ($request->variants as $index => $variant) {
+
+        $key = $variant['color'] . '-' . $variant['size'];
+
+        // 🔥 Get old image if exists
+        $imagePath = $oldVariants[$key]->image ?? null;
+
+        // 🔥 If new image uploaded → overwrite
+        if ($request->hasFile("variants.$index.image")) {
+            $image = $request->file("variants.$index.image");
+            $imagePath = $image->store('variant_images', 'public');
+        }
 
         Varient::create([
+            'product_id' => $product->id,
             'color'      => $variant['color'],
             'size'       => $variant['size'],
             'stock'      => $variant['stock'],
-            'product_id' => $id,
+            'image'      => $imagePath,
         ]);
     }
 
@@ -164,7 +175,6 @@ public function update(Request $request, $id)
         ->route('admin.product_management.show_products')
         ->with('success', 'Products updated successfully');
 }
-
 
 
     public function show(Request $request)
@@ -176,26 +186,6 @@ public function update(Request $request, $id)
     ->eloquent($varient)
       
 
-            
-            
-//toggle button
-            //  ->addColumn('status', function (Varient $varient) {
-
-            //     return '
-                
-                       
-            //             <div class="form-check form-switch">
-            //                          <input 
-            //                               class="form-check-input toggle-status"
-            //                               type="checkbox"
-            //                               name="status"
-            //                               data-id="'.$varient->id.'"  '.($varient->status ? 'checked' : '').'>
-            //              </div>';
-            // })
-
-
-
-//toggle button
             ->addColumn('action', function (Varient $varient) use ($request) {
                 $actions= '<div class="d-flex gap-1"><div class="dropdown">';
 
@@ -211,14 +201,7 @@ public function update(Request $request, $id)
                             </button>';
 
 
-                //edit button
-                $actions .= '<a
-                                href="' . route('admin.varient_management.edit_varient_index', $varient->id) . '"
-                                class="btn btn-sm 
-                                title="Edit">
-                                                              <i class="bi bi-pencil-square btn btn-outline-success btn btn-sm"></i>
-                            </a>';
-
+         
 
                 //delete button
                 $actions .= '<button 
@@ -240,20 +223,6 @@ public function update(Request $request, $id)
     }
 
 
-public function edit_varient_index($id)
-    {
-        $varient = Varient::findOrFail($id);
-       
-        return view('admin.varient_management.form_varient_index', compact('varient'));
-    }
-
-
-
-      
-
-
-
-
     public function single_show($id)
 {
     $varient = Varient::findOrFail($id);
@@ -266,8 +235,6 @@ public function edit_varient_index($id)
     ]);
 }
 
-
-    
 
 
      public function changeStatus(Request $request)
