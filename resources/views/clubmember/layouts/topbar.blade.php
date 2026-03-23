@@ -56,7 +56,7 @@
                                 <div class="d-flex align-items-center px-3 py-3 border-bottom">
                                      
                                     <!-- Image -->
-                                    <img src="{{ url('storage/' . $item->image) }}"
+                                    <img src="{{ url('storage/' . $item->varient->image) }}"
                                         class="rounded shadow-sm me-3"
                                         width="60" height="60" style="object-fit: cover;">
 

@@ -93,15 +93,13 @@ class CartController extends Controller
             // ✅ New item
             Cart::create([
                 'name' => $product->name,
-                'image' => $product->image,
-                'description' => $product->description,
                 'quantity' => 1,
                 'price' => $varient->price, // ✅ store price
                 'clubmember_id' => $clubmemberId,
                 'microsite_id' => $product->microsite_id,
                 'product_id' => $product->id,
                 'varient_id' => $id,
-                'stock'=>0,
+                
             ]);
 
             return back()->with('success', 'Added to cart!');

@@ -20,7 +20,7 @@
                     <div class="row">
                         <div class="col-md-8">
                             <h5 class="fw-bold">{{ $carts->name }}</h5>
-                            <p class="text-muted">{{ $carts->description }}</p>
+                            <p class="text-muted">{{ $carts->varient->product->description }}</p>
 
                             <input type="hidden" name="product_id[]" value="{{ $carts->id }}">
                             <input type="hidden" name="varient_id[]" value="{{ $carts->varient_id }}">
@@ -28,7 +28,7 @@
                         </div>
 
                         <div class="col-md-4 text-center">
-                            <img src="{{ asset('storage/' . $carts->image) }}"
+                            <img src="{{ asset('storage/' . $carts->varient->image) }}"
                                  id="productImage{{ $index }}"
                                  width="120" height="120">
                         </div>
@@ -51,7 +51,7 @@
 
                     {{-- Hidden Base Price + Stock --}}
                     <input type="hidden" id="basePrice{{ $index }}" 
-                        value="{{ $carts->varient ? $carts->varient->price : $carts->price }}">
+                        value="{{ $carts->price ?  $carts->price : $carts->varient->price }}">
 
                      <input type="hidden" id="stock{{ $index }}" 
                         value="{{ $varient->stock }}">
@@ -129,7 +129,7 @@
                 </div>
             </form>
 
-                                              {{--modal address--}}
+                        {{--modal address--}}
                         <div class="modal fade" id="addressModal" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content border-0 rounded-4">
@@ -262,8 +262,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 priceDisplay.innerText = "₹" + total.toFixed(2);
                 priceInput.value = total;
             } else {
-                alert("Stock limit reached");
+                // alert("Stock limit reached");
+                
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Stop!',
+                    text: "Quantity reached stock limit",
+                    confirmButtonText: 'OK'
+                });
             }
+            
         });
     });
 

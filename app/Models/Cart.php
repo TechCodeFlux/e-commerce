@@ -12,8 +12,6 @@ class Cart extends Model
     protected $fillable = [
         'name',
         'varient_id',
-        'image',
-        'description',
         'quantity',
         'price',
         'clubmember_id',
@@ -27,7 +25,7 @@ class Cart extends Model
 
     public function varient()
     {
-        return $this->belongsTo(Varient::class, 'vrient_id');
+        return $this->belongsTo(Varient::class, 'varient_id');
     }
     public function product()
     {
