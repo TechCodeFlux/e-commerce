@@ -353,6 +353,7 @@ $(document).ready(function() {
     localStorage.removeItem('productForm');   
   localStorage.removeItem(STORAGE_KEY);
   localStorage.removeItem(PRODUCT_IMAGE_KEY);
+   localStorage.removeItem('productFormData');
   
   
     console.log("hello");
