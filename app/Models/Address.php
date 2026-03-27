@@ -16,6 +16,8 @@ class Address extends Model
         'state_id',
         'country_id',
         'zip_code',
+        'club_id',
+        'club_member_id',
     ];
 
     public function country()

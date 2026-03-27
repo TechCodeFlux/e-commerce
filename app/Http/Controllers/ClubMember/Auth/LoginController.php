@@ -54,6 +54,8 @@ class LoginController extends Controller
     }
     public function logout(Request $request)
     {
-        Auth::guard('clubmember')->logout();
+        // Auth::guard('clubmember')->logout();
+        Auth::logout();
+        return redirect()->route('clubmember.login');
     }
 }

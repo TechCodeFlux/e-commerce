@@ -111,14 +111,10 @@
                                 <label class="form-label">Image</label>
                                 {{-- Pre-View image --}}
                                         <div class="mt-3">
-                                            @php  $firstVariant = isset($product) ? $product->varients->first() : null;  @endphp
-
                                             <img id="imagePreview"
-                                            src="{{ $firstVariant && $firstVariant->image 
-                                                    ? asset('storage/' . $firstVariant->image) 
-                                                    : (isset($product) && $product->image ? asset('storage/' . $product->image) : '') }}"
-                                            alt="Image Preview"
-                                            class="img-fluid w-25 {{ ($firstVariant && $firstVariant->image) || (isset($product) && $product->image) ? '' : 'd-none' }}">
+                                                src="{{ isset($product) && $product->image ? asset('storage/' . $product->image) : '' }}"
+                                                alt="Image Preview"
+                                                class="img-fluid w-25 {{ isset($product) && $product->image ? '' : 'd-none' }}">
                                         </div>
                                 {{-- end-pre -View image --}}
                                                 <input type="file"
@@ -387,6 +383,70 @@ document.getElementById('imageInput').addEventListener('change', function () {
 });
 
     }
+
+
+
+    const PRODUCT_FORM_KEY = 'productFormData';
+
+// Save form data
+function saveFormData() {
+    let formData = {};
+
+    $('.productForm').find('input, textarea, select').each(function () {
+        let name = $(this).attr('name');
+        if (!name) return;
+
+        if ($(this).attr('type') === 'checkbox') {
+            formData[name] = $(this).is(':checked') ? 1 : 0;
+        } else if ($(this).attr('type') !== 'file') {
+            formData[name] = $(this).val();
+        }
+    });
+
+    localStorage.setItem(PRODUCT_FORM_KEY, JSON.stringify(formData));
+}
+
+// Trigger save on change
+$(document).on('input change', '.productForm input, .productForm textarea, .productForm select', function () {
+    saveFormData();
+});
+
+
+
+
+function restoreFormData() {
+    let savedData = localStorage.getItem(PRODUCT_FORM_KEY);
+    if (!savedData) return;
+
+    let data = JSON.parse(savedData);
+
+    $.each(data, function (key, value) {
+        let field = $('[name="' + key + '"]');
+
+        if (!field.length) return;
+
+        if (field.attr('type') === 'checkbox') {
+            field.prop('checked', value == 1);
+        } else {
+            field.val(value);
+        }
+    });
+}
+
+// Run on page load
+$(document).ready(function () {
+    restoreFormData();
+});
+
+
+
+
+
+
+
+
+
+
 
 
 

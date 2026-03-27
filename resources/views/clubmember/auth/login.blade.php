@@ -1,283 +1,128 @@
-@extends('clubmember.components.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-@section('content')
+    <title>Login Portal</title>
 
-<div class="login-page">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Animated Gradient -->
-    <div class="login-bg"></div>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
-    <div class="container h-100">
-        <div class="row h-100 align-items-center justify-content-center">
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(#424242, #212121);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-            <div class="col-lg-5 col-md-7">
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+        }
 
-                <div class="login-card">
-    @if ($errors->any())
-<div class="login-error-box" id="loginErrorBox">
+        .container-content {
+            background-color: rgba(58, 58, 58, 0.8);
+            padding: 25px;
+            border-top: 2px solid #FFEB3B;
+            border-radius: 8px;
+        }
+
+        .form-control {
+            background-color: #5f5f5f;
+            border: 1px solid #424242;
+            color: #fff;
+        }
+
+        .form-control:focus {
+            border-color: #FFEB3B;
+            background-color: #616161;
+            color: #fff;
+            box-shadow: none;
+        }
+
+        .form-control::placeholder {
+            color: #BDBDBD;
+        }
+
+        .form-button {
+            background-color: rgba(255, 235, 59, 0.3);
+            border: none;
+            color: #fff;
+        }
+
+        .form-button:hover {
+            background-color: rgba(255, 235, 59, 0.6);
+        }
+
+        .logo-badge {
+            font-size: 70px;
+            color: #fff;
+        }
+
+        .text-darkyellow {
+            color: rgba(255, 235, 59, 0.7);
+            text-decoration: none;
+        }
+
+        .text-darkyellow:hover {
+            color: #FFEB3B;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container text-center">
     
-    <div class="login-error-header">
-        <i class="fas fa-exclamation-circle"></i>
-        <span>Login Error</span>
+    <div class="mb-3">
+        <i class="fa fa-user-circle logo-badge"></i>
     </div>
 
-    <ul class="login-error-list">
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
+    <h3 class="text-white">Sign In Template</h3>
+    <p class="text-white">Sign In</p>
 
-</div>
-@endif
-
-                    <!-- Logo -->
-                    @if(!empty($microsite->logo))
-                        <div class="text-center mb-3">
-                            <img src="{{ asset('storage/'.$microsite->logo) }}"
-                                 style="max-height:70px">
-                        </div>
-                    @endif
-
-                    <h3 class="text-center mb-4">
-                        {{ $microsite->name }} Login Portal
-                    </h3>
-
-                    <form action="{{ route('microsite.login.submit',$microsite->slug) }}" method="POST">
-                        @csrf
-
-                        <div class="mb-3">
-                            <input type="email"
-                                   name="email"
-                                   class="form-control login-input"
-                                   placeholder="Enter your email"
-                                   required>
-                        </div>
-                        <br>
-
-                        <div class="mb-4">
-                            <input type="password"
-                                   name="password"
-                                   class="form-control login-input"
-                                   placeholder="Enter your password"
-                                   required>
-                        </div>
-                        <br>
-
-                        <button class="btn login-btn w-100">
-                            Login
-                        </button>
-
-                    </form>
-
-                </div>
-
+    <div class="container-content">
+        <form>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Username" required>
             </div>
 
-        </div>
-    </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" placeholder="Password" required>
+            </div>
 
+            <button type="submit" class="btn form-button w-100 mb-3">
+                Sign In
+            </button>
+
+            <a href="#" class="text-darkyellow d-block mb-2">
+                <small>Forgot your password?</small>
+            </a>
+
+            <p class="text-white mb-1">
+                <small>Do not have an account?</small>
+            </p>
+
+            <a href="#" class="text-darkyellow">
+                <small>Sign Up</small>
+            </a>
+        </form>
+
+        <!-- <p class="mt-3 text-white">
+            <small>Your Name &copy; 2026</small>
+        </p> -->
+    </div>
 </div>
 
-@endsection
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-
-@push('styles')
-<style>
-
-/* Page Wrapper */
-.login-page{
-    height:100vh;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-}
-
-/* Gradient Background */
-.login-bg{
-    position:fixed;
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
-    background:linear-gradient(135deg,#ff8c00,#f5f5dc);
-    background-size:300% 300%;
-    animation:gradientMove 8s ease infinite;
-}
-
-@keyframes gradientMove{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
-}
-
-/* Login Card */
-.login-card{
-    position:relative;
-    z-index:2;
-    padding:100px;
-    border-radius:16px;
-    background:rgba(255,255,255,0.15);
-    backdrop-filter:blur(18px);
-    box-shadow:0 15px 40px rgba(0,0,0,0.2);
-    color:#000000;
-    border:none;
-}
-
-/* Inputs */
-.login-input{
-    height:48px;
-    width:300px;
-    border-radius:20px;
-    border:1px solid rgba(255,255,255,0.5);
-    background:rgba(255,255,255,0.2);
-    color:#000000;
-    padding-left:15px;
-}
-
-.login-input::placeholder{
-    color:#000000;
-}
-
-.login-input:focus{
-    background:rgba(255,255,255,0.3);
-    border-color:#fff;
-    box-shadow:none;
-}
-
-/* Button */
-.login-btn{
-    height:45px;
-    width:300px;
-    border-radius:30px;
-    background:#f49c6c;
-    color:#000000;
-    font-weight:600;
-    transition:0.3s;
-    border:none; 
-}
-
-.login-btn:hover{
-    background:#ffe4c7;
-}
-/**/
-/* Error Box */
-.login-error-box{
-    background:rgba(255,255,255,0.65);
-    border:1px solid #ff9a9a;
-    border-radius:12px;
-    padding:16px 18px;
-    margin-bottom:20px;
-    backdrop-filter:blur(10px);
-    animation:fadeSlide 0.5s ease;
-}
-
-/* Header */
-.login-error-header{
-    font-weight:600;
-    color:#b30000;
-    display:flex;
-    align-items:center;
-    margin-bottom:8px;
-}
-
-.login-error-header i{
-    margin-right:8px;
-    font-size:16px;
-}
-
-/* List */
-.login-error-list{
-    margin:0;
-    padding-left:20px;
-    color:#5a0000;
-    font-size:14px;
-}
-
-.login-error-list li{
-    margin-bottom:4px;
-}
-
-/* Entry animation */
-@keyframes fadeSlide{
-    from{
-        opacity:0;
-        transform:translateY(-10px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-/**/
-
-/* ================= RESPONSIVE FIX ================= */
-
-/* Make inputs and button flexible */
-.login-input,
-.login-btn{
-    max-width:100%;
-}
-
-/* Tablet */
-@media (max-width:992px){
-
-    .login-card{
-        padding:60px;
-    }
-
-}
-
-/* Mobile */
-@media (max-width:768px){
-
-    .login-card{
-        padding:40px;
-    }
-
-    .login-input,
-    .login-btn{
-        width:100%;
-    }
-
-}
-
-/* Small mobile */
-@media (max-width:480px){
-
-    .login-card{
-        padding:30px 20px;
-    }
-
-    h3{
-        font-size:20px;
-    }
-
-}
-
-</style>
-@endpush
-@push('styles')
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-
-    const errorBox = document.getElementById("loginErrorBox");
-
-    if(errorBox){
-        setTimeout(function(){
-            errorBox.style.transition = "opacity 0.6s ease";
-            errorBox.style.opacity = "0";
-
-            setTimeout(function(){
-                errorBox.remove();
-            },600);
-
-        },4000); // disappears after 4 seconds
-    }
-
-});
-</script>
-
-@endpush
+</body>
+</html>

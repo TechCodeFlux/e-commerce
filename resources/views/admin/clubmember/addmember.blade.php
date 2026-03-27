@@ -103,7 +103,7 @@
                             </div>
 
                             {{-- Profile Image --}}
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-12 mb-3">
                             <label>Profile Image</label>
                             <input type="file" name="image"
                                 class="form-control @error('profile_image') is-invalid @enderror">

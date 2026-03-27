@@ -313,30 +313,38 @@ class MicrositeController extends Controller
             'microsite_id' => $microsite->id,
             'club_id' => $microsite->club_id,
         ]);
-        // Fetch club object
-        $club = $microsite->club; // make sure Microsite has belongsTo(Club::class)
+       return redirect()->route('microsite.home', $microsite->slug);
+    }
+  public function home($slug)
+{
+    $microsite = Microsite::where('slug', $slug)->firstOrFail();
 
-        // Fetch microsite products
+    // Session check (VERY IMPORTANT)
+    if (session('microsite_id') != $microsite->id) {
+        return redirect()->route('microsite.login', $slug);
+    }
+
+    $club = $microsite->club;
+
     $micrositeProducts = DB::table('microsite_products')
-    ->join('products', 'products.id', '=', 'microsite_products.product_id')
-    ->leftJoin('varients', 'varients.id', '=', 'microsite_products.varient_id')
-    ->where('microsite_products.microsite_id', $microsite->id)
-    ->select(
-        'products.id',
-        'products.name',
-        'products.description',
-        'products.category_id',
-        DB::raw('MIN(varients.image) as image')
-    )
-    ->groupBy(
-        'products.id',
-        'products.name',
-        'products.description',
-        'products.category_id'
-    )
-    ->get();
+        ->join('products', 'products.id', '=', 'microsite_products.product_id')
+        ->leftJoin('varients', 'varients.id', '=', 'microsite_products.varient_id')
+        ->where('microsite_products.microsite_id', $microsite->id)
+        ->select(
+            'products.id',
+            'products.name',
+            'products.description',
+            'products.category_id',
+            DB::raw('MIN(varients.image) as image')
+        )
+        ->groupBy(
+            'products.id',
+            'products.name',
+            'products.description',
+            'products.category_id'
+        )
+        ->get();
 
-    // Fetch categories used by these products
     $categories = Category::whereIn(
         'id',
         $micrositeProducts->pluck('category_id')->unique()
@@ -348,7 +356,7 @@ class MicrositeController extends Controller
         'micrositeProducts',
         'categories'
     ));
-    }
+}
 /////////////////
     public function getMicrositeProductVariants($productId)
 {
