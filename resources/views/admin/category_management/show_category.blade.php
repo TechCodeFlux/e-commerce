@@ -25,8 +25,8 @@
                                     <div class="col-md-7">
                                         <select class="form-select" id="sort">
                                             <option>Sort by</option>
-                                            <option data-sort="asc" data-column="1" value="">Name A-z</option>
-                                            <option data-sort="desc" data-column="1" value=""> Name Z-a
+                                            <option data-sort="asc" data-column="0" value="">Name A-z</option>
+                                            <option data-sort="desc" data-column="0" value=""> Name Z-a
                                             </option>
                                         </select>
                                     </div>
@@ -215,50 +215,54 @@ $(document).on('change', '.toggle-status', function () {
 //table rows
 
 $(document).ready(function() {
-    console.log("hello");
-    var $column = $('#sort').find(':selected').data('column');
-    var $sort = $('#sort').find(':selected').data('sort');
-    $categoryTable= $('#club').DataTable({
+
+    var $categoryTable = $('#club').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-           url: "{{ route('admin.category_management.show_category') }}",
-            data: function(d) {
-                
-            }
+            url: "{{ route('admin.category_management.show_category') }}",
+            type: "GET"
         },
 
         columns: [
-            { data: 'name', name: 'name', orderable: false,searchable: false },
+            { data: 'name', name: 'name' },
             { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ],
 
         columnDefs: [{
-            'defaultContent': '--',
-            "targets": "_all"
+            defaultContent: '--',
+            targets: "_all"
         }],
+
+        order: [[0, 'asc']] // default sort
     });
-    
-    $(document).on("keyup", ".searchInput", function(e) {
+
+    // Search
+    $(document).on("keyup", ".searchInput", function () {
         $categoryTable.search($(this).val()).draw();
     });
-    $("#club_filter").css({
-        "display": "none"
+
+    // Hide default UI
+    $("#club_filter").hide();
+    $("#club_length").hide();
+
+    // Sort dropdown
+    $('#sort').on('change', function () {
+        let column = $(this).find(':selected').data('column');
+        let sort = $(this).find(':selected').data('sort');
+
+        if(column !== undefined && sort !== undefined){
+            $categoryTable.order([column, sort]).draw();
+        }
     });
-    $("#club_length").css({
-        "display": "none"
-    });
-    $('#sort').on('change', function() {
-        $column = $(this).find(':selected').data('column');
-        $sort = $(this).find(':selected').data('sort');
-        $categoryTable.order([$column, $sort]).draw();
-    })
-    $('#pageLength').on('change',function(){
+
+    // Page length
+    $('#pageLength').on('change', function () {
         $categoryTable.page.len($(this).val()).draw();
-    })
-    $('#pageLength').val($categoryTable.page.len());
-})
+    });
+
+});
 
 
 
