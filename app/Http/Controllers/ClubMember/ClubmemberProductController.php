@@ -27,7 +27,7 @@ public function index(Request $request)
             ->select(
                 'products.id',
                 'products.name',
-                'products.image',
+                DB::raw("CONCAT('" . asset('storage/') . "/', varients.image) as image"),
                 'products.description',
                 'varients.size',
                 'varients.id as varient_id',

@@ -72,6 +72,7 @@ class LoginController extends Controller
         //     $this->guard()->logout();
         //     return view('admin.auth.login');
         // }
+         Auth::guard('admin')->logout();
     
         return redirect()->intended($this->redirectTo());
     }

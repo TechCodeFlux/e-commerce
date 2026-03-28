@@ -1,5 +1,5 @@
 @extends('clubmember.components.app')
-    {{-- @yield('page-title','Club') --}}
+    <!-- @yield('page-title','Club') -->
     @section('content')
     <style>
         /* Transform Table into a Responsive Grid */
