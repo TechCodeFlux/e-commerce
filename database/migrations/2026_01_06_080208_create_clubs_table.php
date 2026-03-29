@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('contact'); 
             $table->string('address');
             $table->integer('country_id');
-            $table->string('state_id');
+            $table->integer('state_id');
             $table->string('city');
             $table->string('zip_code');
             $table->string('password');

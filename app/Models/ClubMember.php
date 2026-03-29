@@ -14,7 +14,6 @@ class ClubMember extends Authenticatable
         'club_id',
         'address_id',
         'contact',
-        'password',
         'email',
         'status',
         'image',

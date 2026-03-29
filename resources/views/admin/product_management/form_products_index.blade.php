@@ -1,3 +1,4 @@
+
 @extends('admin.components.app')
 @section('page-title', $product->id ? 'Edit Product form' : ' Product Form')
 @section('content')
@@ -44,7 +45,7 @@
                           ? route('admin.product_management.edit_product', $product->id) 
                           : route('admin.product_management.add_products') }}"
                     method="POST"
-                    {{-- enctype="multipart/form-data"    --}}
+                    enctype="multipart/form-data"   
                     autocomplete="off">
                     @csrf
                        @if(isset($product->id))
@@ -74,11 +75,13 @@
                                        <select name="category" id="category" class="form-select">
                                             <option value="">Select Category</option>
 
-                                            @foreach($categories as $category)
-                                                <option value="{{ $category->id }}"
-                                                    {{ old('category', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
-                                                    {{ $category->name }}
-                                                </option>
+                                           @foreach($categories as $category)
+                                                @if($category->status == 1)
+                                                    <option value="{{ $category->id }}"
+                                                        {{ old('category', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                                                        {{ $category->name }}
+                                                    </option>
+                                                @endif
                                             @endforeach
                                         </select>
                                         @error('category')
@@ -104,20 +107,16 @@
                      <div class="row ">
                             {{---image---}}
                             
-                            {{-- <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Image</label>
-                                Pre-View image
+                                {{-- Pre-View image --}}
                                         <div class="mt-3">
-                                            @php  $firstVariant = isset($product) ? $product->varients->first() : null;  @endphp
-
                                             <img id="imagePreview"
-                                            src="{{ $firstVariant && $firstVariant->image 
-                                                    ? asset('storage/' . $firstVariant->image) 
-                                                    : (isset($product) && $product->image ? asset('storage/' . $product->image) : '') }}"
-                                            alt="Image Preview"
-                                            class="img-fluid w-25 {{ ($firstVariant && $firstVariant->image) || (isset($product) && $product->image) ? '' : 'd-none' }}">
+                                                src="{{ isset($product) && $product->image ? asset('storage/' . $product->image) : '' }}"
+                                                alt="Image Preview"
+                                                class="img-fluid w-25 {{ isset($product) && $product->image ? '' : 'd-none' }}">
                                         </div>
-                                end-pre -View image
+                                {{-- end-pre -View image --}}
                                                 <input type="file"
                                                 name="image" 
                                                 class="form-control swal2-radio"
@@ -128,7 +127,7 @@
                                                 @error('image')
                                                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                                                 @enderror
-                            </div> --}}
+                            </div>
                            
                        
                         
@@ -175,24 +174,49 @@
 
 @section('script')
 <script>
+    @if(isset($product->id) && $product->image)
+document.addEventListener('DOMContentLoaded', function () {
+    const imageUrl = "{{ asset('storage/' . $product->image) }}";
+    const fileName = "{{ basename($product->image) }}";
+    const imageInput = document.getElementById('imageInput');
+
+    fetch(imageUrl)
+        .then(res => res.blob())
+        .then(blob => {
+            const file = new File([blob], fileName, { type: blob.type });
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            imageInput.files = dt.files; // Browser now shows the filename natively
+        })
+        .catch(err => console.warn('Could not restore image file:', err));
+});
+@endif
+    
 
 $('.productForm').on('submit', function (e) {
 
+    e.preventDefault(); // prevent page reload
+
+    let formData = new FormData(this);
+    formData.append('_token', '{{ csrf_token() }}');
+
+    @if(isset($product->id))
+        var url = "{{ route('admin.product_management.edit_product', $product->id) }}";
+        formData.append('_method', 'PUT');
+    @else
+        var url = "{{ route('admin.product_management.add_products') }}";
+    @endif
+
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success: function (response) {
+
     @if(!isset($product->id))
-        e.preventDefault();
-
-        let formData = new FormData(this);
-        formData.append('_token', '{{ csrf_token() }}');
-
-        $.ajax({
-    url: "{{ route('admin.product_management.add_products') }}",
-    type: "POST",
-    data: formData,
-    processData: false,
-    contentType: false,
-
-    success: function (response) {
-
         let formObject = {};
         formData.forEach((value, key) => {
             formObject[key] = value;
@@ -201,31 +225,35 @@ $('.productForm').on('submit', function (e) {
         localStorage.setItem('productForm', JSON.stringify(formObject));
 
         window.location.href =
-            "{{ route('admin.varient_management.generate_varient') }}"
-    },
+            "{{ route('admin.varient_management.generate_varient') }}";
 
-    error: function(xhr) {
-
-        if (xhr.status === 422) {
-
-            let errors = xhr.responseJSON.errors;
-
-            // Remove old error messages
-            $('.text-danger').remove();
-
-            $.each(errors, function (key, value) {
-
-                let field = $('[name="' + key + '"]');
-
-                field.after(
-                    '<small class="text-danger d-block mt-1">' + value[0] + '</small>'
-                );
-            });
-
-        }
-    }
-});
+    @else
+       window.location.href ="{{ route('admin.varient_management.edit_varient_generator', $product->id ?? ':id') }}".replace(':id', response.id);
     @endif
+},
+
+        error: function(xhr) {
+
+            if (xhr.status === 422) {
+
+                let errors = xhr.responseJSON.errors;
+
+                // remove old errors
+                $('.text-danger').remove();
+
+                $.each(errors, function (key, value) {
+
+                    let field = $('[name="' + key + '"]');
+
+                    field.after(
+                        '<small class="text-danger d-block mt-1">' + value[0] + '</small>'
+                    );
+                });
+
+            }
+        }
+    });
+
 });
 
 
@@ -267,8 +295,6 @@ $(document).ready(function () {
       @endif
 
 });
-
-
 
 
 
@@ -318,55 +344,175 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// function previewImage(event) {
-//         var input = event.target;
-//         var imagePreview = document.getElementById('imagePreview');
-//          const file = event.target.files[0];
+function previewImage(event) {
+        var input = event.target;
+        var imagePreview = document.getElementById('imagePreview');
+         const file = event.target.files[0];
 
-//         if (file) {
-//         imagePreview.src = URL.createObjectURL(file);
-//         imagePreview.classList.remove('d-none'); // show image
-//         }
+        if (file) {
+        imagePreview.src = URL.createObjectURL(file);
+        imagePreview.classList.remove('d-none'); // show image
+        }
 
-//         if (input.files && input.files[0]) {
-//             var reader = new FileReader();
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
 
-//             reader.onload = function(e) {
-//                 // Set the src of the image to the file data
-//                 imagePreview.src = e.target.result;
-//                 // Make the image visible
-//                 imagePreview.style.display = 'block';
-//             }
+            reader.onload = function(e) {
+                // Set the src of the image to the file data
+                imagePreview.src = e.target.result;
+                // Make the image visible
+                imagePreview.style.display = 'block';
+            }
 
-//             // Read the file as a data URL
-//             reader.readAsDataURL(input.files[0]);
-//         } else {
-//             // If the user cancels selection, hide the preview
-//             imagePreview.src = '#';
-//             imagePreview.style.display = 'none';
-//         }
+            // Read the file as a data URL
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            // If the user cancels selection, hide the preview
+            imagePreview.src = '#';
+            imagePreview.style.display = 'none';
+        }
 
 
 
-//     // Show selected file name
-// document.getElementById('imageInput').addEventListener('change', function () {
-//     const fileName = this.files.length > 0 ? this.files[0].name : 'No file chosen';
+    // Show selected file name
+document.getElementById('imageInput').addEventListener('change', function () {
+    const fileName = this.files.length > 0 ? this.files[0].name : 'No file chosen';
 
-//     // Remove existing filename if already added
-//     let existingLabel = document.getElementById('fileNameDisplay');
-//     if (existingLabel) {
-//         existingLabel.remove();
-//     }
+   
+   
+});
 
-//     // Create new filename display
-//     let fileLabel = document.createElement('small');
-//     fileLabel.id = 'fileNameDisplay';
-//     fileLabel.className = 'd-block mt-2 text-primary fw-semibold';
-//     fileLabel.innerText = fileName;
+    }
 
-//     this.parentNode.appendChild(fileLabel);
-// });
-//     }
+
+
+    const PRODUCT_FORM_KEY = 'productFormData';
+
+// Save form data
+function saveFormData() {
+    let formData = {};
+
+    $('.productForm').find('input, textarea, select').each(function () {
+        let name = $(this).attr('name');
+        if (!name) return;
+
+        if ($(this).attr('type') === 'checkbox') {
+            formData[name] = $(this).is(':checked') ? 1 : 0;
+        } else if ($(this).attr('type') !== 'file') {
+            formData[name] = $(this).val();
+        }
+    });
+
+    localStorage.setItem(PRODUCT_FORM_KEY, JSON.stringify(formData));
+}
+
+// Trigger save on change
+$(document).on('input change', '.productForm input, .productForm textarea, .productForm select', function () {
+    saveFormData();
+});
+
+
+
+
+function restoreFormData() {
+    let savedData = localStorage.getItem(PRODUCT_FORM_KEY);
+    if (!savedData) return;
+
+    let data = JSON.parse(savedData);
+
+    $.each(data, function (key, value) {
+        let field = $('[name="' + key + '"]');
+
+        if (!field.length) return;
+
+        if (field.attr('type') === 'checkbox') {
+            field.prop('checked', value == 1);
+        } else {
+            field.val(value);
+        }
+    });
+}
+
+// Run on page load
+$(document).ready(function () {
+    restoreFormData();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+     const PRODUCT_IMAGE_KEY = 'productFormImage';
+
+    function saveProductImage(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            localStorage.setItem(PRODUCT_IMAGE_KEY, JSON.stringify({
+                dataUrl: e.target.result,
+                name: file.name,
+                type: file.type
+            }));
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function restoreProductImage() {
+        const saved = localStorage.getItem(PRODUCT_IMAGE_KEY);
+        if (!saved) return;
+
+        const data = JSON.parse(saved);
+        const imagePreview = document.getElementById('imagePreview');
+        const input = document.getElementById('imageInput');
+
+        if (!imagePreview || !input) return;
+
+        // Restore preview
+        imagePreview.src = data.dataUrl;
+        imagePreview.classList.remove('d-none');
+        imagePreview.style.display = 'block';
+
+      
+        fetch(data.dataUrl)
+            .then(res => res.blob())
+            .then(blob => {
+                const file = new File([blob], data.name, { type: data.type });
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                input.files = dt.files;
+            });
+    }
+
+    // ======== Handle Input Change ========
+    document.getElementById('imageInput').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const imagePreview = document.getElementById('imagePreview');
+
+        if (file) {
+            // Show preview
+            imagePreview.src = URL.createObjectURL(file);
+            imagePreview.classList.remove('d-none');
+            imagePreview.style.display = 'block';
+
+           
+            saveProductImage(file);
+        } 
+    });
+
+    // ======== Restore on Page Load ========
+    if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', restoreProductImage);
+} else {
+    restoreProductImage(); // DOM already ready, call directly
+}
 </script>
 @endsection
 @endsection

@@ -57,9 +57,9 @@
                     <table class="table table-custom table-lg mb-0"  id="admin" >
                     <thead>
                       <tr>
-                        <th class="tooltip-inner link-dark">Image</th>  
+                        <th class="tooltip-inner link-dark pe-xl-5">Image</th>  
                          <th >Name</th>  
-                         <th>Description</th>
+                         <th class="px-sm-5 w-25">Description</th>
                           <th>Status</th>
                         <th  class=" ps-5" >Action</th>
                      </tr>
@@ -74,7 +74,7 @@
 
 
 <div class="modal fade" id="productListModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content shadow-lg border-0">
 
             <!-- Header -->
@@ -86,7 +86,7 @@
             </div>
 
             <!-- Body -->
-            <div class="modal-body p-4 ">
+            <div class="modal-body p-4 overflow-auto">
 
                 <!-- TOP SECTION: Details and Image -->
                 <div class="row align-items-start">
@@ -99,11 +99,12 @@
                                 <td id="ms_name" class="text-dark"></td>
                             </tr>
 
-                            <tr>
-                                <th class="text-muted fw-bold">Description</th>
-                                <td id="ms_description" class="text-dark"></td>
-                            </tr>
-
+                         <tr>
+    <th class="text-muted fw-bold py-2">Description</th>
+    <td class="py-2">
+        <div id="ms_description" class="text-dark text-wrap text-break overflow-auto" ></div>
+    </td>
+</tr>
                             <tr>
                                 <th class="text-muted fw-bold">Category</th>
                                 <td id="ms_category" class="text-dark"></td>
@@ -152,6 +153,7 @@
                                             <th>Color</th>
                                             <th>Size</th>
                                             <th>Stock</th>
+                                            <th>Price</th>
                                         </tr>
                                     </thead>
                                     <tbody id="ms_varients_table">
@@ -229,10 +231,7 @@ $(document).on('click', '.view-product', function () {
 
             $('#ms_name').text(res.name);
             $('#ms_description').text(res.description);
-
-            let imageUrl = res.varients.length > 0 && res.varients[0].image  ? res.varients[0].image : res.image;
-            $('#ms_image').attr('src', imageUrl);
-            
+             $('#ms_image').attr('src', res.image);
             $('#ms_category').text(res.categories.name);
              if(res.categories.status == 1){
                   $('#ms_category_status')
@@ -278,6 +277,7 @@ $(document).on('click', '.view-product', function () {
                             <td>${v.color ?? '-'}</td>
                             <td>${v.size ?? '-'}</td>
                             <td>${v.stock ?? 0}</td>
+                             <td>${v.price ?? 0}</td>
                         </tr>
                     `;
                 });
@@ -349,8 +349,13 @@ $(document).on('change', '.toggle-status', function () {
 
 $(document).ready(function() {
    const STORAGE_KEY = "variant_matrix_data";
+    const PRODUCT_IMAGE_KEY = 'productFormImage';
     localStorage.removeItem('productForm');   
   localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(PRODUCT_IMAGE_KEY);
+   localStorage.removeItem('productFormData');
+  
+  
     console.log("hello");
     var $column = $('#sort').find(':selected').data('column');
     var $sort = $('#sort').find(':selected').data('sort');
@@ -367,7 +372,15 @@ $(document).ready(function() {
         columns: [
             { data: 'image', name: 'image' },
             { data: 'name', name: 'name', orderable: false,searchable: false },
-            { data: 'description', name: 'description' },
+            
+           {      
+                data: 'description',name: 'description',   render: function(data) {
+                                                                if (!data) return '';
+                                                                return '<div class="m-4 text-wrap text-break overflow-auto" style="max-height:100px; width:60vh">'
+                                                                        + data +
+                                                                        '</div>';
+                                                               }
+            },
             { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ],

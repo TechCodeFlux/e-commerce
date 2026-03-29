@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('quantity');
-            $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('club_member_id');
+            $table->unsignedBigInteger('address_id');
             $table->unsignedBigInteger('club_id');
-            $table->unsignedBigInteger('order_status_id');
             $table->unsignedBigInteger('microsite_id');
-            $table->softdeletes();
+            $table->unsignedBigInteger('order_status_id');
+            $table->decimal('total_amount', 10, 2);
+            $table->string('order_status')->default('pending');
             $table->timestamps();
         });
     }

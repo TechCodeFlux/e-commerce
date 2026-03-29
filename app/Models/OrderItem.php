@@ -6,5 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderItem extends Model
 {
-    use SoftDeletes;
+    protected $table = 'order_items';
+
+    protected $fillable = [
+        'order_id',
+        'product_name',
+        'quantity'
+    ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
 }

@@ -1,182 +1,157 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Club;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str; 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
-
-use App\Models\Club;
 use App\Models\ClubMember;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\Address;
 
+
 class ClubMemberController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+{
+    if ($request->ajax()) {
+        $members = ClubMember::with('address')->select('club_members.*');
 
-    // ================= ADMIN — VIEW MEMBERS =================
+        return DataTables::eloquent($members)
+            ->addColumn('action', function (ClubMember $member) {
+                $actions = '<div class="d-flex gap-1"><div class="dropdown">';
 
-    public function index(Request $request, Club $club)
-    {
-        if ($request->ajax()) {
+                // View button
+                $actions .= '<a href="' . route('club.clubmembersindex', $member->id) . '" class="btn btn-sm btn-clean btn-icon" title="Show">
+                                <i class="fas fa-eye" style="color: #ffc107;"></i>
+                             </a>';
 
-            $clubmember = ClubMember::where('club_id', $club->id);
+                // Edit button
+                // $actions .= '<a href="' . route('club.editclubmember', $member->id) . '" class="btn btn-sm btn-outline-secondary me-2" title="Edit">
+                //                 <i class="fas fa-pencil-alt"></i>
+                //              </a>';
 
-            return datatables()
-                ->eloquent($clubmember)
-                ->addColumn('club', fn ($row) => optional($row->club)->name ?? '--')
-                ->addColumn('address', fn ($row) => optional($row->address)->address1 ?? '--')
-                ->make(true);
-        }
+                // // Delete button
+                // $actions .= '<button type="button" class="btn btn-sm btn-outline-danger delete-club-member" onclick="deleteClubMember(' . $member->id . ')" title="Delete">
+                //                 <i class="fas fa-trash-alt"></i>
+                //              </button>';
 
-        return view('admin.clubmember.viewmember', compact('club'));
+                $actions .= '</div></div>';
+                return $actions;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
+    return view('club.clubmember.clubmemberview');
+}
 
-    // ================= ADMIN — ADD MEMBER FORM =================
 
-    public function addmember($id)
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        $club = Club::findOrFail($id);
+        $clubmember = new ClubMember();
         $countries = Country::orderBy('name')->get();
-
-        return view('admin.clubmember.addmember', compact('club', 'countries'));
+        return view('club.clubmember.form', compact('clubmember', 'countries'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+{
+    //  Validate
+    $validated = $request->validate([
+        'name'      => 'required|string|max:255',
+        'email'     => 'required|email|unique:club_members,email',
+        'contact'   => 'required|string|max:20',
+        'address1'  => 'required|string|max:255',
+        'address2'  => 'nullable|string|max:255',
+        'country'   => 'required|integer|exists:countries,id',
+        'state'     => 'required|integer|exists:states,id',
+        'city'      => 'required|string|max:100',
+        'zip_code'  => 'required|string|max:10',
+        'status'    => 'nullable|boolean',
+    ]);
 
-    // ================= ADMIN — STORE MEMBER (CREATES LOGIN USER) =================
+    try {
+       
+        DB::transaction(function () use ($validated, $request) {
 
-    public function storemember(Request $request, $id)
-    {
-        $request->validate([
-            'name'     => 'required',
-            'contact'  => 'required',
-            'email'    => 'required|email|unique:club_members,email',
-            'password' => 'required|min:6', // REQUIRED FOR LOGIN
-            'address'  => 'required|string',
-            'country'  => 'required|integer',
-            'state'    => 'required|integer',
-            'city'     => 'required|string',
-            'zip_code' => 'required'
-        ]);
+            // Create the address
+            $address = Address::create([
+                'address1'   => $validated['address1'],
+                'address2'   => $validated['address2'] ?? null,
+                'country_id' => $validated['country'],
+                'state_id'   => $validated['state'],
+                'city'       => $validated['city'],
+                'zip_code'   => $validated['zip_code'],
+            ]);
 
-        // Create Address
-        $address = Address::create([
-            'address1'   => $request->address,
-            'country_id' => $request->country,
-            'state_id'   => $request->state,
-            'city'       => $request->city,
-            'zip_code'   => $request->zip_code,
-            'status'     => 1,
-        ]);
+            // Create the club member 
+            $member = ClubMember::create([
+                'name'       => $validated['name'],
+                'club_id'    => 6, 
+                'contact'    => $validated['contact'],
+                'email'      => $validated['email'],
+                'status'     => $request->boolean('status'),
+                'address_id' => $address->id,
+            ]);
+        });
 
-        // Create Club Member (Login User)
-        ClubMember::create([
-            'name'       => $request->name,
-            'contact'    => $request->contact,
-            'email'      => $request->email,
-            'password'   => Hash::make($request->password), // 🔐 HASHED
-            'club_id'    => $id,
-            'address_id' => $address->id,
-            'status'     => 1,
-        ]);
-
+        //  Redirect on success
         return redirect()
-            ->route('admin.clubmember.viewmembers', $id)
-            ->with('success', 'Club member added successfully');
+            ->route('club.clubmembersindex')
+            ->with('success', 'Club member registered successfully!');
+
+    } catch (\Throwable $e) {
+        //  Show error if something fails
+        return back()->withErrors(['error' => $e->getMessage()])->withInput();
+    }
+}
+
+
+
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(ClubMember $clubMember)
+    {
+        //
     }
 
-
-    // ================= ADMIN — EDIT MEMBER =================
-
-    public function editmember($id)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(ClubMember $clubMember)
     {
-        $clubmember = ClubMember::findOrFail($id);
-        $club = Club::findOrFail($clubmember->club_id);
-        $countries = Country::orderBy('name')->get();
-        $address = Address::find($clubmember->address_id);
-
-        $states = [];
-        if ($address && $address->country_id) {
-            $states = State::where('country_id', $address->country_id)->get();
-        }
-
-        return view('admin.clubmember.addmember',
-            compact('clubmember', 'club', 'address', 'countries', 'states')
-        );
+        //
     }
 
-
-    // ================= ADMIN — UPDATE MEMBER =================
-
-    public function updatemember(Request $request, $id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, ClubMember $clubMember)
     {
-        $clubmember = ClubMember::findOrFail($id);
-        $address = Address::findOrFail($clubmember->address_id);
-
-        $clubmember->update([
-            'name'    => $request->name,
-            'contact' => $request->contact,
-            'email'   => $request->email,
-        ]);
-
-        $address->update([
-            'address1'   => $request->address,
-            'country_id' => $request->country,
-            'state_id'   => $request->state,
-            'city'       => $request->city,
-            'zip_code'   => $request->zip_code,
-        ]);
-
-        return redirect()
-            ->route('admin.clubmember.viewmembers', $clubmember->club_id)
-            ->with('success', 'Member updated successfully');
+        
     }
 
-
-    // ================= ADMIN — DELETE MEMBER =================
-
-    public function deletemember($id)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(ClubMember $clubMember)
     {
-        ClubMember::findOrFail($id)->delete();
-
-        return redirect()->back()
-            ->with('success', 'Club member deleted successfully');
-    }
-
-
-
-    // =========================================================
-    // 🔐 CLUB MEMBER LOGIN SECTION
-    // =========================================================
-
-    public function showLogin()
-    {
-        return view('clubmember.login');
-    }
-
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required'
-        ]);
-
-        if (Auth::guard('clubmember')->attempt($credentials)) {
-            return redirect()->route('clubmember.dashboard');
-        }
-
-        return back()->withErrors([
-            'email' => 'Invalid email or password',
-        ]);
-    }
-
-    public function logout()
-    {
-        Auth::guard('clubmember')->logout();
-        return redirect()->route('clubmember.login');
+        //
     }
 }

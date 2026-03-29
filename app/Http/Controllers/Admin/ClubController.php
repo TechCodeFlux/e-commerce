@@ -279,4 +279,4 @@ class ClubController extends Controller
     }
     
 
-}
+}       

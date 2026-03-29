@@ -15,7 +15,6 @@ use App\Models\ClubMember;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\Address;
-use App\Models\Microsite;
  
 class ClubMemberController extends Controller
 {
@@ -76,7 +75,7 @@ class ClubMemberController extends Controller
        'name' => 'required|regex:/^[A-Za-z\\s\\.\\-]+$/',
         'address' => 'required|string',
         'contact' => 'required|string|max:10',
-        'email'   => 'required|email',
+        'email'   => 'required|email|unique:club_members,email',
         'country' =>'required|integer',
         'state'   => 'required|max:100',
         'city'    => 'required|string|max:100',
@@ -112,6 +111,8 @@ class ClubMemberController extends Controller
         'state_id'  => $request->state,
         'city'      => $request->city,
         'zip_code'  => $request->zip_code,
+        'club_id'         => $id,
+        'club_member_id'  => $clubmember->id,
         'status'    => 1,
     ]);
 
@@ -324,5 +325,4 @@ class ClubMemberController extends Controller
                 'image_url' => asset('storage/' . $member->image)
             ]);
         }
-
 }

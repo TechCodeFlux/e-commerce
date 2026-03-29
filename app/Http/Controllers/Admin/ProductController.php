@@ -29,17 +29,17 @@ public function store(Request $request)
     $validated = $request->validate([
         'name'        => 'required|string|max:255',
         'description' => 'required|string|max:500',
-        // 'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
         'category'    => 'required|integer|exists:categories,id',
     ]);
 
     // store image temporarily
-// $imagePath = $request->file('image')->store('products', 'public');
+$imagePath = $request->file('image')->store('products', 'public');
     // ✅ write to session
     session()->put('product', [
         'name'        => $request->name,
         'description' => $request->description,
-        // 'image'       => $imagePath,
+        'image'       => $imagePath,
         'status'      => $request->status ? 1 : 0,
         'category_id' => $request->category,
     ]);
@@ -75,22 +75,22 @@ public function store(Request $request)
         'name'        => 'required|string|max:255',
         'description' => 'required|string|max:500',
         // ✅ image not required while editing
-        // 'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         'category'    => 'required|integer|exists:categories,id',
     ]);
 
     // ✅ Use old image if new image not uploaded
-    // if ($request->hasFile('image')) {
-    //     $imagePath = $request->file('image')->store('products', 'public');
-    // } else {
-    //     $imagePath = $product->image; // keep old image
-    // }
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('products', 'public');
+    } else {
+        $imagePath = $product->image; // keep old image
+    }
 
     // ✅ Save to session (like your existing logic)
     session()->put('product', [
         'name'        => $request->name,
         'description' => $request->description,
-        // 'image'       => $imagePath,
+        'image'       => $imagePath,
         'status'      => $request->status ? 1 : 0,
         'category_id' => $request->category,
     ]);
@@ -114,16 +114,15 @@ public function store(Request $request)
 
       
 //add product-image for image scale
-        ->addColumn('image', function ($row) {
-
-    $firstVariant = $row->varients->first();
-
-    if ($firstVariant && $firstVariant->image) {
-        return '<img src="' . asset('storage/' . $firstVariant->image) . '" width="150" class="rounded ">';
-    }
-
-    return '<span class="text-muted">No Image</span>';
-})
+           ->addColumn('image', function (Product $product) {
+                if ($product->image) {
+                    return '<img src="'.asset('storage/'.$product->image).'"
+                                width="150" class="rounded "
+                                
+                                style="object-fit:cover;border-radius:6px;">';
+                }
+                return '--';
+            }) 
 
             
 //toggle button

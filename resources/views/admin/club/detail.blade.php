@@ -4,7 +4,6 @@
     $hideSearch = true;
 @endphp
 @section('head')
-
 @endsection 
 
 @section('content')
@@ -41,7 +40,6 @@
                                 <div class="row">
                                     <div class="row">
                                         <div class="col-md-6"> 
-                                            <div class="card border-0">
                                             <div class="card border-0"> 
                                                 <a href="{{ route('admin.show_microsites', $club->id) }}">
 

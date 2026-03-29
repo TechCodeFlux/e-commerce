@@ -11,17 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('microsite', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-             $table->string('slug',191)->unique();
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->text('description');
-            $table->string('image');
-            $table->unsignedBigInteger('club_id');
-            $table->string('password');
-            $table->boolean('status')->default('0');
+            $table->integer('varient_id');
+            $table->integer('quantity');
+            $table->integer('price');
+            $table->unsignedBigInteger('clubmember_id');
+            $table->unsignedBigInteger('microsite_id');
+            $table->unsignedBigInteger('product_id');
             $table->softdeletes();
             $table->timestamps();
         });
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('microsite');
+        Schema::dropIfExists('carts');
     }
 };

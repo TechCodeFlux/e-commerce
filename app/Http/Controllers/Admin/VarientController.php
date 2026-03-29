@@ -47,7 +47,8 @@ public function store(Request $request)
     'variants.*.color' => 'required|string',
     'variants.*.size'  => 'required|string',
     'variants.*.stock' => 'required|integer|min:0',
-   'variants' => 'required|array|min:1',
+    'variants.*.price' => 'required|integer|min:0',
+    'variants' => 'required|array|min:1',
     'variants.*.image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
 ], [
     'variants.*.image.required' => 'Variant image is required.',
@@ -58,7 +59,7 @@ public function store(Request $request)
     $product = Product::create([
             'name'        => $productData['name'],
             'description' => $productData['description'],
-            // 'image'       => $productData['image'],
+            'image'       => $productData['image'],
             'status'      => $productData['status'],
             'category_id' => $productData['category_id'],
      ]);
@@ -79,6 +80,7 @@ public function store(Request $request)
         'color' => $variant['color'],
         'size'  => $variant['size'],
         'stock' => $variant['stock'],
+        'price' => $variant['price'],
         'image' => $imagePath,   // ← added
         'product_id' => $product->id,
     ]);
@@ -121,6 +123,7 @@ public function update(Request $request, $id)
         'variants.*.color' => 'required',
         'variants.*.size'  => 'required',
         'variants.*.stock' => 'required|integer|min:0',
+         'variants.*.price' => 'required|integer|min:0',
         'variants.*.image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
@@ -133,7 +136,7 @@ public function update(Request $request, $id)
         $product->update([
             'name'        => $productData['name'],
             'description' => $productData['description'],
-            // 'image'       => $productData['image'],
+            'image'       => $productData['image'],
             'status'      => $productData['status'],
             'category_id' => $productData['category_id'],
         ]);
@@ -167,6 +170,7 @@ public function update(Request $request, $id)
             'color'      => $variant['color'],
             'size'       => $variant['size'],
             'stock'      => $variant['stock'],
+            'price'      => $variant['price'],
             'image'      => $imagePath,
         ]);
     }
