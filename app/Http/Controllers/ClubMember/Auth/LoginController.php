@@ -3,59 +3,90 @@
 namespace App\Http\Controllers\ClubMember\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+ use App\Models\Order;
 
 class LoginController extends Controller
-{ 
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = 'clubmember/dashboard';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    // public function __construct()
-    // {
-    //     $this->middleware('guest')->except('logout');
-    //     $this->middleware('auth')->only('logout');
-    // }
+{
+    // 🔹 Show Login Page
     public function showLoginForm()
     {
-
         return view('clubmember.auth.login');
     }
-    protected function redirectTo() 
+
+    // 🔹 Send OTP
+    public function sendOtp(Request $request)
     {
-        return route('clubmember.dashboard');
+        $member = DB::table('club_members')
+            ->where('email', $request->email)
+            ->first();
+
+        if (!$member) {
+            return back()->with('error', 'Email not found');
+        }
+
+        $otp = rand(100000, 999999);
+
+        DB::table('club_members')
+            ->where('email', $request->email)
+            ->update(['otp' => $otp]);
+
+        Mail::raw("Your OTP is: $otp", function ($message) use ($request) {
+            $message->to($request->email)
+                    ->subject('Login OTP');
+        });
+
+        session(['otp_email' => $request->email]);
+
+        return back()->with('success', 'OTP sent to your email');
     }
-    protected function guard()
+
+    // 🔹 Verify OTP + Login
+    public function verifyOtp(Request $request)
     {
-        return Auth::guard('clubmember');
+        $member = DB::table('club_members')
+            ->where('email', session('otp_email'))
+            ->where('otp', $request->otp)
+            ->first();
+
+        if (!$member) {
+            return back()->with('error', 'Invalid OTP');
+        }
+
+        // Login
+        Auth::guard('clubmember')->loginUsingId($member->id);
+
+        // Clear OTP
+        DB::table('club_members')
+            ->where('id', $member->id)
+            ->update(['otp' => null]);
+
+        return redirect()->route('clubmember.dashboard');
     }
-    public function logout(Request $request)
+
+    // 🔹 Dashboard
+public function dashboard()
+{
+    $member = Auth::guard('clubmember')->user();
+
+    if (!$member) {
+        return redirect()->route('clubmember.login');
+    }
+
+    // ✅ FIXED COLUMN NAME
+$orders = Order::with(['items.product', 'items.variant'])
+    ->where('club_member_id', $member->id)
+    ->get();
+
+    return view('clubmember.dashboard', compact('member', 'orders'));
+}
+    // 🔹 Logout
+    public function logout()
     {
-        // Auth::guard('clubmember')->logout();
-        Auth::logout();
+        Auth::guard('clubmember')->logout();
         return redirect()->route('clubmember.login');
     }
 }

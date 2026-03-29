@@ -273,7 +273,7 @@ class MicrositeController extends Controller
 
     $microsite = Microsite::where('slug',$slug)->firstOrFail();
 
-    return view('clubmember.auth.login',compact('microsite'));
+    return view('clubmember.microsite.login',compact('microsite'));
 
     }
 

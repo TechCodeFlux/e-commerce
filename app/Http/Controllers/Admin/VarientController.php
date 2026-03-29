@@ -16,8 +16,7 @@ public function generate_varient($productId = null)
     $varient = new Varient();
 
     $optionColorId = Option::where('name', 'Color')->value('id');
-    $optioncolorvalues = OptionValue::where('option_value_id', $optionColorId)->get();
-
+    $optioncolorvalues = OptionValue::where('option_value_id', $optionColorId)->where('status', 1)->get();
     $optionSizeId = Option::where('name', 'Size')->value('id');
     $optionsizevalues = OptionValue::where('option_value_id', $optionSizeId)->get();
 

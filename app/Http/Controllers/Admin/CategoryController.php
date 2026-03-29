@@ -15,7 +15,7 @@ class CategoryController extends Controller
 {
     public function add_category_index(){
         $category = new Category();
-        $category_list = Category::orderBy('name')->get(); 
+        $category_list = Category::where('status', 1)->orderBy('name')->get(); 
        return  view('admin.category_management.add_category_index', compact('category','category_list'));
     }
 

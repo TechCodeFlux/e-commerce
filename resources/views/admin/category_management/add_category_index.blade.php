@@ -150,7 +150,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-
 // Prevent double submit (MAIN LOGIC)
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -186,6 +185,31 @@ $(document).on('change', '.toggle-status', function () {
             status: status
         },
     });
+});
+
+// Show validation errors on blur (focus out)
+document.addEventListener('DOMContentLoaded', function () {
+
+    const nameInput = document.querySelector('input[name="name"]');
+
+    nameInput.addEventListener('blur', function () {
+
+        let value = this.value.trim();
+
+        // Remove old error if exists
+        let oldError = this.parentNode.querySelector('.live-error');
+        if (oldError) oldError.remove();
+
+        // Validation
+        if (value === '') {
+            let error = document.createElement('small');
+            error.className = 'text-danger d-block mt-1 live-error';
+            error.innerText = 'Name field is required';
+
+            this.parentNode.appendChild(error);
+        }
+    });
+
 });
 </script>
 

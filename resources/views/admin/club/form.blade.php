@@ -235,5 +235,198 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('clubForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault(); 
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Processing...
+        `;
+
+        let formData = new FormData(form);
+
+        fetch(form.action, {
+            method: form.method,
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                'Accept': 'application/json'
+            }
+        })
+        .then(async response => {
+            if (response.status === 422) {
+                let data = await response.json();
+                showErrors(data.errors);
+                throw new Error('Validation error');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Success
+            alert('Saved successfully ✅');
+            window.location.reload(); // or redirect
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `{{ $clubuser->id ? 'Update' : 'Submit' }}`;
+        });
+    });
+
+    function showErrors(errors) {
+
+    // remove old errors
+    document.querySelectorAll('.ajax-error').forEach(el => el.remove());
+
+    Object.keys(errors).forEach(field => {
+
+        let input = document.querySelector(`[name="${field}"]`);
+
+        if (input) {
+            let errorHtml = `<small class="text-danger ajax-error d-block mt-1">${errors[field][0]}</small>`;
+            input.insertAdjacentHTML('afterend', errorHtml);
+        }
+
+    });
+
+
+   function showErrors(errors) {
+
+    // remove old errors
+    document.querySelectorAll('.ajax-error').forEach(el => el.remove());
+    document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+
+    Object.keys(errors).forEach(field => {
+
+        let input = document.querySelector(`[name="${field}"]`);
+
+        if (input) {
+
+            // add red border
+            input.classList.add('is-invalid');
+
+            let errorHtml = `<small class="text-danger ajax-error d-block mt-1">${errors[field][0]}</small>`;
+
+            // handle file input separately
+            if (input.type === "file") {
+                input.closest('.mb-3').insertAdjacentHTML('beforeend', errorHtml);
+            } else {
+                input.insertAdjacentHTML('afterend', errorHtml);
+            }
+        }
+    });
+}
+    
+}
+});
+
+
+// LIVE VALIDATION ON BLUR (focus out)
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('clubForm');
+
+    const fields = form.querySelectorAll('input, textarea, select');
+
+    fields.forEach(field => {
+
+        field.addEventListener('blur', function () {
+
+            validateField(this);
+
+        });
+
+        field.addEventListener('input', function () {
+
+            removeError(this);
+
+        });
+
+        field.addEventListener('change', function () {
+
+            removeError(this);
+
+        });
+
+    });
+
+    function validateField(field) {
+
+        let value = field.value.trim();
+
+        removeError(field);
+
+        // REQUIRED VALIDATION
+        if (field.hasAttribute('required') || field.name === 'name' || field.name === 'email') {
+
+            if (value === '') {
+                showError(field, 'This field is required');
+                return;
+            }
+        }
+
+        // EMAIL VALIDATION
+        if (field.name === 'email' && value !== '') {
+            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(value)) {
+                showError(field, 'Enter a valid email address');
+                return;
+            }
+        }
+
+        // PHONE VALIDATION
+        if (field.name === 'contact' && value !== '') {
+            let phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(value)) {
+                showError(field, 'Enter a valid 10-digit number');
+                return;
+            }
+        }
+
+        // ZIP VALIDATION
+        if (field.name === 'zip_code' && value !== '') {
+            let zipPattern = /^[0-9]{5,6}$/;
+            if (!zipPattern.test(value)) {
+                showError(field, 'Enter a valid ZIP code');
+                return;
+            }
+        }
+    }
+
+    function showError(field, message) {
+
+        field.classList.add('is-invalid');
+
+        let error = document.createElement('small');
+        error.className = 'text-danger ajax-error d-block mt-1';
+        error.innerText = message;
+
+        if (field.type === "file") {
+            field.closest('.mb-3').appendChild(error);
+        } else {
+            field.parentNode.appendChild(error);
+        }
+    }
+
+    function removeError(field) {
+
+        field.classList.remove('is-invalid');
+
+        let error = field.parentNode.querySelector('.ajax-error');
+        if (error) error.remove();
+    }
+
+});
+</script>
 @endsection
 @endsection

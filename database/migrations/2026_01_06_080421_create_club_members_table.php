@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('address_id'); 
             $table->unsignedBigInteger('club_id');
             $table->string('image');
+            $table->string('otp')->nullable();
             $table->boolean('status')->default('0');
             $table->softdeletes();
             $table->timestamps();

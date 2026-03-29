@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('order_status_id');
             $table->decimal('total_amount', 10, 2);
             $table->string('order_status')->default('pending');
+            $table->softdeletes();
             $table->timestamps();
         });
     }

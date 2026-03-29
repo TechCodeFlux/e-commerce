@@ -1,212 +1,337 @@
 <!DOCTYPE html>
-<html lang="zxx" class="no-js">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $microsite->name }}</title>
-    <link rel="icon" href="{{ Storage::url($club->image) }}">
-
-    <link rel="stylesheet" href="{{ url('assets/micro/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ url('assets/micro/css/font-awesome.min.css') }}">
-    <link rel="stylesheet" href="{{ url('assets/micro/css/main.css') }}">
+    <title>{{ $microsite->name }} | Exclusive Collection</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        .size-box {
-            display: inline-block;
-            padding: 8px 14px;
-            border: 1px solid #ccc;
-            margin: 4px;
-            cursor: pointer;
-            transition: 0.2s;
-            min-width: 45px;
-            text-align: center;
+        :root {
+            --primary-color: #0d6efd; /* Adjust this to your club's brand color */
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --accent-font: 'Inter', sans-serif;
         }
 
-        .size-box:hover {
-            border-color: black;
+        body {
+            font-family: var(--accent-font);
+            background-color: #f8f9fa;
+            color: #2d3436;
+        }
+
+        /* --- Header & Nav --- */
+        .header_area {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand img {
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover img {
+            transform: scale(1.05);
+        }
+
+        .nav-link {
+            font-weight: 600;
+            color: #2d3436 !important;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            padding: 10px 20px !important;
+        }
+
+        /* --- Banner --- */
+        .banner-card {
+            position: relative;
+            aspect-ratio: 21 / 8;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .banner-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 6s ease;
+        }
+
+        .banner-card:hover img {
+            transform: scale(1.1);
+        }
+
+        /* --- Description Section --- */
+        .description-card {
+            border: none;
+            border-radius: 24px;
+            background: white;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            top: -40px; /* Slight overlap for premium depth */
+            z-index: 5;
+        }
+
+        /* --- Product Section --- */
+        .section-title {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+
+        .product-card-wrapper {
+            border-radius: 18px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .product-card-wrapper:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+        }
+
+        .product-overlay {
+            position: absolute;
+            bottom: -50px; /* Hidden initially */
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+        }
+
+        .product-card-wrapper:hover .product-overlay {
+            bottom: 0;
+            opacity: 1;
+        }
+
+        /* --- Variant Size Boxes --- */
+        .size-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 18px;
+            border: 2px solid #eee;
+            margin: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .size-box:hover:not(.disabled) {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
         }
 
         .size-box.active {
-            background: black;
+            background: var(--primary-color);
             color: white;
-            border-color: black;
+            border-color: var(--primary-color);
         }
 
         .size-box.disabled {
-            background: #eee;
-            color: #999;
+            background: #f8f9fa;
+            color: #ccc;
+            border-color: #eee;
+            text-decoration: line-through;
             cursor: not-allowed;
+        }
+
+        /* --- Modals --- */
+        .modal-content {
+            border: none;
+            border-radius: 24px;
         }
 
         .modal-img {
             width: 100%;
-            height: 320px;
+            height: 400px;
             object-fit: cover;
-            border-radius: 6px;
+            border-radius: 18px;
         }
 
         @keyframes pop {
-            0% {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="header_area sticky-header">
-        <div class="main_menu">
-            <nav class="navbar navbar-expand-lg navbar-light main_box">
-                <div class="container">
-                    <a class="navbar-brand logo_h" href="index.html">
-                        <img src="img/logo.png" alt="">
-                        <span class="ms-2 fw-bold">
-                            <img src="{{ Storage::url($club->image) }}" alt="{{ $club->name }}" class="ms-2"
-                                style="height:40px; width:auto; border-radius:50%;">
-                            {{ $club->name }}
-                        </span>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
-                        <ul class="nav navbar-nav menu_nav ml-auto">
-                            <li class="nav-item active"><a class="nav-link" href="#">Home</a></li>
-                            <li class="nav-item"><a class="nav-link"
-                                    href="{{ route('clubmember.microsite.carts', $microsite->slug) }}">Cart</a></li>
-                            <form action="{{ route('microsite.logout', $microsite->slug) }}" method="POST" style="display:inline;">
+
+    <header class="header_area sticky-top">
+        <nav class="navbar navbar-expand-lg py-3">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="{{ Storage::url($club->image) }}" alt="{{ $club->name }}" 
+                         style="height:45px; width:45px; object-fit: cover; border-radius:50%;" class="me-2">
+                    <span class="fw-bold tracking-tight text-uppercase" style="font-size: 1.1rem;">{{ $club->name }}</span>
+                </a>
+                
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="fas fa-bars"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <li class="nav-item"><a class="nav-link px-3" href="#">Home</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 position-relative" href="{{ route('clubmember.microsite.carts', $microsite->slug) }}">
+                                Cart <i class="fas fa-shopping-bag ms-1"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item ms-lg-3">
+                            <form action="{{ route('microsite.logout', $microsite->slug) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="nav-link btn btn-link" >
-                                    Logout
-                                </button>
+                                <button type="submit" class="btn btn-outline-dark btn-sm px-4 rounded-pill fw-bold">Logout</button>
                             </form>
-                        </ul>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
-            </nav>
-        </div>
+            </div>
+        </nav>
     </header>
 
-    <!-- Banner -->
-    <section class="banner-area">
-        <div class="banner-img">
-            @if($microsite->image)
-                <img class="img-fluid w-100" src="{{ Storage::url($microsite->image) }}" alt="Banner Image"
-                    style="object-fit:cover; height:400px;">
-            @else
-                <img class="img-fluid w-100" src="img/banner/banner-img.png" alt="Default Banner"
-                    style="object-fit:cover; height:400px;">
-            @endif
+    <section class="banner-area mt-4">
+        <div class="container">
+            <div class="banner-card">
+                @if($microsite && $microsite->image)
+                    <img src="{{ Storage::url($microsite->image) }}" alt="Premium Banner">
+                @else
+                    <img src="{{ asset('img/banner/banner-img.png') }}" alt="Default Banner">
+                @endif
+            </div>
         </div>
     </section>
 
-    <!-- Products -->
-    <section class="product-area section_gap">
+    <section class="description-area">
         <div class="container">
-            <div class="row mb-4 align-items-center">
-                <div class="col-md-6">
-                    <h3 class="mb-0">Products</h3>
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <div class="description-card p-4 p-md-5">
+                        <h2 class="h4 fw-bold mb-3 text-dark">Welcome to {{ $microsite->name }}</h2>
+                        <div class="description-content text-muted lh-lg mb-0">
+                            @if($microsite && $microsite->description)
+                                {!! nl2br(e($microsite->description)) !!}
+                            @else
+                                <p class="fst-italic">Tailored experiences and premium products curated just for you.</p>
+                            @endif
+                        </div>
+                        @if($microsite->category)
+                            <div class="mt-4">
+                                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-normal">
+                                    <i class="fas fa-tag me-1 text-primary"></i> {{ $microsite->category }}
+                                </span>
+                            </div>
+                        @endif
+                    </div>
                 </div>
-                <div class="col-md-6 d-flex justify-content-end">
-                    <select id="categoryFilter" class="form-control w-auto">
-                        <option value="all">All Categories</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}">
-                                {{ $category->name }}
-                            </option>
-                        @endforeach
-                    </select>
+            </div>
+        </div>
+    </section>
+
+    <section class="product-area pb-5">
+        <div class="container">
+            <div class="row mb-5 align-items-end">
+                <div class="col-md-6">
+                    <h3 class="section-title fw-bold">Exclusive Products</h3>
+                </div>
+                <div class="col-md-6 d-flex justify-content-md-end">
+                    <div class="filter-wrapper bg-white p-2 rounded-pill shadow-sm d-flex align-items-center border">
+                        <i class="fas fa-sliders-h ms-3 text-muted"></i>
+                        <select id="categoryFilter" class="form-select border-0 shadow-none bg-transparent fw-bold" style="cursor:pointer">
+                            <option value="all">All Collections</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <div class="row" id="productContainer">
+            <div class="row g-4" id="productContainer">
                 @forelse($micrositeProducts as $product)
                     @php
                         $variant = DB::table('varients')->where('product_id', $product->id)->first();
                     @endphp
 
-                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4 product-card"
-                        data-category="{{ $product->category_id }}">
-                        <div class="single-product">
-                            <img class="img-fluid"
-                                src="{{ $variant ? Storage::url($variant->image) : asset('img/product/p1.jpg') }}"
-                                style="height:220px;object-fit:cover;width:100%;">
-
-                            <div class="product-details">
-                                <h6>{{ $product->name }}</h6>
-                                <p style="font-size:13px;">
-                                    {{ \Illuminate\Support\Str::limit($product->description, 60) }}
-                                </p>
-
-                                <div class="prd-bottom">
-                                    {{-- <a href="javascript:void(0)" class="social-info">
-                                        <span class="fas fa-shopping-bag"></span>
-                                        <p class="hover-text">Add to cart</p>
-                                    </a> --}}
-
-                                    <a href="javascript:void(0)" class="social-info viewProductBtn"
-                                        data-product="{{ $product->id }}">
-                                        <span class="fas fa-eye"></span>
-                                        <p class="hover-text">view more</p>
-                                    </a>
+                    <div class="col-lg-3 col-md-4 col-sm-6 product-item" data-category="{{ $product->category_id }}">
+                        <div class="card h-100 product-card-wrapper border-0 overflow-hidden">
+                            <div class="position-relative overflow-hidden" style="height: 280px;">
+                                <img src="{{ $variant ? Storage::url($variant->image) : asset('img/product/p1.jpg') }}"
+                                     class="w-100 h-100" style="object-fit: cover;" alt="{{ $product->name }}">
+                                
+                                <div class="product-overlay">
+                                    <button class="btn btn-white bg-white text-dark fw-bold rounded-pill px-4 shadow viewProductBtn" 
+                                            data-product="{{ $product->id }}">
+                                        Quick View
+                                    </button>
                                 </div>
+                            </div>
+
+                            <div class="card-body p-4 text-center">
+                                <h6 class="fw-bold mb-2">{{ $product->name }}</h6>
+                                <p class="text-muted small mb-0">{{ \Illuminate\Support\Str::limit($product->description, 50) }}</p>
                             </div>
                         </div>
                     </div>
                 @empty
-                    <div class="col-12 text-center">
-                        <p>No products available</p>
+                    <div class="col-12 text-center py-5">
+                        <p class="text-muted">No products available at this time.</p>
                     </div>
                 @endforelse
             </div>
         </div>
     </section>
 
-    <!-- Variant Modal -->
-    <div class="modal fade" id="variantModal">
+    <div class="modal fade" id="variantModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Product Details</h5>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="row">
+            <div class="modal-content overflow-hidden">
+                <div class="modal-body p-0">
+                    <div class="row g-0">
                         <div class="col-md-6">
-                            <img id="modalImage" class="modal-img">
+                            <img id="modalImage" class="modal-img rounded-0" src="" alt="">
                         </div>
+                        <div class="col-md-6 p-5 d-flex flex-column justify-content-center">
+                            <button type="button" class="btn-close position-absolute top-0 end-0 m-4" data-bs-dismiss="modal"></button>
+                            <h3 id="modalName" class="fw-bold mb-3"></h3>
+                            <p id="modalDesc" class="text-muted lh-base mb-4"></p>
 
-                        <div class="col-md-6 d-flex flex-column justify-content-center">
-                            <h4 id="modalName" class="mb-2"></h4>
-                            <p class="text-muted" id="modalDesc"></p>
+                            <label class="fw-bold small text-uppercase tracking-wider mb-2">Available Options</label>
+                            <div id="sizeContainer" class="mb-4"></div>
 
-                            <h6 class="mt-3">Select Variant</h6>
-                            <div id="sizeContainer"></div>
+                            <div id="stockText" class="mb-4 fw-bold"></div>
 
-                            <p id="stockText" class="mt-2"></p>
-
-                            <div class="mt-3">
-                                <button id="addToCartBtn" class="btn btn-dark w-100" disabled>
-                                    SELECT VARIANT
-                                </button>
-                            </div>
+                            <button id="addToCartBtn" class="btn btn-dark btn-lg w-100 rounded-pill py-3 fw-bold" disabled>
+                                SELECT OPTION
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -214,108 +339,117 @@
         </div>
     </div>
 
-  <!-- Success Modal for add to cart -->
-<div class="modal fade" id="cartSuccessModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-body text-center p-5">
-                <div class="mb-3">
-                    <div style="width:70px;height:70px;margin:auto;border-radius:50%;background:#28a745;display:flex;align-items:center;justify-content:center;animation: pop 0.3s ease;">
-                        <i class="fa fa-check text-white" style="font-size:28px;"></i>
-                    </div>
-                </div>
-                <h4 class="mb-2 font-weight-bold">Added to Cart</h4>
-                <p class="text-muted mb-4">Your item has been successfully added.</p>
-                <div class="d-flex justify-content-center gap-2">
-                    <h4>Continue Shopping</h4>
+    <div class="modal fade" id="cartSuccessModal" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content text-center p-4">
+                <div class="py-3">
+                    <i class="fa fa-circle-check text-success fa-4x mb-3" style="animation: pop 0.4s ease;"></i>
+                    <h5 class="fw-bold">Added to Cart</h5>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Order Success Modal -->
-<div class="modal fade" id="orderSuccessModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-center p-4">
-            <div class="modal-body">
-                <i class="fa fa-check-circle text-success" style="font-size:50px;"></i>
-                <h4 class="mt-3">Success</h4>
-                <p>{{ session('success') }}</p>
-                
-            </div>
-        </div>
-    </div>
-</div>
-    <!-- Scripts -->
-    <script src="{{ url('assets/micro/js/vendor/jquery-2.2.4.min.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         $(document).ready(function () {
+    const micrositeSlug = "{{ $microsite->slug }}";
+    
+    // Initialize Modals properly for BS5
+    const variantModal = new bootstrap.Modal(document.getElementById('variantModal'));
+    const cartSuccessModal = new bootstrap.Modal(document.getElementById('cartSuccessModal'));
 
-            const micrositeSlug = "{{ $microsite->slug }}";
+    // --- Category Filter ---
+    $('#categoryFilter').on('change', function() {
+        let val = $(this).val();
+        $('.product-item').each(function() {
+            (val === 'all' || $(this).data('category') == val) ? $(this).fadeIn(300) : $(this).hide();
+        });
+    });
 
-            // Category filter
-            $('#categoryFilter').change(function () {
-                const selected = $(this).val();
-                $('.product-card').each(function () {
-                    const category = $(this).data('category');
-                    $(this).toggle(selected === 'all' || selected == category);
-                });
+    // --- View Product (Opens Modal) ---
+    $(document).on('click', '.viewProductBtn', function (e) {
+        e.preventDefault();
+        let productId = $(this).data('product');
+        
+        // Clear previous state
+        $('#sizeContainer').html('<div class="spinner-border spinner-border-sm text-primary"></div>');
+        $('#addToCartBtn').prop('disabled', true).text('SELECT OPTION');
+        $('#stockText').text('');
+
+        $.get(`/microsite-product-variants/${productId}`, function (data) {
+            if (!data || data.length === 0) {
+                alert("No variants available for this product.");
+                return;
+            }
+
+            // Update Modal Content
+            $('#modalName').text(data[0].product_name);
+            $('#modalDesc').text(data[0].description);
+            $('#modalImage').attr('src', data[0].image ? '/storage/' + data[0].image : '/img/product/p1.jpg');
+
+            let variantsHtml = '';
+            data.forEach(v => {
+                let display = (v.size || '') + (v.color ? ' - ' + v.color : '');
+                if(display.trim() == "") display = "Standard";
+
+                variantsHtml += `
+                    <div class="size-box ${v.stock <= 0 ? 'disabled' : ''}" 
+                         data-id="${v.id}" 
+                         data-stock="${v.stock}" 
+                         data-image="${v.image}">
+                        ${display}
+                    </div>`;
             });
 
-            // View product
-            $(document).on('click', '.viewProductBtn', function () {
-                let productId = $(this).data('product');
+            $('#sizeContainer').html(variantsHtml);
+            variantModal.show();
+        }).fail(function() {
+            alert("Error loading product details.");
+        });
+    });
 
-                $.get(`/microsite-product-variants/${productId}`, function (data) {
-                    if (!data || data.length === 0) {
-                        alert("No variants found");
-                        return;
-                    }
+    // --- Handle Variant Selection (Delegated Event) ---
+    // This FIXES the "not working" issue by listening to the container, not the box itself.
+    $(document).on('click', '.size-box', function() {
+        if ($(this).hasClass('disabled')) return;
 
-                    $('#modalName').text(data[0].product_name);
-                    $('#modalDesc').text(data[0].description);
-                    $('#modalImage').attr('src', data[0].image ? '/storage/' + data[0].image : '/img/product/p1.jpg');
+        // Visual toggle
+        $('.size-box').removeClass('active');
+        $(this).addClass('active');
 
-                    let variantsHtml = '';
-                    data.forEach(v => {
-                        variantsHtml += `<div class="size-box ${v.stock <= 0 ? 'disabled' : ''}" data-id="${v.id}" data-stock="${v.stock}" data-image="${v.image}">${v.size ?? '-'} - ${v.color ?? '-'}</div>`;
-                    });
+        let stock = parseInt($(this).data('stock'));
+        let variantId = $(this).data('id');
+        let variantImg = $(this).data('image');
 
-                    $('#sizeContainer').html(variantsHtml);
-                    $('#stockText').text('');
-                    $('#addToCartBtn').prop('disabled', true).text('SELECT VARIANT');
+        // Update image if variant has a specific one
+        if (variantImg) {
+            $('#modalImage').attr('src', '/storage/' + variantImg);
+        }
 
-                    $('.size-box').click(function () {
-                        if ($(this).hasClass('disabled')) return;
-                        $('.size-box').removeClass('active');
-                        $(this).addClass('active');
+        // Update button and stock text
+        if (stock > 0) {
+            $('#stockText').html('<span class="text-success small fw-bold"><i class="fas fa-check-circle me-1"></i> In Stock</span>');
+            $('#addToCartBtn')
+                .prop('disabled', false)
+                .text('ADD TO CART')
+                .data('variant-id', variantId) // Store ID for the cart push
+                .removeClass('btn-dark')
+                .addClass('btn-primary');
+        } else {
+            $('#stockText').html('<span class="text-danger small fw-bold">Out of Stock</span>');
+            $('#addToCartBtn').prop('disabled', true).text('OUT OF STOCK').addClass('btn-dark').removeClass('btn-primary');
+        }
+    });
 
-                        let stock = $(this).data('stock');
-                        let variantId = $(this).data('id');
-                        let image = $(this).data('image');
+    // --- Add to Cart Action ---
+    $('#addToCartBtn').on('click', function () {
+        let variantId = $(this).data('variant-id');
+        if (!variantId) return;
 
-                        if (image) $('#modalImage').attr('src', '/storage/' + image);
-
-                        if (stock > 0) {
-                            $('#stockText').html('<span class="text-success">In Stock</span>');
-                            $('#addToCartBtn').prop('disabled', false).text('ADD TO CART').data('variant', variantId);
-                        } else {
-                            $('#stockText').html('<span class="text-danger">Out of Stock</span>');
-                            $('#addToCartBtn').prop('disabled', true).text('OUT OF STOCK');
-                        }
-                    });
-
-                    $('#variantModal').modal('show');
-                });
-            });
-
-            // Add to cart
-    $('#addToCartBtn').click(function () {
-        let variantId = $(this).data('variant');
-        if (!variantId) return alert("Please select a variant");
+        $(this).prop('disabled', true).text('Processing...');
 
         $.ajax({
             url: `/microsite/${micrositeSlug}/add-to-cart`,
@@ -326,43 +460,17 @@
                 quantity: 1
             },
             success: function (res) {
-                $('#variantModal').modal('hide');
-
-                var cartModal = new bootstrap.Modal(document.getElementById('cartSuccessModal'));
-                cartModal.show();
-
-                setTimeout(function () {
-                    cartModal.hide(); // ✅ FIXED
-                }, 2000);
+                variantModal.hide();
+                cartSuccessModal.show();
+                setTimeout(() => cartSuccessModal.hide(), 2000);
             },
             error: function (err) {
-                console.error(err);
-                alert("Error adding to cart: " + (err.responseJSON?.error || err.responseText));
+                alert("Could not add to cart. Please try again.");
+                $('#addToCartBtn').prop('disabled', false).text('ADD TO CART');
             }
         });
     });
-
-});
-
-// Order success modal
-document.addEventListener("DOMContentLoaded", function () {
-    @if(session('success'))
-        var orderModalEl = document.getElementById('orderSuccessModal');
-        var orderModal = new bootstrap.Modal(orderModalEl);
-
-        orderModal.show();
-
-        // ✅ Auto close after 3 seconds
-        setTimeout(function () {
-            orderModal.hide();
-
-            // OPTIONAL: redirect after close
-            window.location.href = "{{ route('microsite.home', $microsite->slug) }}";
-        }, 3000);
-
-    @endif
 });
     </script>
 </body>
-
 </html>

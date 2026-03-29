@@ -87,7 +87,7 @@ class ClubController extends Controller
         'city'      => 'required|string|max:100',
         'zip_code' => 'required|digits:6',
         'status'    => 'nullable|boolean',
-        'image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'image'     => 'required|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
     $randomPassword = Str::random(8);
@@ -168,7 +168,7 @@ class ClubController extends Controller
     'city'      => 'required|string|max:100',
     'zip_code'  => 'required|regex:/^[A-Za-z0-9\-\s]{3,10}$/',
     'status'    => 'nullable|boolean',
-    'image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    'image'     => 'required|image|mimes:jpg,jpeg,png|max:2048',
     ]);
     
     $imagePath = $club->image;
@@ -250,7 +250,7 @@ class ClubController extends Controller
             'city'      => 'required|string|max:100',
             'zip_code'  => 'required|regex:/^[A-Za-z0-9\-\s]{3,10}$/',
             'status'    => 'nullable|boolean',
-            'image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'image'     => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
         
         $imagePath = $club->image;

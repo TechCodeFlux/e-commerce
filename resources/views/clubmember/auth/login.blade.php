@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Login Portal</title>
+    <title>Login</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -89,36 +89,42 @@
     <p class="text-white">Sign In</p>
 
     <div class="container-content">
-        <form>
-            <div class="mb-3">
-                <input type="text" class="form-control" placeholder="Username" required>
-            </div>
 
-            <div class="mb-3">
-                <input type="password" class="form-control" placeholder="Password" required>
-            </div>
+    @if(session('error'))
+        <p class="text-danger">{{ session('error') }}</p>
+    @endif
 
-            <button type="submit" class="btn form-button w-100 mb-3">
-                Sign In
-            </button>
+    @if(session('success'))
+        <p class="text-success">{{ session('success') }}</p>
+    @endif
 
-            <a href="#" class="text-darkyellow d-block mb-2">
-                <small>Forgot your password?</small>
-            </a>
+    <!-- 🔹 STEP 1: EMAIL -->
+    <form method="POST" action="{{ route('clubmember.sendOtp') }}">
+        @csrf
 
-            <p class="text-white mb-1">
-                <small>Do not have an account?</small>
-            </p>
+        <div class="mb-3">
+            <input type="email" name="email" class="form-control" placeholder="Enter Email" required>
+        </div>
 
-            <a href="#" class="text-darkyellow">
-                <small>Sign Up</small>
-            </a>
-        </form>
+        <button type="submit" class="btn form-button w-100 mb-3">
+            <i class="fa fa-envelope"></i> Send OTP
+        </button>
+    </form>
 
-        <!-- <p class="mt-3 text-white">
-            <small>Your Name &copy; 2026</small>
-        </p> -->
-    </div>
+    <!-- 🔹 STEP 2: OTP -->
+    <form method="POST" action="{{ route('clubmember.verifyOtp') }}">
+        @csrf
+
+        <div class="mb-3">
+            <input type="text" name="otp" class="form-control" placeholder="Enter OTP" required>
+        </div>
+
+        <button type="submit" class="btn form-button w-100">
+            <i class="fa fa-lock"></i> Login
+        </button>
+    </form>
+
+</div>
 </div>
 
 <!-- Bootstrap JS -->

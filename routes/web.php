@@ -153,42 +153,51 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
 
 //| PUBLIC MICROSITE ROUTES
 // Microsite login page
-Route::get('/microsite/{slug}/login', [MicrositeController::class, 'showLogin'])->name('microsite.login');
-// Microsite login submit
-Route::post('/microsite/{slug}/login', [MicrositeController::class, 'login'])->name('microsite.login.submit');
-// After login → microsite home
-// Route::get('/microsite/{microsite}/home', function () {return view('clubmember.microsite.home');})->name('microsite.home');
-Route::get('/product-variants/{id}', [MicrositeController::class,'variants']);//to get product variants in microsite home page
-Route::get('/microsite-product-variants/{productId}', [MicrositeController::class, 'getMicrositeProductVariants']);//get varients of product in microsite home page
-Route::post('/microsite/{slug}/add-to-cart', [CartController::class, 'add']);//add to cart route
-Route::get('/microsite/{slug}/cart', [CartController::class, 'index'])->name('clubmember.microsite.carts');//cart page
-Route::post('/microsite/{slug}/preview', [CartController::class, 'preview'])->name('clubmember.microsite.preview');//checkout page
-Route::get('/microsite/{slug}/preview', [CartController::class, 'preview'])->name('clubmember.microsite.preview');//checkout page
+// Route::get('/microsite/{slug}/login', [MicrositeController::class, 'showLogin'])->name('microsite.login');
+// // Microsite login submit
+// Route::post('/microsite/{slug}/login', [MicrositeController::class, 'login'])->name('microsite.login.submit');
+// // After login → microsite home
+// // Route::get('/microsite/{microsite}/home', function () {return view('clubmember.microsite.home');})->name('microsite.home');
+// Route::get('/product-variants/{id}', [MicrositeController::class,'variants']);//to get product variants in microsite home page
+// Route::get('/microsite-product-variants/{productId}', [MicrositeController::class, 'getMicrositeProductVariants']);//get varients of product in microsite home page
+// Route::post('/microsite/{slug}/add-to-cart', [CartController::class, 'add']);//add to cart route
+// Route::get('/microsite/{slug}/cart', [CartController::class, 'index'])->name('clubmember.microsite.carts');//cart page
+// Route::post('/microsite/{slug}/preview', [CartController::class, 'preview'])->name('clubmember.microsite.preview');//checkout page
+// Route::get('/microsite/{slug}/preview', [CartController::class, 'preview'])->name('clubmember.microsite.preview');//checkout page
+
+
+
+// Microsite Routes
+Route::prefix('microsite/{slug}')->group(function () {
+
+    Route::get('/login', [MicrositeController::class, 'showLogin'])->name('microsite.login');
+    Route::post('/login', [MicrositeController::class, 'login'])->name('microsite.login.submit');
+    Route::post('/logout', [MicrositeController::class, 'logout'])->name('microsite.logout');
+    Route::get('/home', [MicrositeController::class, 'home'])->name('microsite.home');
+    Route::get('/cart', [CartController::class, 'index'])->name('clubmember.microsite.carts');
+    Route::post('/add-to-cart', [CartController::class, 'add']);
+    Route::get('/preview', [CartController::class, 'preview'])->name('clubmember.microsite.preview');
+    Route::post('/preview', [CartController::class, 'preview']);
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::post('/address/add', [CartController::class, 'addAddress'])->name('address.add');
+});
 Route::post('/cart-update', [CartController::class, 'update']);//update cart item quantity
 Route::post('/cart-remove', [CartController::class, 'remove']);//remove cart item
-//
-Route::get('/microsite/{slug}/home', [MicrositeController::class, 'home'])->name('microsite.home');//back to mircosite home
-Route::post('/microsite/{slug}/checkout', [CartController::class, 'checkout'])->name('cart.checkout');//checkout functionroute
-Route::post('/microsite/{slug}/address/add', [CartController::class, 'addAddress'])->name('address.add');//add new address route
+Route::get('/microsite-product-variants/{productId}', [MicrositeController::class, 'getMicrositeProductVariants']);//get varients of product in microsite home page
 
-
-Route::get('/microsite/{microsite}/home', function ($micrositeId) {$microsite = Microsite::findOrFail($micrositeId);
-    $club = $microsite->club;$micrositeProducts = DB::table('microsite_products')->join('products', 'products.id', '=', 'microsite_products.product_id')
-        ->leftJoin('varients', function ($join) {$join->on('varients.product_id', '=', 'products.id')
-        ->where('varients.status', 1);})->where('microsite_products.microsite_id', $microsite->id)
-        ->select('products.*',DB::raw('(select image from varients where varients.product_id = products.id limit 1) as variant_image')
-        )->get();$categories = Category::whereIn('id',$micrositeProducts->pluck('category_id')->unique())->get();
-        return view('clubmember.microsite.home', compact('microsite','club','micrositeProducts','categories'));
-    })->name('microsite.home');
-// Logout
-Route::post('/microsite/{slug}/logout', [MicrositeController::class, 'logout'])->name('microsite.logout');
-Route::get('/clubmember', function () {return view('clubmember.auth.login');})->name('clubmember.login');
-
-
-
+// Club Member Auth
 Route::prefix('clubmember')->name('clubmember.')->group(function () {
     Route::get('/', [ClubMemberLoginController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [ClubMemberLoginController::class, 'login'])->name('login.submit');
-    Route::post('logout', [ClubMemberLoginController::class, 'logout'])->name('logout');
-
+    Route::post('/login', [ClubMemberLoginController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [ClubMemberLoginController::class, 'logout'])->name('logout');
 });
+// Dashboard (NEW)
+Route::get('/clubmember/login', [ClubMemberLoginController::class, 'showLoginForm'])->name('clubmember.login');
+
+Route::post('/clubmember/send-otp', [ClubMemberLoginController::class, 'sendOtp'])->name('clubmember.sendOtp');
+
+Route::post('/clubmember/verify-otp', [ClubMemberLoginController::class, 'verifyOtp'])->name('clubmember.verifyOtp');
+
+Route::get('/clubmember/dashboard', [ClubMemberLoginController::class, 'dashboard'])->name('clubmember.dashboard');
+
+Route::post('/clubmember/logout', [ClubMemberLoginController::class, 'logout'])->name('clubmember.logout');
