@@ -228,25 +228,28 @@ public function placeorder(Request $request)
 
             if (!$variantId) continue;
 
-            $variant = Varient::lockForUpdate()->find($variantId);
+            $variant = Varient::lockForUpdate()
+                        ->where('id', $variantId)
+                        ->where('product_id', $productId)
+                        ->first();
 
             // ✅ Stock check
-            if (!$variant || $variant->stock < $qty) {
-                throw new \Exception('Stock not available');
-            }
+            if (!$variant) {
+                    throw new \Exception("Invalid variant ($variantId) for product ($productId)");
+                }
 
             // ✅ Create Order
-            $order = Order::create([
-                'quantity'        => $qty,
-                'product_id'      => $productId,
-                'price'           => $price,
-                'club_member_id'  => $request->clubmember_id,
-                'club_id'         => $request->club_id,
-                'varient_id'      => $variantId,
-                'order_status_id' => 1,
-                'microsite_id'    => $micrositeId,
-                'address_id'      => $request->address_id,
-            ]);
+           $order = Order::create([
+                    'quantity'        => $qty,
+                    'product_id'      => $productId,
+                    'price'           => (int) $price, // ✅ FIX
+                    'club_member_id'  => $request->clubmember_id,
+                    'club_id'         => $request->club_id,
+                    'varient_id'      => $variantId,
+                    'order_status_id' => 1,
+                    'microsite_id'    => 1,
+                    'address_id'      => $request->address_id,
+                ]);
 
             // ✅ Reduce stock
             $variant->decrement('stock', $qty);
@@ -273,12 +276,13 @@ public function placeorder(Request $request)
         return redirect()
             ->route('clubmember.viewproduct')
             ->with('success', 'Order placed successfully!');
-
-    } catch (\Exception $e) {
-
-        DB::rollback();
-
-        return back()->with('error', $e->getMessage());
     }
+
+        catch (\Exception $e) {
+
+            DB::rollback();
+
+            dd($e->getMessage(), $e->getLine());
+        }
 }
 }

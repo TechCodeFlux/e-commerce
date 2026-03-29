@@ -34,7 +34,7 @@ class ClubMemberOrderController extends Controller
                             : asset('images/no-image.png'),
                     'size' => optional($order->varient)->size ?? 'N/A',
                     'color' => optional($order->varient)->color ?? 'N/A',
-                    'stock' => optional($order->product)->stock ?? 0,
+                    'stock' => optional($order->varient)->stock ?? 0,
 
                     'username' => optional($order->clubMember)->name ?? 'User',
                     'email' => optional($order->clubMember)->email ?? 'N/A',

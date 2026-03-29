@@ -1,3 +1,4 @@
+
 @extends('clubmember.components.app')
 
 @section('content')
@@ -22,7 +23,7 @@
                             <h5 class="fw-bold">{{ $carts->name }}</h5>
                             <p class="text-muted">{{ $carts->varient->product->description }}</p>
 
-                            <input type="hidden" name="product_id[]" value="{{ $carts->id }}">
+                            <input type="hidden" name="product_id[]" value="{{ $carts->varient->product_id }}">
                             <input type="hidden" name="varient_id[]" value="{{ $carts->varient_id }}">
                             <input type="hidden" name="cart_id[]" value="{{ $carts->id }}">
                         </div>
@@ -110,7 +111,7 @@
 
                 @foreach($address as $addr)
                     <div>
-                        <input type="radio" name="address_id" value="{{ $addr->id }}">
+                       <input type="radio" name="address_id" value="{{ $addr->id }}" required>
                         {{ $addr->address1 }},
                         {{ $addr->country->name }},
                         {{ $addr->state->name }},

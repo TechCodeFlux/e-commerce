@@ -61,7 +61,7 @@ class CartController extends Controller
             }
 
             $cart = Cart::where('clubmember_id', $clubmemberId)
-                ->where('product_id', $product->id)
+                ->where('varient_id', $varient->id)
                 ->first();
 
             // ✅ If already in cart
