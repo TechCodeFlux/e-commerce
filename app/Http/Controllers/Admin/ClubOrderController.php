@@ -70,8 +70,8 @@ class ClubOrderController extends Controller
             //->addColumn('quantity', fn ($row) => $row->order->quantity )
 
             ->addColumn('image', function ($row) {
-                if ($row->product && $row->product->image) {
-                    return asset('storage/' . $row->product->image);
+                if ($row->varient && $row->varient->image) {
+                    return asset('storage/' . $row->varient->image);
                 }
                 return '<span class="text-muted">No Image</span>';
                 })

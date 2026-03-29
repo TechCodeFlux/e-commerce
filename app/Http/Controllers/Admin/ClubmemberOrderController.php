@@ -29,8 +29,8 @@ class ClubMemberOrderController extends Controller
             ->map(function ($order) {
                 return [
                     'name' => optional($order->product)->name ?? 'N/A',
-                    'image' => $order->product && $order->product->image
-                          ? asset('storage/' . $order->product->image)
+                    'image' => $order->varient && $order->varient->image
+                          ? asset('storage/' . $order->varient->image)
                             : asset('images/no-image.png'),
                     'size' => optional($order->varient)->size ?? 'N/A',
                     'color' => optional($order->varient)->color ?? 'N/A',
