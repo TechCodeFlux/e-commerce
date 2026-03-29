@@ -552,7 +552,7 @@
                 ('admin.clubsindex','admin.club','admin.editclub','admin.clubs.dashboard',
                 'admin.clubmember.viewmembers','admin.club.profile','admin.show_microsites',
                 'admin.clubmember.addmember','admin.add_microsites','admin.editmicrosite',
-                'admin.clubmember.profile','admin.clubmember.editmember') ? 'active' : '' }}">
+                'admin.clubmember.profile','admin.clubmember.editmember','admin.microsite.*','admin.club.vieworder','admin.clubmember.vieworder') ? 'active' : '' }}">
                     <span class="nav-link-icon">
                         <i class="bi bi-person-badge"></i>
                     </span>
@@ -594,15 +594,15 @@
                     <span>Products</span>
                 </a>
             </li>
-             {{-- <li>
-                <a class="{{ request()->routeIs('admin.varient_management.show_varient','admin.varient_management.form_varient_index')? 'active' : '' }}"
-                href="{{ route('admin.varient_management.show_varient') }}">
+             <li>
+                <a class="{{ request()->routeIs('admin.orders.index')? 'active' : '' }}"
+                href="{{ route('admin.orders.index') }}">
                     <span class="nav-link-icon">
-                        <i class="bi bi-diagram-3 me-2"></i>
+                        <i class="bi bi-receipt me-2"></i>
                     </span>
-                    <span>Varient</span>
+                    <span>Orders</span>
                 </a>
-            </li> --}}
+            </li>
             
            
 

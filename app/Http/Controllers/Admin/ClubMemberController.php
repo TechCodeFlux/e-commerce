@@ -57,7 +57,6 @@ class ClubMemberController extends Controller
    }
 
 
-
    public function addmember($id)
     {
         $club = Club::findOrFail($id);
@@ -111,7 +110,7 @@ class ClubMemberController extends Controller
         'state_id'  => $request->state,
         'city'      => $request->city,
         'zip_code'  => $request->zip_code,
-        'club_id'         => $id,
+        // 'club_id'         => $id,
         'club_member_id'  => $clubmember->id,
         'status'    => 1,
     ]);

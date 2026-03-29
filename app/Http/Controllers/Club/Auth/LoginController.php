@@ -3,58 +3,50 @@
 namespace App\Http\Controllers\Club\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Club;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
+     * Show login form
      */
-    protected $redirectTo = 'club/dashboard';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    // public function __construct()
-    // {
-    //     $this->middleware('guest')->except('logout');
-    //     $this->middleware('auth')->only('logout');
-    // }
     public function showLoginForm()
     {
-
         return view('club.auth.login');
     }
-    protected function redirectTo() 
-    {
-        return route('club.dashboard');
+
+    /**
+     * Login
+     */
+   public function login(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    if (Auth::guard('club')->attempt([
+        'email' => $request->email,
+        'password' => $request->password
+    ])) {
+        // login success
+        return redirect()->route('club.dashboard');
     }
-    protected function guard()
-    {
-        return Auth::guard('club');
-    }
+
+    return back()->with('error', 'Invalid credentials');
+}
+    /**
+     * Logout
+     */
     public function logout(Request $request)
     {
         Auth::guard('club')->logout();
-    }
 
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('club.login');
+    }
 }

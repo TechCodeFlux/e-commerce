@@ -11,7 +11,7 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('club.clubmembersindex') }}">
+                    <a href="{{ route('club.member.index', $club->id) }}">
                         <i class="bi bi-building small me-2"></i> Club Members
                     </a>
                 </li>
@@ -39,7 +39,8 @@
                 <div class="col-lg-12">
 
                     <form 
-                        action="{{ $clubmember->id ? route('club.update', $clubmember->id) : route('club.storeclubmember') }}" 
+                    {{-- {{ $clubmember->id ? route('club.update', $clubmember->id) : route('club.storeclubmember') }} --}}
+                        action="" 
                         method="POST" 
                         autocomplete="off">
                         @csrf
@@ -77,56 +78,98 @@
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                <label class="form-label">Address 1</label>
-                                <textarea name="address1" class="form-control" rows="2"
-                                    placeholder="Address Line 1">{{ old('address1', $clubmember->address1 ?? '') }}</textarea>
-                                @error('address1')
-                                    <small class="text-danger d-block mt-1">{{ $message }}</small>
-                                @enderror
-                            </div>
+                            <label>Profile Image</label>
+                            <input type="file" name="image"
+                                class="form-control @error('profile_image') is-invalid @enderror">
+
+                            @error('image')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                            {{-- Show existing image in edit --}}
+                            @if(!empty($clubmember->image))
+                                <div class="mt-2">
+                                    <img src="{{ asset('storage/'.$clubmember->image) }}"
+                                        width="80" height="80"
+                                        class="rounded-circle"
+                                        style="object-fit: cover;">
+                                </div>
+                            @endif
+                        </div>
+
                             <div class="col-md-12 mb-3">
-                                <label class="form-label">Address 2</label>
-                                <textarea name="address2" class="form-control" rows="2"
-                                    placeholder="Address Line 2">{{ old('address2', $clubmember->address2 ?? '') }}</textarea>
-                                @error('address2')
-                                    <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                <label>Address</label>
+                                <textarea name="address"
+                                        class="form-control @error('address') is-invalid @enderror"
+                                        >{{ old('address', $address->address1 ?? '') }}</textarea>
+
+
+
+                                @error('address')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
                                 @enderror
                             </div>
                             
+                            
 
+                            {{-- Country --}}
                             <div class="col-md-4 mb-3">
-                        <label>Country</label>
-                        <select name="country" id="country" class="form-select">
-                            <option value="">Select Country</option>
-                            @foreach($countries as $country)
-                                <option value="{{ $country->id }}"
-                                    {{ old('country', $clubmember->country_id ?? '') == $country->id ? 'selected' : '' }}>
-                                    {{ $country->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-
-                            <div class="col-md-4 mb-3">
-                        <label>State</label>
-                        <select name="state" id="state" class="form-select">
-                            <option value="">Select State</option>
-                        </select>
-                    </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">City</label>
-                                <input type="text" name="city" class="form-control" placeholder="City"
-                                    value="{{ old('city', $clubmember->city ?? '') }}">
+                                <label>Country</label>
+                                <select name="country" id="country" class="form-select">
+                                    <option value="">Select Country</option>
+                                    @foreach($countries as $country)
+                                        <option value="{{ $country->id }}"
+                                           {{ old('country', optional($address)->country_id) == $country->id ? 'selected' : '' }}>
+                                            {{ $country->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">ZIP Code</label>
-                                <input type="text" name="zip_code" class="form-control" placeholder="ZIP Code"
-                                    value="{{ old('zip_code', $clubmember->zip_code ?? '') }}">
+
+                            {{-- State --}}
+                           <div class="col-md-4 mb-3">
+                            <label>State</label>
+                            <select name="state" id="state" class="form-select">
+                                <option value="">Select State</option>
+                                    @isset($states)
+                                    @foreach($states as $state)
+                                        <option value="{{ $state->id }}"
+                                       {{ old('state', optional($address)->state_id) == $state->id ? 'selected' : '' }}>
+                                        {{ $state->name }}
+                                        </option>
+                                    @endforeach
+                                 @endisset
+                                </select>
                             </div>
 
+                            {{-- City --}}
+                            <div class="col-md-4 mb-3">
+                                <label>City</label>
+                                <input type="text" name="city" class="form-control @error('city') is-invalid @enderror"
+                                    value="{{ old('city', $address->city ?? '') }}">
+                                    @error('city')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            {{-- zip code--}}
+                            <div class="col-md-4 mb-3">
+                                <label>Zip code</label>
+                                <input type="text" name="zip_code" class="form-control @error('zip_code') is-invalid @enderror"
+                                    value="{{ old('zip_code', $address->zip_code ?? '') }}">
+                                    @error('zip_code')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                             <div class="col-md-4 mb-4">
                                 <label class="form-label d-block">Status</label>
 

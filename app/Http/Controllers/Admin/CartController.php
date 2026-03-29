@@ -140,7 +140,7 @@ class CartController extends Controller
                     'city'       => $request->city,
                     'zip_code'   => $request->zip_code,
                     'club_member_id'  => $clubmemberId,
-                    'club_id'    => DB::table('club_members')->where('id', $clubmemberId)->value('club_id'),
+                    // 'club_id'    => DB::table('club_members')->where('id', $clubmemberId)->value('club_id'),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

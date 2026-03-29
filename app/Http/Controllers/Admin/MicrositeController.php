@@ -70,7 +70,7 @@ class MicrositeController extends Controller
                     ';
                 })
                 ->addColumn('action', function ($microsite) {
-
+ 
                     $actions = '<div class="d-flex gap-1">';
                     $actions .= '<button class="btn btn-sm btn-clean btn-outline-warning showMicrositeProducts" data-id="'.$microsite->id.'" title="Show">
                         <i class="fas fa-box-open" ></i></button>';
@@ -110,7 +110,6 @@ class MicrositeController extends Controller
         $microsite = new Microsite();
         return view('admin.microsite_management.add_microsite', compact('club', 'microsite'));
     }
-
     /**
      * Store a newly created resource in storage.
      */

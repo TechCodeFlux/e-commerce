@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\ClubMemberController;
 use App\Http\Controllers\Admin\ClubController;
 
-use App\Http\Controllers\ClubMember\Auth\LoginController as ClubMemberLoginController;
-
 //for dashboard
 use App\Http\Controllers\Admin\DashboardController;
 //category controller
@@ -18,26 +16,72 @@ use App\Http\Controllers\Admin\MicrositeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VarientController;
 use App\Http\Controllers\Admin\CartController;
+//orders
+use App\Http\Controllers\Admin\ClubOrderController;
+use App\Http\Controllers\Admin\ClubMemberOrderController;
+
+// club
+use App\Http\Controllers\ClubMember\Auth\LoginController as ClubMemberLoginController;
+use App\Http\Controllers\Club\Auth\LoginController;
+use App\Http\Controllers\Club\ClubDashboardController;
+
+
 //model
-use App\Models\Microsite;
-use Illuminate\Support\Facades\DB;
-use App\Models\Category;
+// use App\Models\Microsite;
+// use Illuminate\Support\Facades\DB;
+// use App\Models\Category;
 //arjun
 // Route::get('/', function () {return view('club.auth.login');})->name('club.login');
 Route::get('/', function () {return view('home');})->name('home');
-Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-    Route::get('/', function () {return view('club.auth.login');})->name('login');
-    Auth::routes(['register' => false]); 
-//     //dashboard controller
-    //Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
-//     //club controller
-//     // Route::get('clubmembers', [ClubMemberController::class, 'index'])->name('clubmembersindex'); //view club members in table
-//     // Route::get('clubmembersform', [ClubMemberController::class, 'create'])->name('addclubmember'); //To add club member data form(submit form)
-//     // Route::post('clubmembersadd', [ClubMemberController::class, 'store'])->name('storeclubmember'); //add club member data to table (submit form)
-//     // // Route::put('clubmembersupdate/{club}', [ClubMemberController::class, 'update'])->name('update'); //add club member data (update form)
-//     // Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
 
+Route::prefix('club')->name('club.')->group(function () {
+
+    Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+
+    Route::middleware('auth:club')->group(function () {
+        Route::get('/dashboard', [ClubDashboardController::class, 'dashboard'])->name('dashboard');
+        ///club member
+        Route::get('/members/{club}', [ClubDashboardController::class, 'clubmember'])->name('member.index');
+        Route::get('/members/list/{club}', [ClubDashboardController::class, 'clubmember'])->name('member.list');
+        Route::delete('/member/delete/{id}', [ClubDashboardController::class, 'delete'])->name('member.delete');
+        Route::get('club/addmember/{id}',[ClubDashboardController::class,'addmember'])->name('clubmember.addmember');//to add club members page
+        Route::post('club/storemember/{id}',[ClubDashboardController::class,'storemember'])->name('clubmember.storemember');//store club members from add club member page
+        Route::get('club/editmember/{id}',[ClubDashboardController::class,'editmember'])->name('clubmember.editmember');
+        Route::delete('club/deletemember/{id}',[ClubDashboardController::class,'deletemember'])->name('clubmember.deletemember');
+        ///profile
+        Route::get('club/profile/{id}',[ClubDashboardController::class,'profile'])->name('club.profile');
+        Route::post('club/editprofile/{id}',[ClubDashboardController::class,'editprofile'])->name('club.editprofile');
+        ///orders
+        Route::get('vieworder/{id}',[ClubDashboardController::class,'show'])->name('club.vieworder');
+        ///microsite access
+        Route::get('show_microsites/{club}', [ClubDashboardController::class, 'toMicro'])->name('show_microsites');//view microsites
+        Route::get('microsite_show/{microsite}', [ClubDashboardController::class, 'showMicro'])->name('microsite_show');//show microsite details modal
+        Route::get('add_microsites/{id}', [ClubDashboardController::class, 'create'])->name('add_microsites');//add microsite form
+        Route::put('microsite_update/{microsite}', [ClubDashboardController::class, 'update'])->name('microsite_update');//update microsite data
+        Route::post('microsite_store', [ClubDashboardController::class, 'store'])->name('microsite_store');//store microsite data
+        Route::get('edit_microsite/{id}',[ClubDashboardController::class,'edit'])->name('editmicrosite');//edit microsite form
+        Route::post('delete_microsite', [ClubDashboardController::class, 'destroyMicro'])->name('delete_microsite');//delete microsite
+        Route::get('/admin/microsite/{microsite}/products', [ClubDashboardController::class, 'products'])->name('microsite.list_products');//to add products into microsite blade page
+
+
+        ///
+        Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    });
 });
+// Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
+//     Route::get('/', function () {return view('club.auth.login');})->name('login');
+//     Auth::routes(['register' => false]); 
+// //     //dashboard controller
+//     //Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
+// //     //club controller
+// //     // Route::get('clubmembers', [ClubMemberController::class, 'index'])->name('clubmembersindex'); //view club members in table
+// //     // Route::get('clubmembersform', [ClubMemberController::class, 'create'])->name('addclubmember'); //To add club member data form(submit form)
+// //     // Route::post('clubmembersadd', [ClubMemberController::class, 'store'])->name('storeclubmember'); //add club member data to table (submit form)
+// //     // // Route::put('clubmembersupdate/{club}', [ClubMemberController::class, 'update'])->name('update'); //add club member data (update form)
+// //     // Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
+
+// });
 //pauljo
 // Admin login
 // Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
@@ -149,7 +193,14 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('varient_management/show_single/{id}', [VarientController::class, 'single_show'])->name('varient_management.show_single');
     Route::post('varient_management/change-status', [VarientController::class, 'changeStatus'])->name('varient_management.change-status');
     Route::post('varient/get-option-values',[VarientController::class, 'getOptionValues'])->name('varient_management.get_option_values');
+
+    //club orders
+    Route::get('vieworder/{id}',[ClubOrderController::class,'show'])->name('club.vieworder');
+    Route::post('change_status/{id}', [ClubOrderController::class, 'changeStatus'])->name('clubs.changestatus');
+     Route::get('club/member/vieworder/{id}',[ClubMemberOrderController::class,'show'])->name('clubmember.vieworder');
+     Route::get('/orders', [DashboardController::class, 'orders'])->name('orders.index');
 });
+
 
 //| PUBLIC MICROSITE ROUTES
 // Microsite login page

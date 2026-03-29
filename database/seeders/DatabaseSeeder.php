@@ -27,9 +27,9 @@ class DatabaseSeeder extends Seeder
         );
 
         // countrySeeder
-        $this->call([
-            CountrySeeder::class,
-        ]);
+        // $this->call([
+        //     CountrySeeder::class,
+        // ]);
 
     }
 }

@@ -61,7 +61,7 @@
 
                         <!-- Button -->
                         <div style="text-align:center; margin-top:25px;">
-                            <a href="{{ url('/') }}" 
+                            <a href="{{ url('/club') }}" 
                                style="background:#28a745; color:#ffffff; text-decoration:none; padding:10px 20px; border-radius:5px; font-size:14px; display:inline-block;">
                                 Login to Your Account
                             </a>

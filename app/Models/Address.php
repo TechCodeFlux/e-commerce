@@ -16,7 +16,7 @@ class Address extends Model
         'state_id',
         'country_id',
         'zip_code',
-        'club_id',
+        // 'club_id',
         'club_member_id',
     ];
 
@@ -27,5 +27,20 @@ class Address extends Model
     public function state()
     {
         return $this->belongsTo(State::class);
+    }
+    public function clubMember()
+    {
+        return $this->belongsTo(ClubMember::class);
+    }
+    public function getFullAddressAttribute()
+    {
+        return implode(', ', array_filter([
+            $this->address1,
+            $this->address2,
+            $this->city,
+            optional($this->state)->name,
+            optional($this->country)->name,
+            $this->zip_code,
+        ]));
     }
 }

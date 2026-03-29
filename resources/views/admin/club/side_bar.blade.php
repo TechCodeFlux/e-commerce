@@ -11,20 +11,20 @@
                 </li>
                 
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link {{ request()->routeIs('admin.clubmember.viewmembers','admin.clubmember.addmember','admin.clubmember.profile','admin.clubmember.editmember') ? 'active' : '' }}" id="profile-tab" href="{{ route('admin.clubmember.viewmembers',$club->id) }}" role="tab" aria-controls="profile" aria-selected="true">
+                    <a class="nav-link {{ request()->routeIs('admin.clubmember.viewmembers','admin.clubmember.addmember','admin.clubmember.profile','admin.clubmember.editmember','admin.clubmember.vieworder') ? 'active' : '' }}" id="profile-tab" href="{{ route('admin.clubmember.viewmembers',$club->id) }}" role="tab" aria-controls="profile" aria-selected="true">
                         <i class="bi-people me-2"></i> Club Members
                     </a>
                 </li>
 
                 
                <li class="nav-item">
-                    <a class="nav-link">
+                    <a class="nav-link {{ request()->routeIs('admin.club.vieworder') ? 'active' : '' }}" id="profile-tab" href="{{ route('admin.club.vieworder',$club->id) }}" role="tab" aria-controls="profile" aria-selected="true">
                         <i class="bi bi-receipt me-2"></i> Orders
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.show_microsites','admin.add_microsites','admin.editmicrosite') ? 'active' : '' }}" href="{{ route('admin.show_microsites', $club->id) }}">
+                    <a class="nav-link {{ request()->routeIs('admin.show_microsites','admin.add_microsites','admin.editmicrosite','admin.microsite.*') ? 'active' : '' }}" href="{{ route('admin.show_microsites', $club->id) }}">
                         <i class="bi bi-globe me-2"></i> Microsites
                     </a>
                 </li>

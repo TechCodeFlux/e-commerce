@@ -484,35 +484,36 @@
 <!-- menu -->
 <div class="menu">
     <div class="menu-header">
-        <a href="index.html" class="menu-header-logo">
-            <img src="{{url('assets/images/logo.svg')}}" alt="logo">
+        <a href="{{route('club.dashboard')}}" class="menu-header-logo" style="display:flex; align-items:center; gap:0.1px;">
+            <img src="{{url('assets/images/grabit/logo1.png')}}" alt="logo" style="width:80px; height:auto;">
+        <span style="font-size:25px; font-family:'Calibri', sans; color:black; font-weight:530; font-style:italic; letter-spacing:2px;">
+        <b>GRABiT</b>
+        </span>
         </a>
-        <a href="index.html" class="btn btn-sm menu-close-btn">
+        <a href="{{route('club.dashboard')}}" class="btn btn-sm menu-close-btn">
             <i class="bi bi-x"></i>
         </a>
     </div>
     <div class="menu-body">
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown">
-                <div class="avatar me-3">
-                    <img src="{{url('assets/images/user/man_avatar3.jpg')}}"
-                         class="rounded-circle" alt="image">
-                </div>
-                <div>
-                    <div class="fw-bold">Timotheus Bendan</div>
-                    <small class="text-muted">Sales Manager</small>
-                </div>
+                @php
+    $club = Auth::guard('club')->user();
+@endphp
+
+<div class="avatar me-3">
+    <img src="{{ $club->image 
+        ? asset('storage/'.$club->image) 
+        : url('assets/images/user/man_avatar3.jpg') }}"
+         class="rounded-circle" alt="image">
+</div>
+<div>
+    <div class="fw-bold">{{ $club->name }}</div>
+    <small class="text-muted">{{ $club->email }}</small>
+</div>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
-                <a href="#" class="dropdown-item d-flex align-items-center">
-                    <i class="bi bi-person dropdown-item-icon"></i> Profile
-                </a>
-                <a href="#" class="dropdown-item d-flex align-items-center">
-                    <i class="bi bi-envelope dropdown-item-icon"></i> Inbox
-                </a>
-                <a href="#" class="dropdown-item d-flex align-items-center" data-sidebar-target="#settings">
-                    <i class="bi bi-gear dropdown-item-icon"></i> Settings
-                </a>
+                
                 <a href="./login.html" class="dropdown-item d-flex align-items-center text-danger"
                    target="_blank">
                     <i class="bi bi-box-arrow-right dropdown-item-icon"></i> Logout
@@ -520,38 +521,50 @@
             </div>
         </div>
         <ul>
-            <li class="menu-divider">E-Commerce</li>
+            {{-- <li class="menu-divider">E-Commerce</li> --}}
             <li>
-                <a  class="active"
+                <a  class="{{ request()->routeIs('club.dashboard') ? 'active' : '' }}"
                     href="{{route('club.dashboard')}}">
                     <span class="nav-link-icon">
-                        <i class="bi bi-bar-chart"></i>
+                        <i class="bi bi-graph-up me-2"></i>
                     </span>
                     <span>Club Dashboard</span>
                 </a>
             </li>
-            
-            
-            
             <li>
-                <a  href="{{route('club.clubmembersindex')}}">
+                <a  class="{{ request()->routeIs('club.member.index','club.clubmember.addmember','club.clubmember.editmember')? 'active' : '' }}"
+                    href="{{ route('club.member.index', $club->id) }}">
                     <span class="nav-link-icon">
-                        <i class="bi bi-person-badge"></i>
+                        <i class="bi-people me-2"></i>
                     </span>
                     <span>Club Members</span> 
                 </a>
             </li>
-            
-           
-
-            
-            
-            <li>
-                <a href="#" class="disabled">
+             <li>
+                <a  class="{{ request()->routeIs('club.club.vieworder') ? 'active' : '' }}"
+                    href="{{route('club.club.vieworder', $club->id)}}">
                     <span class="nav-link-icon">
-                        <i class="bi bi-hand-index-thumb"></i>
+                        <i class="bi bi-receipt me-2"></i>
                     </span>
-                    <span>Disabled</span>
+                    <span>Orders</span> 
+                </a>
+            </li>
+             <li>
+                <a  class="{{ request()->routeIs('club.show_microsites','club.microsite_show','club.add_microsites','club.editmicrosite','club.microsite.list_products') ? 'active' : '' }}"
+                    href="{{ route('club.show_microsites', $club->id) }}">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-globe me-2"></i>
+                    </span>
+                    <span>Microsites</span> 
+                </a>
+            </li>
+             <li>
+                <a  class="{{ request()->routeIs('club.club.profile')? 'active' : '' }}"
+                    href="{{ route('club.club.profile', $club->id) }}">
+                    <span class="nav-link-icon">
+                        <i class="bi bi-person me-2"></i>
+                    </span>
+                    <span>Profile</span> 
                 </a>
             </li>
         </ul>
