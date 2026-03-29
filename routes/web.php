@@ -6,6 +6,11 @@ use App\Http\Controllers\Admin\ClubMemberController;
 use App\Http\Controllers\Admin\ClubController;
 
 use App\Http\Controllers\ClubMember\Auth\LoginController as ClubMemberLoginController;
+use App\Http\Controllers\Club\Auth\LoginController;
+
+use App\Http\Controllers\Club\ClubDashboardController;
+
+
 
 //for dashboard
 use App\Http\Controllers\Admin\DashboardController;
@@ -25,9 +30,17 @@ use App\Models\Category;
 //arjun
 // Route::get('/', function () {return view('club.auth.login');})->name('club.login');
 Route::get('/', function () {return view('home');})->name('home');
-Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->group(function () {
-    Route::get('/', function () {return view('club.auth.login');})->name('login');
-    Auth::routes(['register' => false]); 
+
+Route::prefix('club')->name('club.')->group(function () {
+
+    Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+
+    Route::middleware('auth:club')->group(function () {
+        Route::get('/dashboard', [ClubDashboardController::class, 'dashboard'])->name('dashboard');
+        Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    });
+});
 //     //dashboard controller
     //Route::get('dashboard', [ClubDashboardController::class, 'index'])->name('dashboard');//dashboard
 //     //club controller
@@ -37,7 +50,6 @@ Route::prefix('club')->name('club.')->namespace('App\Http\Controllers\Club')->gr
 //     // // Route::put('clubmembersupdate/{club}', [ClubMemberController::class, 'update'])->name('update'); //add club member data (update form)
 //     // Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
 
-});
 //pauljo
 // Admin login
 // Route::get('/admin', function () {return view('admin.auth.login');})->name('admin.login');
@@ -80,7 +92,7 @@ Route::prefix('admin')->name('admin.')->namespace('App\Http\Controllers\Admin')-
     Route::get('category_management/add_category_index/{id}', [CategoryController::class, 'edit_category_index'])->name('category_management.edit_category_index');
     Route::put('category_management/edit_category/{id}', [CategoryController::class, 'update'])->name('category_management.edit_category');
     Route::post('category_management/change-status', [CategoryController::class, 'changeStatus'])->name('category_management.change-status');
-     //admin dashboard contain clubmember details------------------------------------------------------------------------------------------------------
+    //admin dashboard contain clubmember details------------------------------------------------------------------------------------------------------
     Route::get('/clubs/{club}/dashboard', [ClubController::class, 'dashboard'])->name('clubs.dashboard');//dashboard for each club   
     Route::get('club/members/{club}', [ClubMemberController::class, 'index'])->name('clubmember.viewmembers');//display members
     Route::get('club/addmember/{id}',[ClubMemberController::class,'addmember'])->name('clubmember.addmember');//add club members
@@ -203,3 +215,13 @@ Route::post('/clubmember/verify-otp', [ClubMemberLoginController::class, 'verify
 Route::get('/clubmember/dashboard', [ClubMemberLoginController::class, 'dashboard'])->name('clubmember.dashboard');
 
 Route::post('/clubmember/logout', [ClubMemberLoginController::class, 'logout'])->name('clubmember.logout');
+
+
+
+
+Route::prefix('club')->name('club.')->middleware('auth:club')->group(function () {
+
+    Route::get('/members', [ClubMemberController::class, 'index'])
+        ->name('member.index');
+
+});

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title> Vetra | E-Commerce Club Dashboard </title>
+    <title> Club  </title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{url('assets/images/favicon.png')}}"/>
@@ -23,6 +23,11 @@
 
     <!-- Main style file -->
     <link rel="stylesheet" href="{{ url('dist/css/app.min.css')}}" type="text/css">
+    {{-- Icon Pack --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -33,7 +38,7 @@
 
 <!-- preloader -->
 <div class="preloader">
-    <img src="{{url('assets/images/logo.svg')}}" alt="logo">
+    <img src="{{url('assets/images/grabit/logo.png')}}" alt="logo">
     <div class="preloader-icon"></div>
 </div>
 <!-- ./ preloader -->
@@ -61,6 +66,10 @@
 
 <!-- Main Javascript file -->
 <script src="{{url('dist/js/app.min.js')}}"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 
 @yield('script')
 </body>

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Club extends Authenticatable
 {
     use Notifiable, SoftDeletes;
+protected $table = 'clubs';
 
     protected $fillable = [
         'name',
