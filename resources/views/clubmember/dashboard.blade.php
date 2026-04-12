@@ -228,7 +228,7 @@
                         $statusData = [
                             1 => ['class' => 'status-pending', 'label' => 'Pending', 'icon' => 'bi-clock'],
                             2 => ['class' => 'status-delivered', 'label' => 'Delivered', 'icon' => 'bi-check2-circle'],
-                            3 => ['class' => 'status-cancelled', 'label' => 'Cancelled', 'icon' => 'bi-x-circle']
+                            7 => ['class' => 'status-delivered', 'label' => 'Delivered', 'icon' => 'bi-check-circle']
                         ];
                         $curr = $statusData[$order->order_status_id] ?? $statusData[1];
                     @endphp

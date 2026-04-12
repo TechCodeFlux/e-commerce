@@ -49,6 +49,8 @@ Route::prefix('club')->name('club.')->group(function () {
         Route::post('club/storemember/{id}',[ClubDashboardController::class,'storemember'])->name('clubmember.storemember');//store club members from add club member page
         Route::get('club/editmember/{id}',[ClubDashboardController::class,'editmember'])->name('clubmember.editmember');
         Route::delete('club/deletemember/{id}',[ClubDashboardController::class,'deletemember'])->name('clubmember.deletemember');
+        Route::post('club/updatemember/{id}',[ClubDashboardController::class,'updatemember'])->name('clubmember.updatemember');
+        // Route::post('club/storemember/{id}',[ClubMemberController::class,'storemember'])->name('clubmember.storemember');
         ///profile
         Route::get('club/profile/{id}',[ClubDashboardController::class,'profile'])->name('club.profile');
         Route::post('club/editprofile/{id}',[ClubDashboardController::class,'editprofile'])->name('club.editprofile');
@@ -80,7 +82,6 @@ Route::prefix('club')->name('club.')->group(function () {
 // //     // Route::post('clubmembersadd', [ClubMemberController::class, 'store'])->name('storeclubmember'); //add club member data to table (submit form)
 // //     // // Route::put('clubmembersupdate/{club}', [ClubMemberController::class, 'update'])->name('update'); //add club member data (update form)
 // //     // Route::get('/get-states/{country}', [ClubController::class, 'getStates'])->name('get.states');//get states based on country ID
-
 // });
 //pauljo
 // Admin login

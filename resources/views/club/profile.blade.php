@@ -31,7 +31,8 @@
         <div class="col-12">
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-3 p-md-5">
-                    <form method="POST" action="{{ route('admin.club.editprofile',$club->id) }}" enctype="multipart/form-data">
+                    <form id="ProfileForm"
+                        method="POST" action="{{ route('club.club.editprofile',$club->id) }}" enctype="multipart/form-data">
                         @csrf
 
                         {{-- Header Section: Image + Basic Info --}}
@@ -137,7 +138,7 @@
                         {{-- Action Buttons --}}
                         <div class="mt-5 pt-4 border-top d-flex flex-column flex-sm-row justify-content-end gap-2">
                             {{-- <button type="reset" class="btn btn-light px-4 py-2 border">Cancel</button> --}}
-                            <button type="submit" class="btn btn-primary px-5 py-2 fw-bold shadow-sm">
+                            <button type="submit" id="submitBtn" class="btn btn-primary px-5 py-2 fw-bold shadow-sm">
                                 <i class="bi bi-check-circle me-1"></i> Save Changes
                             </button>
                         </div>
@@ -192,5 +193,18 @@ document.getElementById('imageUpload').addEventListener('change', function(e){
         reader.readAsDataURL(file);
     }
 });
+ const form = document.getElementById('ProfileForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (form && submitBtn) {
+        form.addEventListener('submit', function () {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Processing...
+            `;
+        });
+    }
+
 </script>
 @endsection

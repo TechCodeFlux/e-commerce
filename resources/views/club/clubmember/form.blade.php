@@ -25,9 +25,9 @@
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
 
-            <h6 class="card-title mb-4 text-center">
+            <h4 class="text-left mb-4">
                 {{ $clubmember->id ? 'Edit' : 'Add' }} Club Member
-            </h6>
+            </h4>
 
             @if(session('success'))
                 <div class="alert alert-success text-center">
@@ -39,10 +39,11 @@
                 <div class="col-lg-12">
 
                     <form 
-                    {{-- {{ $clubmember->id ? route('club.update', $clubmember->id) : route('club.storeclubmember') }} --}}
-                        action="" 
+                    id="memberForm"
+                        action="{{ $clubmember->id ? route('club.clubmember.updatemember', $clubmember->id) : route('club.clubmember.storemember',$club->id) }}" 
                         method="POST" 
-                        autocomplete="off">
+                        autocomplete="off"
+                        enctype="multipart/form-data">
                         @csrf
                         @if($clubmember->id)
                             @method('PUT')
@@ -192,8 +193,8 @@
 
                         </div>
 
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary px-5">
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="submit" id="submitBtn" class="btn btn-primary px-5">
                                 {{ $clubmember->id ? 'Update' : 'Submit' }}
                             </button> 
                         </div>
@@ -264,6 +265,25 @@ document.addEventListener('DOMContentLoaded', function () {
     if (countrySelect.value) {
         loadStates(countrySelect.value);
     }
+});
+// Prevent double submit (MAIN LOGIC)
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('memberForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function () {
+
+        // Disable button immediately
+        submitBtn.disabled = true;
+
+        // Show loading spinner
+        submitBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Processing...
+        `;
+    });
+
 });
 </script>
 @endsection

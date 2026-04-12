@@ -40,7 +40,6 @@
 <div class="tab-pane fade show active">
 
 <div class="mb-4">
-
 <form method="POST"
       action="{{ route('admin.club.editprofile',$club->id) }}"
       enctype="multipart/form-data">

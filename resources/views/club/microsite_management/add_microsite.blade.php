@@ -60,8 +60,8 @@
                     <form 
                         id="MicrositeForm"
                         action="{{ isset($microsite->id) 
-                            ? route('admin.microsite_update', $microsite->id) 
-                            : route('admin.microsite_store') }}" 
+                            ? route('club.microsite_update', $microsite->id) 
+                            : route('club.microsite_store') }}" 
                         method="POST" 
                         enctype="multipart/form-data"
                     >

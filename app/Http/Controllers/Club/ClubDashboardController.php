@@ -119,6 +119,71 @@ public function addmember($id)
         $message=" ";
         return view('club.clubmember.form', compact('club','clubmember','message','countries','address'));
     }
+    public function updatemember(Request $request,$id)
+    {
+         $request->validate([
+            'name' => 'required|regex:/^[A-Za-z\\s\\.\\-]+$/',
+            'address' => 'required|string',
+            'contact' => 'required|string|max:20',
+            'email'   => 'required|email',
+            'state'   => 'required|string|max:100',
+            'country' => 'required|string|max:100',
+            'city'    => 'required|string|max:100',
+            'zip_code' =>'required|digits:6',
+            'status'  => 'nullable|boolean',
+        ]);
+
+        $clubmember=ClubMember::findorfail($id);
+        $address = Address::findOrFail($clubmember->address_id);
+        $club = Club::findOrFail($clubmember->club_id); 
+
+         $data = [
+                'name'    => $request->name,
+                'contact' => $request->contact,
+                'email'   => $request->email,
+            ];
+
+            // ✅ Only update image if new file uploaded
+            if ($request->hasFile('image')) {
+
+                // (Optional) Delete old image
+                if ($clubmember->image && Storage::exists('public/' . $clubmember->image)) {
+                    Storage::delete('public/' . $clubmember->image);
+                }
+
+                $imagePath = $request->file('image')->store('club_members', 'public');
+                $data['image'] = $imagePath;
+            }
+
+            $clubmember->update($data);
+
+        $address->update([
+            'address1'       => $request->address,
+            'country_id'     =>$request->country,
+            'state_id'        => $request->state,
+            'city'           => $request->city,
+            'zip_code'       => $request->zip_code,
+            
+        ]);
+
+        $memberData = [
+                'name'      => $clubmember->name,
+                'email'     => $clubmember->email,
+                'contact'   => $clubmember->contact,
+                'address'   => $address->address1,
+                'city'      => $address->city,
+                'state'     => $address->state_id,
+                'zip_code'  => $address->zip_code,
+            ];
+
+
+
+        Mail::to($memberData['email'])->send(new ClubMemberMail($memberData, 'update'));
+        // return view('admin.clubmember.viewmember', compact('club'));
+        return redirect()
+                ->route('club.member.list', $club->id)
+                ->with('success', 'Updated successfully');
+    }
     public function storemember(Request $request, $id)
 {
     $request->validate([
@@ -188,7 +253,7 @@ public function addmember($id)
     Mail::to($memberData['email'])->send(new ClubMemberMail($memberData, 'create'));
 
     return redirect()
-        ->route('club.clubmember.clubmemberview', $id)
+        ->route('club.member.list', $id)
         ->with('success', 'Club member added successfully');
 }
 public function editmember($id)
@@ -223,52 +288,50 @@ public function deletemember($id)
         $states = State::orderBy('name')->get();
         return view('club.profile',compact('club','countries','states'));
     }
-    public function editprofile(Request $request,$id)
-    {
+    public function editprofile(Request $request, $id)
+{
+    $club = Club::findOrFail($id);
 
-        $club=Club::findorfail($id);
-        // $countries = Country::orderBy('name')->get();
-        // $states = State::orderBy('name')->get();
-         $request->validate([
-            'name'    => 'required|regex:/^[A-Za-z\s\.\-]+$/',
-            'address' => 'required|string',
-            'contact' => 'required|regex:/^\+?[1-9]\d{6,14}$/',
-            'email'   => [
-                            'required',
-                            'email',        
-                        ],
-            'country'   => 'required|integer|exists:countries,id',
-            'state'     => 'required|integer|exists:states,id',
-            'city'      => 'required|string|max:100',
-            'zip_code'  => 'required|regex:/^[A-Za-z0-9\-\s]{3,10}$/',
-            'status'    => 'nullable|boolean',
-            'image'     => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
-        
-        $imagePath = $club->image;
+    $request->validate([
+        'name'    => 'required|regex:/^[A-Za-z\s\.\-]+$/',
+        'address' => 'required|string',
+        'contact' => 'required|regex:/^\+?[1-9]\d{6,14}$/',
+        'email'   => ['required','email'],
+        'country' => 'required|integer|exists:countries,id',
+        'state'   => 'required|integer|exists:states,id',
+        'city'    => 'required|string|max:100',
+        'zip_code'=> 'required|regex:/^[A-Za-z0-9\-\s]{3,10}$/',
+        'status'  => 'nullable|boolean',
+        'image'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('club_profile_images', 'public');
+    $imagePath = $club->image;
+
+    if ($request->hasFile('image')) {
+        if ($club->image && \Storage::disk('public')->exists($club->image)) {
+            \Storage::disk('public')->delete($club->image);
         }
-        
-                $club->update([
-                'name'       => $request->name,
-                'address'    => $request->address,
-                'contact'    => $request->contact,
-                'email'      => $request->email,
-                'country_id' => $request->country,
-                'state_id'   => $request->state,
-                'city'       => $request->city,
-                'zip_code'   => $request->zip_code,
-                'status'     => $request->has('status'),
-                'image'      => $imagePath,
-            ]);
 
-        
-        return redirect()
-        ->route('club.profile', $club->id) // or profile route
-        ->with('success', 'Profile updated successfully!');
+        $imagePath = $request->file('image')->store('club_profile_images', 'public');
     }
+
+    $club->update([
+        'name'       => $request->name,
+        'address'    => $request->address,
+        'contact'    => $request->contact,
+        'email'      => $request->email,
+        'country_id' => $request->country,
+        'state_id'   => $request->state,
+        'city'       => $request->city,
+        'zip_code'   => $request->zip_code,
+        'status'     => $request->has('status'),
+        'image'      => $imagePath,
+    ]);
+
+    return redirect()
+        ->route('club.club.profile', $club->id)
+        ->with('success', 'Profile updated successfully!');
+}
     public function show(Request $request, $id)
     {
         $club = Club::findOrFail($id);
@@ -557,7 +620,6 @@ public function deletemember($id)
                 'status'       => 1
             ]);
         }
-
         return back()->with('success', 'Product added to microsite');
     }
     //remove products from microsite

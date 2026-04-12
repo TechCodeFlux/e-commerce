@@ -514,9 +514,12 @@
             </a>
             <div class="dropdown-menu dropdown-menu-end">
                 
-                <a href="./login.html" class="dropdown-item d-flex align-items-center text-danger"
-                   target="_blank">
+                <a href="javascript:;" onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+                     class="dropdown-item d-flex align-items-center">
                     <i class="bi bi-box-arrow-right dropdown-item-icon"></i> Logout
+                    <form id="logout-form" action="{{ route('club.logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form> 
                 </a>
             </div>
         </div>

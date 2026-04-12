@@ -230,7 +230,6 @@ class ClubController extends Controller
         $states = State::orderBy('name')->get();
         return view('admin.club.profile',compact('club','countries','states'));
     }
-
     public function editprofile(Request $request,$id)
     {
 

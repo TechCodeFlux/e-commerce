@@ -65,6 +65,16 @@
                                     Status: {{ $order->order_status }}
                                 </small>
                             </div>
+                            <div>
+                                <small>
+                                    Name: {{ $order->clubMember->name ?? $order->club_member_id }}
+                                </small>
+
+                                <div class="card-body border-bottom">
+                <strong>Address:</strong><br>
+                {{ $order->address->full_address ?? 'N/A' }}
+            </div>
+                            </div>
 
                             <div class="text-end">
                                 <h6 class="mb-0 text-success">

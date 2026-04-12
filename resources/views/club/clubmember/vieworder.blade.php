@@ -69,6 +69,16 @@
                                 <h6 class="mb-0 text-success">
                                     ₹{{ number_format($order->total_amount, 2) }}
                                 </h6>
+                                <div>
+                                <small>
+                                    Name: {{ $order->clubMember->name ?? $order->club_member_id }}
+                                </small>
+
+                                <div class="card-body border-bottom">
+                <strong>Address:</strong><br>
+                {{ $order->address->full_address ?? 'N/A' }}
+            </div>
+                            </div>
 
                                 {{-- ✅ Button --}}
                                 @if($order->order_status_id != 7)
